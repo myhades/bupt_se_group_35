@@ -15,11 +15,11 @@
     <VBox fx:id="loginPanel" spacing="20" alignment="CENTER" prefWidth="500">
         <Label text="EBU6304 Software Engineering" style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #0B76A0;"/>
         <Label text="Welcome Back" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-        <TextField fx:id="usernameField" promptText="Username" prefWidth="300" />
-        <PasswordField fx:id="passwordField" promptText="Password" prefWidth="300" />
+        <TextField fx:id="usernameField" promptText="Username" prefWidth="300" prefHeight="40"/>
+        <PasswordField fx:id="passwordField" promptText="Password" prefWidth="300" prefHeight="40"/>
         <HBox spacing="10" alignment="CENTER">
-            <Button text="Login" onAction="#handleLogin"/>
-            <Button text="Register" onAction="#handleRegister"/>
+            <Button text="Login" onAction="#handleLogin" style="-fx-background-color: black; -fx-text-fill: white;-fx-pref-height: 40;-fx-pref-width: 120"/>
+            <Button text="Register" onAction="#handleRegister" style="-fx-background-color: white; -fx-text-fill: black;-fx-pref-height: 40;-fx-pref-width: 120"/>
         </HBox>
     </VBox>
 
@@ -27,8 +27,8 @@
     <Region HBox.hgrow="ALWAYS"/>
 
     <!-- Right Pane: Image Panel -->
-    <StackPane fx:id="imagePanel" maxWidth="500">
+    <StackPane fx:id="imagePanel" prefHeight="500" prefWidth="500">
         <!-- The background image can be set programmatically in the controller -->
-        <ImageView fx:id="backgroundImage" fitWidth="500" preserveRatio="true"/>
+        <ImageView fx:id="backgroundImage" fitWidth="500"/>
     </StackPane>
 </HBox>
