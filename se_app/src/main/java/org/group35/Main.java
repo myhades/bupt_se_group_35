@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.group35.view.LoginPage;
 
 public class Main extends Application {
 
@@ -17,6 +18,8 @@ public class Main extends Application {
         primaryStage.setTitle("JavaFX Demo");
         primaryStage.setScene(scene);
         primaryStage.show();
+        LoginPage LOGINPAGE = new LoginPage();
+        LOGINPAGE.start(primaryStage);
     }
 
     public static void main(String[] args) {
