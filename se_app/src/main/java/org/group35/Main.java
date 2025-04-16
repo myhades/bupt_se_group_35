@@ -4,31 +4,36 @@ import org.group35.config.Settings;
 import org.group35.util.LoggerHelper;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.group35.view.LoginPage;
+import java.io.IOException;
+import java.net.URL;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Basic stage configurations
-        Label label = new Label("Monora");
-        StackPane root = new StackPane(label);
-        Scene scene = new Scene(root, 400, 300);
+        try {
+            // Load the FXML file
+            URL resource = getClass().getResource("/org/group35/view/LoginPage.fxml");
+            if (resource == null) {
+                throw new IllegalStateException("Cannot find LoginPage.fxml");
+            }
+            Parent root = FXMLLoader.load(resource);
+            Scene scene = new Scene(root, 1000, 500);
 
-        primaryStage.setTitle("Monora");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        LoginPage LOGINPAGE = new LoginPage();
-        LOGINPAGE.start(primaryStage);
+            primaryStage.setTitle("Monora");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
         initialize();
-
         launch(args);
     }
 

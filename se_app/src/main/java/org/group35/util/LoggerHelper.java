@@ -10,11 +10,11 @@ import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.classic.PatternLayout;
 
 /**
- * LoggerHelper demonstrates the use of a professional logging framework.
- * It configures the log level and optionally adds a file appender based on application settings.
+ * LoggerHelper provides methods to configure logging based on application settings
+ * and static convenience methods for logging at various levels.
  */
 public class LoggerHelper {
-    // Obtain a logger instance for this class using SLF4J.
+    // SLF4J logger for LoggerHelper class
     private static final Logger logger = LoggerFactory.getLogger(LoggerHelper.class);
 
     /**
@@ -24,31 +24,31 @@ public class LoggerHelper {
      */
     public static void configureLogLevel(Settings settings) {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        // Use fully qualified name for ch.qos.logback.classic.Logger to avoid the conflict.
+        // Use fully qualified name to avoid conflict with SLF4J Logger.
         ch.qos.logback.classic.Logger rootLogger =
                 (ch.qos.logback.classic.Logger) loggerContext.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-        // Set root logger level based on settings (defaulting to DEBUG if the value is invalid).
+        // Set the root logger level based on settings, defaulting to DEBUG if the value is invalid.
         rootLogger.setLevel(Level.toLevel(settings.getLogLevel(), Level.DEBUG));
         logger.info("Log level configured to: " + settings.getLogLevel());
 
-        // Detach any previously added file appender with the name "FILE".
+        // Detach any previously attached file appender named "FILE" to prevent duplicates.
         rootLogger.detachAppender("FILE");
 
-        // If file logging is enabled, configure and attach a file appender.
+        // If file logging is enabled, configure and attach a FileAppender.
         if (settings.isFileLoggingEnabled()) {
             FileAppender fileAppender = new FileAppender();
             fileAppender.setContext(loggerContext);
             fileAppender.setName("FILE");
-            // Set the file path from settings.
+            // Set file location based on settings.
             fileAppender.setFile(settings.getLogFilePath());
 
-            // Configure a PatternLayout for formatting log messages.
+            // Configure pattern layout for file logging.
             PatternLayout layout = new PatternLayout();
             layout.setContext(loggerContext);
             layout.setPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
             layout.start();
 
-            // Use a LayoutWrappingEncoder to wrap the layout.
+            // Create an encoder wrapping the layout.
             LayoutWrappingEncoder encoder = new LayoutWrappingEncoder();
             encoder.setContext(loggerContext);
             encoder.setLayout(layout);
@@ -57,7 +57,7 @@ public class LoggerHelper {
             fileAppender.setEncoder(encoder);
             fileAppender.start();
 
-            // Add the file appender to the root logger.
+            // Attach the file appender to the root logger.
             rootLogger.addAppender(fileAppender);
             logger.info("File logging enabled. Log file: " + settings.getLogFilePath());
         } else {
@@ -66,31 +66,77 @@ public class LoggerHelper {
     }
 
     /**
-     * Logs sample messages at various log levels.
+     * Convenience method for logging an INFO level message.
+     *
+     * @param message the message to log.
      */
-    public static void logTest() {
-        logger.trace("This is a TRACE level message.");
-        logger.debug("This is a DEBUG level message.");
-        logger.info("This is an INFO level message.");
-        logger.warn("This is a WARN level message.");
-        logger.error("This is an ERROR level message.");
+    public static void info(String message) {
+        logger.info(message);
     }
 
     /**
-     * Main method to test the logging configuration and functionality.
+     * Convenience method for logging a DEBUG level message.
+     *
+     * @param message the message to log.
+     */
+    public static void debug(String message) {
+        logger.debug(message);
+    }
+
+    /**
+     * Convenience method for logging a WARN level message.
+     *
+     * @param message the message to log.
+     */
+    public static void warn(String message) {
+        logger.warn(message);
+    }
+
+    /**
+     * Convenience method for logging an ERROR level message.
+     *
+     * @param message the message to log.
+     */
+    public static void error(String message) {
+        logger.error(message);
+    }
+
+    /**
+     * Convenience method for logging a TRACE level message.
+     *
+     * @param message the message to log.
+     */
+    public static void trace(String message) {
+        logger.trace(message);
+    }
+
+    /**
+     * Logs sample messages at various levels.
+     */
+    public static void logTest() {
+        trace("This is a TRACE level message.");
+        debug("This is a DEBUG level message.");
+        info("This is an INFO level message.");
+        warn("This is a WARN level message.");
+        error("This is an ERROR level message.");
+    }
+
+    /**
+     * Main method for testing the logging configuration and the convenience methods.
      *
      * @param args command-line arguments (not used).
      */
     public static void main(String[] args) {
-        // For demonstration, create a new Settings instance.
+        // For testing, create a default Settings instance.
         Settings settings = new Settings();
-        // Optionally change settings:
+        // Optionally set desired settings.
         settings.setLogLevel("INFO");
         settings.setFileLoggingEnabled(true);
-        settings.setLogFilePath("logs/app.log");
+        settings.setLogFilePath("./log/app.log");
 
-        // Configure logger based on settings.
+        // Configure logging with these settings.
         configureLogLevel(settings);
+
         // Log sample messages.
         logTest();
     }
