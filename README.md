@@ -1,4 +1,7 @@
 # Monora - Budget Better, Live Freer
+
+![Repo Logo](https://raw.githubusercontent.com/myhades/bupt_se_group_35/refs/heads/main/assets/monora_canvas.png)
+
 Monora is a smart budgeting and expense tracking app with AI-powered financial suggestions.
 This app is developed as the Software Engineering project by Group 35.
 

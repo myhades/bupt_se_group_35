@@ -43,7 +43,7 @@ public class Main extends Application {
         // Initialize logger
         LoggerHelper.configureLogLevel(settings);
 
-        logger.info("Application initialization complete.");
+        LoggerHelper.info("Application initialization complete.");
 
     }
 }

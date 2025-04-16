@@ -92,6 +92,6 @@ public class LoggerHelper {
         // Configure logger based on settings.
         configureLogLevel(settings);
         // Log sample messages.
-        logMessages();
+        logTest();
     }
 }
