@@ -38,5 +38,4 @@ build/
 .DS_Store
 
 ## Application Runtime Data ##
-log/
-data/
+app_data/

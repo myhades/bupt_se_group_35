@@ -1,34 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.group35.view.LoginController" spacing="10" alignment="CENTER">
+<!--
+    This FXML defines the login page layout.
+    - The left pane contains the title and login form controls.
+    - The title is split into two lines, and the "Welcome Back" label is placed very near the second line.
+    - The input fields display both prompt and input text in black (#000000).
+-->
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.LoginController"
+      spacing="10"
+      alignment="CENTER">
+
     <!-- Left Pane: Login Form Panel -->
-    <VBox fx:id="loginPanel" spacing="20" alignment="CENTER" prefWidth="500">
-        <Label text="EBU6304 Software Engineering" style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #0B76A0;"/>
-        <Label text="Welcome Back" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-        <TextField fx:id="usernameField" promptText="Username" prefWidth="300" prefHeight="40"/>
-        <PasswordField fx:id="passwordField" promptText="Password" prefWidth="300" prefHeight="40"/>
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="Login" onAction="#handleLogin" style="-fx-background-color: black; -fx-text-fill: white;-fx-pref-height: 40;-fx-pref-width: 120"/>
-            <Button text="Register" onAction="#handleRegister" style="-fx-background-color: white; -fx-text-fill: black;-fx-pref-height: 40;-fx-pref-width: 120"/>
+    <VBox fx:id="loginPanel"
+          spacing="30"
+          alignment="CENTER_LEFT"
+          prefWidth="500"
+          prefHeight="500"
+          style="-fx-padding: 0 80 0 80;">  <!-- Padding: top 0, right 80, bottom 0, left 80 -->
+
+        <!-- Nested VBox for Title and Welcome Labels with reduced spacing -->
+        <VBox spacing="5" alignment="CENTER_LEFT">
+            <!-- Title Label: Split into two lines with newline -->
+            <Label text="EBU6304 Software&#10;Engineering"
+                   style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #0B76A0;"/>
+            <!-- Welcome Label: Same font size and placed close to title -->
+            <Label text="Welcome Back"
+                   style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+        </VBox>
+
+        <!-- Username Field: Dark background remains, but text and prompt text are black -->
+        <TextField fx:id="usernameField"
+                   promptText="Username"
+                   prefWidth="300"
+                   prefHeight="40"
+                   style="-fx-background-color: #CCCCCC; -fx-text-fill: #000000; -fx-prompt-text-fill: #635f5f; -fx-font-size: 14px; -fx-padding: 0 0 0 10;"/>
+
+        <!-- Password Field: Same styling as Username Field -->
+        <PasswordField fx:id="passwordField"
+                       promptText="Password"
+                       prefWidth="300"
+                       prefHeight="40"
+                       style="-fx-background-color: #CCCCCC; -fx-text-fill: #000000; -fx-prompt-text-fill: #635f5f; -fx-font-size: 14px; -fx-padding: 0 0 0 10;"/>
+
+        <!-- Button Panel: Holds Login and Register buttons -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button text="Login"
+                    onAction="#handleLogin"
+                    style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 14px; -fx-pref-height: 40; -fx-pref-width: 120;"/>
+            <Button text="Register"
+                    onAction="#handleRegister"
+                    style="-fx-background-color: white; -fx-text-fill: black; -fx-border-color: black; -fx-font-size: 14px; -fx-pref-height: 40; -fx-pref-width: 120;"/>
         </HBox>
+
     </VBox>
 
     <!-- Filler region to push the image panel to the right -->
-    <Region HBox.hgrow="ALWAYS"/>
+    <Region fx:id="filler" HBox.hgrow="ALWAYS"/>
 
     <!-- Right Pane: Image Panel -->
-    <StackPane fx:id="imagePanel" prefHeight="500" prefWidth="500">
-        <!-- The background image can be set programmatically in the controller -->
-        <ImageView fx:id="backgroundImage" fitWidth="500"/>
+    <StackPane fx:id="imagePanel"
+               prefWidth="500"
+               prefHeight="500">
+        <ImageView fx:id="backgroundImage"
+                   fitWidth="500"
+                   preserveRatio="true"/>
     </StackPane>
+
 </HBox>

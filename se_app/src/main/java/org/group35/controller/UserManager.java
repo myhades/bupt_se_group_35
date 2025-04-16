@@ -66,18 +66,4 @@ public class UserManager {
         }
         return false;
     }
-
-    // Simple test method
-    public static void main(String[] args) {
-        try {
-            // Register a user
-            registerUser("user1", "password123");
-
-            // Verify login
-            boolean success = loginUser("user1", "password123");
-            System.out.println("Login successful? " + success);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

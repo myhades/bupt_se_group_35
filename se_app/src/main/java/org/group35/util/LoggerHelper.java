@@ -9,6 +9,10 @@ import ch.qos.logback.core.FileAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.classic.PatternLayout;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * LoggerHelper provides methods to configure logging based on application settings
  * and static convenience methods for logging at various levels.
@@ -19,6 +23,8 @@ public class LoggerHelper {
 
     /**
      * Configures the root logger level and optionally adds file logging based on the provided settings.
+     * If file logging is enabled, it uses the folder specified in settings.getLogFilePath() and
+     * generates a log file name based on the current time.
      *
      * @param settings the Settings instance containing configuration such as log level and file logging options.
      */
@@ -31,16 +37,25 @@ public class LoggerHelper {
         rootLogger.setLevel(Level.toLevel(settings.getLogLevel(), Level.DEBUG));
         logger.info("Log level configured to: " + settings.getLogLevel());
 
-        // Detach any previously attached file appender named "FILE" to prevent duplicates.
+        // Detach any previously attached file appender named "FILE".
         rootLogger.detachAppender("FILE");
 
-        // If file logging is enabled, configure and attach a FileAppender.
         if (settings.isFileLoggingEnabled()) {
             FileAppender fileAppender = new FileAppender();
             fileAppender.setContext(loggerContext);
             fileAppender.setName("FILE");
-            // Set file location based on settings.
-            fileAppender.setFile(settings.getLogFilePath());
+
+            // Generate the log file name based on the current time.
+            // Assume settings.getLogFilePath() returns a directory path (without file name).
+            String logFolder = settings.getLogFilePath();
+            // Ensure the log folder exists.
+            File folder = new File(logFolder);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            String fullLogFileName = logFolder + File.separator + timestamp + ".log";
+            fileAppender.setFile(fullLogFileName);
 
             // Configure pattern layout for file logging.
             PatternLayout layout = new PatternLayout();
@@ -59,7 +74,7 @@ public class LoggerHelper {
 
             // Attach the file appender to the root logger.
             rootLogger.addAppender(fileAppender);
-            logger.info("File logging enabled. Log file: " + settings.getLogFilePath());
+            logger.info("File logging enabled. Log file created: " + fullLogFileName);
         } else {
             logger.info("File logging is disabled.");
         }
@@ -119,25 +134,5 @@ public class LoggerHelper {
         info("This is an INFO level message.");
         warn("This is a WARN level message.");
         error("This is an ERROR level message.");
-    }
-
-    /**
-     * Main method for testing the logging configuration and the convenience methods.
-     *
-     * @param args command-line arguments (not used).
-     */
-    public static void main(String[] args) {
-        // For testing, create a default Settings instance.
-        Settings settings = new Settings();
-        // Optionally set desired settings.
-        settings.setLogLevel("INFO");
-        settings.setFileLoggingEnabled(true);
-        settings.setLogFilePath("./log/app.log");
-
-        // Configure logging with these settings.
-        configureLogLevel(settings);
-
-        // Log sample messages.
-        logTest();
     }
 }

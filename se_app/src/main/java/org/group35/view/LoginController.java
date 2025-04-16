@@ -28,7 +28,7 @@ public class LoginController {
     private void initialize() {
         // Optionally set a background image.
         // Adjust the path below to the location of your image file.
-        backgroundImage.setImage(new Image("/org/group35/view/assets/background.png"));
+        backgroundImage.setImage(new Image("/org/group35/view/assets/LoginPage_background.jpg"));
     }
 
     /**
