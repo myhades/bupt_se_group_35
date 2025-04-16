@@ -14,11 +14,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Hello, JavaFX!");
+        // Basic stage configurations
+        Label label = new Label("Monora");
         StackPane root = new StackPane(label);
         Scene scene = new Scene(root, 400, 300);
 
-        primaryStage.setTitle("JavaFX Demo");
+        primaryStage.setTitle("Monora");
         primaryStage.setScene(scene);
         primaryStage.show();
         LoginPage LOGINPAGE = new LoginPage();
@@ -27,20 +28,22 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         initialize();
-        launch(args); // 启动 JavaFX 应用
+
+        launch(args);
     }
 
     private static void initialize() {
-        // Create a new Settings instance; these settings can later be loaded from a JSON file.
+        // Initialize settings
         Settings settings = new Settings();
 
-        // Optionally modify the settings:
-        settings.setLogLevel("INFO");         // Options: TRACE, DEBUG, INFO, WARN, ERROR.
-        settings.setFileLoggingEnabled(true);   // Enable file logging.
-        settings.setLogFilePath("./log/app.log");  // Set path for the log file.
+        settings.setLogLevel("INFO");
+        settings.setFileLoggingEnabled(true);
+        settings.setLogFilePath("./log/app.log");
 
-        // Configure the logging framework based on these settings.
+        // Initialize logger
         LoggerHelper.configureLogLevel(settings);
+
+        logger.info("Application initialization complete.");
 
     }
 }
