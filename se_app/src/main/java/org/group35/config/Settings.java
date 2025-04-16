@@ -6,7 +6,8 @@ import org.group35.util.JsonUtils;
 
 /**
  * The Settings class holds the application configuration settings.
- * It includes settings such as the data file reading location.
+ * It includes settings such as the data file reading location,
+ * log level, and file logging options.
  *
  * This class supports persistence to a JSON file using the JsonUtils helper.
  */
@@ -16,18 +17,31 @@ public class Settings {
     // Default is the current working directory.
     private String dataFilePath;
 
-    // You can add more settings fields here if needed.
-    // For example:
-    // private String appTheme;
-    // private String language;
+    // The log level for the application.
+    // Valid values: "TRACE", "DEBUG", "INFO", "WARN", "ERROR".
+    // Default value is "DEBUG".
+    private String logLevel;
+
+    // Enable or disable logging to file.
+    // Default is false.
+    private boolean fileLoggingEnabled;
+
+    // The file path for log output.
+    // Default is "logs/app.log" (relative to the working directory).
+    private String logFilePath;
 
     /**
-     * Default constructor.
-     * It initializes settings with default values.
+     * Default constructor that initializes settings with default values.
      */
     public Settings() {
-        // Set the default data file location to the current directory.
+        // Set the default data file location to the current working directory.
         this.dataFilePath = System.getProperty("user.dir");
+        // Set the default log level.
+        this.logLevel = "DEBUG";
+        // Disable file logging by default.
+        this.fileLoggingEnabled = false;
+        // Set default log file path.
+        this.logFilePath = "logs/app.log";
     }
 
     /**
@@ -49,6 +63,60 @@ public class Settings {
     }
 
     /**
+     * Returns the log level setting.
+     *
+     * @return the log level as a String.
+     */
+    public String getLogLevel() {
+        return logLevel;
+    }
+
+    /**
+     * Sets the log level.
+     *
+     * @param logLevel the log level to be set (e.g., "DEBUG", "INFO").
+     */
+    public void setLogLevel(String logLevel) {
+        this.logLevel = logLevel;
+    }
+
+    /**
+     * Checks if file logging is enabled.
+     *
+     * @return true if file logging is enabled; false otherwise.
+     */
+    public boolean isFileLoggingEnabled() {
+        return fileLoggingEnabled;
+    }
+
+    /**
+     * Enables or disables file logging.
+     *
+     * @param fileLoggingEnabled true to enable file logging; false to disable.
+     */
+    public void setFileLoggingEnabled(boolean fileLoggingEnabled) {
+        this.fileLoggingEnabled = fileLoggingEnabled;
+    }
+
+    /**
+     * Returns the log file path.
+     *
+     * @return the log file path.
+     */
+    public String getLogFilePath() {
+        return logFilePath;
+    }
+
+    /**
+     * Sets the log file path.
+     *
+     * @param logFilePath the path to the log file.
+     */
+    public void setLogFilePath(String logFilePath) {
+        this.logFilePath = logFilePath;
+    }
+
+    /**
      * Loads the settings from the specified JSON file.
      * If the file does not exist or an error occurs, default settings are returned.
      *
@@ -57,12 +125,11 @@ public class Settings {
      */
     public static Settings loadFromFile(File file) {
         if (!file.exists()) {
-            return new Settings(); // Return default settings if file does not exist
+            return new Settings();
         }
         try {
             return JsonUtils.readJsonFromFile(file, Settings.class);
         } catch (IOException e) {
-            // Print the exception stack trace for debugging and return default settings
             e.printStackTrace();
             return new Settings();
         }

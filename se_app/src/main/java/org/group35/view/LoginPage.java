@@ -30,7 +30,7 @@ public class LoginPage extends Application {
         loginPanel.setAlignment(Pos.CENTER);
 
         // Create the title and welcome label
-        Label titleLabel = new Label("EBU6304 Software Engineering");
+        Label titleLabel = new Label("EBU6304 Software \nEngineering");
         titleLabel.setStyle("-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #0B76A0;");
 
         Label welcomeLabel = new Label("Welcome Back");

@@ -1,9 +1,10 @@
 package org.group35.controller;
 
-
 import org.group35.model.User;
 import org.group35.util.JsonUtils;
 import org.group35.util.PasswordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
