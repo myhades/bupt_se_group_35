@@ -34,8 +34,8 @@ public class Settings {
      * Default constructor that initializes settings with default values.
      */
     public Settings() {
-        // Set the default data file location to the current working directory.
-        this.dataFilePath = System.getProperty("user.dir");
+        // Set the default data file location to the data sub folder of current working directory.
+        this.dataFilePath = System.getProperty("user.dir") + java.io.File.separator + "data";
         // Set the default log level.
         this.logLevel = "DEBUG";
         // Disable file logging by default.

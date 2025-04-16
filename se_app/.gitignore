@@ -37,5 +37,6 @@ build/
 ### Mac OS ###
 .DS_Store
 
-## Misc ##
+## Application Runtime Data ##
 log/
+data/
