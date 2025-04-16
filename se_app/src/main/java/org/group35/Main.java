@@ -1,15 +1,11 @@
 package org.group35;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
-import java.net.URL;
 import org.group35.config.Settings;
 import org.group35.util.LoggerHelper;
 import org.group35.util.SceneManager;
+import org.group35.runtime.ApplicationRuntime;
 import org.group35.persistence.PersistentDataManager;
 
 public class Main extends Application {
@@ -26,6 +22,7 @@ public class Main extends Application {
     }
 
     private static void initialize() {
+
         // Initialize settings
         Settings settings = new Settings();
         settings.setLogLevel("INFO");
@@ -35,6 +32,9 @@ public class Main extends Application {
 
         // Initialize persistent data manager
         PersistentDataManager.initialize(settings);
+
+        // Initialize application runtime by accessing (singleton)
+        ApplicationRuntime.getInstance();
 
         LoggerHelper.info("Application initialization complete.");
 
