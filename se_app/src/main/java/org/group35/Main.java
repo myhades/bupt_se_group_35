@@ -8,6 +8,8 @@ import org.group35.util.SceneManager;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.persistence.PersistentDataManager;
 
+import org.group35.controller.UserManager;
+
 public class Main extends Application {
 
     @Override
@@ -18,6 +20,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         initialize();
+        test_endpoint();
         launch(args);
     }
 
@@ -25,7 +28,7 @@ public class Main extends Application {
 
         // Initialize settings
         Settings settings = new Settings();
-        settings.setLogLevel("INFO");
+        settings.setLogLevel("DEBUG");
 
         // Initialize logger
         LoggerHelper.configureLogLevel(settings);
@@ -33,10 +36,17 @@ public class Main extends Application {
         // Initialize persistent data manager
         PersistentDataManager.initialize(settings);
 
-        // Initialize application runtime by accessing (singleton)
+        // Initialize application runtime (singleton)
         ApplicationRuntime.getInstance();
 
         LoggerHelper.info("Application initialization complete.");
+
+    }
+
+    private static void test_endpoint() {
+
+//        UserManager userManager = ApplicationRuntime.getInstance().getUserManager();
+//        userManager.registerUser("admin", "admin");
 
     }
 

@@ -3,6 +3,7 @@ package org.group35.runtime;
 import org.group35.model.User;
 import org.group35.controller.UserManager;
 import org.group35.util.SceneManager;
+import org.group35.util.LoggerHelper;
 
 /**
  * ApplicationRuntime is a singleton class that encapsulates all model manager instances.
@@ -34,40 +35,38 @@ public final class ApplicationRuntime {
      * Initializes all model managers.
      */
     private ApplicationRuntime() {
+        LoggerHelper.debug("Initializing ApplicationRuntime singleton");
         userManager = new UserManager();
-        // Initialize additional managers here.
+        LoggerHelper.trace("UserManager initialized");
     }
 
     /**
      * Returns the singleton instance of ApplicationRuntime.
-     *
      * @return the ApplicationRuntime instance.
      */
     public static synchronized ApplicationRuntime getInstance() {
         if (instance == null) {
             instance = new ApplicationRuntime();
+            LoggerHelper.trace("ApplicationRuntime instance created");
         }
         return instance;
     }
 
     /**
      * Returns the UserManager instance.
-     *
      * @return the UserManager.
      */
     public UserManager getUserManager() {
         return userManager;
     }
 
-    // Provide getters for additional managers as needed.
-
     /**
      * Handles user login by setting the current user and updating the program status.
-     *
      * @param user the User who has logged in.
      */
     public void loginUser(User user) {
         this.loggedInUser = user;
+        LoggerHelper.info("User logged in: " + user.getUsername());
         setProgramStatus(ProgramStatus.HOME);
     }
 
@@ -75,18 +74,20 @@ public final class ApplicationRuntime {
      * Logs out the current user and updates the program status to LOGIN.
      */
     public void logoutUser() {
+        if (loggedInUser != null) {
+            LoggerHelper.info("User logged out: " + loggedInUser.getUsername());
+        }
         this.loggedInUser = null;
         setProgramStatus(ProgramStatus.LOGIN);
     }
 
     /**
      * Updates the program status and calls SceneManager to switch scenes based on the new status.
-     *
      * @param status the new program status.
      */
     public void setProgramStatus(ProgramStatus status) {
         this.programStatus = status;
-        // Trigger scene switching using the SceneManager.
+        LoggerHelper.debug("ProgramStatus changed to: " + status);
         switch (status) {
             case LOGIN:
                 SceneManager.showLoginPage();
@@ -95,7 +96,7 @@ public final class ApplicationRuntime {
                 SceneManager.showHomePage();
                 break;
             default:
-                // Handle additional statuses as needed.
+                LoggerHelper.warn("Unhandled ProgramStatus: " + status);
                 break;
         }
     }

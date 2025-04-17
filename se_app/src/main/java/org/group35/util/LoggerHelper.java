@@ -16,54 +16,41 @@ import java.util.Date;
 /**
  * LoggerHelper provides methods to configure logging based on application settings
  * and static convenience methods for logging at various levels.
+ * Convenience methods now log via the caller's class logger.
  */
 public class LoggerHelper {
-    // SLF4J logger for LoggerHelper class
-    private static final Logger logger = LoggerFactory.getLogger(LoggerHelper.class);
+    // SLF4J logger for this helper (only used for internal configuration messages)
+    private static final Logger helperLogger = LoggerFactory.getLogger(LoggerHelper.class);
 
     /**
-     * Configures the root logger level and optionally adds file logging based on the provided settings.
-     * If file logging is enabled, it uses the folder specified in settings.getLogFilePath() and
-     * generates a log file name based on the current time.
-     *
-     * @param settings the Settings instance containing configuration such as log level and file logging options.
+     * Configures the root logger level and optionally adds file logging.
      */
     public static void configureLogLevel(Settings settings) {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        // Use fully qualified name to avoid conflict with SLF4J Logger.
         ch.qos.logback.classic.Logger rootLogger =
                 (ch.qos.logback.classic.Logger) loggerContext.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-        // Set the root logger level based on settings, defaulting to DEBUG if the value is invalid.
         rootLogger.setLevel(Level.toLevel(settings.getLogLevel(), Level.DEBUG));
-        logger.info("Log level configured to: " + settings.getLogLevel());
+        helperLogger.info("Log level configured to: {}", settings.getLogLevel());
 
-        // Detach any previously attached file appender named "FILE".
         rootLogger.detachAppender("FILE");
-
         if (settings.isFileLoggingEnabled()) {
             FileAppender fileAppender = new FileAppender();
             fileAppender.setContext(loggerContext);
             fileAppender.setName("FILE");
 
-            // Generate the log file name based on the current time.
-            // Assume settings.getLogFilePath() returns a directory path (without file name).
             String logFolder = settings.getLogFilePath();
-            // Ensure the log folder exists.
             File folder = new File(logFolder);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-            String fullLogFileName = logFolder + File.separator + timestamp + ".log";
-            fileAppender.setFile(fullLogFileName);
+            if (!folder.exists()) folder.mkdirs();
 
-            // Configure pattern layout for file logging.
+            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            String fileName = logFolder + File.separator + timestamp + ".log";
+            fileAppender.setFile(fileName);
+
             PatternLayout layout = new PatternLayout();
             layout.setContext(loggerContext);
             layout.setPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
             layout.start();
 
-            // Create an encoder wrapping the layout.
             LayoutWrappingEncoder encoder = new LayoutWrappingEncoder();
             encoder.setContext(loggerContext);
             encoder.setLayout(layout);
@@ -71,63 +58,43 @@ public class LoggerHelper {
 
             fileAppender.setEncoder(encoder);
             fileAppender.start();
-
-            // Attach the file appender to the root logger.
             rootLogger.addAppender(fileAppender);
-            logger.info("File logging enabled. Log file created: " + fullLogFileName);
+            helperLogger.info("File logging enabled. Log file: {}", fileName);
         } else {
-            logger.info("File logging is disabled.");
+            helperLogger.info("File logging is disabled.");
         }
     }
 
-    /**
-     * Convenience method for logging an INFO level message.
-     *
-     * @param message the message to log.
-     */
+    // Obtains the SLF4J Logger for the calling class
+    private static Logger getCallerLogger() {
+        String className = Thread.currentThread().getStackTrace()[3].getClassName();
+        return LoggerFactory.getLogger(className);
+    }
+
     public static void info(String message) {
-        logger.info(message);
+        getCallerLogger().info(message);
     }
 
-    /**
-     * Convenience method for logging a DEBUG level message.
-     *
-     * @param message the message to log.
-     */
     public static void debug(String message) {
-        logger.debug(message);
+        getCallerLogger().debug(message);
     }
 
-    /**
-     * Convenience method for logging a WARN level message.
-     *
-     * @param message the message to log.
-     */
     public static void warn(String message) {
-        logger.warn(message);
+        getCallerLogger().warn(message);
     }
 
-    /**
-     * Convenience method for logging an ERROR level message.
-     *
-     * @param message the message to log.
-     */
     public static void error(String message) {
-        logger.error(message);
+        getCallerLogger().error(message);
     }
 
-    /**
-     * Convenience method for logging a TRACE level message.
-     *
-     * @param message the message to log.
-     */
     public static void trace(String message) {
-        logger.trace(message);
+        getCallerLogger().trace(message);
     }
 
-    /**
-     * Logs sample messages at various levels.
-     */
+    public static void trace(String message, Throwable t) {
+        getCallerLogger().trace(message, t);
+    }
+
     public static void logTest() {
         trace("This is a TRACE level message.");
         debug("This is a DEBUG level message.");
