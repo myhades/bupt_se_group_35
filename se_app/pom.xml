@@ -75,6 +75,10 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>org.group35.Main</mainClass>
+                    <options>
+                        <option>--sun-misc-unsafe-memory-access=allow</option>
+                        <option>--enable-native-access=ALL-UNNAMED,javafx.graphics</option>
+                    </options>
                 </configuration>
             </plugin>
 
