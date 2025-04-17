@@ -3,6 +3,7 @@ package org.group35.controller;
 import org.group35.model.User;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.util.PasswordUtils;
+import org.group35.util.LoggerHelper;
 
 import java.util.List;
 
