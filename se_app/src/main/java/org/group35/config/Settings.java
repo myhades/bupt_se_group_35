@@ -35,13 +35,13 @@ public class Settings {
      */
     public Settings() {
         // Set the default data file location.
-        this.dataFilePath = System.getProperty("user.dir") + "/app_data/data";
+        this.dataFilePath = System.getProperty("user.dir") + "\\app_data\\data";
         // Set the default log level.
         this.logLevel = "INFO";
         // Enable file logging by default.
         this.fileLoggingEnabled = true;
         // Set default log file path.
-        this.logFilePath = System.getProperty("user.dir") + "/app_data/logs";
+        this.logFilePath = System.getProperty("user.dir") + "\\app_data\\logs";
     }
 
     /**
