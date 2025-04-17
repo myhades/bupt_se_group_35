@@ -71,7 +71,7 @@ public class LoginController {
         }
         // Duplicate username check
         boolean exists = UserManager.getUsers().stream()
-                .anyMatch(u -> u.getUsername().equalsIgnoreCase(username));
+                .anyMatch(u -> u.getUsername().equals(username));
         if (exists) {
             showAlert(Alert.AlertType.ERROR, "Registration Error", null, "That username is already taken.");
             return;
@@ -114,7 +114,7 @@ public class LoginController {
     private Optional<String> showConfirmPasswordDialog(String initialPwd) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Confirm Password");
-        dialog.setHeaderText("Please re-enter your password:");
+        dialog.setHeaderText("Please confirm your password:");
 
         ButtonType confirmType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(confirmType, ButtonType.CANCEL);

@@ -28,7 +28,7 @@ public class Main extends Application {
 
         // Initialize settings
         Settings settings = new Settings();
-        settings.setLogLevel("INFO");
+        settings.setLogLevel("DEBUG");
 
         // Initialize logger
         LoggerHelper.configureLogLevel(settings);
