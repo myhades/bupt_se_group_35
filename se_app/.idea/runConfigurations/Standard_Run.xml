@@ -12,6 +12,7 @@
           <option name="goals">
             <list>
               <option value="javafx:run" />
+              <option value="-Dexec.args=--enable-native-access=ALL-UNNAMED" />
             </list>
           </option>
           <option name="multimoduleDir" />

@@ -72,6 +72,7 @@
 
     <build>
         <plugins>
+            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -111,18 +112,5 @@
 
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>tencent</id>
-            <url>https://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>tencent</id>
-            <url>https://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>

@@ -1,49 +1,34 @@
 package org.group35;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
-import java.net.URL;
 import org.group35.config.Settings;
 import org.group35.util.LoggerHelper;
+import org.group35.util.SceneManager;
+import org.group35.runtime.ApplicationRuntime;
 import org.group35.persistence.PersistentDataManager;
+
+import org.group35.controller.UserManager;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        try {
-            // Load the FXML file
-            URL resource = getClass().getResource("/org/group35/view/LoginPage.fxml");
-            if (resource == null) {
-                throw new IllegalStateException("Cannot find LoginPage.fxml");
-            }
-            Parent root = FXMLLoader.load(resource);
-            Scene scene = new Scene(root, 1000, 500);
-
-            primaryStage.setTitle("Monora");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void start(Stage primaryStage) throws Exception {
+        SceneManager.setPrimaryStage(primaryStage);
+        SceneManager.showLoginPage();
     }
 
     public static void main(String[] args) {
         initialize();
+        test_endpoint();
         launch(args);
     }
 
     private static void initialize() {
+
         // Initialize settings
         Settings settings = new Settings();
-
-        settings.setLogLevel("INFO");
-        settings.setFileLoggingEnabled(true);
-        settings.setLogFilePath("./log/app.log");
+        settings.setLogLevel("DEBUG");
 
         // Initialize logger
         LoggerHelper.configureLogLevel(settings);
@@ -51,7 +36,17 @@ public class Main extends Application {
         // Initialize persistent data manager
         PersistentDataManager.initialize(settings);
 
+        // Initialize application runtime (singleton)
+        ApplicationRuntime.getInstance();
+
         LoggerHelper.info("Application initialization complete.");
+
+    }
+
+    private static void test_endpoint() {
+
+//        UserManager userManager = ApplicationRuntime.getInstance().getUserManager();
+//        userManager.registerUser("admin", "admin");
 
     }
 
