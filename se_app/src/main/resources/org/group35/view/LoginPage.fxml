@@ -28,12 +28,12 @@
           alignment="CENTER_LEFT"
           prefWidth="500"
           prefHeight="500"
-          style="-fx-padding: 0 80 30 80;">  <!-- Padding: top 0, right 80, bottom 0, left 80 -->
+          style="-fx-padding: 0 80 40 80;">  <!-- Padding: top 0, right 80, bottom 0, left 80 -->
 
         <!-- Nested VBox for Title and Welcome Labels with reduced spacing -->
         <VBox spacing="5" alignment="CENTER_LEFT">
             <!-- Title Label: Split into two lines with newline -->
-            <Label text="EBU6304 Software&#10;Engineering"
+            <Label text="EBU6304&#10;Software Engineering"
                    style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #0B76A0;"/>
             <!-- Welcome Label: Same font size and placed close to title -->
             <Label text="Welcome Back"

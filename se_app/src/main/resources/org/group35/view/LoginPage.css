@@ -1,3 +1,27 @@
+/* LoginPage.css */
+
+@font-face {
+    font-family: 'ArticulatNormal';
+    src: url('assets/articulat-cf-normal.ttf');
+}
+@font-face {
+    font-family: 'ArticulatDemiBold';
+    src: url('assets/articulat-cf-demi-bold.ttf');
+}
+
+/* Apply normal font to text inputs and buttons */
+.text-input,
+.password-field,
+.button {
+    -fx-font-family: 'ArticulatNormal';
+}
+
+/* Apply demi-bold font to title labels */
+.title-label {
+    -fx-font-family: 'ArticulatDemiBold';
+}
+
+/* Button hover/click animations */
 .button:hover {
     -fx-opacity: 0.6;
 }
