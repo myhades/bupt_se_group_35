@@ -51,17 +51,21 @@ public class AIAssistant {
                 "1. Analyze the user's financial records.\\n" +
                 "2. Generate a brief, one-sentence summary of the user's spending habits.\\n" +
                 "## Constraints\\n" +
+                "3. Offer reliable and feasible suggestions for saving expenses for next month based on monthly income and savings goal.\\n" +
+                "## Constraints\\n" +
                 "- Provide a concise, human-readable summary without mentioning specific numbers.\\n" +
-                "- Focus on categorizing spending between essential expenses (rent, utilities) and discretionary spending (entertainment, dining).\\n" +
+                "- Compare essential expenses (housing, utilities, groceries) with discretionary spending (entertainment, dining, shopping).\\n" +
                 "- Use natural language that feels personal and helpful.\\n" +
+                "- Focus on highlighting the balance or imbalance between different spending categories.\\n" +
                 "## Input Data\\n" +
                 "JSON Records (date,type,amount,merchant):\\n" + usrContent +
                 "## Task\\n" +
                 "1. Analyze the data to identify major spending categories.\\n" +
                 "2. Determine the balance between essential and discretionary spending.\\n" +
                 "3. Return ONLY a single sentence summary that describes the overall spending pattern.\\n" +
-                "4. Example format: \\\"Most of your recent spending went to essential expenses like rent and utilities, with discretionary spending such as dining out and entertainment.\\\"\\n" +
-                "5. Do NOT include any specific monetary values or percentages in your summary.\\n";
+                "4. Example format: \\\"Your recent spending shows some essential expenses such as rent and utilities, along with significant discretionary spending on dining out and entertainment.\\\"\\n" +
+                "5. Do NOT include any specific monetary values or percentages in your summary.\\n" +
+                "6. Explicitly mention the major categories you identified in a way that gives the user insight about their spending priorities.\\n";
         return prompt;
     }
 
@@ -140,14 +144,13 @@ public class AIAssistant {
                     LoggerHelper.debug("Response body: " + responseBody.string());
                 }
 
-                // API调用失败时返回一个默认摘要
-                return "您的大部分支出用于超市购物和基本生活必需品，其次是餐饮和水电费。";
+                return "";
             }
         } catch (IOException e) {
             LoggerHelper.error(e.getMessage());
             //e.printStackTrace();
-            // 发生异常时返回一个默认摘要
-            return "您的大部分支出用于超市购物和基本生活必需品，其次是餐饮和水电费。";
+
+            return "";
         } finally {
             if (responseBody != null) {
                 responseBody.close();
