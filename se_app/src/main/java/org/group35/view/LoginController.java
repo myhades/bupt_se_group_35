@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 import org.group35.model.User;
@@ -166,6 +168,19 @@ public class LoginController {
     private void hideWarning() {
         warningLabel.setVisible(false);
         warningLabel.setManaged(false);
+    }
+
+    @FXML
+    private void handleLoginKeyPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            handleLogin(null);  // Trigger the login action when ENTER is pressed
+        }
+    }
+    @FXML
+    private void handleConfirmKeyPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            handleConfirm(null);  // Trigger the login action when ENTER is pressed
+        }
     }
 
     private void showAlert(Alert.AlertType type, String title, String header, String content) {
