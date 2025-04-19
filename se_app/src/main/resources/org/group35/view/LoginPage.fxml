@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -9,8 +10,8 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.shape.SVGPath?>
+
 <HBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.LoginController"
       spacing="10"
@@ -18,56 +19,95 @@
       stylesheets="@LoginPage.css"
       styleClass="root-container">
 
-    <!-- Left Pane: Login Form Panel -->
+    <!-- Left Pane: Login/Form Panel -->
     <VBox styleClass="login-panel">
 
-        <!-- Title & Welcome all in one VBox, spaced by CSS -->
-        <VBox styleClass="title-box" alignment="CENTER_LEFT">
-            <Label text="EBU6304"
-                   styleClass="title-label"/>
-            <Label text="Software Engineering"
-                   styleClass="title-label"/>
-            <Label text="Welcome Back"
-                   styleClass="subtitle-label"/>
+        <!-- Login Group -->
+        <VBox fx:id="loginGroup" spacing="20" alignment="CENTER_LEFT">
+            <!-- Title & Welcome -->
+            <VBox styleClass="title-box" alignment="CENTER_LEFT">
+                <Label text="Monora" styleClass="title-label"/>
+                <Label text="Welcome Back" styleClass="subtitle-label"/>
+            </VBox>
+
+            <!-- Username Field -->
+            <StackPane styleClass="icon-field">
+                <TextField fx:id="usernameField"
+                           promptText="Username"
+                           styleClass="input-field"/>
+                <SVGPath content="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                         styleClass="input-icon"
+                         StackPane.alignment="CENTER_RIGHT">
+                </SVGPath>
+            </StackPane>
+
+            <!-- Password Field -->
+            <StackPane styleClass="icon-field">
+                <PasswordField fx:id="passwordField"
+                               promptText="Password"
+                               styleClass="input-field"/>
+                <SVGPath content="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                         styleClass="input-icon"
+                         StackPane.alignment="CENTER_RIGHT">
+                </SVGPath>
+            </StackPane>
+
+            <!-- Button Panel -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="button-panel">
+                <VBox.margin>
+                    <Insets top="10"/>
+                </VBox.margin>
+                <Button text="Login"
+                        onAction="#handleLogin"
+                        styleClass="button,login-button"
+                        contentDisplay="RIGHT">
+                    <graphic>
+                        <SVGPath content="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"
+                                 styleClass="login-icon"/>
+                    </graphic>
+                </Button>
+                <Button text="Register"
+                        onAction="#handleRegister"
+                        styleClass="button,register-button"/>
+            </HBox>
         </VBox>
 
-        <!-- Username Field -->
-        <StackPane styleClass="icon-field">
-            <TextField fx:id="usernameField"
-                       promptText="Username"
-                       styleClass="input-field"/>
-            <SVGPath content="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
-                     styleClass="input-icon"
-                     StackPane.alignment="CENTER_RIGHT">
-            </SVGPath>
-        </StackPane>
+        <!-- Confirm Group -->
+        <VBox fx:id="confirmGroup"
+              spacing="20"
+              alignment="CENTER_LEFT"
+              visible="false"
+              managed="false">
+            <!-- Confirmation Title -->
+            <VBox styleClass="title-box" alignment="CENTER_LEFT">
+                <Label text="Complete" styleClass="subtitle-label"/>
+                <Label text="Your Registration" styleClass="subtitle-label"/>
+            </VBox>
 
-        <!-- Password Field -->
-        <StackPane styleClass="icon-field">
-            <PasswordField fx:id="passwordField"
-                           promptText="Password"
-                           styleClass="input-field"/>
-            <SVGPath content="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
-                     styleClass="input-icon"
-                     StackPane.alignment="CENTER_RIGHT">
-            </SVGPath>
-        </StackPane>
+            <!-- Confirm Password Field -->
+            <StackPane styleClass="icon-field">
+                <PasswordField fx:id="confirmPasswordField"
+                               promptText="Confirm Password"
+                               styleClass="input-field"/>
+                <SVGPath content="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                         styleClass="input-icon"
+                         StackPane.alignment="CENTER_RIGHT">
+                </SVGPath>
+            </StackPane>
 
-        <!-- Button Panel -->
-        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="button-panel">
-            <Button text="Login"
-                    onAction="#handleLogin"
-                    styleClass="button,login-button"
-                    contentDisplay="RIGHT">
-                <graphic>
-                    <SVGPath content="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"
-                    styleClass="login-icon"/>
-                </graphic>
-            </Button>
-            <Button text="Register"
-                    onAction="#handleRegister"
-                    styleClass="button,register-button"/>
-        </HBox>
+            <!-- Confirm/Cancel Buttons -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="button-panel">
+                <VBox.margin>
+                    <Insets top="10"/>
+                </VBox.margin>
+                <Button text="Confirm"
+                        onAction="#handleConfirm"
+                        styleClass="button,login-button"/>
+                <Button text="Cancel"
+                        onAction="#handleCancel"
+                        styleClass="button,register-button"/>
+            </HBox>
+        </VBox>
 
     </VBox>
 

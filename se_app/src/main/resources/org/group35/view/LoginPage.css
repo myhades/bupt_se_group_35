@@ -27,11 +27,11 @@
 /* Titles */
 .title-box {
     -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-spacing: -10px;
-    -fx-font-size: 32px;
+    -fx-spacing: -14px;
+    -fx-font-size: 38px;
 }
 .title-label {
-    -fx-text-fill: #0B76A0;
+    -fx-text-fill: #2C6298;
 }
 .subtitle-label {
     -fx-text-fill: #000000;
