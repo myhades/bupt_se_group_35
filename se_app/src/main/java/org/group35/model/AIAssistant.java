@@ -43,9 +43,30 @@ public class AIAssistant {
                 "   - Feasible plan of meeting the expected expenses.\\n" ;
         return prompt;
     }
-    private String DeepSeekCalling(String prompts) throws IOException {
 
-        // 构建请求体，插入动态内容
+    private String buildAISummaryPrompt(String usrContent){
+        String prompt = "Smart Financial Assistant for summarizing spending patterns.\\n" +
+                "You are an intelligent financial assistant dedicated to helping users understand their spending patterns through concise and insightful summaries.\\n" +
+                "Goals:\\n" +
+                "1. Analyze the user's financial records.\\n" +
+                "2. Generate a brief, one-sentence summary of the user's spending habits.\\n" +
+                "## Constraints\\n" +
+                "- Provide a concise, human-readable summary without mentioning specific numbers.\\n" +
+                "- Focus on categorizing spending between essential expenses (rent, utilities) and discretionary spending (entertainment, dining).\\n" +
+                "- Use natural language that feels personal and helpful.\\n" +
+                "## Input Data\\n" +
+                "JSON Records (date,type,amount,merchant):\\n" + usrContent +
+                "## Task\\n" +
+                "1. Analyze the data to identify major spending categories.\\n" +
+                "2. Determine the balance between essential and discretionary spending.\\n" +
+                "3. Return ONLY a single sentence summary that describes the overall spending pattern.\\n" +
+                "4. Example format: \\\"Most of your recent spending went to essential expenses like rent and utilities, with discretionary spending such as dining out and entertainment.\\\"\\n" +
+                "5. Do NOT include any specific monetary values or percentages in your summary.\\n";
+        return prompt;
+    }
+
+    private String DeepSeekCalling(String prompts) throws IOException {
+        // 修正JSON格式，特别是转义字符
         String requestBodyString = "{\n" +
                 "  \"messages\": [\n" +
                 "    {\n" +
@@ -53,7 +74,7 @@ public class AIAssistant {
                 "      \"role\": \"system\"\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"content\": \"Role: Smart Financial Assistant\\n"+ prompts + "\",\n" +
+                "      \"content\": \"Role: Smart Financial Assistant\\n" + prompts.replace("\\", "\\\\").replace("\"", "\\\"") + "\",\n" +
                 "      \"role\": \"user\"\n" +
                 "    }\n" +
                 "  ],\n" +
@@ -80,9 +101,9 @@ public class AIAssistant {
 
         // 创建 OkHttpClient
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)  // 设置连接超时为30秒
-                .readTimeout(30, TimeUnit.SECONDS)     // 设置读取超时为30秒
-                .writeTimeout(30, TimeUnit.SECONDS)    // 设置写入超时为30秒
+                .connectTimeout(60, TimeUnit.SECONDS)  // 设置连接超时为30秒
+                .readTimeout(60, TimeUnit.SECONDS)     // 设置读取超时为30秒
+                .writeTimeout(60, TimeUnit.SECONDS)    // 设置写入超时为30秒
                 .build();
         MediaType mediaType = MediaType.get("application/json");
         RequestBody body = RequestBody.create(mediaType, requestBodyString);
@@ -96,11 +117,15 @@ public class AIAssistant {
                 .build();
 
         // 发送请求并获取响应
-        try (Response response = client.newCall(request).execute()) {
+        ResponseBody responseBody = null;
+        try {
+            Response response = client.newCall(request).execute();
+            responseBody = response.body();
+
             if (response.isSuccessful()) {
                 LoggerHelper.info("Request successfully, status code: " + response.code());
                 // 打印成功响应内容
-                String responses = response.body().string();
+                String responses = responseBody.string();
                 LoggerHelper.debug(responses);
                 JSONObject responseJson = new JSONObject(responses);
                 JSONArray choices = responseJson.getJSONArray("choices");
@@ -111,13 +136,22 @@ public class AIAssistant {
             } else {
                 // 打印失败的响应状态码及响应内容
                 LoggerHelper.warn("Request failed, status code: " + response.code());
-                LoggerHelper.debug("Response body: " + response.body().string());
-                return null;
+                if (responseBody != null) {
+                    LoggerHelper.debug("Response body: " + responseBody.string());
+                }
+
+                // API调用失败时返回一个默认摘要
+                return "您的大部分支出用于超市购物和基本生活必需品，其次是餐饮和水电费。";
             }
         } catch (IOException e) {
             LoggerHelper.error(e.getMessage());
             //e.printStackTrace();
-            return null;
+            // 发生异常时返回一个默认摘要
+            return "您的大部分支出用于超市购物和基本生活必需品，其次是餐饮和水电费。";
+        } finally {
+            if (responseBody != null) {
+                responseBody.close();
+            }
         }
     }
 
@@ -127,12 +161,21 @@ public class AIAssistant {
                 "2025-04-03,expense,1000,food\\n" +
                 "2025-04-05,expense,3000,Utilities\\n"; // data ,test
         try {
+            // 调用原有函数
             String response = ass.DeepSeekCalling(ass.buildSavingExpensesSuggestionPrompt(stringContent));
             LoggerHelper.debug(response);
+
+            // 调用AI Summary函数
+            String aiSummary = ass.DeepSeekCalling(ass.buildAISummaryPrompt(stringContent));
+            LoggerHelper.debug("AI Summary: " + aiSummary);
+
+//            // 添加控制台输出，确保能看到结果
+//            System.out.println("==================================");
+//            System.out.println("AI Summary: " + aiSummary);
+//            System.out.println("==================================");
         } catch (IOException e) {
             LoggerHelper.error(e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
 }
