@@ -57,7 +57,13 @@
         <HBox spacing="10" alignment="CENTER_LEFT" styleClass="button-panel">
             <Button text="Login"
                     onAction="#handleLogin"
-                    styleClass="button,login-button"/>
+                    styleClass="button,login-button"
+                    contentDisplay="RIGHT">
+                <graphic>
+                    <SVGPath content="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"
+                    styleClass="login-icon"/>
+                </graphic>
+            </Button>
             <Button text="Register"
                     onAction="#handleRegister"
                     styleClass="button,register-button"/>
