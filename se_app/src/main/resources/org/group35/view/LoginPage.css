@@ -59,7 +59,7 @@
 /* Buttons */
 .button {
     -fx-font-family: 'Articulat CF Normal';
-    -fx-font-size: 16gipx;
+    -fx-font-size: 16px;
     -fx-pref-height: 50px;
     -fx-pref-width: 130px;
     -fx-cursor: hand;
