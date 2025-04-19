@@ -1,6 +1,7 @@
 package org.group35.util;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -17,6 +18,11 @@ public class SceneManager {
      */
     public static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
+        primaryStage.setResizable(false);
+        Image icon = new Image(
+                SceneManager.class.getResourceAsStream("/org/group35/util/assets/monora_icon.png")
+        );
+        primaryStage.getIcons().add(icon);
         LoggerHelper.info("Primary stage configured");
     }
 
