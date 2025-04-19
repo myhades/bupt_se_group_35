@@ -10,69 +10,66 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<!--
-    This FXML defines the login page layout.
-    - The left pane contains the title and login form controls.
-    - The title is split into two lines, and the "Welcome Back" label is placed very near the second line.
-    - The input fields display both prompt and input text in black (#000000).
--->
+<?import javafx.scene.shape.SVGPath?>
 <HBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.LoginController"
       spacing="10"
       alignment="CENTER"
-      stylesheets="@LoginPage.css">
+      stylesheets="@LoginPage.css"
+      styleClass="root-container">
 
     <!-- Left Pane: Login Form Panel -->
-    <VBox fx:id="loginPanel"
-          spacing="30"
-          alignment="CENTER_LEFT"
-          prefWidth="500"
-          prefHeight="500"
-          style="-fx-padding: 0 80 40 80;">  <!-- Padding: top 0, right 80, bottom 0, left 80 -->
+    <VBox styleClass="login-panel">
 
-        <!-- Nested VBox for Title and Welcome Labels with reduced spacing -->
-        <VBox spacing="5" alignment="CENTER_LEFT">
-            <!-- Title Label: Split into two lines with newline -->
-            <Label text="EBU6304&#10;Software Engineering"
-                   style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #0B76A0;"/>
-            <!-- Welcome Label: Same font size and placed close to title -->
+        <!-- Title & Welcome all in one VBox, spaced by CSS -->
+        <VBox styleClass="title-box" alignment="CENTER_LEFT">
+            <Label text="EBU6304"
+                   styleClass="title-label"/>
+            <Label text="Software Engineering"
+                   styleClass="title-label"/>
             <Label text="Welcome Back"
-                   style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+                   styleClass="subtitle-label"/>
         </VBox>
 
-        <!-- Username Field: Dark background remains, but text and prompt text are black -->
-        <TextField fx:id="usernameField"
-                   promptText="Username"
-                   prefWidth="300"
-                   prefHeight="40"
-                   style="-fx-background-color: #CCCCCC; -fx-text-fill: #000000; -fx-prompt-text-fill: #635f5f; -fx-font-size: 14px; -fx-padding: 0 0 0 10;"/>
+        <!-- Username Field -->
+        <StackPane styleClass="icon-field">
+            <TextField fx:id="usernameField"
+                       promptText="Username"
+                       styleClass="input-field"/>
+            <SVGPath content="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                     styleClass="input-icon"
+                     StackPane.alignment="CENTER_RIGHT">
+            </SVGPath>
+        </StackPane>
 
-        <!-- Password Field: Same styling as Username Field -->
-        <PasswordField fx:id="passwordField"
-                       promptText="Password"
-                       prefWidth="300"
-                       prefHeight="40"
-                       style="-fx-background-color: #CCCCCC; -fx-text-fill: #000000; -fx-prompt-text-fill: #635f5f; -fx-font-size: 14px; -fx-padding: 0 0 0 10;"/>
+        <!-- Password Field -->
+        <StackPane styleClass="icon-field">
+            <PasswordField fx:id="passwordField"
+                           promptText="Password"
+                           styleClass="input-field"/>
+            <SVGPath content="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                     styleClass="input-icon"
+                     StackPane.alignment="CENTER_RIGHT">
+            </SVGPath>
+        </StackPane>
 
-        <!-- Button Panel: Holds Login and Register buttons -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
+        <!-- Button Panel -->
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="button-panel">
             <Button text="Login"
                     onAction="#handleLogin"
-                    style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 14px; -fx-pref-height: 40; -fx-pref-width: 120;"/>
+                    styleClass="button,login-button"/>
             <Button text="Register"
                     onAction="#handleRegister"
-                    style="-fx-background-color: white; -fx-text-fill: black; -fx-border-color: white; -fx-font-size: 14px; -fx-pref-height: 40; -fx-pref-width: 120;"/>
+                    styleClass="button,register-button"/>
         </HBox>
 
     </VBox>
 
-    <!-- Filler region to push the image panel to the right -->
-    <Region fx:id="filler" HBox.hgrow="ALWAYS"/>
+    <!-- Spacer -->
+    <Region HBox.hgrow="ALWAYS"/>
 
-    <!-- Right Pane: Image Panel -->
-    <StackPane fx:id="imagePanel"
-               prefWidth="500"
-               prefHeight="500">
+    <!-- Image Panel -->
+    <StackPane styleClass="image-panel">
         <ImageView fx:id="backgroundImage"
                    fitWidth="500"
                    preserveRatio="true"/>

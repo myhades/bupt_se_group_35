@@ -28,7 +28,8 @@ public class Main extends Application {
 
         // Initialize settings
         Settings settings = new Settings();
-        settings.setLogLevel("DEBUG");
+        settings.setLogLevel("TRACE");
+        settings.setFileLoggingEnabled(false);
 
         // Initialize logger
         LoggerHelper.configureLogLevel(settings);

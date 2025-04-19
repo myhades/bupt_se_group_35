@@ -30,7 +30,7 @@ public class PersistentDataManager {
         }
         // Set the DATA_FILE path.
         DATA_FILE = settings.getDataFilePath() + File.separator + "persistent_data.json";
-        LoggerHelper.debug("DATA_FILE set to: " + DATA_FILE);
+        LoggerHelper.debug("Data file is set to: " + DATA_FILE);
         // Load the store.
         loadStore();
     }
@@ -52,12 +52,12 @@ public class PersistentDataManager {
      */
     public static void loadStore() {
         if (DATA_FILE == null) {
-            LoggerHelper.warn("DATA_FILE is null, defaulting to 'persistent_data.json'");
+            LoggerHelper.warn("Data file is null, defaulting to 'persistent_data.json'");
             DATA_FILE = "persistent_data.json";
         }
         File file = new File(DATA_FILE);
         if (!file.exists()) {
-            LoggerHelper.info("DATA_FILE not found, initializing new PersistentStore");
+            LoggerHelper.info("Data file not found, initializing new PersistentStore");
             store = new PersistentStore();
         } else {
             try {
@@ -81,7 +81,7 @@ public class PersistentDataManager {
      */
     public static void saveStore() {
         if (DATA_FILE == null) {
-            LoggerHelper.warn("DATA_FILE is null on save, defaulting to 'persistent_data.json'");
+            LoggerHelper.warn("Data file is null on save, defaulting to 'persistent_data.json'");
             DATA_FILE = "persistent_data.json";
         }
         try {

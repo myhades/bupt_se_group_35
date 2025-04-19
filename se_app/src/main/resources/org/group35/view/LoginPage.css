@@ -1,33 +1,95 @@
 /* LoginPage.css */
 
+/* Font declarations */
 @font-face {
-    font-family: 'ArticulatNormal';
-    src: url('assets/articulat-cf-normal.ttf');
+    font-family: 'Articulat CF Normal';
+    src: url('assets/fonts/articulat-cf-normal.ttf');
 }
 @font-face {
-    font-family: 'ArticulatDemiBold';
-    src: url('assets/articulat-cf-demi-bold.ttf');
+    font-family: 'Articulat CF Demi Bold';
+    src: url('assets/fonts/articulat-cf-demi-bold.ttf');
 }
 
-/* Apply normal font to text inputs and buttons */
-.text-input,
-.password-field,
-.button {
-    -fx-font-family: 'ArticulatNormal';
+/* Root container defaults */
+.root-container {
+    -fx-font-family: 'Articulat CF Normal';
 }
 
-/* Apply demi-bold font to title labels */
+/* Login panel */
+.login-panel {
+    -fx-pref-width: 500px;
+    -fx-pref-height: 500px;
+    -fx-spacing: 30px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 80 50 80;
+}
+
+/* Titles */
+.title-box {
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-spacing: -10px;
+    -fx-font-size: 32px;
+}
 .title-label {
-    -fx-font-family: 'ArticulatDemiBold';
+    -fx-text-fill: #0B76A0;
+}
+.subtitle-label {
+    -fx-text-fill: #000000;
 }
 
-/* Button hover/click animations */
-.button:hover {
-    -fx-opacity: 0.6;
+/* Input fields */
+.input-field {
+    -fx-background-color: #CCCCCC;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #635f5f;
+    -fx-font-size: 15px;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 40px;
+    -fx-padding: 0 35px 0 10px;
+}
+.icon-field {
+    -fx-pref-width: 300px;
+}
+.input-icon {
+    -fx-fill: #635f5f;
+    -fx-cursor: text;
+    -fx-translate-x: -18px;
 }
 
+/* Buttons */
+.button {
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-font-size: 15px;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 120px;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2,0,0,1);
+}
+.login-button {
+    -fx-background-color: #000000;
+    -fx-text-fill: #FFFFFF;
+}
+.register-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000;
+    -fx-effect: none;
+}
 .button:pressed {
-    -fx-scale-x: 0.95;
-    -fx-scale-y: 0.95;
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
     -fx-opacity: 0.6;
+}
+.login-button:hover {
+    -fx-background-color: derive(#000000, 50%);
+}
+.register-button:hover {
+    -fx-text-fill: derive(#000000, 50%);
+}
+
+/* Image panel */
+.image-panel {
+    -fx-pref-width: 500px;
+    -fx-pref-height: 500px;
 }

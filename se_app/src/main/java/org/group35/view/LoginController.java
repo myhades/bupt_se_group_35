@@ -27,7 +27,7 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        backgroundImage.setImage(new Image("/org/group35/view/assets/LoginPage_background.jpg"));
+        backgroundImage.setImage(new Image("/org/group35/view/assets/images/LoginPage_background.jpg"));
     }
 
     @FXML
