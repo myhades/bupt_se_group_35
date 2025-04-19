@@ -30,6 +30,13 @@
                 <Label text="Welcome Back" styleClass="subtitle-label"/>
             </VBox>
 
+            <!-- Warning Message -->
+            <Label fx:id="warningLabel"
+                   text=""
+                   styleClass="warning-label"
+                   visible="false"
+                   managed="false"/>
+
             <!-- Username Field -->
             <StackPane styleClass="icon-field">
                 <TextField fx:id="usernameField"
@@ -83,6 +90,13 @@
                 <Label text="Complete" styleClass="subtitle-label"/>
                 <Label text="Your Registration" styleClass="subtitle-label"/>
             </VBox>
+
+            <!-- Warning Message -->
+            <Label fx:id="confirmWarningLabel"
+                   text=""
+                   styleClass="warning-label"
+                   visible="false"
+                   managed="false"/>
 
             <!-- Confirm Password Field -->
             <StackPane styleClass="icon-field">

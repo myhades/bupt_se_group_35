@@ -37,6 +37,15 @@
     -fx-text-fill: #000000;
 }
 
+/* Warning textbox */
+.warning-label {
+    -fx-text-fill: #bf1c1c;
+    -fx-font-size: 16px;
+    -fx-padding: -15 0 -5 0;
+    -fx-wrap-text: true;
+    -fx-max-width: 290px;
+}
+
 /* Input fields */
 .input-field {
     -fx-background-color: #CCCCCC;

@@ -16,23 +16,11 @@ import java.util.Optional;
 
 public class LoginController {
 
-    @FXML
-    private TextField usernameField;
-
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private PasswordField confirmPasswordField;
-
-    @FXML
-    private VBox loginGroup;
-
-    @FXML
-    private VBox confirmGroup;
-
-    @FXML
-    private ImageView backgroundImage;
+    @FXML private Label warningLabel, confirmWarningLabel;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField, confirmPasswordField;
+    @FXML private VBox loginGroup, confirmGroup;
+    @FXML private ImageView backgroundImage;
 
     // Store pending registration data
     private String pendingUsername;
@@ -40,71 +28,69 @@ public class LoginController {
 
     @FXML
     private void initialize() {
+        // load background
         backgroundImage.setImage(new Image(
                 getClass().getResourceAsStream("/org/group35/view/assets/images/LoginPage_background.jpg")
         ));
+        // hide warning
+        hideWarning();
     }
 
     @FXML
     private void handleLogin(ActionEvent event) {
+        hideWarning();
+
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Login Error", null,
-                    "Please enter both username and password.");
+            showWarning("Please enter both username and password.");
             return;
         }
 
         boolean success = UserManager.loginUser(username, password);
-        if (success) {
-            Optional<User> opt = UserManager.getUsers().stream()
-                    .filter(u -> u.getUsername().equals(username))
-                    .findFirst();
-
-            if (opt.isPresent()) {
-                ApplicationRuntime.getInstance().loginUser(opt.get());
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Login Error", null,
-                        "User record not found.");
-            }
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Login Error", null,
-                    "Invalid username or password.");
+        if (!success) {
+            showWarning("Invalid username or password.");
+            return;
         }
+
+        Optional<User> opt = UserManager.getUsers().stream()
+                .filter(u -> u.getUsername().equals(username))
+                .findFirst();
+        if (opt.isEmpty()) {
+            showWarning("User record not found.");
+            return;
+        }
+        ApplicationRuntime.getInstance().loginUser(opt.get());
     }
 
     @FXML
     private void handleRegister(ActionEvent event) {
-        // Prepare for registration: collect and validate initial data
+        hideWarning();
+
         String username = usernameField.getText().trim();
         if (username.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Registration Error", null,
-                    "Please enter a username.");
+            showWarning("Please enter a username.");
             return;
         }
         if (!username.matches("[A-Za-z0-9]+")) {
-            showAlert(Alert.AlertType.ERROR, "Registration Error", null,
-                    "Username can only contain letters and digits.");
+            showWarning("Username can only contain letters and digits.");
             return;
         }
         if (UserManager.getUsers().stream()
                 .anyMatch(u -> u.getUsername().equals(username))) {
-            showAlert(Alert.AlertType.ERROR, "Registration Error", null,
-                    "That username is already taken.");
+            showWarning("That username is already taken.");
             return;
         }
 
         String initialPwd = passwordField.getText();
         if (initialPwd.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Registration Error", null,
-                    "Please enter a password.");
+            showWarning("Please enter a password.");
             return;
         }
         if (initialPwd.length() < 8 || !initialPwd.matches(".*[A-Za-z].*")
                 || !initialPwd.matches(".*\\d.*")) {
-            showAlert(Alert.AlertType.ERROR, "Registration Error", null,
-                    "Password must be at least 8 characters and include letters and digit.");
+            showWarning("Password must be at least 8 characters and include letters and digit.");
             return;
         }
 
@@ -112,7 +98,7 @@ public class LoginController {
         pendingUsername = username;
         pendingPassword = initialPwd;
 
-        // Show confirm group
+        // switch to confirm group
         loginGroup.setManaged(false);
         loginGroup.setVisible(false);
         confirmGroup.setManaged(true);
@@ -123,10 +109,10 @@ public class LoginController {
 
     @FXML
     private void handleConfirm(ActionEvent event) {
+        hideWarning();
         String confirmPwd = confirmPasswordField.getText();
         if (!confirmPwd.equals(pendingPassword)) {
-            showAlert(Alert.AlertType.ERROR, "Registration Error", null,
-                    "Passwords do not match.");
+            showWarning("Passwords do not match.");
             return;
         }
         // Perform registration
@@ -140,15 +126,13 @@ public class LoginController {
 
     @FXML
     private void handleCancel(ActionEvent event) {
-        // Cancel registration, go back
         resetToLogin();
     }
 
     /**
-     * Resets the UI back to the login group, clearing all fields.
+     * Resets the UI back to the login view, clearing fields and warnings.
      */
     private void resetToLogin() {
-        pendingUsername = null;
         pendingPassword = null;
 
         confirmGroup.setManaged(false);
@@ -158,6 +142,30 @@ public class LoginController {
 
         usernameField.clear();
         passwordField.clear();
+        hideWarning();
+    }
+
+    /**
+     * Show an inline warning message above the input field.
+     */
+    private void showWarning(String msg) {
+        if (loginGroup.isVisible()) {
+            warningLabel.setText(msg);
+            warningLabel.setVisible(true);
+            warningLabel.setManaged(true);
+        } else {
+            confirmWarningLabel.setText(msg);
+            confirmWarningLabel.setVisible(true);
+            confirmWarningLabel.setManaged(true);
+        }
+    }
+
+    /**
+     * Hide the inline warning label.
+     */
+    private void hideWarning() {
+        warningLabel.setVisible(false);
+        warningLabel.setManaged(false);
     }
 
     private void showAlert(Alert.AlertType type, String title, String header, String content) {
