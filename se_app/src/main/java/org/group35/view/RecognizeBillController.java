@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import org.group35.AIModel.CaptureTest;
+import org.group35.service.BillsRecognition;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LoggerHelper;
 import org.group35.util.SceneManager;
@@ -169,70 +169,70 @@ public class RecognizeBillController implements Initializable {
     }
 
     @FXML
-    private void handleProcessButton(ActionEvent event) {
-        if (capturedImage == null) {
-            showAlert("处理错误", "没有可处理的图像。请先捕获图像。");
-            return;
-        }
-
-        processButton.setDisable(true);
-        captureButton.setDisable(true);
-
-        // 创建处理线程
-        Thread processThread = new Thread(() -> {
-            try {
-                LoggerHelper.info("开始处理账单图像");
-
-                // 转换图像为Base64
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                ImageIO.write(capturedImage, "PNG", outputStream);
-                byte[] imageData = outputStream.toByteArray();
-                String base64Image = imageToBase64.IToBase64(imageData);
-
-                // 从应用程序运行时获取用户设置信息
-                double savingGoal = 1000.0; // 默认值
-                double monthlyIncome = 5000.0; // 默认值
-
-                // 使用CaptureTest处理图像
-                CaptureTest captureTest = new CaptureTest(savingGoal, monthlyIncome);
-                String prompt = captureTest.buildCapturePrompt();
-                String requestBody = captureTest.buildRequestBody(base64Image, prompt);
-                String response = captureTest.DeepSeekCalling(requestBody);
-
-                // 解析响应
-                if (response != null) {
-                    LoggerHelper.info("账单处理完成");
-                    JSONObject jsonResponse = new JSONObject(response);
-
-                    // 更新UI
-                    Platform.runLater(() -> {
-                        processButton.setDisable(false);
-                        captureButton.setDisable(false);
-                        showAlert("处理成功", "账单已成功处理，可以继续捕获新的账单。");
-                        // TODO: 显示处理结果，例如添加到支出记录中
-                    });
-                } else {
-                    LoggerHelper.warn("处理账单失败");
-                    Platform.runLater(() -> {
-                        processButton.setDisable(false);
-                        captureButton.setDisable(false);
-                        showAlert("处理失败", "处理账单时出错。请重试。");
-                    });
-                }
-
-            } catch (Exception e) {
-                LoggerHelper.error("处理账单错误：" + e.getMessage());
-                Platform.runLater(() -> {
-                    processButton.setDisable(false);
-                    captureButton.setDisable(false);
-                    showAlert("处理错误", "处理账单时出错：" + e.getMessage());
-                });
-            }
-        });
-
-        processThread.setDaemon(true);
-        processThread.start();
-    }
+//    private void handleProcessButton(ActionEvent event) {
+//        if (capturedImage == null) {
+//            showAlert("处理错误", "没有可处理的图像。请先捕获图像。");
+//            return;
+//        }
+//
+//        processButton.setDisable(true);
+//        captureButton.setDisable(true);
+//
+//        // 创建处理线程
+//        Thread processThread = new Thread(() -> {
+//            try {
+//                LoggerHelper.info("开始处理账单图像");
+//
+//                // 转换图像为Base64
+//                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//                ImageIO.write(capturedImage, "PNG", outputStream);
+//                byte[] imageData = outputStream.toByteArray();
+//                String base64Image = imageToBase64.IToBase64(imageData);
+//
+//                // 从应用程序运行时获取用户设置信息
+//                double savingGoal = 1000.0; // 默认值
+//                double monthlyIncome = 5000.0; // 默认值
+//
+//                // 使用CaptureTest处理图像
+//                BillsRecognition captureTest = new BillsRecognition(savingGoal, monthlyIncome);
+//                String prompt = captureTest.buildCapturePrompt();
+//                String requestBody = captureTest.buildRequestBody(base64Image, prompt);
+////                String response = captureTest.DeepSeekCalling(requestBody);
+//
+//                // 解析响应
+//                if (response != null) {
+//                    LoggerHelper.info("账单处理完成");
+//                    JSONObject jsonResponse = new JSONObject(response);
+//
+//                    // 更新UI
+//                    Platform.runLater(() -> {
+//                        processButton.setDisable(false);
+//                        captureButton.setDisable(false);
+//                        showAlert("处理成功", "账单已成功处理，可以继续捕获新的账单。");
+//                        // TODO: 显示处理结果，例如添加到支出记录中
+//                    });
+//                } else {
+//                    LoggerHelper.warn("处理账单失败");
+//                    Platform.runLater(() -> {
+//                        processButton.setDisable(false);
+//                        captureButton.setDisable(false);
+//                        showAlert("处理失败", "处理账单时出错。请重试。");
+//                    });
+//                }
+//
+//            } catch (Exception e) {
+//                LoggerHelper.error("处理账单错误：" + e.getMessage());
+//                Platform.runLater(() -> {
+//                    processButton.setDisable(false);
+//                    captureButton.setDisable(false);
+//                    showAlert("处理错误", "处理账单时出错：" + e.getMessage());
+//                });
+//            }
+//        });
+//
+//        processThread.setDaemon(true);
+//        processThread.start();
+//    }
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
