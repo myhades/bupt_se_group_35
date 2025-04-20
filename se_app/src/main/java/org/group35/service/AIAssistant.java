@@ -1,4 +1,4 @@
-package org.group35.AIModel;
+package org.group35.service;
 
 import okhttp3.*;
 import org.group35.util.LoggerHelper;

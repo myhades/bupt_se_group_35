@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Priority?>
+
+<!--
+    This FXML file is used to define the user interface layout of the Manual Entry Page.
+    - The overall page uses a VBox layout as the root container, with a background color of #f0f0f0 and padding of 20 on the top, 40 on the right, 40 on the bottom, and 40 on the left.
+    - The top navigation bar uses an HBox layout and contains multiple buttons and icons for navigating to different functional pages (such as the Dashboard, Spending, Plan, More pages, etc.), as well as a user logout function.
+    - The main content section also uses a VBox layout, which is divided into a top area with a back button and the page title, and a middle main input area.
+    - The middle main input area is further divided into two parts: the AI Recognition part and the Manual Input part.
+        - AI Recognition part: It contains a text area for users to describe in natural language, a microphone button for voice - input - related operations, and a convert button for converting the input content.
+        - Manual Input part: It contains three text fields for entering the name, amount, and category respectively, and a save button for saving the input information.
+    - The background color of the input fields (including the text area and text fields) is set to #a5a5a5, and both the prompt text and the input text are white to provide a clear visual effect.
+-->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.ManualEntryController"
+      spacing="10"
+      style="-fx-background-color: #f0f0f0; -fx-padding: 20 40 40 40;">
+
+    <!-- Top navigation bar -->
+    <HBox alignment="CENTER" spacing="30">
+        <Button onAction="#handleQuit" style="-fx-background-color: transparent; -fx-cursor: hand;">
+            <graphic>
+                <ImageView fx:id="QuitButtonImageView" fitWidth="25" fitHeight="25"/>
+            </graphic>
+        </Button>
+
+        <HBox alignment="CENTER">
+            <Button onAction="#handleDashboard" style="-fx-background-color: transparent; -fx-cursor: hand;" >
+                <graphic>
+                    <ImageView fx:id="DashboardImageView" fitWidth="25" fitHeight="25"/>
+                </graphic>
+            </Button>
+            <Label text="Dashboard" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+        </HBox>
+
+        <HBox alignment="CENTER">
+            <Button onAction="#handleSpending" style="-fx-background-color: transparent; -fx-cursor: hand;" >
+                <graphic>
+                    <ImageView fx:id="SpendingImageView" fitWidth="25" fitHeight="25"/>
+                </graphic>
+            </Button>
+            <Label text="Spending" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red; -fx-underline: true;"/>
+        </HBox>
+
+        <HBox alignment="CENTER">
+            <Button onAction="#handlePlan" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                <graphic>
+                    <ImageView fx:id="PlanImageView" fitWidth="25" fitHeight="25"/>
+                </graphic>
+            </Button>
+            <Label text="Plan" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+        </HBox>
+
+        <HBox alignment="CENTER">
+            <Button onAction="#handleMore" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                <graphic>
+                    <ImageView fx:id="MoreImageView" fitWidth="25" fitHeight="25"/>
+                </graphic>
+            </Button>
+            <Label text="More" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+        </HBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button onAction="#handleLogOut" style="-fx-background-color: transparent; -fx-cursor: hand;">
+            <graphic>
+                <HBox alignment="CENTER" spacing="10">
+                    <VBox alignment="CENTER">
+                        <Label text="Alaric" style="-fx-font-size: 16px; -fx-text-fill: black;"/>
+                        <Label text="Logout" style="-fx-font-size: 14px; -fx-text-fill: gray;"/>
+                    </VBox>
+                    <ImageView fx:id="avatarImageView" fitWidth="50" fitHeight="56"/>
+                </HBox>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Main parts -->
+    <VBox spacing="20" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
+        <!-- Back Button + Manual Entry -->
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                <graphic>
+                    <ImageView fx:id="BackButtonImageView" fitWidth="50" fitHeight="50"/>
+                </graphic>
+            </Button>
+            <Label text="Manual Entry" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+            <Label text="●" style="-fx-font-size: 36px; -fx-text-fill: green;"/>
+        </HBox>
+
+        <!-- The central main area -->
+        <HBox spacing="50" alignment="CENTER" VBox.vgrow="ALWAYS">
+
+            <!-- AI Recognition Part -->
+            <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;" prefWidth="400">
+                <Label text="AI Recognition" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                <StackPane>
+                    <TextArea fx:id="aiTextArea"
+                              promptText="Describe with natural language"
+                              style="-fx-background-color: #a5a5a5; -fx-control-inner-background: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px; -fx-padding: 15;"
+                              prefHeight="200" prefWidth="350"/>
+
+                    <Button onAction="#handleMicro" style="-fx-background-color: transparent; -fx-cursor: hand;" StackPane.alignment="BOTTOM_RIGHT">
+                        <graphic>
+                            <ImageView fx:id="MicrophoneImageView" fitWidth="30" fitHeight="30"/>
+                        </graphic>
+                    </Button>
+                </StackPane>
+
+                <Button text="Convert →" onAction="#handleConvert" style="-fx-background-color: #d2691e; -fx-text-fill: white; -fx-font-size: 16px;-fx-cursor: hand;" prefWidth="150" prefHeight="40"/>
+            </VBox>
+
+            <!-- Input Part -->
+            <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;" prefWidth="450">
+                <Label text="Input" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                <TextField fx:id="nameField"
+                           promptText="Name"
+                           style="-fx-background-color: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px;"
+                           prefHeight="40"/>
+
+                <TextField fx:id="amountField"
+                           promptText="Amount"
+                           style="-fx-background-color: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px;"
+                           prefHeight="40"/>
+
+                <TextField fx:id="categoryField"
+                           promptText="Category"
+                           style="-fx-background-color: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px;"
+                           prefHeight="40"/>
+
+                <HBox alignment="BOTTOM_RIGHT">
+                    <Button text="Save" onAction="#handleSave" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 16px;-fx-cursor: hand;" prefWidth="120" prefHeight="40"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </VBox>
+</VBox>

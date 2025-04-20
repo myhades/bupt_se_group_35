@@ -1,4 +1,4 @@
-package org.group35.model;
+package org.group35.service;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
