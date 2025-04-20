@@ -1,36 +1,55 @@
 package org.group35.view;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import org.group35.util.SceneManager;
-import org.group35.util.LoggerHelper;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.PieChart;
+import jdk.jshell.spi.SPIResolutionException;
+import org.group35.runtime.ApplicationRuntime;
+import javafx.event.ActionEvent;
+
+//import java.awt.event.ActionEvent;
 
 public class HomeController {
 
     @FXML
-    private ImageView avatarImage;
+    private LineChart<String, Number> spendingChart;
 
     @FXML
-    private Button recognizeBillButton;
+    private PieChart categoryPieChart;
 
     @FXML
     public void initialize() {
-        // 初始化头像（如果有）
-        // avatarImage.setImage(new Image(...));
+        // Apply styles to the charts after they are initialized
+        spendingChart.getStyleClass().add("chart");
+        categoryPieChart.getStyleClass().add("pie-chart");
 
-        // 其他初始化代码
-        LoggerHelper.info("首页初始化完成");
+        // Initialize Spending Distribution Chart with fake data
+        XYChart.Series<String, Number> spendingSeries = new XYChart.Series<>();
+        spendingSeries.setName("Spending Distribution");
+
+        spendingSeries.getData().add(new XYChart.Data<>("Jan", 350));
+        spendingSeries.getData().add(new XYChart.Data<>("Feb", 420));
+        spendingSeries.getData().add(new XYChart.Data<>("Mar", 300));
+        spendingSeries.getData().add(new XYChart.Data<>("Apr", 470));
+        spendingSeries.getData().add(new XYChart.Data<>("May", 380));
+        spendingSeries.getData().add(new XYChart.Data<>("Jun", 450));
+        spendingSeries.getData().add(new XYChart.Data<>("Jul", 500));
+
+        spendingChart.getData().add(spendingSeries);
+
+        // Initialize Category Pie Chart with fake data
+        PieChart.Data foodData = new PieChart.Data("Food", 30);
+        PieChart.Data transportData = new PieChart.Data("Transport", 20);
+        PieChart.Data entertainmentData = new PieChart.Data("Entertainment", 25);
+        PieChart.Data othersData = new PieChart.Data("Others", 25);
+
+        categoryPieChart.getData().addAll(foodData, transportData, entertainmentData, othersData);
     }
 
-    /**
-     * 处理账单识别按钮点击事件
-     * 导航到账单识别页面
-     */
     @FXML
-    private void handleRecognizeBillButton(ActionEvent event) {
-        LoggerHelper.info("导航到账单识别页面");
-        SceneManager.showRecognizeBillPage();
+    private void gotoSpending(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoSpending();
     }
+
 }
