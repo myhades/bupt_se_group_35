@@ -17,7 +17,9 @@ public final class ApplicationRuntime {
     public enum ProgramStatus {
         LOGIN,
         HOME,
-        SPENDING
+        SPENDING,
+        ManualEntry,
+        RecogBill
         // Add other statuses as needed.
     }
 
@@ -111,7 +113,15 @@ public final class ApplicationRuntime {
     }
 
     public void gotoHome() {
-        setProgramStatus((ProgramStatus.HOME));
+        setProgramStatus(ProgramStatus.HOME);
+    }
+
+    public void gotoManualEntry() {
+        setProgramStatus(ProgramStatus.ManualEntry);
+    }
+
+    public void gotoRecogBill() {
+        setProgramStatus(ProgramStatus.RecogBill);
     }
 
     /**
@@ -130,6 +140,12 @@ public final class ApplicationRuntime {
                 break;
             case SPENDING:
                 SceneManager.showSpendingPage();
+                break;
+            case ManualEntry:
+                SceneManager.showManualEntryPage();
+                break;
+            case RecogBill:
+                SceneManager.showRecognizeBillPage();
                 break;
             default:
                 LoggerHelper.warn("Unhandled ProgramStatus: " + status);

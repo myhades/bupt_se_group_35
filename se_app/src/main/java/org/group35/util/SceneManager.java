@@ -67,6 +67,11 @@ public class SceneManager {
         switchScene("/org/group35/view/RecognizeBillPage.fxml", 1000, 500, "Monora");
     }
 
+    public static void showManualEntryPage() {
+        LoggerHelper.debug("Switching to ManualEntryPage.fxml");
+        switchScene("/org/group35/view/ManualEntryPage.fxml", 1000, 500, "Monora");
+    }
+
     /**
      * Convenience method for showing the spending page.
      */

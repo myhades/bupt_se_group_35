@@ -25,7 +25,7 @@
                         </Button>
                         <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="20.0">
                             <children>
-                                <Button fx:id="dashboardButton" mnemonicParsing="false" onAction="#handleDashboardButton" styleClass="nav-button">
+                                <Button fx:id="dashboardButton" mnemonicParsing="false" onAction="#gotoHome" styleClass="nav-button">
                                     <graphic>
                                         <HBox alignment="CENTER" spacing="5.0">
                                             <children>
@@ -34,7 +34,7 @@
                                         </HBox>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="spendingButton" mnemonicParsing="false" onAction="#handleSpendingButton" styleClass="nav-button-active">
+                                <Button fx:id="spendingButton" mnemonicParsing="false" onAction="#gotoSpending" styleClass="nav-button-active">
                                     <graphic>
                                         <HBox alignment="CENTER" spacing="5.0">
                                             <children>
@@ -89,7 +89,7 @@
                     <children>
                         <HBox alignment="CENTER_LEFT" spacing="20.0">
                             <children>
-                                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" styleClass="back-button">
+                                <Button fx:id="backButton" mnemonicParsing="false" onAction="#gotoManualEntry" styleClass="back-button">
                                     <graphic>
                                         <Label styleClass="back-arrow" text="←" />
                                     </graphic>
@@ -123,7 +123,7 @@
                         <HBox alignment="CENTER" spacing="20.0">
                             <children>
                                 <Button fx:id="captureButton" mnemonicParsing="false" onAction="#handleCaptureButton" styleClass="primary-button" text="Capture" />
-                                <Button fx:id="processButton" mnemonicParsing="false" onAction="#handleProcessButton" styleClass="primary-button" text="Process Bill" />
+                                <Button fx:id="processButton" mnemonicParsing="false" styleClass="primary-button" text="Process Bill" />
                             </children>
                             <VBox.margin>
                                 <Insets top="20.0" />

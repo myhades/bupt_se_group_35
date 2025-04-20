@@ -48,8 +48,23 @@ public class HomeController {
     }
 
     @FXML
+    private void gotoHome(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoHome();
+    }
+
+    @FXML
     private void gotoSpending(ActionEvent event) {
         ApplicationRuntime.getInstance().gotoSpending();
+    }
+
+    @FXML
+    private void gotoManualEntry(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoManualEntry();
+    }
+
+    @FXML
+    private void gotoRecogBill(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoRecogBill();
     }
 
 }

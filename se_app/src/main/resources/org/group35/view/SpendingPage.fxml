@@ -25,7 +25,7 @@
             <HBox styleClass="nav-row" alignment="CENTER_LEFT" spacing="10">
                 <HBox spacing="20" styleClass="nav-bar">
                     <!-- Dashboard -->
-                    <Button text="Dashboard" onAction="#gotoDashboard" styleClass="nav-button">
+                    <Button text="Dashboard" onAction="#gotoHome" styleClass="nav-button">
                         <graphic>
                             <SVGPath content="M19,5V7H15V5H19M9,5V11H5V5H9M19,13V19H15V13H19M9,17V19H5V17H9M21,3H13V9H21V3M11,3H3V13H11V3M21,11H13V21H21V11M11,15H3V21H11V15Z"
                                      styleClass="nav-icon"/>
@@ -73,13 +73,13 @@
             <!-- New Entry Section -->
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="new-entry-container">
                 <Label text="New entry:" styleClass="new-entry-label"/>
-                <Button text="Manual" styleClass="add-button-green">
+                <Button text="Manual" styleClass="add-button-green" onAction="#gotoManualEntry">
                     <graphic>
                         <SVGPath content="M3,17.25V21H6.75L17.81,9.94L14.06,6.19L3,17.25M22.7,6.04C23.09,5.65 23.09,5 22.7,4.63L19.37,1.3C19,0.91 18.35,0.91 17.96,1.3L15.12,4.14L18.87,7.89L22.7,4.04Z"
                                  styleClass="add-icon"/>
                     </graphic>
                 </Button>
-                <Button text="Recognize Bill" styleClass="add-button-brown">
+                <Button text="Recognize Bill" styleClass="add-button-brown" onAction="#gotoRecogBill">
                     <graphic>
                         <SVGPath content="M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H20V6H4M6,9H18V11H6V9M6,13H16V15H6V13Z"
                                  styleClass="camera-icon"/>
