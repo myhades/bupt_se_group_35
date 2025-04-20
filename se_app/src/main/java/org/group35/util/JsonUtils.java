@@ -3,6 +3,7 @@ package org.group35.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.*;
+import org.group35.util.LoggerHelper;
 
 /**
  * JSON utility class.
@@ -14,22 +15,31 @@ public class JsonUtils {
      * Convert object to JSON string.
      */
     public static String toJson(Object obj) {
-        return gson.toJson(obj);
+        LoggerHelper.trace("Trying to convert to JSON from object type: " + (obj != null ? obj.getClass().getName() : "null"));
+        String json = gson.toJson(obj);
+        LoggerHelper.trace("Conversion completed. Result length: " + (json != null ? json.length() : 0));
+        return json;
     }
 
     /**
      * Convert JSON string to designated object.
      */
     public static <T> T fromJson(String json, Class<T> classOfT) {
-        return gson.fromJson(json, classOfT);
+        LoggerHelper.trace("Starting to convert JSON into object type: " + classOfT.getName());
+        T obj = gson.fromJson(json, classOfT);
+        LoggerHelper.trace("Conversion completed. Created an instance of: " + (obj != null ? obj.getClass().getName() : "null"));
+        return obj;
     }
 
     /**
      * Read JSON from file.
      */
     public static <T> T readJsonFromFile(File file, Class<T> classOfT) throws IOException {
+        LoggerHelper.trace("Reading JSON from file: " + file.getAbsolutePath());
         try (Reader reader = new FileReader(file)) {
-            return gson.fromJson(reader, classOfT);
+            T obj = gson.fromJson(reader, classOfT);
+            LoggerHelper.trace("Parsing completed. Created an instance of: " + (obj != null ? obj.getClass().getName() : "null"));
+            return obj;
         }
     }
 
@@ -37,8 +47,10 @@ public class JsonUtils {
      * Write JSON to file.
      */
     public static void writeJsonToFile(File file, Object obj) throws IOException {
+        LoggerHelper.trace("Writing JSON to file: " + file.getAbsolutePath());
         try (Writer writer = new FileWriter(file)) {
             gson.toJson(obj, writer);
         }
+        LoggerHelper.trace("Writing completed for file: " + file.getAbsolutePath());
     }
 }

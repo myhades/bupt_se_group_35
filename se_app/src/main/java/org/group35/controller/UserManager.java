@@ -1,83 +1,72 @@
 package org.group35.controller;
 
 import org.group35.model.User;
-import org.group35.util.JsonUtils;
+import org.group35.persistence.PersistentDataManager;
 import org.group35.util.PasswordUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.group35.util.LoggerHelper;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manages user registration and login operations, with data persisted to a JSON file.
+ * Manages user registration and login operations.
+ * Data persistence is handled by PersistentDataManager.
+ * Logging is added via LoggerHelper.
  */
 public class UserManager {
-    private static final File USER_FILE = new File("users.json");
 
     /**
-     * Register a new user: hash the password, add the user, and save to file.
+     * Register a new user: hash the password, add the user to the store.
      */
-    public static void registerUser(String username, String plainPassword) throws IOException {
+    public static void registerUser(String username, String plainPassword) {
+        LoggerHelper.debug("Attempting to register user: " + username);
         String hashed = PasswordUtils.hashPassword(plainPassword);
         User newUser = new User(username, hashed);
 
-        List<User> userList = loadUsers();
+        List<User> userList = getUsers();
         userList.add(newUser);
-        JsonUtils.writeJsonToFile(USER_FILE, userList);
-    }
-
-    /**
-     * Load the list of registered users. Returns an empty list if the file does not exist.
-     */
-    public static List<User> loadUsers() {
-        if (!USER_FILE.exists()) {
-            return new ArrayList<>();
-        }
-        try {
-            String content = new String(Files.readAllBytes(USER_FILE.toPath()));
-            // Assumes the JSON stores an array of User objects
-            User[] users = JsonUtils.fromJson(content, User[].class);
-            List<User> list = new ArrayList<>();
-            if (users != null) {
-                for (User u : users) {
-                    list.add(u);
-                }
-            }
-            return list;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        // Save the updated user list to the persistent store
+        PersistentDataManager.getStore().setUsers(userList);
+        PersistentDataManager.saveStore();
+        LoggerHelper.info("User registered successfully: " + username);
     }
 
     /**
      * Verify user login credentials.
      */
     public static boolean loginUser(String username, String plainPassword) {
-        List<User> users = loadUsers();
+        LoggerHelper.debug("Attempting login for user: " + username);
+        List<User> users = getUsers();
         for (User u : users) {
             if (u.getUsername().equals(username)) {
-                return PasswordUtils.checkPassword(plainPassword, u.getHashedPassword());
+                boolean authenticated = PasswordUtils.checkPassword(plainPassword, u.getHashedPassword());
+                if (authenticated) {
+                    LoggerHelper.info("Login successful for user: " + username);
+                } else {
+                    LoggerHelper.warn("Login failed for user: " + username + " - incorrect password");
+                }
+                return authenticated;
             }
         }
+        LoggerHelper.warn("Login failed for user: " + username + " - user not found");
         return false;
     }
 
-    // Simple test method
-    public static void main(String[] args) {
-        try {
-            // Register a user
-            registerUser("user1", "password123");
+    /**
+     * Get the list of users from the persistent store.
+     */
+    public static List<User> getUsers() {
+        List<User> users = PersistentDataManager.getStore().getUsers();
+        LoggerHelper.trace("Number of users retrieved from persistent store: " + (users != null ? users.size() : 0));
+        return users;
+    }
 
-            // Verify login
-            boolean success = loginUser("user1", "password123");
-            System.out.println("Login successful? " + success);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Set the list of users in the persistent store (used for testing or bulk updates).
+     */
+    public static void setUsers(List<User> users) {
+        LoggerHelper.debug("Setting user list with " + (users != null ? users.size() : 0) + " entries");
+        PersistentDataManager.getStore().setUsers(users);
+        PersistentDataManager.saveStore();
+        LoggerHelper.info("User list updated in persistent store");
     }
 }

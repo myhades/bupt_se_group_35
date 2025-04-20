@@ -6,7 +6,6 @@ import org.group35.model.User;
 
 /**
  * PersistentStore aggregates all persistent data.
- * Currently, it only contains a list of users.
  */
 public class PersistentStore {
     private List<User> users = new ArrayList<>();

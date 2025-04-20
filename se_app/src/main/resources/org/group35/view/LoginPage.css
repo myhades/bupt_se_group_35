@@ -1,0 +1,119 @@
+/* LoginPage.css */
+
+/* Font declarations */
+@font-face {
+    font-family: 'Articulat CF Normal';
+    src: url('assets/fonts/articulat-cf-normal.ttf');
+}
+@font-face {
+    font-family: 'Articulat CF Demi Bold';
+    src: url('assets/fonts/articulat-cf-demi-bold.ttf');
+}
+
+/* Root container defaults */
+.root-container {
+    -fx-font-family: 'Articulat CF Normal';
+}
+
+/* Login panel */
+.login-panel {
+    -fx-pref-width: 500px;
+    -fx-pref-height: 500px;
+    -fx-spacing: 30px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 80 50 80;
+}
+
+/* Titles */
+.title-box {
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-spacing: -14px;
+    -fx-font-size: 38px;
+}
+.title-label {
+    -fx-text-fill: #2C6298;
+}
+.subtitle-label {
+    -fx-text-fill: #000000;
+}
+
+/* Warning textbox */
+.warning-label {
+    -fx-text-fill: #bf1c1c;
+    -fx-font-size: 16px;
+    -fx-padding: -10 0 0 0;
+    -fx-wrap-text: true;
+    -fx-max-width: 290px;
+}
+
+/* Input fields */
+.input-field {
+    -fx-background-color: #CCCCCC;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #635f5f;
+    -fx-font-size: 16px;
+    -fx-pref-width: 290px;
+    -fx-pref-height: 40px;
+    -fx-padding: 0 50px 0 10px;
+}
+.icon-field {
+    -fx-pref-width: 290px;
+}
+.input-icon {
+    -fx-fill: #635f5f;
+    -fx-cursor: text;
+    -fx-translate-x: -18px;
+}
+
+/* Buttons */
+.button {
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-font-size: 16px;
+    -fx-pref-height: 50px;
+    -fx-pref-width: 130px;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2,0,0,1);
+}
+.login-button {
+    -fx-background-color: #000000;
+    -fx-text-fill: #FFFFFF;
+    -fx-graphic-text-gap: 8px;
+    -fx-padding: 0 12px 0 14px;
+}
+.login-icon {
+    -fx-fill: #FFFFFF;
+    -fx-translate-y: 1px;
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+.register-button {
+    -fx-background-color: transparent;
+    -fx-pref-width: 120px;
+    -fx-text-fill: #000000;
+    -fx-effect: none;
+}
+.button:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+    -fx-opacity: 0.6;
+}
+.button:focused {
+    -fx-border-color: #529dea;  /* Use the same primary color or your choice */
+    -fx-border-width: 3px;
+}
+.login-button:hover {
+    -fx-background-color: derive(#000000, 50%);
+}
+.register-button:hover {
+    -fx-text-fill: derive(#000000, 50%);
+}
+
+/* Image panel */
+.image-panel {
+    -fx-pref-width: 500px;
+    -fx-pref-height: 500px;
+}
