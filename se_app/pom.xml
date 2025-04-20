@@ -46,6 +46,21 @@
             <artifactId>okhttp</artifactId>
             <version>4.9.2</version>
         </dependency>
+
+        <!-- webcam-capture and slf4j -->
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture</artifactId>
+            <version>0.3.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.19</version>
+        </dependency>
+
+
         <!-- Encryption support：jBCrypt -->
         <dependency>
             <groupId>org.mindrot</groupId>
