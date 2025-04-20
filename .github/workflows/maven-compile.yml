@@ -21,13 +21,14 @@ jobs:
           distribution: temurin
           java-version: '24'
 
-      - name: Cache Maven Repo
+      - name: Cache Maven repo
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('se_app/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-m2-
 
       - name: Maven clean compile
+        working-directory: se_app
         run: mvn --batch-mode clean compile
