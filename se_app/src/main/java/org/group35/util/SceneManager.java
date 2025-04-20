@@ -58,4 +58,12 @@ public class SceneManager {
         LoggerHelper.debug("Switching to HomePage.fxml");
         switchScene("/org/group35/view/HomePage.fxml", 1000, 500, "Monora");
     }
+
+    /**
+     * Convenience method for showing the bill recognition page.
+     */
+    public static void showRecognizeBillPage() {
+        LoggerHelper.debug("Switching to RecognizeBillPage.fxml");
+        switchScene("/org/group35/view/RecognizeBillPage.fxml", 1000, 500, "Monora");
+    }
 }
