@@ -1,9 +1,8 @@
 package org.group35.service;
 
 import okhttp3.*;
+import org.group35.util.ImageUtils;
 import org.group35.util.LoggerHelper;
-import org.group35.util.imageToBase64;
-import org.group35.util.loadAndCompressImage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -194,9 +193,9 @@ public class BillsRecognition {
         BillsRecognition ass = new BillsRecognition(7000,5000);
 
         try {
-            byte[] imageData = loadAndCompressImage.loadCompressImage("C:\\Users\\29772\\OneDrive - Queen Mary, University of London\\Documents\\GitHub\\bupt_se_group_35\\se_app\\src\\main\\resources\\org\\group35\\model\\img.png");
+            byte[] imageData = ImageUtils.loadCompressImage("C:\\Users\\29772\\OneDrive - Queen Mary, University of London\\Documents\\GitHub\\bupt_se_group_35\\se_app\\src\\main\\resources\\org\\group35\\model\\img.png");
             String jsonDataPath = "./data.json";
-            String base64Image = imageToBase64.IToBase64(imageData);
+            String base64Image = ImageUtils.IToBase64(imageData);
             String requestBody = ass.buildRequestBody(base64Image, ass.buildCapturePrompt());
             String response = ass.multimodelAPICalling(requestBody);
             LoggerHelper.debug(response);

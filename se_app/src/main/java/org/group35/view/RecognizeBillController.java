@@ -14,12 +14,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import org.group35.service.BillsRecognition;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LoggerHelper;
 import org.group35.util.SceneManager;
-import org.group35.util.imageToBase64;
-import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -187,7 +184,7 @@ public class RecognizeBillController implements Initializable {
 //                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 //                ImageIO.write(capturedImage, "PNG", outputStream);
 //                byte[] imageData = outputStream.toByteArray();
-//                String base64Image = imageToBase64.IToBase64(imageData);
+//                String base64Image = ImageToBase64.IToBase64(imageData);
 //
 //                // 从应用程序运行时获取用户设置信息
 //                double savingGoal = 1000.0; // 默认值
