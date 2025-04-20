@@ -22,7 +22,7 @@ public class CaptureTest {
         this.monIncome = monIncome;
     }
 
-    public String buildCapturePrompt(){
+    private String buildCapturePrompt(){
         //TODO: Customized user input
         // 文本参数
         String promptText = "识别图片中内容，并返回一个json文件，以类别，金额，时间的格式总结每个输入输出";
@@ -135,7 +135,7 @@ public class CaptureTest {
         return payload.toString();
     }
 
-    public String DeepSeekCalling(String requestBody) throws IOException {
+    private String DeepSeekCalling(String requestBody) throws IOException {
 
         // 创建 OkHttpClient
         OkHttpClient client = new OkHttpClient.Builder()
