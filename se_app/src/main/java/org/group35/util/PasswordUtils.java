@@ -12,9 +12,9 @@ public class PasswordUtils {
      * Hash the plaintext password.
      */
     public static String hashPassword(String plainTextPassword) {
-        LoggerHelper.trace("hashPassword() called");
+        LoggerHelper.trace("Starting to hash the password");
         String hashed = BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
-        LoggerHelper.trace("Password hashed successfully");
+        LoggerHelper.trace("Password hashing completed successfully");
         return hashed;
     }
 
@@ -23,11 +23,11 @@ public class PasswordUtils {
      */
     public static boolean checkPassword(String plainTextPassword, String hashedPassword) {
         if (plainTextPassword == null || hashedPassword == null) {
-            LoggerHelper.trace("checkPassword() returned false due to null input");
+            LoggerHelper.trace("Password verification aborted: missing input");
             return false;
         }
         boolean result = BCrypt.checkpw(plainTextPassword, hashedPassword);
-        LoggerHelper.trace("checkPassword() result: " + result);
+        LoggerHelper.trace("Password verification result: " + result);
         return result;
     }
 }
