@@ -1,0 +1,119 @@
+.main-container {
+    -fx-background-color: #f5f5f5;
+}
+
+.header {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.close-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.close-button:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-padding: 10 15;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.nav-button-active {
+    -fx-background-color: transparent;
+    -fx-padding: 10 15;
+    -fx-cursor: hand;
+    -fx-border-color: #e74c3c;
+    -fx-border-width: 0 0 2 0;
+}
+
+.small-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.small-button:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.avatar {
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+}
+
+.content-area {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 1);
+    -fx-margin: 20;
+}
+
+.back-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.back-arrow {
+    -fx-font-size: 20;
+    -fx-text-fill: #333;
+}
+
+.page-title {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.status-indicator {
+    -fx-font-size: 16;
+}
+
+.camera-container {
+    -fx-background-color: #333333;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.preview-image {
+    -fx-border-color: white;
+    -fx-border-width: 2;
+}
+
+.frame-placeholder {
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-border-style: solid;
+}
+
+.placeholder-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-padding: 10 0 0 0;
+}
+
+.primary-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+}
+
+.primary-button:hover {
+    -fx-background-color: #c0392b;
+}

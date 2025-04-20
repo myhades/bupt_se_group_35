@@ -64,6 +64,30 @@ public final class ApplicationRuntime {
      * Handles user login by setting the current user and updating the program status.
      * @param user the User who has logged in.
      */
+
+    /**
+     * Returns the currently logged in user.
+     * @return the current User, or null if no user is logged in.
+     */
+    public User getCurrentUser() {
+        return loggedInUser;
+    }
+
+    /**
+     * Sets the current user.
+     * @param user the User to set as current.
+     */
+    public void setCurrentUser(User user) {
+        this.loggedInUser = user;
+        if (user == null) {
+            LoggerHelper.info("Current user set to null");
+        } else {
+            LoggerHelper.info("Current user set to: " + user.getUsername());
+        }
+    }
+
+
+
     public void loginUser(User user) {
         this.loggedInUser = user;
         LoggerHelper.info("User logged in: " + user.getUsername());

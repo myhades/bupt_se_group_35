@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.HomeController"
+      stylesheets="@HomePage.css"
+      styleClass="root-container">
+
+    <!-- Navigation Bar and Avatar -->
+    <HBox styleClass="nav-row" alignment="CENTER_LEFT" spacing="10">
+        <HBox spacing="20" styleClass="nav-bar">
+            <!-- Dashboard -->
+            <Button text="Dashboard" styleClass="nav-button">
+                <graphic>
+                    <SVGPath content="M19,5V7H15V5H19M9,5V11H5V5H9M19,13V19H15V13H19M9,17V19H5V17H9M21,3H13V9H21V3M11,3H3V13H11V3M21,11H13V21H21V11M11,15H3V21H11V15Z"
+                             styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+            <!-- Spending -->
+            <Button text="Spending" styleClass="nav-button-active">
+                <graphic>
+                    <SVGPath content="M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z"
+                             styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+            <!-- Plan -->
+            <Button text="Plan" styleClass="nav-button">
+                <graphic>
+                    <SVGPath content="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V9H19V19M19 7H5V5H19V7Z"
+                             styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+            <!-- More -->
+            <Button text="More" styleClass="nav-button">
+                <graphic>
+                    <SVGPath content="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,13C9.33,13 4,14.33 4,17V20H20V17C20,14.33 14.67,13 12,13Z"
+                             styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Avatar + User Info -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Label text="Alaric" styleClass="avatar-name"/>
+            <Button text="Logout" styleClass="avatar-logout"/>
+            <StackPane styleClass="avatar-container">
+                <ImageView fx:id="avatarImage"
+                           fitWidth="40" fitHeight="40"
+                           styleClass="avatar-image"/>
+            </StackPane>
+        </HBox>
+    </HBox>
+
+    <!-- New Entry Row -->
+    <HBox styleClass="entry-row" alignment="CENTER_LEFT" spacing="10">
+        <Label text="New entry:" styleClass="entry-label"/>
+        <Button text="Manual" styleClass="manual-button">
+            <graphic>
+                <SVGPath content="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                         styleClass="manual-icon"/>
+            </graphic>
+        </Button>
+        <Button fx:id="recognizeBillButton" text="Recognize Bill" styleClass="recognize-button" onAction="#handleRecognizeBillButton">
+            <graphic>
+                <SVGPath content="M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H20V6H4M6,9H18V11H6V9M6,13H16V15H6V13Z"
+                         styleClass="recognize-icon"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Main Content Area -->
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <!-- Left: Spendings List -->
+        <VBox styleClass="spending-panel" HBox.hgrow="ALWAYS">
+            <Label text="Spendings" styleClass="panel-title"/>
+
+            <!-- Spending Item: Rent -->
+            <HBox styleClass="spending-item" alignment="CENTER_LEFT">
+                <StackPane styleClass="category-icon-container" id="rent-icon">
+                    <Label text="R" styleClass="category-icon-label"/>
+                </StackPane>
+                <VBox styleClass="spending-details">
+                    <Label text="Rent" styleClass="spending-title"/>
+                    <Label text="November 30th" styleClass="spending-date"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="$ 1200" styleClass="spending-amount"/>
+            </HBox>
+
+            <!-- Spending Item: Netflix -->
+            <HBox styleClass="spending-item" alignment="CENTER_LEFT">
+                <StackPane styleClass="category-icon-container" id="netflix-icon">
+                    <Label text="N" styleClass="category-icon-label"/>
+                </StackPane>
+                <VBox styleClass="spending-details">
+                    <Label text="Netflix Family" styleClass="spending-title"/>
+                    <Label text="December 1st" styleClass="spending-date"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="$ 29.9" styleClass="spending-amount"/>
+            </HBox>
+
+            <!-- Spending Item: Utilities -->
+            <HBox styleClass="spending-item" alignment="CENTER_LEFT">
+                <StackPane styleClass="category-icon-container" id="utilities-icon">
+                    <Label text="U" styleClass="category-icon-label"/>
+                </StackPane>
+                <VBox styleClass="spending-details">
+                    <Label text="Utilities" styleClass="spending-title"/>
+                    <Label text="December 25th" styleClass="spending-date"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="$ 189.45" styleClass="spending-amount"/>
+            </HBox>
+
+            <!-- Spending Item: McDonald -->
+            <HBox styleClass="spending-item" alignment="CENTER_LEFT">
+                <StackPane styleClass="category-icon-container" id="food-icon">
+                    <Label text="M" styleClass="category-icon-label"/>
+                </StackPane>
+                <VBox styleClass="spending-details">
+                    <Label text="McDonald" styleClass="spending-title"/>
+                    <Label text="December 25th" styleClass="spending-date"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="$ 15.9" styleClass="spending-amount"/>
+            </HBox>
+
+            <!-- Spending Item: Dinner -->
+            <HBox styleClass="spending-item" alignment="CENTER_LEFT">
+                <StackPane styleClass="category-icon-container" id="dinner-icon">
+                    <Label text="D" styleClass="category-icon-label"/>
+                </StackPane>
+                <VBox styleClass="spending-details">
+                    <Label text="Dinner" styleClass="spending-title"/>
+                    <Label text="December 27th" styleClass="spending-date"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="$ 98.7" styleClass="spending-amount"/>
+            </HBox>
+        </VBox>
+
+        <!-- Right: Budget and AI Summary -->
+        <VBox spacing="20" HBox.hgrow="NEVER" prefWidth="250">
+            <!-- Budget Panel -->
+            <VBox styleClass="budget-panel">
+                <Label text="Budget" styleClass="panel-title"/>
+                <Label text="$ 200" styleClass="budget-amount"/>
+                <Label text="left to spend" styleClass="budget-description"/>
+                <StackPane styleClass="budget-progress-container">
+                    <Region styleClass="budget-progress-bg"/>
+                    <Region styleClass="budget-progress-fg" maxWidth="75%"/>
+                </StackPane>
+            </VBox>
+
+            <!-- AI Summary Panel -->
+            <VBox styleClass="ai-summary-panel">
+                <Label text="AI Summary" styleClass="panel-title"/>
+                <Label text="Most of your recent spending went to essential expenses like rent and utilities, with discretionary spending such as dining out and entertainment..."
+                       styleClass="ai-summary-text" wrapText="true"/>
+            </VBox>
+        </VBox>
+    </HBox>
+</VBox>

@@ -1,0 +1,279 @@
+/* Font faces */
+@font-face {
+    font-family: 'Articulat CF Bold';
+    src: url('assets/fonts/articulat-cf-bold.ttf');
+}
+@font-face {
+    font-family: 'Articulat CF Demi Bold';
+    src: url('assets/fonts/articulat-cf-demi-bold.ttf');
+}
+@font-face {
+    font-family: 'Articulat CF Normal';
+    src: url('assets/fonts/articulat-cf-normal.ttf');
+}
+
+/* Root */
+.root-container {
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-padding: 10px 20px;
+    -fx-text-fill: #000000;
+    -fx-background-color: #f5f5f5;
+}
+
+/* Navigation Row */
+.nav-row {
+    -fx-padding: 5 0 15 0;
+    -fx-spacing: 30;
+}
+.nav-bar {
+    -fx-spacing: 30;
+}
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 8;
+    -fx-padding: 5 10;
+}
+.nav-button:hover {
+    -fx-text-fill: #e74c3c;
+}
+.nav-button-active {
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 8;
+    -fx-padding: 5 10;
+    -fx-border-color: #e74c3c;
+    -fx-border-width: 0 0 2 0;
+}
+.nav-icon {
+    -fx-fill: #000000;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+/* Avatar */
+.avatar-container {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 50%;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 50%;
+}
+.avatar-image {
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+}
+.avatar-name {
+    -fx-font-size: 14px;
+}
+.avatar-logout {
+    -fx-font-size: 12px;
+    -fx-background-color: transparent;
+    -fx-text-fill: #666;
+    -fx-cursor: hand;
+}
+.avatar-logout:hover {
+    -fx-text-fill: #e74c3c;
+}
+
+/* Entry Row */
+.entry-row {
+    -fx-padding: 15 0 25 0;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+.entry-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.manual-button, .recognize-button {
+    -fx-padding: 8 15;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-graphic-text-gap: 8;
+    -fx-cursor: hand;
+}
+.manual-button {
+    -fx-background-color: #4CAF50;
+    -fx-background-radius: 20;
+}
+.manual-button:hover {
+    -fx-background-color: #388E3C;
+}
+.recognize-button {
+    -fx-background-color: #8B4513;
+    -fx-background-radius: 20;
+}
+.recognize-button:hover {
+    -fx-background-color: #6B3510;
+}
+.manual-icon, .recognize-icon {
+    -fx-fill: white;
+}
+
+/* Spending Panel */
+.spending-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+.spending-item {
+    -fx-padding: 10 5;
+    -fx-spacing: 10;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.category-icon-container {
+    -fx-min-width: 35;
+    -fx-min-height: 35;
+    -fx-max-width: 35;
+    -fx-max-height: 35;
+    -fx-background-radius: 50%;
+    -fx-alignment: center;
+}
+#rent-icon {
+    -fx-background-color: #2196F3;
+}
+#netflix-icon {
+    -fx-background-color: #F44336;
+}
+#utilities-icon {
+    -fx-background-color: #FF9800;
+}
+#food-icon {
+    -fx-background-color: #F44336;
+}
+#dinner-icon {
+    -fx-background-color: #795548;
+}
+.category-icon-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.spending-details {
+    -fx-spacing: 2;
+}
+.spending-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.spending-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: #757575;
+}
+.spending-amount {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Budget and AI Summary Panels */
+.panel-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+.budget-panel, .ai-summary-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+    -fx-spacing: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+.budget-amount {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+.budget-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #757575;
+}
+.budget-progress-container {
+    -fx-padding: 10 0 0 0;
+}
+.budget-progress-bg {
+    -fx-background-color: #E0E0E0;
+    -fx-background-radius: 5;
+    -fx-pref-height: 8;
+    -fx-min-width: 100%;
+}
+.budget-progress-fg {
+    -fx-background-color: #2196F3;
+    -fx-background-radius: 5;
+    -fx-pref-height: 8;
+    -fx-min-width: 10%;
+}
+.ai-summary-text {
+    -fx-font-size: 14px;
+    -fx-line-spacing: 5;
+}
+
+/* Greeting Bar */
+.greeting-row {
+    -fx-padding: 20 0 0 6;
+    -fx-alignment: center-left;
+}
+.greeting-label {
+    -fx-font-size: 46px;
+    -fx-font-family: 'Articulat CF Bold';
+}
+.info-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #666;
+    -fx-padding: -10 0 0 0;
+}
+.edit-button {
+    -fx-background-color: #595959;
+    -fx-font-size: 20px;
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 10 22;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+.edit-icon {
+    -fx-fill: #FFFFFF;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+.edit-button:hover {
+    -fx-background-color: #BBB;
+}
+
+/* Chart Row */
+.chart-row {
+    -fx-padding: 30 0 0 6;
+}
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+}
+.chart {
+    -fx-pref-height: 500px;
+}
+.pie-chart {
+    -fx-pref-height: 500px;
+}
+
+/* Action Button (Recognize Bill) */
+.action-button {
+    -fx-background-color: #e74c3c;
+    -fx-font-size: 20px;
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 10 22;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+.action-icon {
+    -fx-fill: #FFFFFF;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+.action-button:hover {
+    -fx-background-color: #c0392b;
+}
