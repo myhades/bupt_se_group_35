@@ -12,18 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 签出代码
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. 安装 JDK (示例用 17)
-      - name: Set up JDK 17
+      - name: Set up JDK 24
         uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '24'
 
-      # 3. 缓存 Maven 本地仓库，加速依赖下载
       - name: Cache Maven Repo
         uses: actions/cache@v3
         with:
@@ -32,6 +29,5 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-
 
-      # 4. 只做编译
       - name: Maven clean compile
         run: mvn --batch-mode clean compile
