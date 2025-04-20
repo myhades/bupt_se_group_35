@@ -1,4 +1,4 @@
-package org.group35.model;
+package org.group35.AIModel;
 
 import okhttp3.*;
 import org.group35.util.LoggerHelper;
@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class CaptureTest {
-    private static final String API_URL = "https://api.deepseek.com/v1/chat/completions";  // DeepSeek API URL
-    private static final String API_TOKEN = "sk-8c5a64ad52574f3e93a27b2d97055aab";  // DeepSeek API token
+//    private static final String API_URL = "https://api.deepseek.com/v1/chat/completions";  // DeepSeek API URL
+//    private static final String API_TOKEN = "sk-8c5a64ad52574f3e93a27b2d97055aab";  // DeepSeek API token
+    private static final String API_URL = "https://api.gptsapi.net";  // model API URL
+    private static final String API_TOKEN = "sk-id8a932449e17e32258e1565c2ab579825ad061b479cbtQr";  // model API token
     private double savingGoal;
     private double monIncome;
     public CaptureTest(double savingGoal,double monIncome){
@@ -30,7 +32,7 @@ public class CaptureTest {
 
     public String buildRequestBody(String base64Image, String prompt) {
         JSONObject payload = new JSONObject();
-        payload.put("model", "deepseek-ai/Janus-Pro-7B");
+        payload.put("model", "gpt-4.1");
         payload.put("temperature", 1);
         payload.put("max_tokens", 2048);
         payload.put("top_p", 1);
@@ -162,12 +164,12 @@ public class CaptureTest {
                 // 打印成功响应内容
                 String responses = response.body().string();
                 LoggerHelper.debug(responses);
-                JSONObject responseJson = new JSONObject(responses);
-                JSONArray choices = responseJson.getJSONArray("choices");
-                JSONObject message = choices.getJSONObject(0).getJSONObject("message");
-                String content = message.getString("content");
-                LoggerHelper.debug("Response: " + content);
-                return content;
+//                JSONObject responseJson = new JSONObject(responses);
+//                JSONArray choices = responseJson.getJSONArray("choices");
+//                JSONObject message = choices.getJSONObject(0).getJSONObject("message");
+//                String content = message.getString("content");
+//                LoggerHelper.debug("Response: " + content);
+                return responses;
             } else {
                 // 打印失败的响应状态码及响应内容
                 LoggerHelper.warn("Request failed, status code: " + response.code());
