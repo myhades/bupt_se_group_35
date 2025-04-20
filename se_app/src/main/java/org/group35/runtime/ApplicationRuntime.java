@@ -16,7 +16,8 @@ public final class ApplicationRuntime {
      */
     public enum ProgramStatus {
         LOGIN,
-        HOME
+        HOME,
+        SPENDING
         // Add other statuses as needed.
     }
 
@@ -105,6 +106,14 @@ public final class ApplicationRuntime {
         setProgramStatus(ProgramStatus.LOGIN);
     }
 
+    public void gotoSpending() {
+        setProgramStatus(ProgramStatus.SPENDING); //TODO: compare with current status
+    }
+
+    public void gotoHome() {
+        setProgramStatus((ProgramStatus.HOME));
+    }
+
     /**
      * Updates the program status and calls SceneManager to switch scenes based on the new status.
      * @param status the new program status.
@@ -118,6 +127,9 @@ public final class ApplicationRuntime {
                 break;
             case HOME:
                 SceneManager.showHomePage();
+                break;
+            case SPENDING:
+                SceneManager.showSpendingPage();
                 break;
             default:
                 LoggerHelper.warn("Unhandled ProgramStatus: " + status);
