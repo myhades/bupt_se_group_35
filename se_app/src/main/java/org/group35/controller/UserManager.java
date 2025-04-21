@@ -84,19 +84,20 @@ public class UserManager {
             if (u.getUsername().equals(username)) {
                 try {
                     byte[] compressed = ImageUtils.loadCompressImage(imagePath);
-                    String encoded = ImageUtils.IToBase64(compressed);
-                    u.setAvatar(encoded);
+                    String base64 = ImageUtils.toBase64(compressed);
+                    u.setAvatar(base64);
                     PersistentDataManager.getStore().setUsers(users);
                     PersistentDataManager.saveStore();
                     LoggerHelper.info("Avatar updated for user: " + username);
                 } catch (IOException e) {
-                    LoggerHelper.error("Failed to load avatar image for user: " + username);
+                    LoggerHelper.error("Failed to process avatar image for user: " + username);
                 }
                 return;
             }
         }
         LoggerHelper.warn("Failed to set avatar. User not found: " + username);
     }
+
 
     /**
      * Retrieves the Base64‑encoded avatar string for a user.
