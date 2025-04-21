@@ -94,7 +94,7 @@
     -fx-opacity: 0.6;
 }
 .button:focused {
-    -fx-border-color: #529dea;  /* Use the same primary color or your choice */
+    -fx-border-color: #529dea;
     -fx-border-width: 3px;
 }
 .login-button:hover {

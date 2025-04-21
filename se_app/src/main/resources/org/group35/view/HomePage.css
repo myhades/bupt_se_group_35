@@ -11,14 +11,14 @@
 }
 .info-label {
     -fx-font-size: 20px;
-    -fx-text-fill: #666;
+    -fx-text-fill: #7F7F7F;
     -fx-padding: -10 0 0 0;
 }
 .edit-button {
-    -fx-background-color: #595959;
-    -fx-font-size: 20px;
+    -fx-padding: 7 22;
+    -fx-font-size: 18px;
     -fx-text-fill: #FFFFFF;
-    -fx-padding: 10 22;
+    -fx-background-color: #595959;
     -fx-background-radius: 30px;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 14px;
@@ -29,15 +29,15 @@
     -fx-scale-y: 1.2;
 }
 .edit-button:hover {
-    -fx-background-color: #BBB;
+    -fx-background-color: derive(#595959, 50%);
 }
 
 /* Chart Row */
 .chart-row {
-    -fx-padding: 30 0 0 6;
+    -fx-padding: 30 0 0 0;
 }
 .chart-title {
-    -fx-font-size: 16px;
+    -fx-font-size: 18px;
     -fx-font-family: 'Articulat CF Demi Bold';
 }
 .chart {
@@ -45,4 +45,12 @@
 }
 .pie-chart {
     -fx-pref-height: 500px;
+}
+.chart-container {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 16px;
+}
+.chart-container .chart-title {
+    -fx-padding: 0 0 0 5px;
 }

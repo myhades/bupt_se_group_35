@@ -1,5 +1,8 @@
 package org.group35.view.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Base64;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -7,20 +10,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Circle;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
+import org.group35.util.ImageUtils;
 
-import java.io.IOException;
-
+/**
+ * Navigation bar component including nav buttons, username, and avatar.
+ */
 public class NavBarController extends HBox {
     @FXML private Button dashboardBtn, spendingBtn, planBtn, moreBtn, logoutBtn;
     @FXML private Label usernameLabel;
     @FXML private ImageView avatarImage;
 
-    // the Java‑bean property
+    // Property to track which page is active
     private final ObjectProperty<ProgramStatus> activePage =
             new SimpleObjectProperty<>(this, "activePage", null);
 
@@ -35,7 +42,7 @@ public class NavBarController extends HBox {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load NavBar.fxml", e);
         }
-        activePage.addListener((obs, oldP, newP) -> highlight(newP));
+        activePage.addListener((obs, oldStatus, newStatus) -> highlight(newStatus));
     }
 
     @FXML
@@ -46,11 +53,17 @@ public class NavBarController extends HBox {
         planBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoManualEntry());
         moreBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoRecogBill());
 
-        // Populate username from the logged‑in user
+        // Display current user's name and avatar
         User current = ApplicationRuntime.getInstance().getCurrentUser();
         if (current != null) {
             usernameLabel.setText(current.getUsername());
-            // optionally: avatarImage.setImage(current.getAvatarImage());
+            Image avatar = ImageUtils.fromBase64(current.getAvatar());
+            if (avatar != null) {
+                avatarImage.setImage(avatar);
+                double radius = avatarImage.getFitWidth() / 2.0;
+                Circle clip = new Circle(radius, radius, radius);
+                avatarImage.setClip(clip);
+            }
         } else {
             usernameLabel.setText("Guest");
         }
@@ -77,15 +90,13 @@ public class NavBarController extends HBox {
         }
     }
 
-    /** Java‑bean setter */
+    // Java‑bean property
     public void setActivePage(ProgramStatus page) {
         activePage.set(page);
     }
-    /** Java‑bean getter (optional)  */
     public ProgramStatus getActivePage() {
         return activePage.get();
     }
-    /** Java‑bean property accessor (necessary for FXML nested & binding)  */
     public ObjectProperty<ProgramStatus> activePageProperty() {
         return activePage;
     }
