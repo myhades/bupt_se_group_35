@@ -1,0 +1,36 @@
+# File: .github/workflows/pr-title-check.yml
+name: PR Title Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check-title:
+    name: Check PR Title Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prTitle = context.payload.pull_request.title;
+            const valid = /^(feat|fix|chore|docs|refactor|test):\s[A-Z].+/.test(prTitle);
+
+            if (!valid) {
+                core.setFailed(
+                `PR title "${prTitle}" is invalid. ` +
+                `Must follow "<type>: Summary" with type one of feat|fix|chore|docs|refactor|test `
+                + `and Summary starting uppercase.`
+                );
+            } else {
+                core.info("PR title format is valid.");
+            }
+
+      - name: Skip title check on push
+        if: ${{ github.event_name != 'pull_request' }}
+        run: echo "Not a PR, skipping title validation"
