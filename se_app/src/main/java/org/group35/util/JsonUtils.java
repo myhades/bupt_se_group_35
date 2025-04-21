@@ -3,21 +3,27 @@ package org.group35.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.*;
+import java.time.LocalDateTime;
 import org.group35.util.LoggerHelper;
 
 /**
- * JSON utility class.
+ * JSON utility class with support for Java 8 date/time types.
  */
 public class JsonUtils {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new DateTimeAdapter())
+            .setPrettyPrinting()
+            .create();
 
     /**
      * Convert object to JSON string.
      */
     public static String toJson(Object obj) {
-        LoggerHelper.trace("Trying to convert to JSON from object type: " + (obj != null ? obj.getClass().getName() : "null"));
+        LoggerHelper.trace("Trying to convert to JSON from object type: " +
+                (obj != null ? obj.getClass().getName() : "null"));
         String json = gson.toJson(obj);
-        LoggerHelper.trace("Conversion completed. Result length: " + (json != null ? json.length() : 0));
+        LoggerHelper.trace("Conversion completed. Result length: " +
+                (json != null ? json.length() : 0));
         return json;
     }
 
@@ -27,7 +33,8 @@ public class JsonUtils {
     public static <T> T fromJson(String json, Class<T> classOfT) {
         LoggerHelper.trace("Starting to convert JSON into object type: " + classOfT.getName());
         T obj = gson.fromJson(json, classOfT);
-        LoggerHelper.trace("Conversion completed. Created an instance of: " + (obj != null ? obj.getClass().getName() : "null"));
+        LoggerHelper.trace("Conversion completed. Created an instance of: " +
+                (obj != null ? obj.getClass().getName() : "null"));
         return obj;
     }
 
@@ -38,7 +45,8 @@ public class JsonUtils {
         LoggerHelper.trace("Reading JSON from file: " + file.getAbsolutePath());
         try (Reader reader = new FileReader(file)) {
             T obj = gson.fromJson(reader, classOfT);
-            LoggerHelper.trace("Parsing completed. Created an instance of: " + (obj != null ? obj.getClass().getName() : "null"));
+            LoggerHelper.trace("Parsing completed. Created an instance of: " +
+                    (obj != null ? obj.getClass().getName() : "null"));
             return obj;
         }
     }
