@@ -1,18 +1,10 @@
 /* LoginPage.css */
 
-/* Font declarations */
-@font-face {
-    font-family: 'Articulat CF Normal';
-    src: url('assets/fonts/articulat-cf-normal.ttf');
-}
-@font-face {
-    font-family: 'Articulat CF Demi Bold';
-    src: url('assets/fonts/articulat-cf-demi-bold.ttf');
-}
-
 /* Root container defaults */
 .root-container {
     -fx-font-family: 'Articulat CF Normal';
+    -fx-padding: 0;
+    -fx-text-fill: #000000;
 }
 
 /* Login panel */

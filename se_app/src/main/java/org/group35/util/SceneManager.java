@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.group35.util.LoggerHelper;
 
 /**
  * Manages switching between application scenes.
@@ -33,6 +32,9 @@ public class SceneManager {
         try {
             Parent root = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
             Scene scene = new Scene(root, width, height);
+            scene.getStylesheets().add(
+                    SceneManager.class.getResource("/org/group35/view/Global.css").toExternalForm()
+            );
             primaryStage.setTitle(title);
             primaryStage.setScene(scene);
             primaryStage.show();

@@ -4,11 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.PieChart;
-import jdk.jshell.spi.SPIResolutionException;
-import org.group35.runtime.ApplicationRuntime;
-import javafx.event.ActionEvent;
-
-//import java.awt.event.ActionEvent;
 
 public class HomeController {
 
@@ -46,25 +41,4 @@ public class HomeController {
 
         categoryPieChart.getData().addAll(foodData, transportData, entertainmentData, othersData);
     }
-
-    @FXML
-    private void gotoHome(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoHome();
-    }
-
-    @FXML
-    private void gotoSpending(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoSpending();
-    }
-
-    @FXML
-    private void gotoManualEntry(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoManualEntry();
-    }
-
-    @FXML
-    private void gotoRecogBill(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoRecogBill();
-    }
-
 }

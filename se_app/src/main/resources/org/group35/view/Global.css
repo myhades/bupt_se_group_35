@@ -1,0 +1,22 @@
+/* Global.css */
+
+/* Font faces */
+@font-face {
+    font-family: 'Articulat CF Bold';
+    src: url('assets/fonts/articulat-cf-bold.ttf');
+}
+@font-face {
+    font-family: 'Articulat CF Demi Bold';
+    src: url('assets/fonts/articulat-cf-demi-bold.ttf');
+}
+@font-face {
+    font-family: 'Articulat CF Normal';
+    src: url('assets/fonts/articulat-cf-normal.ttf');
+}
+
+/* Root defaults */
+.root-container {
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-padding: 40px;
+    -fx-text-fill: #000000;
+}
