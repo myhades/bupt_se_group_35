@@ -1,5 +1,5 @@
 # .github/workflows/automerge-on-open.yml
-name: Auto‑merge on PR open
+name: Enable Auto‑Merge on PRs
 
 on:
   pull_request:
