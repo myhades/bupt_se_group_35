@@ -2,9 +2,11 @@ package org.group35.controller;
 
 import org.group35.model.User;
 import org.group35.persistence.PersistentDataManager;
+import org.group35.util.ImageUtils;
 import org.group35.util.PasswordUtils;
 import org.group35.util.LoggerHelper;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -68,5 +70,46 @@ public class UserManager {
         PersistentDataManager.getStore().setUsers(users);
         PersistentDataManager.saveStore();
         LoggerHelper.info("User list updated in persistent store");
+    }
+
+    /**
+     * Compresses, crops to square, encodes to Base64 and stores as the user's avatar.
+     * @param username  the user to update
+     * @param imagePath path to the source image file
+     */
+    public static void setUserAvatar(String username, String imagePath) {
+        LoggerHelper.debug("Attempting to set avatar for user: " + username);
+        List<User> users = getUsers();
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                try {
+                    byte[] compressed = ImageUtils.loadCompressImage(imagePath);
+                    String encoded = ImageUtils.IToBase64(compressed);
+                    u.setAvatar(encoded);
+                    PersistentDataManager.getStore().setUsers(users);
+                    PersistentDataManager.saveStore();
+                    LoggerHelper.info("Avatar updated for user: " + username);
+                } catch (IOException e) {
+                    LoggerHelper.error("Failed to load avatar image for user: " + username);
+                }
+                return;
+            }
+        }
+        LoggerHelper.warn("Failed to set avatar. User not found: " + username);
+    }
+
+    /**
+     * Retrieves the Base64‑encoded avatar string for a user.
+     * @param username the user to look up
+     * @return Base64 avatar or null if not set / user not found
+     */
+    public static String getUserAvatar(String username) {
+        for (User u : getUsers()) {
+            if (u.getUsername().equals(username)) {
+                return u.getAvatar();
+            }
+        }
+        LoggerHelper.warn("Failed to get avatar. User not found: " + username);
+        return null;
     }
 }
