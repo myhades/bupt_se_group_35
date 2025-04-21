@@ -67,7 +67,7 @@ public class RecognizeBillController implements Initializable {
             userNameLabel.setText(ApplicationRuntime.getInstance().getCurrentUser().getUsername());
         }
 
-        // 初始化界面，预览按钮最初禁用
+        // 初始化界面，预览按钮最初禁用·
         processButton.setDisable(true);
 
         // 初始化摄像头
@@ -165,7 +165,7 @@ public class RecognizeBillController implements Initializable {
         }
     }
 
-    @FXML
+//    @FXML
 //    private void handleProcessButton(ActionEvent event) {
 //        if (capturedImage == null) {
 //            showAlert("处理错误", "没有可处理的图像。请先捕获图像。");
@@ -231,6 +231,7 @@ public class RecognizeBillController implements Initializable {
 //        processThread.start();
 //    }
 
+    @FXML
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -239,22 +240,22 @@ public class RecognizeBillController implements Initializable {
         alert.showAndWait();
     }
 
-    @FXML
-    private void handleBackButton(ActionEvent event) {
-        // 返回上一页面
-        SceneManager.showHomePage();
-    }
-
-    @FXML
-    private void handleDashboardButton(ActionEvent event) {
-        // 导航到仪表盘
-        SceneManager.showHomePage();
-    }
-
-    @FXML
-    private void handleSpendingButton(ActionEvent event) {
-        // 当前已在支出页面，无需操作
-    }
+//    @FXML
+//    private void handleBackButton(ActionEvent event) {
+//        // 返回上一页面
+//        SceneManager.showHomePage();
+//    }
+//
+//    @FXML
+//    private void handleDashboardButton(ActionEvent event) {
+//        // 导航到仪表盘
+//        SceneManager.showHomePage();
+//    }
+//
+//    @FXML
+//    private void handleSpendingButton(ActionEvent event) {
+//        // 当前已在支出页面，无需操作
+//    }
 
     @FXML
     private void handlePlanButton(ActionEvent event) {
@@ -302,5 +303,25 @@ public class RecognizeBillController implements Initializable {
     // 当控制器被销毁时释放资源
     public void destroy() {
         releaseCamera();
+    }
+
+    @FXML
+    private void gotoHome(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoHome();
+    }
+
+    @FXML
+    private void gotoSpending(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoSpending();
+    }
+
+    @FXML
+    private void gotoManualEntry(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoManualEntry();
+    }
+
+    @FXML
+    private void gotoRecogBill(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoRecogBill();
     }
 }

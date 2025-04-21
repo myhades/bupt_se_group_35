@@ -7,3 +7,10 @@
     -fx-scale-y: 0.95;
     -fx-opacity: 0.6;
 }
+
+/* Root */
+.root-container {
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-padding: 40px;
+    -fx-text-fill: #000000;
+}

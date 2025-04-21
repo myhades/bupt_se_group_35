@@ -46,14 +46,14 @@ public class ManualEntryController {
 
     @FXML
     private void initialize() {
-        avatarImageView.setImage(new Image("/org/group35/view/assets/Test_Avatar.jpg"));
-        DashboardImageView.setImage(new Image("/org/group35/view/assets/DashBoard_Logo.jpg"));
-        SpendingImageView.setImage(new Image("/org/group35/view/assets/Spending_Logo.jpg"));
-        PlanImageView.setImage(new Image("/org/group35/view/assets/Plan_Logo.jpg"));
-        MoreImageView.setImage(new Image("/org/group35/view/assets/More_Logo.jpg"));
-        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
-        MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
-        QuitButtonImageView.setImage(new Image("/org/group35/view/assets/QuitButton.jpg"));
+//        avatarImageView.setImage(new Image("/org/group35/view/assets/Test_Avatar.jpg"));
+//        DashboardImageView.setImage(new Image("/org/group35/view/assets/DashBoard_Logo.jpg"));
+//        SpendingImageView.setImage(new Image("/org/group35/view/assets/Spending_Logo.jpg"));
+//        PlanImageView.setImage(new Image("/org/group35/view/assets/Plan_Logo.jpg"));
+//        MoreImageView.setImage(new Image("/org/group35/view/assets/More_Logo.jpg"));
+//        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
+//        MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
+//        QuitButtonImageView.setImage(new Image("/org/group35/view/assets/QuitButton.jpg"));
     }
 
     @FXML
@@ -189,5 +189,25 @@ public class ManualEntryController {
         ButtonType okButton = new ButtonType(buttonText);
         alert.getButtonTypes().setAll(okButton);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void gotoHome(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoHome();
+    }
+
+    @FXML
+    private void gotoSpending(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoSpending();
+    }
+
+    @FXML
+    private void gotoManualEntry(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoManualEntry();
+    }
+
+    @FXML
+    private void gotoRecogBill(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoRecogBill();
     }
 }

@@ -2,11 +2,7 @@ package org.group35.view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import org.group35.controller.UserManager;
-import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
-
-import java.util.Optional;
 
 public class SpendingController {
 
@@ -14,14 +10,22 @@ public class SpendingController {
     public void initialize() {}
 
     @FXML
-    private void gotoDashboard(ActionEvent event) {
-
+    private void gotoHome(ActionEvent event) {
         ApplicationRuntime.getInstance().gotoHome();
     }
 
     @FXML
     private void gotoSpending(ActionEvent event) {
-
         ApplicationRuntime.getInstance().gotoSpending();
+    }
+
+    @FXML
+    private void gotoManualEntry(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoManualEntry();
+    }
+
+    @FXML
+    private void gotoRecogBill(ActionEvent event) {
+        ApplicationRuntime.getInstance().gotoRecogBill();
     }
 }
