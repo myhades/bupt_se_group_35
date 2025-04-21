@@ -18,8 +18,8 @@ public final class ApplicationRuntime {
         LOGIN,
         HOME,
         SPENDING,
-        ManualEntry,
-        RecogBill
+        MANUAL_ENTRY,
+        RECOG_BILL
         // Add other statuses as needed.
     }
 
@@ -117,11 +117,11 @@ public final class ApplicationRuntime {
     }
 
     public void gotoManualEntry() {
-        setProgramStatus(ProgramStatus.ManualEntry);
+        setProgramStatus(ProgramStatus.MANUAL_ENTRY);
     }
 
     public void gotoRecogBill() {
-        setProgramStatus(ProgramStatus.RecogBill);
+        setProgramStatus(ProgramStatus.RECOG_BILL);
     }
 
     /**
@@ -141,10 +141,10 @@ public final class ApplicationRuntime {
             case SPENDING:
                 SceneManager.showSpendingPage();
                 break;
-            case ManualEntry:
+            case MANUAL_ENTRY:
                 SceneManager.showManualEntryPage();
                 break;
-            case RecogBill:
+            case RECOG_BILL:
                 SceneManager.showRecognizeBillPage();
                 break;
             default:

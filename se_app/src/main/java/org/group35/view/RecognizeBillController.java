@@ -67,7 +67,7 @@ public class RecognizeBillController implements Initializable {
             userNameLabel.setText(ApplicationRuntime.getInstance().getCurrentUser().getUsername());
         }
 
-        // 初始化界面，预览按钮最初禁用
+        // 初始化界面，预览按钮最初禁用·
         processButton.setDisable(true);
 
         // 初始化摄像头
