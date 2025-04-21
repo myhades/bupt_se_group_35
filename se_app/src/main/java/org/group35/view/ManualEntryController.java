@@ -35,15 +35,15 @@ public class ManualEntryController {
         MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
     }
 
-    @FXML
-    private void handleLogOut(ActionEvent event) {
-        System.out.println("LogOut button clicked.");
-    }
-
-    @FXML
-    private void handleBack(ActionEvent event) {
-        System.out.println("Back button clicked.");
-    }
+//    @FXML
+//    private void handleLogOut(ActionEvent event) {
+//        System.out.println("LogOut button clicked.");
+//    }
+//
+//    @FXML
+//    private void handleBack(ActionEvent event) {
+//        System.out.println("Back button clicked.");
+//    }
 
     @FXML
     private void handleMicro(ActionEvent event) {
@@ -56,7 +56,7 @@ public class ManualEntryController {
     @FXML
     private void handleConvert(ActionEvent event) {
         System.out.println("Convert button clicked.");
-        // 判断 aiTextArea 是否为空
+        // To tell whether aiTextArea is Empty
         if (aiTextArea.getText().trim().isEmpty()) {
             showAlertDialog("Input Error", "Please enter some text in the AI Recognition area before converting.", "OK");
             return;

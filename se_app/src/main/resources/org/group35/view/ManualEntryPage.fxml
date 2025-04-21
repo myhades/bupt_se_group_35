@@ -31,14 +31,14 @@
     <HBox styleClass="nav-row" alignment="CENTER_LEFT" spacing="10">
         <HBox spacing="20" styleClass="nav-bar">
             <!-- Dashboard -->
-            <Button text="Dashboard" styleClass="nav-button">
+            <Button text="Dashboard" styleClass="nav-button" onAction="#gotoHome">
                 <graphic>
                     <SVGPath content="M19,5V7H15V5H19M9,5V11H5V5H9M19,13V19H15V13H19M9,17V19H5V17H9M21,3H13V9H21V3M11,3H3V13H11V3M21,11H13V21H21V11M11,15H3V21H11V15Z"
                              styleClass="nav-icon"/>
                 </graphic>
             </Button>
             <!-- Spending -->
-            <Button text="Spending" styleClass="nav-button-selected" onAction="#gotoSpending">
+            <Button text="Spending" styleClass="nav-button-selected">
                 <graphic>
                     <SVGPath content="M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z"
                              styleClass="nav-icon-selected"/>
@@ -80,7 +80,7 @@
     <VBox spacing="20" style="-fx-padding: 10;" VBox.vgrow="ALWAYS">
         <!-- Back Button + Manual Entry -->
         <HBox spacing="15" alignment="CENTER_LEFT">
-            <Button onAction="#handleBack" styleClass="Back_Button">
+            <Button styleClass="Back_Button" onAction="#gotoSpending">
                 <graphic>
                     <ImageView fx:id="BackButtonImageView" fitWidth="50" fitHeight="50"/>
                 </graphic>
