@@ -1,13 +1,3 @@
-/*.button:hover {*/
-/*    -fx-opacity: 0.6;*/
-/*}*/
-
-/*.button:pressed {*/
-/*    -fx-scale-x: 0.95;*/
-/*    -fx-scale-y: 0.95;*/
-/*    -fx-opacity: 0.6;*/
-/*}*/
-
 /* Root */
 .root-container {
     -fx-font-family: 'Articulat CF Demi Bold';
@@ -75,54 +65,83 @@
     -fx-cursor: hand;
 }
 
-/* AI Recognition Area */
+/* Shadow settings */
 VBox {
     -fx-background-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);
 }
 
-/* The titles of the AI section and the manual input section */
-Label {
-    -fx-text-fill: #333333;
+/* TextField */
+.textfield {
+    -fx-background-color: #a5a5a5;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+/* Handle_Button */
+.Handle_Button {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+/* Back_Button */
+.Back_Button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+/* Convert_Button */
+.Convert_Button {
+    -fx-background-color: #d2691e;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+/* Micro_Button */
+.Micro_Button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+/* Input */
+.Input_Character {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
 }
 
 /* Text Area Settings */
-.text-area, .text-field {
+.text-area {
     -fx-background-color: #a5a5a5;
     -fx-control-inner-background: #a5a5a5;
     -fx-text-fill: white;
     -fx-prompt-text-fill: white;
     -fx-background-radius: 5;
+    -fx-font-size: 14px;
+    -fx-padding: 0;
+}
+.text-area:focused {
+    -fx-background-insets: 0;
+    -fx-background-color: #a5a5a5;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: transparent;
 }
 
-/* Button */
-.button {
-    -fx-background-radius: 5;
+.AI_Rec_Character {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
 }
 
-/* Main Button settings */
-.button:focused, .button:hover {
-    -fx-opacity: 0.85;
+.Dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: green;
 }
 
-/* Convert Button */
-.button[text="Convert →"] {
-    -fx-background-color: #d2691e;
-    -fx-text-fill: white;
-}
-
-/* Save Button */
-.button[text="Save"] {
-    -fx-background-color: black;
-    -fx-text-fill: white;
-}
-
-/* BackButton */
-#BackButtonImageView {
-    -fx-cursor: hand;
-}
-
-/* Micro */
-#MicrophoneImageView {
-    -fx-cursor: hand;
+.ManualEntry_Character {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
 }

@@ -80,13 +80,13 @@
     <VBox spacing="20" style="-fx-padding: 10;" VBox.vgrow="ALWAYS">
         <!-- Back Button + Manual Entry -->
         <HBox spacing="15" alignment="CENTER_LEFT">
-            <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-cursor: hand;">
+            <Button onAction="#handleBack" styleClass="Back_Button">
                 <graphic>
                     <ImageView fx:id="BackButtonImageView" fitWidth="50" fitHeight="50"/>
                 </graphic>
             </Button>
-            <Label text="Manual Entry" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: black;"/>
-            <Label text="●" style="-fx-font-size: 20px; -fx-text-fill: green;"/>
+            <Label text="Manual Entry" styleClass="ManualEntry_Character"/>
+            <Label text="●" styleClass="Dot"/>
         </HBox>
 
         <!-- The central main area -->
@@ -94,45 +94,45 @@
 
             <!-- AI Recognition Part -->
             <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;" prefWidth="400">
-                <Label text="AI Recognition" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="AI Recognition" styleClass="AI_Rec_Character"/>
 
                 <StackPane>
                     <TextArea fx:id="aiTextArea"
                               promptText="Describe with natural language"
-                              style="-fx-background-color: #a5a5a5; -fx-control-inner-background: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px; -fx-padding: 15;"
+                              styleClass="text-area"
                               prefHeight="200" prefWidth="350"/>
 
-                    <Button onAction="#handleMicro" style="-fx-background-color: transparent; -fx-cursor: hand;" StackPane.alignment="BOTTOM_RIGHT">
+                    <Button onAction="#handleMicro" styleClass="Micro_Button" StackPane.alignment="BOTTOM_RIGHT">
                         <graphic>
                             <ImageView fx:id="MicrophoneImageView" fitWidth="30" fitHeight="30"/>
                         </graphic>
                     </Button>
                 </StackPane>
 
-                <Button text="Convert →" onAction="#handleConvert" style="-fx-background-color: #d2691e; -fx-text-fill: white; -fx-font-size: 16px;-fx-cursor: hand;" prefWidth="150" prefHeight="40"/>
+                <Button text="Convert →" onAction="#handleConvert" styleClass="Convert_Button" prefWidth="150" prefHeight="40"/>
             </VBox>
 
             <!-- Input Part -->
             <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20;" prefWidth="450">
-                <Label text="Input" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="Input" styleClass="Input_Character"/>
 
                 <TextField fx:id="nameField"
                            promptText="Name"
-                           style="-fx-background-color: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px;"
+                           styleClass="textfield"
                            prefHeight="40"/>
 
                 <TextField fx:id="amountField"
                            promptText="Amount"
-                           style="-fx-background-color: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px;"
+                           styleClass="textfield"
                            prefHeight="40"/>
 
                 <TextField fx:id="categoryField"
                            promptText="Category"
-                           style="-fx-background-color: #a5a5a5; -fx-text-fill: white; -fx-prompt-text-fill: white; -fx-font-size: 14px;"
+                           styleClass="textfield"
                            prefHeight="40"/>
 
                 <HBox alignment="BOTTOM_RIGHT">
-                    <Button text="Save" onAction="#handleSave" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 16px;-fx-cursor: hand;" prefWidth="120" prefHeight="40"/>
+                    <Button text="Save" onAction="#handleSave" styleClass="Handle_Button" prefWidth="120" prefHeight="40"/>
                 </HBox>
             </VBox>
         </HBox>
