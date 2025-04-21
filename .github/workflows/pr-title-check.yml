@@ -2,7 +2,10 @@
 name: PR Title Lint
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
     types: [opened, edited, synchronize, reopened]
 
 jobs:
@@ -11,24 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR title
+        if: ${{ github.event_name == 'pull_request' }}
         uses: actions/github-script@v7
         with:
           script: |
-            // Grab the PR title
             const prTitle = context.payload.pull_request.title;
-            
-            // Regex enforces:
-            // 1) type is one of feat|fix|chore|docs|refactor|test
-            // 2) followed by ": "
-            // 3) summary starts with an uppercase letter
             const valid = /^(feat|fix|chore|docs|refactor|test):\s[A-Z].+/.test(prTitle);
-            
+
             if (!valid) {
-              core.setFailed(
-                `PR title "${prTitle}" is invalid.\n` +
-                `Titles must follow "<type>: Summary" where <type> is one of feat|fix|chore|docs|refactor|test ` +
-                `and "Summary" must start with an uppercase letter.`
-              );
+                core.setFailed(
+                `PR title "${prTitle}" is invalid. ` +
+                `Must follow "<type>: Summary" with type one of feat|fix|chore|docs|refactor|test `
+                + `and Summary starting uppercase.`
+                );
             } else {
-              console.log("PR title format is valid.");
+                core.info("PR title format is valid.");
             }
+
+      - name: Skip title check on push
+        if: ${{ github.event_name != 'pull_request' }}
+        run: echo "Not a PR, skipping title validation"
