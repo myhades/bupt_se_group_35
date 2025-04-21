@@ -1,7 +1,9 @@
 package org.group35.runtime;
 
+import org.group35.controller.TransactionManager;
 import org.group35.model.User;
 import org.group35.controller.UserManager;
+import org.group35.controller.TransactionManager;
 import org.group35.util.SceneManager;
 import org.group35.util.LoggerHelper;
 
@@ -28,6 +30,7 @@ public final class ApplicationRuntime {
 
     // Manager instances for different models.
     private final UserManager userManager;
+    private final TransactionManager transcationManager;
 
     // Miscellaneous runtime data
     private User loggedInUser;
@@ -38,9 +41,9 @@ public final class ApplicationRuntime {
      * Initializes all model managers.
      */
     private ApplicationRuntime() {
-        LoggerHelper.debug("Initializing ApplicationRuntime singleton");
         userManager = new UserManager();
-        LoggerHelper.trace("UserManager initialized");
+        transcationManager = new TransactionManager();
+        LoggerHelper.debug("ApplicationRuntime singleton initialized");
     }
 
     /**
@@ -64,12 +67,15 @@ public final class ApplicationRuntime {
     }
 
     /**
-     * Handles user login by setting the current user and updating the program status.
-     * @param user the User who has logged in.
+     * Returns the TransactionManager instance.
+     * @return the TransactionManager.
      */
+    public TransactionManager getTranscationManager() {
+        return transcationManager;
+    }
 
     /**
-     * Returns the currently logged in user.
+     * Returns the currently logged-in user.
      * @return the current User, or null if no user is logged in.
      */
     public User getCurrentUser() {
@@ -89,8 +95,6 @@ public final class ApplicationRuntime {
         }
     }
 
-
-
     public void loginUser(User user) {
         this.loggedInUser = user;
         LoggerHelper.info("User logged in: " + user.getUsername());
@@ -108,8 +112,10 @@ public final class ApplicationRuntime {
         setProgramStatus(ProgramStatus.LOGIN);
     }
 
+    //TODO: compare with current status
+
     public void gotoSpending() {
-        setProgramStatus(ProgramStatus.SPENDING); //TODO: compare with current status
+        setProgramStatus(ProgramStatus.SPENDING);
     }
 
     public void gotoHome() {
