@@ -16,7 +16,7 @@
 }
 .edit-button {
     -fx-padding: 7 22;
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
     -fx-text-fill: #FFFFFF;
     -fx-background-color: #595959;
     -fx-background-radius: 30px;
@@ -37,14 +37,13 @@
     -fx-padding: 30 0 0 0;
 }
 .chart-title {
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
     -fx-font-family: 'Articulat CF Demi Bold';
 }
-.chart {
-    -fx-pref-height: 500px;
-}
+.chart,
 .pie-chart {
     -fx-pref-height: 500px;
+    -fx-padding: 0 0 -16px 0;
 }
 .chart-container {
     -fx-background-color: white;
@@ -53,4 +52,20 @@
 }
 .chart-container .chart-title {
     -fx-padding: 0 0 0 5px;
+}
+#spendingChart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+#spendingChart .chart-horizontal-grid-lines,
+#spendingChart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+#spendingChart .chart-series-line {
+    -fx-stroke: #2C6298;    /* your blue */
+    -fx-stroke-width: 2px;
+}
+#spendingChart .chart-line-symbol {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }

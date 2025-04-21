@@ -50,13 +50,9 @@
               spacing="10"
               GridPane.columnIndex="0">
             <Label text="Spending distribution" styleClass="chart-title"/>
-            <LineChart fx:id="spendingChart">
-                <xAxis>
-                    <CategoryAxis fx:id="xAxis" label="Month"/>
-                </xAxis>
-                <yAxis>
-                    <NumberAxis fx:id="yAxis" label="Amount"/>
-                </yAxis>
+            <LineChart fx:id="spendingChart" styleClass="speding-chart">
+                <xAxis><CategoryAxis fx:id="xAxis" label="Month"/></xAxis>
+                <yAxis><NumberAxis fx:id="yAxis" label="Amount"/></yAxis>
             </LineChart>
         </VBox>
 
