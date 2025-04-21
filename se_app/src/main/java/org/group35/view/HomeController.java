@@ -23,15 +23,18 @@ public class HomeController {
         XYChart.Series<String, Number> spendingSeries = new XYChart.Series<>();
         spendingSeries.setName("Spending Distribution");
 
-        spendingSeries.getData().add(new XYChart.Data<>("Jan", 350));
+        spendingSeries.getData().add(new XYChart.Data<>("Jan", 50));
         spendingSeries.getData().add(new XYChart.Data<>("Feb", 420));
-        spendingSeries.getData().add(new XYChart.Data<>("Mar", 300));
+        spendingSeries.getData().add(new XYChart.Data<>("Mar", 200));
         spendingSeries.getData().add(new XYChart.Data<>("Apr", 470));
-        spendingSeries.getData().add(new XYChart.Data<>("May", 380));
-        spendingSeries.getData().add(new XYChart.Data<>("Jun", 450));
-        spendingSeries.getData().add(new XYChart.Data<>("Jul", 500));
+        spendingSeries.getData().add(new XYChart.Data<>("May", 100));
+        spendingSeries.getData().add(new XYChart.Data<>("Jun", 850));
+        spendingSeries.getData().add(new XYChart.Data<>("Jul", 270));
+        spendingSeries.getData().add(new XYChart.Data<>("Aug", 500));
 
         spendingChart.getData().add(spendingSeries);
+        spendingChart.setCreateSymbols(false);
+
 
         // Initialize Category Pie Chart with fake data
         PieChart.Data foodData = new PieChart.Data("Food", 30);

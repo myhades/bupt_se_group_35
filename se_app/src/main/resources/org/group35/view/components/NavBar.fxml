@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
+<?import javafx.scene.shape.Circle?>
+<?import javafx.geometry.Insets?>
 <fx:root
     xmlns:fx="http://javafx.com/fxml"
     type="org.group35.view.components.NavBarController"
@@ -44,15 +46,23 @@
 
     <Region HBox.hgrow="ALWAYS"/>
 
-    <HBox spacing="10" alignment="CENTER_RIGHT">
+    <HBox spacing="14" alignment="CENTER_RIGHT">
         <VBox alignment="CENTER_RIGHT" spacing="2">
-            <Label fx:id="usernameLabel" text="Username" styleClass="avatar-name"/>
-            <Button fx:id="logoutBtn" text="Logout" styleClass="avatar-logout"/>
+            <Label fx:id="usernameLabel"
+                   text="Username"
+                   styleClass="avatar-name"/>
+            <Button fx:id="logoutBtn"
+                    text="Logout"
+                    styleClass="avatar-logout"/>
         </VBox>
         <StackPane styleClass="avatar-container">
             <ImageView fx:id="avatarImage"
-                       fitWidth="40" fitHeight="40"
-                       styleClass="avatar-image"/>
+                       fitWidth="48" fitHeight="48"
+                       styleClass="avatar-image">
+                <clip>
+                    <Circle centerX="24" centerY="24" radius="24"/>
+                </clip>
+            </ImageView>
         </StackPane>
     </HBox>
 </fx:root>
