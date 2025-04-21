@@ -27,64 +27,6 @@
       stylesheets="@ManualEntryPage.css"
       styleClass="root-container">
 
-<!--    &lt;!&ndash; Top navigation bar &ndash;&gt;-->
-<!--    <HBox alignment="CENTER" spacing="30">-->
-<!--        <Button onAction="#handleQuit" style="-fx-background-color: transparent; -fx-cursor: hand;">-->
-<!--            <graphic>-->
-<!--                <ImageView fx:id="QuitButtonImageView" fitWidth="25" fitHeight="25"/>-->
-<!--            </graphic>-->
-<!--        </Button>-->
-
-<!--        <HBox alignment="CENTER">-->
-<!--            <Button onAction="#handleDashboard" style="-fx-background-color: transparent; -fx-cursor: hand;" >-->
-<!--                <graphic>-->
-<!--                    <ImageView fx:id="DashboardImageView" fitWidth="25" fitHeight="25"/>-->
-<!--                </graphic>-->
-<!--            </Button>-->
-<!--            <Label text="Dashboard" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;"/>-->
-<!--        </HBox>-->
-
-<!--        <HBox alignment="CENTER">-->
-<!--            <Button onAction="#handleSpending" style="-fx-background-color: transparent; -fx-cursor: hand;" >-->
-<!--                <graphic>-->
-<!--                    <ImageView fx:id="SpendingImageView" fitWidth="25" fitHeight="25"/>-->
-<!--                </graphic>-->
-<!--            </Button>-->
-<!--            <Label text="Spending" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: red; -fx-underline: true;"/>-->
-<!--        </HBox>-->
-
-<!--        <HBox alignment="CENTER">-->
-<!--            <Button onAction="#handlePlan" style="-fx-background-color: transparent; -fx-cursor: hand;">-->
-<!--                <graphic>-->
-<!--                    <ImageView fx:id="PlanImageView" fitWidth="25" fitHeight="25"/>-->
-<!--                </graphic>-->
-<!--            </Button>-->
-<!--            <Label text="Plan" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;"/>-->
-<!--        </HBox>-->
-
-<!--        <HBox alignment="CENTER">-->
-<!--            <Button onAction="#handleMore" style="-fx-background-color: transparent; -fx-cursor: hand;">-->
-<!--                <graphic>-->
-<!--                    <ImageView fx:id="MoreImageView" fitWidth="25" fitHeight="25"/>-->
-<!--                </graphic>-->
-<!--            </Button>-->
-<!--            <Label text="More" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;"/>-->
-<!--        </HBox>-->
-
-<!--        <Region HBox.hgrow="ALWAYS"/>-->
-
-<!--        <Button onAction="#handleLogOut" style="-fx-background-color: transparent; -fx-cursor: hand;">-->
-<!--            <graphic>-->
-<!--                <HBox alignment="CENTER" spacing="10">-->
-<!--                    <VBox alignment="CENTER">-->
-<!--                        <Label text="Alaric" style="-fx-font-size: 16px; -fx-text-fill: black;"/>-->
-<!--                        <Label text="Logout" style="-fx-font-size: 14px; -fx-text-fill: gray;"/>-->
-<!--                    </VBox>-->
-<!--                    <ImageView fx:id="avatarImageView" fitWidth="50" fitHeight="56"/>-->
-<!--                </HBox>-->
-<!--            </graphic>-->
-<!--        </Button>-->
-<!--    </HBox>-->
     <!-- Navigation Bar and Avatar -->
     <HBox styleClass="nav-row" alignment="CENTER_LEFT" spacing="10">
         <HBox spacing="20" styleClass="nav-bar">
@@ -96,10 +38,10 @@
                 </graphic>
             </Button>
             <!-- Spending -->
-            <Button text="Spending" styleClass="nav-button" onAction="#gotoSpending">
+            <Button text="Spending" styleClass="nav-button-selected" onAction="#gotoSpending">
                 <graphic>
                     <SVGPath content="M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z"
-                             styleClass="nav-icon"/>
+                             styleClass="nav-icon-selected"/>
                 </graphic>
             </Button>
             <!-- Plan -->
@@ -135,7 +77,7 @@
     </HBox>
 
     <!-- Main parts -->
-    <VBox spacing="20" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
+    <VBox spacing="20" style="-fx-padding: 10;" VBox.vgrow="ALWAYS">
         <!-- Back Button + Manual Entry -->
         <HBox spacing="15" alignment="CENTER_LEFT">
             <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-cursor: hand;">
@@ -144,7 +86,7 @@
                 </graphic>
             </Button>
             <Label text="Manual Entry" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: black;"/>
-            <Label text="●" style="-fx-font-size: 36px; -fx-text-fill: green;"/>
+            <Label text="●" style="-fx-font-size: 20px; -fx-text-fill: green;"/>
         </HBox>
 
         <!-- The central main area -->

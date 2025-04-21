@@ -17,77 +17,27 @@ import java.util.Optional;
 public class ManualEntryController {
     @FXML
     private TextArea aiTextArea;
-
     @FXML
     private TextField nameField;
-
     @FXML
     private TextField amountField;
-
     @FXML
     private TextField categoryField;
-
-    @FXML
-    private ImageView avatarImageView;
-    @FXML
-    private ImageView DashboardImageView;
-    @FXML
-    private ImageView SpendingImageView;
-    @FXML
-    private ImageView PlanImageView;
-    @FXML
-    private ImageView MoreImageView;
     @FXML
     private ImageView BackButtonImageView;
     @FXML
     private ImageView MicrophoneImageView;
-    @FXML
-    private ImageView QuitButtonImageView;
+
 
     @FXML
     private void initialize() {
-//        avatarImageView.setImage(new Image("/org/group35/view/assets/Test_Avatar.jpg"));
-//        DashboardImageView.setImage(new Image("/org/group35/view/assets/DashBoard_Logo.jpg"));
-//        SpendingImageView.setImage(new Image("/org/group35/view/assets/Spending_Logo.jpg"));
-//        PlanImageView.setImage(new Image("/org/group35/view/assets/Plan_Logo.jpg"));
-//        MoreImageView.setImage(new Image("/org/group35/view/assets/More_Logo.jpg"));
-//        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
-//        MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
-//        QuitButtonImageView.setImage(new Image("/org/group35/view/assets/QuitButton.jpg"));
-    }
-
-    @FXML
-    private void handleDashboard(ActionEvent event) {
-        System.out.println("Dashboard button clicked.");
-    }
-
-    @FXML
-    private void handleSpending(ActionEvent event) {
-        System.out.println("Spending button clicked.");
-    }
-
-    @FXML
-    private void handlePlan(ActionEvent event) {
-        System.out.println("Plan button clicked.");
-    }
-
-    @FXML
-    private void handleMore(ActionEvent event) {
-        System.out.println("More button clicked.");
+        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
+        MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
     }
 
     @FXML
     private void handleLogOut(ActionEvent event) {
         System.out.println("LogOut button clicked.");
-    }
-
-    @FXML
-    private void handleQuit(ActionEvent event) {
-        System.out.println("Quit button clicked.");
-        if (showConfirmationDialog("Exit Confirmation", "Are you sure you want to exit the application?", "Yes", "No")) {
-            Platform.exit();
-            System.exit(0);
-        }
     }
 
     @FXML
@@ -131,7 +81,6 @@ public class ManualEntryController {
 //        }
 //    }
 //    }
-
 }
 
     @FXML
