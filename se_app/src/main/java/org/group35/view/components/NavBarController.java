@@ -6,17 +6,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 
 import java.io.IOException;
 
 public class NavBarController extends HBox {
-    @FXML private Button dashboardBtn;
-    @FXML private Button spendingBtn;
-    @FXML private Button planBtn;
-    @FXML private Button moreBtn;
+    @FXML private Button dashboardBtn, spendingBtn, planBtn, moreBtn, logoutBtn;
+    @FXML private Label usernameLabel;
+    @FXML private ImageView avatarImage;
 
     // the Java‑bean property
     private final ObjectProperty<ProgramStatus> activePage =
@@ -24,7 +26,7 @@ public class NavBarController extends HBox {
 
     public NavBarController() {
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("NavBar.fxml")
+                getClass().getResource("/org/group35/view/components/NavBar.fxml")
         );
         loader.setRoot(this);
         loader.setController(this);
@@ -33,30 +35,32 @@ public class NavBarController extends HBox {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load NavBar.fxml", e);
         }
-
-        // whenever somebody does setActivePage(...), update the highlight:
         activePage.addListener((obs, oldP, newP) -> highlight(newP));
     }
 
     @FXML
     private void initialize() {
-        dashboardBtn.setOnAction(this::gotoHome);
-        spendingBtn.setOnAction(this::gotoSpending);
-        planBtn.setOnAction(this::gotoPlan);
-        moreBtn.setOnAction(this::gotoMore);
+        // Navigation button handlers
+        dashboardBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoHome());
+        spendingBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoSpending());
+        planBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoManualEntry());
+        moreBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoRecogBill());
+
+        // Populate username from the logged‑in user
+        User current = ApplicationRuntime.getInstance().getCurrentUser();
+        if (current != null) {
+            usernameLabel.setText(current.getUsername());
+            // optionally: avatarImage.setImage(current.getAvatarImage());
+        } else {
+            usernameLabel.setText("Guest");
+        }
+
+        // Logout action
+        logoutBtn.setOnAction(this::handleLogout);
     }
 
-    private void gotoHome(ActionEvent e) {
-        ApplicationRuntime.getInstance().gotoHome();
-    }
-    private void gotoSpending(ActionEvent e) {
-        ApplicationRuntime.getInstance().gotoSpending();
-    }
-    private void gotoPlan(ActionEvent e) {
-        // …
-    }
-    private void gotoMore(ActionEvent e) {
-        // …
+    private void handleLogout(ActionEvent event) {
+        ApplicationRuntime.getInstance().logoutUser();
     }
 
     private void highlight(ProgramStatus status) {

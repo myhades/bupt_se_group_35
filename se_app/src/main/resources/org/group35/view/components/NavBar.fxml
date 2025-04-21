@@ -46,8 +46,12 @@
 
     <HBox spacing="10" alignment="CENTER_RIGHT">
         <VBox alignment="CENTER_RIGHT" spacing="2">
-            <Label fx:id="usernameLabel" text="Username" styleClass="avatar-name"/>
-            <Button fx:id="logoutBtn" text="Logout" styleClass="avatar-logout"/>
+            <Label fx:id="usernameLabel"
+                   text="Username"
+                   styleClass="avatar-name"/>
+            <Button fx:id="logoutBtn"
+                    text="Logout"
+                    styleClass="avatar-logout"/>
         </VBox>
         <StackPane styleClass="avatar-container">
             <ImageView fx:id="avatarImage"
