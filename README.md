@@ -91,23 +91,15 @@ docs: update logger setup guide
 
 ### Branching & Workflow
 
+**Branch Name:**
+
 All development is done on separate branches based on `main`. Branch naming convention:
 
 ```
 <category>/<short-descriptive-name>
 ```
 
-Supported categories:
-
-| Category   | Description                                                  | Example                            |
-|------------|--------------------------------------------------------------|------------------------------------|
-| `feature`  | Implementing new features                                    | `feature/logger-integration`       |
-| `bugfix`   | Fixing bugs discovered during development/testing            | `bugfix/login-validation`          |
-| `hotfix`   | Critical fixes for immediate production deployment           | `hotfix/crash-on-launch`           |
-| `refactor` | Structural code changes without altering functionality       | `refactor/settings-handler`        |
-| `test`     | Adding or modifying test cases                               | `test/user-authentication`         |
-| `docs`     | Documentation-only changes                                   | `docs/setup-instructions`          |
-| `chore`    | Maintenance tasks, build scripts, or dependency updates      | `chore/gradle-version-update`      |
+Supported categories are the same with commit types. Example branch names: `feature/logger-integration`, `fix/login-validation`.
 
 **Basic Workflow:**
 
