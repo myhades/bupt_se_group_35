@@ -18,16 +18,17 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const core = require('@actions/core');
             const prTitle = context.payload.pull_request.title;
             const valid = /^(feat|fix|chore|docs|refactor|test):\s[A-Z].+/.test(prTitle);
+
             if (!valid) {
-              core.setFailed(
-                `PR title "${prTitle}" is invalid.\n` +
-                `Must follow "<type>: Summary" with type one of feat|fix|chore|docs|refactor|test and Summary starting uppercase.`
-              );
+                core.setFailed(
+                `PR title "${prTitle}" is invalid. ` +
+                `Must follow "<type>: Summary" with type one of feat|fix|chore|docs|refactor|test `
+                + `and Summary starting uppercase.`
+                );
             } else {
-              core.info("PR title format is valid.");
+                core.info("PR title format is valid.");
             }
 
       - name: Skip title check on push
