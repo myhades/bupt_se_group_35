@@ -1,27 +1,29 @@
-// src/main/java/org/group35/util/ImageUtils.java
 package org.group35.util;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import javax.imageio.ImageIO;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 import net.coobird.thumbnailator.Thumbnails;
 
+/**
+ * Utility methods for loading, compressing, and converting images.
+ */
 public class ImageUtils {
-
-    /**
-     * Encode raw bytes into Base64.
-     */
-    public static String IToBase64(byte[] imageData) {
-        return Base64.getEncoder().encodeToString(imageData);
-    }
 
     /**
      * Loads an image from disk, center‑crops it to a square, resizes to 1024×1024,
      * compresses to JPEG at 80% quality, and returns the raw bytes.
+     *
+     * @param path file system path to the image
+     * @return processed image bytes in JPEG format
+     * @throws IOException if file I/O fails
      */
     public static byte[] loadCompressImage(String path) throws IOException {
         BufferedImage img = ImageIO.read(new File(path));
@@ -40,5 +42,51 @@ public class ImageUtils {
                 .toOutputStream(output);
 
         return output.toByteArray();
+    }
+
+    /**
+     * Encodes raw image bytes into a Base64 string (no data URI prefix).
+     *
+     * @param imageData raw image bytes
+     * @return Base64 encoded string
+     */
+    public static String toBase64(byte[] imageData) {
+        return Base64.getEncoder().encodeToString(imageData);
+    }
+
+    /**
+     * Encodes a JavaFX Image into a Base64 string with the given format.
+     *
+     * @param fxImage the JavaFX Image to encode
+     * @param format the image format (e.g., "png" or "jpg")
+     * @return Base64 encoded string of the image bytes
+     * @throws IOException if encoding fails
+     */
+    public static String toBase64(Image fxImage, String format) throws IOException {
+        BufferedImage bImage = SwingFXUtils.fromFXImage(fxImage, null);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, format, baos);
+        byte[] bytes = baos.toByteArray();
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    /**
+     * Decodes a raw Base64 string into a JavaFX Image.
+     * Expects no data URI prefix.
+     *
+     * @param base64Data Base64 encoded image data
+     * @return JavaFX Image or null if decoding fails
+     */
+    public static Image fromBase64(String base64Data) {
+        if (base64Data == null || base64Data.isBlank()) {
+            return null;
+        }
+        try {
+            byte[] bytes = Base64.getDecoder().decode(base64Data);
+            return new Image(new ByteArrayInputStream(bytes));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

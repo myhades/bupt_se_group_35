@@ -195,7 +195,7 @@ public class BillsRecognition {
         try {
             byte[] imageData = ImageUtils.loadCompressImage("C:\\Users\\29772\\OneDrive - Queen Mary, University of London\\Documents\\GitHub\\bupt_se_group_35\\se_app\\src\\main\\resources\\org\\group35\\model\\img.png");
             String jsonDataPath = "./data.json";
-            String base64Image = ImageUtils.IToBase64(imageData);
+            String base64Image = ImageUtils.toBase64(imageData);
             String requestBody = ass.buildRequestBody(base64Image, ass.buildCapturePrompt());
             String response = ass.multimodelAPICalling(requestBody);
             LoggerHelper.debug(response);

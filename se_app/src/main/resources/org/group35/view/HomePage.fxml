@@ -45,20 +45,22 @@
         </columnConstraints>
 
         <!-- Left: Line chart -->
-        <VBox spacing="10" GridPane.columnIndex="0">
+        <VBox fx:id="spendingContainer"
+              styleClass="chart-container"
+              spacing="10"
+              GridPane.columnIndex="0">
             <Label text="Spending distribution" styleClass="chart-title"/>
-            <LineChart fx:id="spendingChart">
-                <xAxis>
-                    <CategoryAxis fx:id="xAxis" label="Month"/>
-                </xAxis>
-                <yAxis>
-                    <NumberAxis fx:id="yAxis" label="Amount"/>
-                </yAxis>
+            <LineChart fx:id="spendingChart" styleClass="speding-chart">
+                <xAxis><CategoryAxis fx:id="xAxis" label="Month"/></xAxis>
+                <yAxis><NumberAxis fx:id="yAxis" label="Amount"/></yAxis>
             </LineChart>
         </VBox>
 
         <!-- Right: Pie chart -->
-        <VBox spacing="10" GridPane.columnIndex="1">
+        <VBox fx:id="categoryContainer"
+              styleClass="chart-container"
+              spacing="10"
+              GridPane.columnIndex="1">
             <Label text="Category" styleClass="chart-title"/>
             <PieChart fx:id="categoryPieChart" styleClass="pie-chart"/>
         </VBox>
