@@ -34,17 +34,14 @@
         <!-- Left: Budget Info -->
         <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="0">
             <Label text="Budget" styleClass="chart-title"/>
-            <PieChart fx:id="budgetPieChart" styleClass="pie-chart"/>
-
             <HBox spacing="20">
-                <VBox spacing="6">
+                <VBox spacing="15">
                     <Label text="Available" styleClass="info-label-small"/>
                     <Label fx:id="availableAmount" text="\$200 20%" styleClass="budget-amount"/>
-                </VBox>
-                <VBox spacing="6">
                     <Label text="Used" styleClass="info-label-small"/>
                     <Label fx:id="usedAmount" text="\$1600 80%" styleClass="budget-amount"/>
                 </VBox>
+                <PieChart fx:id="budgetPieChart" styleClass="pie-chart" legendVisible="false"/>
             </HBox>
 
             <HBox spacing="20">
@@ -64,11 +61,11 @@
         </VBox>
 
         <!-- Right: Recommendation and Local Info -->
-        <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="1">
-            <Label text="Recommendation" styleClass="chart-title"/>
-            <Button fx:id="recommendationButton" text="Tap to get recommendations on restaurants, coupon sites and more." styleClass="recommendation-button">
+        <VBox styleClass="chart-container" spacing="10" GridPane.columnIndex="1">
+            <Label text="Recommendation" styleClass="chart-title" graphicTextGap="10"/>
+            <Button fx:id="recommendationButton" text="Tap to get recommendations on restaurants, coupon sites and more." styleClass="recommendation-button" graphicTextGap="20">
                 <graphic>
-                    <SVGPath content="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20ZM12 16a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"
+                    <SVGPath content="M12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5M12,2A7,7 0 0,1 19,9C19,14.25 12,22 12,22C12,22 5,14.25 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9C7,10 7,12 12,18.71C17,12 17,10 17,9A5,5 0 0,0 12,4Z"
                              styleClass="edit-icon"/>
                 </graphic>
             </Button>
