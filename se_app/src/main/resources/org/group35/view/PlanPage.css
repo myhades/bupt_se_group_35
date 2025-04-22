@@ -23,8 +23,8 @@
     -fx-padding: 20px;
 }
 .pie-chart {
-    -fx-pref-height: 300px;
-    -fx-padding: 0 0 -10px 0;
+    -fx-pref-height: 350px;
+    -fx-padding: 0 0 0 0;
 }
 
 /* Budget Info */
@@ -34,19 +34,34 @@
 }
 
 /* Buttons */
-.edit-button, .ai-suggestion-button {
+.edit-button{
     -fx-padding: 7 22;
     -fx-font-size: 18px;
     -fx-text-fill: #FFFFFF;
-    -fx-background-color: #595959;
+    -fx-background-color: #585858;
     -fx-background-radius: 30px;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 14px;
 }
-.edit-button:hover, .ai-suggestion-button:hover {
-    -fx-background-color: derive(#595959, 50%);
+.ai-suggestion-button {
+    -fx-padding: 7 22;
+    -fx-font-size: 18px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #275317;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
 }
+/*.edit-button:hover, .ai-suggestion-button:hover {*/
+/*    -fx-background-color: derive(#595959, 50%);*/
+/*}*/
 .edit-icon {
+    -fx-fill: #fdfdfd;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+.Here-icon {
     -fx-fill: #D76A03;
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
@@ -65,6 +80,10 @@
 .info-label-small {
     -fx-font-size: 16px;
     -fx-text-fill: #7F7F7F;
+}
+.info-label-big {
+    -fx-font-size: 16px;
+    -fx-text-fill: #323232;
 }
 .update-label {
     -fx-font-size: 14px;
