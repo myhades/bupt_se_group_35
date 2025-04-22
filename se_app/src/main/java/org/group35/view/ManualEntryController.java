@@ -1,49 +1,28 @@
 package org.group35.view;
 
-import javafx.application.Platform;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
-import org.group35.controller.UserManager;
-
-import java.util.List;
-import java.util.Optional;
+import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 
 public class ManualEntryController {
-    @FXML
-    private TextArea aiTextArea;
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField amountField;
-    @FXML
-    private TextField categoryField;
-    @FXML
-    private ImageView BackButtonImageView;
-    @FXML
-    private ImageView MicrophoneImageView;
-
+    @FXML private TextArea aiTextArea;
+    @FXML private TextField nameField;
+    @FXML private TextField amountField;
+    @FXML private TextField categoryField;
+    @FXML private ImageView BackButtonImageView;
+    @FXML private ImageView MicrophoneImageView;
 
     @FXML
     private void initialize() {
         BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
         MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
     }
-
-//    @FXML
-//    private void handleLogOut(ActionEvent event) {
-//        System.out.println("LogOut button clicked.");
-//    }
-//
-//    @FXML
-//    private void handleBack(ActionEvent event) {
-//        System.out.println("Back button clicked.");
-//    }
 
     @FXML
     private void handleMicro(ActionEvent event) {
@@ -81,7 +60,7 @@ public class ManualEntryController {
 //        }
 //    }
 //    }
-}
+    }
 
     @FXML
     private void handleSave(ActionEvent event) {
@@ -115,6 +94,7 @@ public class ManualEntryController {
         alert.getButtonTypes().setAll(okButton);
         alert.showAndWait();
     }
+
     // Show Confirmation
     private boolean showConfirmationDialog(String title, String content, String confirmButtonText, String cancelButtonText) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -140,23 +120,7 @@ public class ManualEntryController {
         alert.showAndWait();
     }
 
-    @FXML
-    private void gotoHome(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoHome();
-    }
-
-    @FXML
-    private void gotoSpending(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoSpending();
-    }
-
-    @FXML
-    private void gotoManualEntry(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoManualEntry();
-    }
-
-    @FXML
-    private void gotoRecogBill(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoRecogBill();
+    public void gotoSpending(ActionEvent actionEvent) {
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.SPENDING);
     }
 }

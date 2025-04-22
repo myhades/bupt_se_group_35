@@ -1,8 +1,6 @@
 package org.group35.view.components;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Base64;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -48,10 +46,10 @@ public class NavBarController extends HBox {
     @FXML
     private void initialize() {
         // Navigation button handlers
-        dashboardBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoHome());
-        spendingBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoSpending());
-        planBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoManualEntry());
-        moreBtn.setOnAction(e -> ApplicationRuntime.getInstance().gotoRecogBill());
+        dashboardBtn.setOnAction(e -> ApplicationRuntime.getInstance().navigateTo(ProgramStatus.HOME));
+        spendingBtn.setOnAction(e -> ApplicationRuntime.getInstance().navigateTo(ProgramStatus.SPENDING));
+        planBtn.setOnAction(e -> ApplicationRuntime.getInstance().navigateTo(ProgramStatus.PLAN));
+        moreBtn.setOnAction(e -> ApplicationRuntime.getInstance().navigateTo(ProgramStatus.MORE));
 
         // Display current user's name and avatar
         User current = ApplicationRuntime.getInstance().getCurrentUser();

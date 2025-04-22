@@ -14,6 +14,7 @@ import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.controller.UserManager;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class LoginController {
@@ -30,11 +31,9 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        // load background
         backgroundImage.setImage(new Image(
-                getClass().getResourceAsStream("/org/group35/view/assets/images/LoginPage_background.jpg")
+                Objects.requireNonNull(getClass().getResourceAsStream("/org/group35/view/assets/images/LoginPage_background.jpg"))
         ));
-        // hide warning
         hideWarning();
     }
 

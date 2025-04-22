@@ -14,61 +14,18 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import org.group35.view.components.NavBarController?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.group35.view.SpendingController"
             stylesheets="@SpendingPage.css"
             styleClass="root-container">
 
     <top>
-        <!-- Navigation Bar and Avatar -->
         <VBox spacing="20">
-            <HBox styleClass="nav-row" alignment="CENTER_LEFT" spacing="10">
-                <HBox spacing="20" styleClass="nav-bar">
-                    <!-- Dashboard -->
-                    <Button text="Dashboard" onAction="#gotoHome" styleClass="nav-button">
-                        <graphic>
-                            <SVGPath content="M19,5V7H15V5H19M9,5V11H5V5H9M19,13V19H15V13H19M9,17V19H5V17H9M21,3H13V9H21V3M11,3H3V13H11V3M21,11H13V21H21V11M11,15H3V21H11V15Z"
-                                     styleClass="nav-icon"/>
-                        </graphic>
-                    </Button>
-                    <!-- Spending -->
-                    <Button text="Spending" onAction="#gotoSpending" styleClass="nav-button-selected">
-                        <graphic>
-                            <SVGPath content="M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z"
-                                     styleClass="nav-icon-selected"/>
-                        </graphic>
-                    </Button>
-                    <!-- Plan -->
-                    <Button text="Plan" styleClass="nav-button">
-                        <graphic>
-                            <SVGPath content="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V9H19V19M19 7H5V5H19V7Z"
-                                     styleClass="nav-icon"/>
-                        </graphic>
-                    </Button>
-                    <!-- More -->
-                    <Button text="More" styleClass="nav-button">
-                        <graphic>
-                            <SVGPath content="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,13C9.33,13 4,14.33 4,17V20H20V17C20,14.33 14.67,13 12,13Z"
-                                     styleClass="nav-icon"/>
-                        </graphic>
-                    </Button>
-                </HBox>
 
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <!-- Avatar + User Info -->
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <VBox alignment="CENTER_RIGHT" spacing="2">
-                        <Label text="Alaric" styleClass="avatar-name"/>
-                        <Button text="Logout" styleClass="avatar-logout"/>
-                    </VBox>
-                    <StackPane styleClass="avatar-container">
-                        <ImageView fx:id="avatarImage"
-                                   fitWidth="40" fitHeight="40"
-                                   styleClass="avatar-image"/>
-                    </StackPane>
-                </HBox>
-            </HBox>
+            <!-- NavBar -->
+            <NavBarController activePage="SPENDING"/>
 
             <!-- New Entry Section -->
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="new-entry-container">
