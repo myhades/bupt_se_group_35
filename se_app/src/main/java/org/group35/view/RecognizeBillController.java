@@ -114,7 +114,7 @@ public class RecognizeBillController implements Initializable {
         cameraService.removeErrorListener(this::onError);
     }
 
-    public void gotoManualEntry(ActionEvent actionEvent) {
-        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.MANUAL_ENTRY);
+    public void gotoSpending(ActionEvent actionEvent) {
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.SPENDING);
     }
 }

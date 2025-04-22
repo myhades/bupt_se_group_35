@@ -20,7 +20,7 @@
 
         <!-- Header Row: Back button, Title, and Status Indicator -->
         <HBox styleClass="header-row" alignment="CENTER_LEFT" spacing="10">
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#gotoManualEntry" styleClass="back-button">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#gotoSpending" styleClass="back-button">
                 <graphic>
                     <Label styleClass="back-arrow" text="←"/>
                 </graphic>

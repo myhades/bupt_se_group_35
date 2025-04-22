@@ -2,9 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
@@ -22,23 +20,26 @@
             styleClass="root-container">
 
     <top>
-        <VBox spacing="20">
-
+        <VBox>
             <!-- NavBar -->
             <NavBarController activePage="SPENDING"/>
 
             <!-- New Entry Section -->
-            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="new-entry-container">
+            <HBox alignment="CENTER_LEFT" spacing="16" styleClass="new-entry-container">
                 <Label text="New entry:" styleClass="new-entry-label"/>
-                <Button text="Manual" styleClass="add-button-green" onAction="#gotoManualEntry">
+                <Button text="Manual"
+                        onAction="#gotoManualEntry"
+                        styleClass="add-button,add-manual">
                     <graphic>
-                        <SVGPath content="M3,17.25V21H6.75L17.81,9.94L14.06,6.19L3,17.25M22.7,6.04C23.09,5.65 23.09,5 22.7,4.63L19.37,1.3C19,0.91 18.35,0.91 17.96,1.3L15.12,4.14L18.87,7.89L22.7,4.04Z"
+                        <SVGPath content="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"
                                  styleClass="add-icon"/>
                     </graphic>
                 </Button>
-                <Button text="Recognize Bill" styleClass="add-button-brown" onAction="#gotoRecogBill">
+                <Button text="Recognize Bill"
+                        onAction="#gotoRecogBill"
+                        styleClass="add-button,add-bill">
                     <graphic>
-                        <SVGPath content="M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H20V6H4M6,9H18V11H6V9M6,13H16V15H6V13Z"
+                        <SVGPath content="M20,4H16.83L15,2H9L7.17,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,18H4V6H8.05L9.88,4H14.12L15.95,6H20V18M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15Z"
                                  styleClass="camera-icon"/>
                     </graphic>
                 </Button>
