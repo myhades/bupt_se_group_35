@@ -25,9 +25,9 @@ public class Transaction {
     @SerializedName("recurrencePattern")
     private String recurrencePattern;
 
-    /** User's current monthly budget at time of entry */
-    @SerializedName("monthlyBudget")
-    private BigDecimal monthlyBudget;
+//    /** User's current monthly budget at time of entry */
+//    @SerializedName("monthlyBudget")
+//    private BigDecimal monthlyBudget;
 
     public Transaction() {
         this.id = UUID.randomUUID().toString();
@@ -86,10 +86,10 @@ public class Transaction {
         this.recurrencePattern = recurrencePattern;
     }
 
-    public BigDecimal getMonthlyBudget() {
-        return monthlyBudget;
-    }
-    public void setMonthlyBudget(BigDecimal monthlyBudget) {
-        this.monthlyBudget = monthlyBudget;
-    }
+//    public BigDecimal getMonthlyBudget() {
+//        return monthlyBudget;
+//    }
+//    public void setMonthlyBudget(BigDecimal monthlyBudget) {
+//        this.monthlyBudget = monthlyBudget;
+//    }
 }

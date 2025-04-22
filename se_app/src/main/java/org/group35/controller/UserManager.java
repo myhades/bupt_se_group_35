@@ -1,5 +1,6 @@
 package org.group35.controller;
 
+import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.util.ImageUtils;
@@ -7,7 +8,10 @@ import org.group35.util.PasswordUtils;
 import org.group35.util.LoggerHelper;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 /**
  * Manages user registration and login operations.
@@ -15,6 +19,27 @@ import java.util.List;
  * Logging is added via LoggerHelper.
  */
 public class UserManager {
+
+    private List<User> users;
+
+    public UserManager() {
+        LoggerHelper.debug("Initializing UserManager and loading users");
+        users = PersistentDataManager.getStore().getUsers();
+        if (users == null) {
+            LoggerHelper.info("No existing users found, starting with empty list");
+            users = new ArrayList<>();
+        } else {
+            LoggerHelper.info("Loaded " + users.size() + " users from store");
+        }
+    }
+
+    /** Saves the current user list back to the persistent store. */
+    private void save() {
+        LoggerHelper.debug("Persisting " + users.size() + " users to store");
+        PersistentDataManager.getStore().setUsers(users);
+        PersistentDataManager.saveStore();
+        LoggerHelper.info("Users saved successfully");
+    }
 
     /**
      * Register a new user: hash the password, add the user to the store.
@@ -98,7 +123,6 @@ public class UserManager {
         LoggerHelper.warn("Failed to set avatar. User not found: " + username);
     }
 
-
     /**
      * Retrieves the Base64‑encoded avatar string for a user.
      * @param username the user to look up
@@ -112,5 +136,20 @@ public class UserManager {
         }
         LoggerHelper.warn("Failed to get avatar. User not found: " + username);
         return null;
+    }
+
+    /** Returns users for a given username. */
+    public List<User> getByUser(String username) {
+        LoggerHelper.trace("Filtering transactions for user: " + username);
+        return users.stream()
+                .filter(tx -> username.equals(tx.getUsername()))
+                .collect(Collectors.toList());
+    }
+
+    /** Sets the monthly budget for a specific user's future entries. */
+    public void setMonthlyBudget(String username, BigDecimal budget) {
+        LoggerHelper.info("Setting monthly budget for user " + username + " to " + budget);
+        getByUser(username).forEach(tx -> tx.setMonthlyBudget(budget));
+        save();
     }
 }

@@ -73,12 +73,12 @@ public class TransactionManager {
         save();
     }
 
-    /** Sets the monthly budget for a specific user's future entries. */
-    public void setMonthlyBudget(String username, BigDecimal budget) {
-        LoggerHelper.info("Setting monthly budget for user " + username + " to " + budget);
-        getByUser(username).forEach(tx -> tx.setMonthlyBudget(budget));
-        save();
-    }
+//    /** Sets the monthly budget for a specific user's future entries. */
+//    public void setMonthlyBudget(String username, BigDecimal budget) {
+//        LoggerHelper.info("Setting monthly budget for user " + username + " to " + budget);
+//        getByUser(username).forEach(tx -> tx.setMonthlyBudget(budget));
+//        save();
+//    }
 
     /** Save the current transaction list back to the persistent store. */
     private void save() {
