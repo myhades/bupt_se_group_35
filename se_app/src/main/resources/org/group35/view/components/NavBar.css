@@ -16,12 +16,11 @@
     -fx-text-fill: #000000;
 }
 .nav-button:hover {
-    -fx-background-color: rgba(0,0,0,0.05);
     -fx-background-insets: -4;
+    -fx-background-color: rgba(0,0,0,0.05);
 }
 .nav-button:pressed {
-    -fx-scale-x: 0.98;
-    -fx-scale-y: 0.98;
+    -fx-background-insets: -4;
     -fx-background-color: rgba(0,0,0,0.15);
 }
 .nav-button.active {
