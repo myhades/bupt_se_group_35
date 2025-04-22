@@ -43,9 +43,9 @@
 }
 
 .page-title {
-    -fx-font-size: 24;
+    -fx-font-size: 36;
     -fx-font-weight: bold;
-    -fx-text-fill: #333;
+    -fx-text-fill: #000000;
 }
 
 .status-indicator {
@@ -53,7 +53,7 @@
 }
 
 .camera-container {
-    -fx-background-color: #333333;
+    -fx-background-color: #ffffff;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
 }
@@ -70,10 +70,11 @@
 }
 
 .placeholder-text {
-    -fx-font-size: 16px;
-    -fx-text-fill: white;
-    -fx-text-alignment: center;
-    -fx-padding: 10 0 0 0;
+    -fx-font-size: 18px;
+    -fx-text-fill: #000000;
+    -fx-text-alignment: left;
+    -fx-padding: 10 0 0 100;
+    -fx-wrap-text: true; /* 添加此行 */
 }
 
 .primary-button {
@@ -87,4 +88,15 @@
 
 .primary-button:hover {
     -fx-background-color: #c0392b;
+}
+
+.Dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: #8b4527;
+}
+
+.camera-icon-1 {
+    -fx-fill: #000000;
+    -fx-scale-x: 1.5;  /* 水平放大 2 倍 */
+    -fx-scale-y: 1.5;  /* 垂直放大 2 倍 */
 }
