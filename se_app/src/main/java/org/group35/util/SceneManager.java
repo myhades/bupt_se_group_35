@@ -81,4 +81,11 @@ public class SceneManager {
         LoggerHelper.debug("Switching to SpendingPage.fxml");
         switchScene("/org/group35/view/SpendingPage.fxml", 1000, 500, "Monora");
     }
+    /**
+     * Convenience method for showing the plan page.
+     */
+    public static void showPlanPage() {
+        LoggerHelper.debug("Switching to PlanPage.fxml");
+        switchScene("/org/group35/view/PlanPage.fxml", 1000, 500, "Monora");
+    }
 }

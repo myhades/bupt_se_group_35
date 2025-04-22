@@ -84,6 +84,7 @@ public class NavBarController extends HBox {
         switch (status) {
             case HOME:     dashboardBtn.getStyleClass().add("active"); break;
             case SPENDING: spendingBtn.getStyleClass().add("active"); break;
+            case PLAN:    planBtn.getStyleClass().add("active"); break;
             default:       break;
         }
     }

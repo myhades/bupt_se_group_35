@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.group35.view.components.NavBarController?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.PlanController"
+      stylesheets="@PlanPage.css"
+      styleClass="root-container">
+
+    <!-- NavBar -->
+    <NavBarController activePage="PLAN"/>
+
+    <!-- Title Section -->
+    <VBox styleClass="greeting-row" spacing="10">
+        <Label text="You're currently on a budget." styleClass="greeting-label"/>
+    </VBox>
+
+    <!-- Main Content -->
+    <GridPane styleClass="chart-row" hgap="20" vgap="20">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="40"/>
+        </columnConstraints>
+
+        <!-- Left: Budget Info -->
+        <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="0">
+            <Label text="Budget" styleClass="chart-title"/>
+            <PieChart fx:id="budgetPieChart" styleClass="pie-chart"/>
+
+            <HBox spacing="20">
+                <VBox spacing="6">
+                    <Label text="Available" styleClass="info-label-small"/>
+                    <Label fx:id="availableAmount" text="\$200 20%" styleClass="budget-amount"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Used" styleClass="info-label-small"/>
+                    <Label fx:id="usedAmount" text="\$1600 80%" styleClass="budget-amount"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="20">
+                <Button text="Edit Budget" styleClass="edit-button">
+                    <graphic>
+                        <SVGPath content="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"
+                                 styleClass="edit-icon"/>
+                    </graphic>
+                </Button>
+                <Button text="Get AI Suggestion" styleClass="ai-suggestion-button">
+                    <graphic>
+                        <SVGPath content="M9,1V6H4V8H9V13H11V8H16V6H11V1H9Z"
+                                 styleClass="edit-icon"/>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+
+        <!-- Right: Recommendation and Local Info -->
+        <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="1">
+            <Label text="Recommendation" styleClass="chart-title"/>
+            <Button fx:id="recommendationButton" text="Tap to get recommendations on restaurants, coupon sites and more." styleClass="recommendation-button">
+                <graphic>
+                    <SVGPath content="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20ZM12 16a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"
+                             styleClass="edit-icon"/>
+                </graphic>
+            </Button>
+            <Label text="Local" styleClass="chart-title"/>
+            <VBox spacing="6">
+                <Label text="Time Zone: Asia/Shanghai" styleClass="info-label-small"/>
+                <Label text="Currency: RMB/Yuan" styleClass="info-label-small"/>
+                <Label text="Ratio: 7.29 per USD" styleClass="info-label-small"/>
+                <Label text="Last updated: 2025/3/18 21:14" styleClass="update-label"/>
+            </VBox>
+        </VBox>
+
+    </GridPane>
+
+</VBox>
