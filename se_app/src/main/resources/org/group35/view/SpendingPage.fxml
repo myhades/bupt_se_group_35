@@ -11,6 +11,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ScrollPane?>
 
 <?import org.group35.view.components.NavBarController?>
 
@@ -49,88 +50,93 @@
 
     <center>
         <!-- Main Content Area -->
-        <HBox spacing="20" styleClass="content-container">
+        <HBox spacing="20" styleClass="content-container" VBox.vgrow="ALWAYS">
             <!-- Left: Spending List -->
             <VBox spacing="15" styleClass="spending-list" HBox.hgrow="ALWAYS" maxWidth="600">
                 <Label text="Spendings" styleClass="section-title"/>
-
-                <!-- Rent -->
-                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                    <StackPane>
-                        <Circle radius="20" styleClass="icon-circle-dark-blue"/>
-                        <Label text="R" styleClass="icon-letter"/>
-                    </StackPane>
-                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Rent" styleClass="spending-name"/>
-                            <Label text="Manual" styleClass="spending-type-manual-small"/>
+                <!-- ScrollPane containing only the spending items -->
+                <ScrollPane styleClass="spending-scrollpane" fitToWidth="true" VBox.vgrow="ALWAYS" maxHeight="Infinity" minHeight="200">
+                    <VBox spacing="15" styleClass="spending-list">
+                        <!-- Rent -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
+                            <StackPane>
+                                <Circle radius="20" styleClass="icon-circle-dark-blue"/>
+                                <Label text="R" styleClass="icon-letter"/>
+                            </StackPane>
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Rent" styleClass="spending-name"/>
+                                    <Label text="Manual" styleClass="spending-type-manual-small"/>
+                                </HBox>
+                                <Label text="November 30th" styleClass="spending-date"/>
+                            </VBox>
+                            <Label text="\$ 1200" styleClass="spending-amount"/>
                         </HBox>
-                        <Label text="November 30th" styleClass="spending-date"/>
-                    </VBox>
-                    <Label text="\$ 1200" styleClass="spending-amount"/>
-                </HBox>
 
-                <!-- Netflix -->
-                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                    <StackPane>
-                        <Circle radius="20" styleClass="icon-circle-red"/>
-                        <Label text="N" styleClass="icon-letter"/>
-                    </StackPane>
-                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Netflix Family" styleClass="spending-name"/>
-                            <Label text="Recurring" styleClass="spending-type-recurring-small"/>
+                        <!-- Netflix -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
+                            <StackPane>
+                                <Circle radius="20" styleClass="icon-circle-red"/>
+                                <Label text="N" styleClass="icon-letter"/>
+                            </StackPane>
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Netflix Family" styleClass="spending-name"/>
+                                    <Label text="Recurring" styleClass="spending-type-recurring-small"/>
+                                </HBox>
+                                <Label text="December 11st" styleClass="spending-date"/>
+                            </VBox>
+                            <Label text="\$ 29.9" styleClass="spending-amount"/>
                         </HBox>
-                        <Label text="December 11st" styleClass="spending-date"/>
-                    </VBox>
-                    <Label text="\$ 29.9" styleClass="spending-amount"/>
-                </HBox>
 
-                <!-- Utilities -->
-                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                    <StackPane>
-                        <Circle radius="20" styleClass="icon-circle-orange"/>
-                        <Label text="U" styleClass="icon-letter"/>
-                    </StackPane>
-                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Utilities" styleClass="spending-name"/>
+                        <!-- Utilities -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
+                            <StackPane>
+                                <Circle radius="20" styleClass="icon-circle-orange"/>
+                                <Label text="U" styleClass="icon-letter"/>
+                            </StackPane>
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Utilities" styleClass="spending-name"/>
+                                </HBox>
+                                <Label text="December 25th" styleClass="spending-date"/>
+                            </VBox>
+                            <Label text="\$ 189.45" styleClass="spending-amount"/>
                         </HBox>
-                        <Label text="December 25th" styleClass="spending-date"/>
-                    </VBox>
-                    <Label text="\$ 189.45" styleClass="spending-amount"/>
-                </HBox>
 
-                <!-- McDonald -->
-                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                    <StackPane>
-                        <Circle radius="20" styleClass="icon-circle-yellow"/>
-                        <Label text="M" styleClass="icon-letter"/>
-                    </StackPane>
-                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="McDonald" styleClass="spending-name"/>
+                        <!-- McDonald -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
+                            <StackPane>
+                                <Circle radius="20" styleClass="icon-circle-yellow"/>
+                                <Label text="M" styleClass="icon-letter"/>
+                            </StackPane>
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="McDonald" styleClass="spending-name"/>
+                                </HBox>
+                                <Label text="December 25th" styleClass="spending-date"/>
+                            </VBox>
+                            <Label text="\$ 15.9" styleClass="spending-amount"/>
                         </HBox>
-                        <Label text="December 25th" styleClass="spending-date"/>
-                    </VBox>
-                    <Label text="\$ 15.9" styleClass="spending-amount"/>
-                </HBox>
 
-                <!-- Dinner -->
-                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                    <StackPane>
-                        <Circle radius="20" styleClass="icon-circle-gray"/>
-                        <Label text="D" styleClass="icon-letter"/>
-                    </StackPane>
-                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Dinner" styleClass="spending-name"/>
+                        <!-- Dinner -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
+                            <StackPane>
+                                <Circle radius="20" styleClass="icon-circle-gray"/>
+                                <Label text="D" styleClass="icon-letter"/>
+                            </StackPane>
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Dinner" styleClass="spending-name"/>
+                                </HBox>
+                                <Label text="December 27th" styleClass="spending-date"/>
+                            </VBox>
+                            <Label text="\$ 98.7" styleClass="spending-amount"/>
                         </HBox>
-                        <Label text="December 27th" styleClass="spending-date"/>
                     </VBox>
-                    <Label text="\$ 98.7" styleClass="spending-amount"/>
-                </HBox>
+                </ScrollPane>
             </VBox>
+
 
             <!-- Right: Budget and AI Summary -->
             <VBox spacing="20" styleClass="info-panel" minWidth="300" maxWidth="350">
