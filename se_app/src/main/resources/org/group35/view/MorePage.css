@@ -1,0 +1,11 @@
+/* MorePage.css */
+
+/* Greeting Bar */
+.greeting-row {
+    -fx-padding: 30 0 0 6;
+    -fx-alignment: center-left;
+}
+.greeting-label {
+    -fx-font-size: 46px;
+    -fx-font-family: 'Articulat CF Bold';
+}

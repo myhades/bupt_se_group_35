@@ -2,7 +2,7 @@
 
 /* Greeting Bar */
 .greeting-row {
-    -fx-padding: 20 0 0 6;
+    -fx-padding: 30 0 -10 6;
     -fx-alignment: center-left;
 }
 .greeting-label {
@@ -29,7 +29,7 @@
     -fx-scale-y: 1.2;
 }
 .edit-button:hover {
-    -fx-background-color: derive(#595959, 50%);
+    -fx-background-color: derive(#595959, 25%);
 }
 
 /* Chart Row */

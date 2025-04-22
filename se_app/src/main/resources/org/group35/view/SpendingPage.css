@@ -2,7 +2,7 @@
 
 /* New Entry Container */
 .new-entry-container {
-    -fx-padding: 16px 0 16px 6px;
+    -fx-padding: 30px 0 20px 6px;
 }
 
 /* Section Title */
@@ -35,26 +35,23 @@
     -fx-background-color: #3B7D23;
 }
 .add-manual:hover {
-    -fx-background-color: derive(#3B7D23, 50%);
+    -fx-background-color: derive(#3B7D23, 25%);
 }
 .add-bill {
     -fx-background-color: #8B4513;
 }
 .add-bill:hover {
-    -fx-background-color: derive(#8B4513, 50%);
+    -fx-background-color: derive(#8B4513, 25%);
 }
 .add-icon, .camera-icon {
     -fx-fill: white;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
 }
 
 /* Spending List */
 .spending-list {
     -fx-padding: 15px;
     -fx-background-color: #ffffff;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-background-radius: 20px;
     -fx-spacing: 15px;
     -fx-min-width: 450px;
     -fx-max-width: 600px;
@@ -64,11 +61,9 @@
 .spending-item {
     -fx-padding: 12px 15px;
     -fx-background-color: white;
-    -fx-border-radius: 6px;
     -fx-background-radius: 6px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 2, 0, 0, 1);
-    -fx-border-color: #f0f0f0;
-    -fx-border-width: 1px;
+    -fx-border-color: transparent;
     -fx-min-height: 50px;
     -fx-max-height: 70px;
 }
@@ -140,8 +135,7 @@
 .info-panel {
     -fx-padding: 15px;
     -fx-background-color: #ffffff;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-background-radius: 20px;
     -fx-spacing: 15px;
     -fx-min-width: 280px;
     -fx-max-width: 320px;
@@ -152,8 +146,7 @@
 .budget-panel {
     -fx-padding: 15px;
     -fx-background-color: #ffffff;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-background-radius: 20px;
     -fx-spacing: 8px;
     -fx-alignment: CENTER_LEFT;
 }
@@ -181,8 +174,7 @@
 .ai-panel {
     -fx-padding: 15px;
     -fx-background-color: #ffffff;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-background-radius: 20px;
     -fx-alignment: TOP_LEFT;
     -fx-spacing: 12px;
 }

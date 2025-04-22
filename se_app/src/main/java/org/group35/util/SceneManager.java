@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 /**
  * Manages switching between application scenes.
  */
@@ -28,20 +30,19 @@ public class SceneManager {
     /**
      * Loads an FXML file and sets it as the current scene.
      */
-    public static void switchScene(String fxmlPath, int width, int height, String title) {
+    public static void switchScene(String fxmlPath) {
         try {
-            Parent root = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
-            Scene scene = new Scene(root, width, height);
+            Parent root = FXMLLoader.load(Objects.requireNonNull(SceneManager.class.getResource(fxmlPath)));
+            Scene scene = new Scene(root, 1000, 560);
             scene.getStylesheets().add(
-                    SceneManager.class.getResource("/org/group35/view/Global.css").toExternalForm()
+                    Objects.requireNonNull(SceneManager.class.getResource("/org/group35/view/Global.css")).toExternalForm()
             );
-            primaryStage.setTitle(title);
+            primaryStage.setTitle("Monora");
             primaryStage.setScene(scene);
             primaryStage.show();
             LoggerHelper.info("Navigated to scene: " + fxmlPath);
         } catch (Exception e) {
             LoggerHelper.error("Failed to load scene '" + fxmlPath + "': " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -50,7 +51,7 @@ public class SceneManager {
      */
     public static void showLoginPage() {
         LoggerHelper.debug("Switching to LoginPage.fxml");
-        switchScene("/org/group35/view/LoginPage.fxml", 1000, 500, "Monora");
+        switchScene("/org/group35/view/LoginPage.fxml");
     }
 
     /**
@@ -58,7 +59,23 @@ public class SceneManager {
      */
     public static void showHomePage() {
         LoggerHelper.debug("Switching to HomePage.fxml");
-        switchScene("/org/group35/view/HomePage.fxml", 1000, 500, "Monora");
+        switchScene("/org/group35/view/HomePage.fxml");
+    }
+
+    /**
+     * Convenience method for showing the plan page.
+     */
+    public static void showPlanPage() {
+        LoggerHelper.debug("Switching to PlanPage.fxml");
+        switchScene("/org/group35/view/PlanPage.fxml");
+    }
+
+    /**
+     * Convenience method for showing the more page.
+     */
+    public static void showMorePage() {
+        LoggerHelper.debug("Switching to MorePage.fxml");
+        switchScene("/org/group35/view/MorePage.fxml");
     }
 
     /**
@@ -66,12 +83,12 @@ public class SceneManager {
      */
     public static void showRecognizeBillPage() {
         LoggerHelper.debug("Switching to RecognizeBillPage.fxml");
-        switchScene("/org/group35/view/RecognizeBillPage.fxml", 1000, 500, "Monora");
+        switchScene("/org/group35/view/RecognizeBillPage.fxml");
     }
 
     public static void showManualEntryPage() {
         LoggerHelper.debug("Switching to ManualEntryPage.fxml");
-        switchScene("/org/group35/view/ManualEntryPage.fxml", 1000, 500, "Monora");
+        switchScene("/org/group35/view/ManualEntryPage.fxml");
     }
 
     /**
@@ -79,6 +96,6 @@ public class SceneManager {
      */
     public static void showSpendingPage() {
         LoggerHelper.debug("Switching to SpendingPage.fxml");
-        switchScene("/org/group35/view/SpendingPage.fxml", 1000, 500, "Monora");
+        switchScene("/org/group35/view/SpendingPage.fxml");
     }
 }

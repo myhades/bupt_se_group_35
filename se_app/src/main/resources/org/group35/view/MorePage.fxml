@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.group35.view.components.NavBarController?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.MoreController"
+      stylesheets="@MorePage.css"
+      styleClass="root-container">
+
+    <!-- NavBar -->
+    <NavBarController activePage="MORE"/>
+
+    <!-- Greeting Row -->
+    <HBox styleClass="greeting-row" alignment="CENTER_LEFT" spacing="10">
+        <HBox spacing="3">
+            <Label text="Logged in as " styleClass="greeting-label"/>
+            <Label text="Guest." fx:id="userLabel" styleClass="greeting-label" />
+        </HBox>
+    </HBox>
+
+</VBox>
