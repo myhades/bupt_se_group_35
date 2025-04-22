@@ -16,7 +16,7 @@
       spacing="20">
     <children>
         <!-- Top Nav Bar -->
-        <NavBarController activePage="HOME" />
+        <NavBarController activePage="SPENDING" />
 
         <!-- Header Row: Back button, Title, and Status Indicator -->
         <HBox styleClass="header-row" alignment="CENTER_LEFT" spacing="10">
