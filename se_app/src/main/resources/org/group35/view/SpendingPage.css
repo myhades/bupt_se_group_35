@@ -31,6 +31,11 @@
     -fx-cursor: hand;
     -fx-graphic-text-gap: 8px;
 }
+.add-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-opacity: 0.6;
+}
 .add-manual {
     -fx-background-color: #3B7D23;
 }
