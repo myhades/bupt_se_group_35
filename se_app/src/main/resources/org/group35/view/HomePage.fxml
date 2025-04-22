@@ -25,7 +25,7 @@
     <!-- Greeting Row + Edit Button -->
     <HBox styleClass="greeting-row" alignment="CENTER_LEFT" spacing="10">
         <VBox spacing="4">
-            <Label text="Good afternoon!" styleClass="greeting-label"/>
+            <Label text="Good afternoon" styleClass="greeting-label"/>
             <Label text="Not sure what to do? Take a quick tutorial." styleClass="info-label"/>
         </VBox>
         <Region HBox.hgrow="ALWAYS"/>

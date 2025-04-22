@@ -1,10 +1,11 @@
+/* ManualEntryPage.css */
 
 VBox {
-    -fx-background-radius: 10;
+    -fx-background-radius: 20px;
 }
 
 /* TextField */
-.textfield {
+.text-field {
     -fx-background-color: #a5a5a5;
     -fx-text-fill: white;
     -fx-prompt-text-fill: white;
@@ -54,7 +55,6 @@ VBox {
     -fx-control-inner-background: #a5a5a5;
     -fx-text-fill: white;
     -fx-prompt-text-fill: white;
-    -fx-background-radius: 5;
     -fx-font-size: 14px;
     -fx-padding: 0;
     -fx-font-family: "Arial";
