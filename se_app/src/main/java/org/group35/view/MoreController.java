@@ -17,9 +17,9 @@ public class MoreController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         User current = ApplicationRuntime.getInstance().getCurrentUser();
         if (current != null) {
-            userLabel.setText(current.getUsername() + ".");
+            userLabel.setText(current.getUsername());
         } else {
-            userLabel.setText("Guest.");
+            userLabel.setText("Guest");
         }
     }
 }
