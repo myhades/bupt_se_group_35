@@ -1,99 +1,8 @@
 /* SpendingPage.css */
 
-/* Font faces */
-@font-face {
-    font-family: 'Articulat CF Bold';
-    src: url('assets/fonts/articulat-cf-bold.ttf');
-}
-@font-face {
-    font-family: 'Articulat CF Demi Bold';
-    src: url('assets/fonts/articulat-cf-demi-bold.ttf');
-}
-@font-face {
-    font-family: 'Articulat CF Normal';
-    src: url('assets/fonts/articulat-cf-normal.ttf');
-}
-
-/* Root */
-.root-container {
-    -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-padding: 20px;
-    -fx-text-fill: #000000;
-    -fx-background-color: #f5f5f5;
-}
-
-/* Navigation Row */
-.nav-row,
-.nav-bar {
-    -fx-spacing: 30;
-}
-.nav-button {
-    -fx-background-color: transparent;
-    -fx-font-size: 16px;
-    -fx-cursor: hand;
-    -fx-graphic-text-gap: 12;
-}
-.nav-button-selected {
-    -fx-background-color: transparent;
-    -fx-font-size: 16px;
-    -fx-cursor: hand;
-    -fx-graphic-text-gap: 12;
-    -fx-text-fill: red;
-    -fx-underline: true;
-}
-
-.nav-button:hover {
-    -fx-text-fill: #2C6298;
-}
-.nav-icon {
-    -fx-fill: #000000;
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
-}
-
-.nav-icon-selected {
-    -fx-fill: red;
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
-}
-
-/* Avatar */
-.avatar-container {
-    -fx-background-color: #DDD;
-    -fx-background-radius: 50%;
-    -fx-padding: 4;
-}
-.avatar-image {
-    -fx-background-radius: 50%;
-    -fx-border-radius: 50%;
-}
-.avatar-name,
-.avatar-logout {
-    -fx-text-alignment: right;
-    -fx-alignment: CENTER_RIGHT;
-    -fx-padding: -3 2 -3 0;
-}
-.avatar-name {
-    -fx-font-size: 16px;
-    -fx-font-family: "Articulat CF Normal";
-}
-.avatar-logout {
-    -fx-font-size: 16px;
-    -fx-font-family: "Articulat CF Normal";
-    -fx-background-color: transparent;
-    -fx-text-fill: #333;
-    -fx-cursor: hand;
-}
-
-/* Content Container */
-.content-container {
-    -fx-padding: 10px;
-    -fx-spacing: 20;
-}
-
 /* New Entry Container */
 .new-entry-container {
-    -fx-padding: 10px 0;
+    -fx-padding: 16px 0 16px 6px;
 }
 
 /* Section Title */
@@ -113,34 +22,31 @@
 }
 
 /* Button Styles */
-.add-button-green {
-    -fx-background-color: #4CAF50;
+.add-button {
     -fx-text-fill: white;
-    -fx-padding: 8px 16px;
+    -fx-padding: 6px 16px;
     -fx-font-size: 16px;
     -fx-font-family: 'Articulat CF Demi Bold';
     -fx-background-radius: 20px;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 8px;
-    -fx-max-width: 120px;
 }
-
-.add-button-brown {
+.add-manual {
+    -fx-background-color: #3B7D23;
+}
+.add-manual:hover {
+    -fx-background-color: derive(#3B7D23, 50%);
+}
+.add-bill {
     -fx-background-color: #8B4513;
-    -fx-text-fill: white;
-    -fx-padding: 8px 16px;
-    -fx-font-size: 16px;
-    -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-background-radius: 20px;
-    -fx-cursor: hand;
-    -fx-graphic-text-gap: 8px;
-    -fx-max-width: 150px;
 }
-
+.add-bill:hover {
+    -fx-background-color: derive(#8B4513, 50%);
+}
 .add-icon, .camera-icon {
     -fx-fill: white;
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
 }
 
 /* Spending List */
@@ -186,7 +92,7 @@
 }
 
 .spending-type-manual-small {
-    -fx-background-color: #4CAF50;
+    -fx-background-color: #3B7D23;
     -fx-font-size: 12px;
     -fx-padding: 3px 8px;
     -fx-font-family: 'Articulat CF Normal';
@@ -201,16 +107,6 @@
     -fx-font-family: 'Articulat CF Normal';
     -fx-text-fill: white;
     -fx-background-radius: 12px;
-}
-
-/* Root Container */
-.root-container {
-    -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-padding: 20px;
-    -fx-text-fill: #000000;
-    -fx-background-color: #f5f5f5;
-    -fx-pref-width: 900px;
-    -fx-max-width: 1000px;
 }
 
 /* Icon Circles */

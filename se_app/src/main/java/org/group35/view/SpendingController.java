@@ -3,6 +3,7 @@ package org.group35.view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import org.group35.runtime.ApplicationRuntime;
+import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 
 public class SpendingController {
 
@@ -10,22 +11,12 @@ public class SpendingController {
     public void initialize() {}
 
     @FXML
-    private void gotoHome(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoHome();
-    }
-
-    @FXML
-    private void gotoSpending(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoSpending();
-    }
-
-    @FXML
     private void gotoManualEntry(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoManualEntry();
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.MANUAL_ENTRY);
     }
 
     @FXML
     private void gotoRecogBill(ActionEvent event) {
-        ApplicationRuntime.getInstance().gotoRecogBill();
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.RECOGNIZE_BILL);
     }
 }

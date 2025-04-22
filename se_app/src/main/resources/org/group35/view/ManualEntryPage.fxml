@@ -8,9 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Priority?>
 
 <!--
     This FXML file is used to define the user interface layout of the Manual Entry Page.
@@ -22,7 +20,7 @@
         - Manual Input part: It contains three text fields for entering the name, amount, and category respectively, and a save button for saving the input information.
     - The background color of the input fields (including the text area and text fields) is set to #a5a5a5, and both the prompt text and the input text are white to provide a clear visual effect.
 -->
-<?import javafx.scene.shape.SVGPath?>
+
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.ManualEntryController"
       stylesheets="@ManualEntryPage.css"

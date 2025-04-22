@@ -5,136 +5,60 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import org.group35.view.components.NavBarController?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="main-container" stylesheets="@RecognizeBillPage.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group35.view.RecognizeBillController">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.group35.view.RecognizeBillController"
+      stylesheets="@RecognizeBillPage.css" styleClass="root-container"
+      spacing="20">
     <children>
-        <BorderPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <top>
-                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="800.0" styleClass="header" BorderPane.alignment="CENTER">
+        <!-- Top Nav Bar -->
+        <NavBarController activePage="HOME" />
+
+        <!-- Header Row: Back button, Title, and Status Indicator -->
+        <HBox styleClass="header-row" alignment="CENTER_LEFT" spacing="10">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#gotoSpending" styleClass="back-button">
+                <graphic>
+                    <Label styleClass="back-arrow" text="←"/>
+                </graphic>
+            </Button>
+            <Label text="Recognize Bill" styleClass="page-title" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="statusIndicator" text="●" styleClass="status-indicator" />
+        </HBox>
+
+        <!-- Camera Preview / Placeholder -->
+        <StackPane fx:id="cameraContainer" styleClass="camera-container" maxWidth="700.0" maxHeight="400.0">
+            <children>
+                <ImageView fx:id="previewImage" fitWidth="600" fitHeight="300" preserveRatio="true" styleClass="preview-image" />
+                <VBox fx:id="placeholderBox" alignment="CENTER" styleClass="frame-placeholder" maxWidth="650" maxHeight="350">
                     <children>
-                        <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleCloseButton" styleClass="close-button">
-                            <graphic>
-                                <Label text="✕" />
-                            </graphic>
-                        </Button>
-                        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="20.0">
-                            <children>
-                                <Button fx:id="dashboardButton" mnemonicParsing="false" onAction="#gotoHome" styleClass="nav-button">
-                                    <graphic>
-                                        <HBox alignment="CENTER" spacing="5.0">
-                                            <children>
-                                                <Label text="Dashboard" />
-                                            </children>
-                                        </HBox>
-                                    </graphic>
-                                </Button>
-                                <Button fx:id="spendingButton" mnemonicParsing="false" onAction="#gotoSpending" styleClass="nav-button-active">
-                                    <graphic>
-                                        <HBox alignment="CENTER" spacing="5.0">
-                                            <children>
-                                                <Label text="Spending" />
-                                            </children>
-                                        </HBox>
-                                    </graphic>
-                                </Button>
-                                <Button fx:id="planButton" mnemonicParsing="false" onAction="#handlePlanButton" styleClass="nav-button">
-                                    <graphic>
-                                        <HBox alignment="CENTER" spacing="5.0">
-                                            <children>
-                                                <Label text="Plan" />
-                                            </children>
-                                        </HBox>
-                                    </graphic>
-                                </Button>
-                                <Button fx:id="moreButton" mnemonicParsing="false" onAction="#handleMoreButton" styleClass="nav-button">
-                                    <graphic>
-                                        <HBox alignment="CENTER" spacing="5.0">
-                                            <children>
-                                                <Label text="More" />
-                                            </children>
-                                        </HBox>
-                                    </graphic>
-                                </Button>
-                            </children>
-                        </HBox>
-                        <VBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="200.0">
-                            <children>
-                                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                                    <children>
-                                        <Label fx:id="userNameLabel" text="Alaric" />
-                                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#handleLogoutButton" styleClass="small-button" text="Logout" />
-                                        <ImageView fx:id="userAvatar" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar">
-                                            <image>
-                                                <Image url="@assets/images/default_avatar.png" />
-                                            </image>
-                                        </ImageView>
-                                    </children>
-                                    <padding>
-                                        <Insets right="10.0" />
-                                    </padding>
-                                </HBox>
-                            </children>
-                        </VBox>
+                        <ImageView fitWidth="50" fitHeight="50" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/images/camera_icon.png" />
+                            </image>
+                        </ImageView>
+                        <Label text="Place your bill\ninside the frame" textAlignment="CENTER" styleClass="placeholder-text" />
                     </children>
-                </HBox>
-            </top>
-            <center>
-                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="content-area" BorderPane.alignment="CENTER">
-                    <children>
-                        <HBox alignment="CENTER_LEFT" spacing="20.0">
-                            <children>
-                                <Button fx:id="backButton" mnemonicParsing="false" onAction="#gotoManualEntry" styleClass="back-button">
-                                    <graphic>
-                                        <Label styleClass="back-arrow" text="←" />
-                                    </graphic>
-                                </Button>
-                                <Label styleClass="page-title" text="Recognize Bill">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                </Label>
-                                <Label styleClass="status-indicator" text="●" textFill="#813109" />
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="20.0" />
-                            </VBox.margin>
-                        </HBox>
-                        <StackPane fx:id="cameraContainer" maxHeight="400.0" maxWidth="700.0" prefHeight="350.0" prefWidth="650.0" styleClass="camera-container">
-                            <children>
-                                <ImageView fx:id="previewImage" fitHeight="300.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" styleClass="preview-image" />
-                                <VBox fx:id="placeholderBox" alignment="CENTER" maxHeight="350.0" maxWidth="650.0" prefHeight="350.0" prefWidth="650.0" styleClass="frame-placeholder">
-                                    <children>
-                                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@assets/images/camera_icon.png" />
-                                            </image>
-                                        </ImageView>
-                                        <Label styleClass="placeholder-text" text="Place your bill&#10;inside the frame" textAlignment="CENTER" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </StackPane>
-                        <HBox alignment="CENTER" spacing="20.0">
-                            <children>
-                                <Button fx:id="captureButton" mnemonicParsing="false" onAction="#handleCaptureButton" styleClass="primary-button" text="Capture" />
-                                <Button fx:id="processButton" mnemonicParsing="false" styleClass="primary-button" text="Process Bill" />
-                            </children>
-                            <VBox.margin>
-                                <Insets top="20.0" />
-                            </VBox.margin>
-                        </HBox>
-                    </children>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                    </padding>
                 </VBox>
-            </center>
-        </BorderPane>
+            </children>
+        </StackPane>
+
+        <!-- Action Row: Capture and Process Buttons -->
+        <HBox styleClass="action-row" alignment="CENTER" spacing="20">
+            <Button fx:id="captureButton" mnemonicParsing="false" onAction="#handleCaptureButton"
+                    text="Capture" styleClass="primary-button" />
+            <Button fx:id="processButton" mnemonicParsing="false" onAction="#handleProcessButton"
+                    text="Process Bill" styleClass="primary-button" />
+        </HBox>
+
     </children>
-</AnchorPane>
+
+    <!-- Padding around entire layout -->
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+</VBox>

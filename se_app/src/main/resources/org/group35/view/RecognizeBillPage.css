@@ -1,7 +1,3 @@
-.main-container {
-    -fx-background-color: #f5f5f5;
-}
-
 .header {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
@@ -16,24 +12,6 @@
     -fx-background-color: #f0f0f0;
 }
 
-.nav-button {
-    -fx-background-color: transparent;
-    -fx-padding: 10 15;
-    -fx-cursor: hand;
-}
-
-.nav-button:hover {
-    -fx-background-color: #f5f5f5;
-}
-
-.nav-button-active {
-    -fx-background-color: transparent;
-    -fx-padding: 10 15;
-    -fx-cursor: hand;
-    -fx-border-color: #e74c3c;
-    -fx-border-width: 0 0 2 0;
-}
-
 .small-button {
     -fx-background-color: transparent;
     -fx-cursor: hand;
@@ -41,13 +19,6 @@
 
 .small-button:hover {
     -fx-background-color: #f0f0f0;
-}
-
-.avatar {
-    -fx-background-radius: 50%;
-    -fx-border-radius: 50%;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 1;
 }
 
 .content-area {

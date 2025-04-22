@@ -4,6 +4,7 @@ import org.group35.controller.TransactionManager;
 import org.group35.model.User;
 import org.group35.controller.UserManager;
 import org.group35.controller.TransactionManager;
+import org.group35.util.CameraUtils;
 import org.group35.util.SceneManager;
 import org.group35.util.LoggerHelper;
 
@@ -20,29 +21,38 @@ public final class ApplicationRuntime {
         LOGIN,
         HOME,
         SPENDING,
+        PLAN,
+        MORE,
         MANUAL_ENTRY,
-        RECOG_BILL
+        RECOGNIZE_BILL
         // Add other statuses as needed.
     }
 
     // Singleton instance of ApplicationRuntime.
     private static ApplicationRuntime instance;
 
-    // Manager instances for different models.
-    private final UserManager userManager;
-    private final TransactionManager transcationManager;
+    // Model managers
+    private final UserManager         userManager;
+    private final TransactionManager  transactionManager;
 
-    // Miscellaneous runtime data
-    private User loggedInUser;
-    private ProgramStatus programStatus;
+    // Shared services
+    private final CameraUtils         cameraService;
+
+    // Runtime state
+    private User           loggedInUser;
+    private ProgramStatus  programStatus;
 
     /**
      * Private constructor to enforce singleton pattern.
      * Initializes all model managers.
      */
     private ApplicationRuntime() {
-        userManager = new UserManager();
-        transcationManager = new TransactionManager();
+        userManager        = new UserManager();
+        transactionManager = new TransactionManager();
+        cameraService      = new CameraUtils();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(cameraService::shutdown));
+
         LoggerHelper.debug("ApplicationRuntime singleton initialized");
     }
 
@@ -71,7 +81,13 @@ public final class ApplicationRuntime {
      * @return the TransactionManager.
      */
     public TransactionManager getTranscationManager() {
-        return transcationManager;
+        return transactionManager;
+    }
+
+    /** Returns the CameraService instance.
+     * @return the shared CameraUtils service */
+    public CameraUtils getCameraService() {
+        return cameraService;
     }
 
     /**
@@ -112,22 +128,30 @@ public final class ApplicationRuntime {
         setProgramStatus(ProgramStatus.LOGIN);
     }
 
-    //TODO: compare with current status
+//    // [Deprecated]
+//
+//    public void gotoSpending() {
+//        setProgramStatus(ProgramStatus.SPENDING);
+//    }
+//
+//    public void gotoHome() {
+//        setProgramStatus(ProgramStatus.HOME);
+//    }
+//
+//    public void gotoManualEntry() {
+//        setProgramStatus(ProgramStatus.MANUAL_ENTRY);
+//    }
+//
+//    public void gotoRecogBill() {
+//        setProgramStatus(ProgramStatus.RECOG_BILL);
+//    }
 
-    public void gotoSpending() {
-        setProgramStatus(ProgramStatus.SPENDING);
-    }
-
-    public void gotoHome() {
-        setProgramStatus(ProgramStatus.HOME);
-    }
-
-    public void gotoManualEntry() {
-        setProgramStatus(ProgramStatus.MANUAL_ENTRY);
-    }
-
-    public void gotoRecogBill() {
-        setProgramStatus(ProgramStatus.RECOG_BILL);
+    /**
+     * Switch to the given scene / program status unless already there.
+     */
+    public void navigateTo(ProgramStatus target) {
+        if (this.programStatus == target) return;
+        setProgramStatus(target);
     }
 
     /**
@@ -138,24 +162,21 @@ public final class ApplicationRuntime {
         this.programStatus = status;
         LoggerHelper.debug("ProgramStatus changed to: " + status);
         switch (status) {
-            case LOGIN:
-                SceneManager.showLoginPage();
-                break;
-            case HOME:
-                SceneManager.showHomePage();
-                break;
-            case SPENDING:
-                SceneManager.showSpendingPage();
-                break;
-            case MANUAL_ENTRY:
-                SceneManager.showManualEntryPage();
-                break;
-            case RECOG_BILL:
-                SceneManager.showRecognizeBillPage();
-                break;
-            default:
-                LoggerHelper.warn("Unhandled ProgramStatus: " + status);
-                break;
+            case LOGIN:          SceneManager.showLoginPage(); break;
+            case HOME:           SceneManager.showHomePage(); break;
+            case SPENDING:       SceneManager.showSpendingPage(); break;
+            case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
+            case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
+            default:             LoggerHelper.warn("Unhandled ProgramStatus: " + status); break;
         }
+    }
+
+    /**
+     * Call this when your application is closing (e.g. in JavaFX Application.stop())
+     * to ensure all services are cleanly shut down.
+     */
+    public void shutdown() {
+        LoggerHelper.debug("ApplicationRuntime shutdown. Cleaning up services");
+        cameraService.shutdown();
     }
 }
