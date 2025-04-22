@@ -71,17 +71,17 @@
 
                 <TextField fx:id="nameField"
                            promptText="Name"
-                           styleClass="textfield"
+                           styleClass="text-field"
                            prefHeight="40"/>
 
                 <TextField fx:id="amountField"
                            promptText="Amount"
-                           styleClass="textfield"
+                           styleClass="text-field"
                            prefHeight="40"/>
 
                 <TextField fx:id="categoryField"
                            promptText="Category"
-                           styleClass="textfield"
+                           styleClass="text-field"
                            prefHeight="40"/>
 
                 <HBox alignment="BOTTOM_RIGHT">

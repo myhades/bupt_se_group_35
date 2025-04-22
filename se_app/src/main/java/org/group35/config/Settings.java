@@ -13,6 +13,15 @@ import org.group35.util.JsonUtils;
  */
 public class Settings {
 
+    private static Settings instance;
+
+    // App's name
+    public final String appName = "Monora";
+
+    // Path and filename for settings persistence
+    private static final String SETTINGS_DIR = System.getProperty("user.dir") + File.separator + "app_data";
+    private static final String SETTINGS_FILE = SETTINGS_DIR + File.separator + "settings.txt";
+
     // The directory where data files are stored.
     // Default is the current working directory.
     private String dataFilePath;
@@ -30,91 +39,62 @@ public class Settings {
     // Default is "logs/app.log" (relative to the working directory).
     private String logFilePath;
 
+    // The width of the application window in pixels.
+    // Default is 1000.
+    private Integer windowWidth;
+
+    // The width of the application window in pixels.
+    // Default is 560.
+    private Integer windowHeight;
+
     /**
      * Default constructor that initializes settings with default values.
      */
-    public Settings() {
-        // Set the default data file location.
+    private Settings() {
         this.dataFilePath = System.getProperty("user.dir") + "\\app_data\\data";
-        // Set the default log level.
         this.logLevel = "INFO";
-        // Enable file logging by default.
-        this.fileLoggingEnabled = true;
-        // Set default log file path.
+        this.fileLoggingEnabled = false;
         this.logFilePath = System.getProperty("user.dir") + "\\app_data\\logs";
+        this.windowWidth = 1000;
+        this.windowHeight = 560;
     }
 
     /**
-     * Returns the data file directory path.
-     *
-     * @return the data file directory path.
+     * Returns the singleton Settings instance,
+     * loading defaults on first call.
      */
-    public String getDataFilePath() {
-        return dataFilePath;
+    public static synchronized Settings getInstance() {
+        if (instance == null) {
+            File settingsFile = new File(SETTINGS_FILE);
+
+            if (settingsFile.exists()) {
+                instance = loadFromFile(settingsFile);
+            } else {
+                new File(SETTINGS_DIR).mkdirs();
+                instance = new Settings();
+                try {
+                    instance.saveToFile(settingsFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return instance;
     }
 
-    /**
-     * Sets the data file directory path.
-     *
-     * @param dataFilePath the new data file directory path.
-     */
-    public void setDataFilePath(String dataFilePath) {
-        this.dataFilePath = dataFilePath;
-    }
-
-    /**
-     * Returns the log level setting.
-     *
-     * @return the log level as a String.
-     */
-    public String getLogLevel() {
-        return logLevel;
-    }
-
-    /**
-     * Sets the log level.
-     *
-     * @param logLevel the log level to be set (e.g., "DEBUG", "INFO").
-     */
-    public void setLogLevel(String logLevel) {
-        this.logLevel = logLevel;
-    }
-
-    /**
-     * Checks if file logging is enabled.
-     *
-     * @return true if file logging is enabled; false otherwise.
-     */
-    public boolean isFileLoggingEnabled() {
-        return fileLoggingEnabled;
-    }
-
-    /**
-     * Enables or disables file logging.
-     *
-     * @param fileLoggingEnabled true to enable file logging; false to disable.
-     */
-    public void setFileLoggingEnabled(boolean fileLoggingEnabled) {
-        this.fileLoggingEnabled = fileLoggingEnabled;
-    }
-
-    /**
-     * Returns the log file path.
-     *
-     * @return the log file path.
-     */
-    public String getLogFilePath() {
-        return logFilePath;
-    }
-
-    /**
-     * Sets the log file path.
-     *
-     * @param logFilePath the path to the log file.
-     */
-    public void setLogFilePath(String logFilePath) {
-        this.logFilePath = logFilePath;
-    }
+    // Getters and Setters
+    public String getDataFilePath() { return dataFilePath; }
+    public void setDataFilePath(String dataFilePath) { this.dataFilePath = dataFilePath; }
+    public String getLogLevel() { return logLevel; }
+    public void setLogLevel(String logLevel) { this.logLevel = logLevel; }
+    public boolean isFileLoggingEnabled() { return fileLoggingEnabled; }
+    public void setFileLoggingEnabled(boolean fileLoggingEnabled) { this.fileLoggingEnabled = fileLoggingEnabled; }
+    public String getLogFilePath() { return logFilePath; }
+    public void setLogFilePath(String logFilePath) { this.logFilePath = logFilePath; }
+    public Integer getWindowWidth() { return windowWidth; }
+    public void setWindowWidth(Integer windowWidth) { this.windowWidth = windowWidth; }
+    public Integer getWindowHeight() { return windowHeight; }
+    public void setWindowHeight(Integer windowHeight) { this.windowHeight = windowHeight; }
 
     /**
      * Loads the settings from the specified JSON file.
