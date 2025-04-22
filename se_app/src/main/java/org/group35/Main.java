@@ -25,8 +25,6 @@ public class Main extends Application {
 
         // Initialize settings (singleton)
         Settings settings = Settings.getInstance();
-        settings.setLogLevel("DEBUG");
-        settings.setFileLoggingEnabled(false);
 
         // Initialize logger (static)
         LoggerHelper.configureLogLevel(settings);
