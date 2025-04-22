@@ -60,15 +60,11 @@
     -fx-spacing: 15px;
     -fx-min-width: 450px;
     -fx-max-width: 600px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
 }
 
 .spending-item {
     -fx-padding: 12px 15px;
-    -fx-background-color: white;
-    -fx-background-radius: 6px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 2, 0, 0, 1);
-    -fx-border-color: transparent;
+    -fx-background-color: transparent;
     -fx-min-height: 50px;
     -fx-max-height: 70px;
 }
@@ -97,7 +93,7 @@
     -fx-padding: 3px 8px;
     -fx-font-family: 'Articulat CF Normal';
     -fx-text-fill: white;
-    -fx-background-radius: 12px;
+    -fx-background-radius: 20px;
 }
 
 .spending-type-recurring-small {
@@ -106,7 +102,7 @@
     -fx-padding: 3px 8px;
     -fx-font-family: 'Articulat CF Normal';
     -fx-text-fill: white;
-    -fx-background-radius: 12px;
+    -fx-background-radius: 20px;
 }
 
 /* Icon Circles */
@@ -144,7 +140,6 @@
     -fx-spacing: 15px;
     -fx-min-width: 280px;
     -fx-max-width: 320px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
 }
 
 /* Budget Panel */
