@@ -15,6 +15,13 @@ public class Transaction {
     private LocalDateTime timestamp;
     private BigDecimal amount;
     private boolean income;
+    private String location;
+    private String category; //TODO: add category field as enum
+
+    /** CNY: Chinese Yuan, HKD: Hong Kong Dollar, EUR: Euro, USD: US Dollar, GBP: British Pound, JPY: Japanese Yen, SGD: Singapore Dollar */
+    public enum Currency { CNY, HKD, EUR, USD, GBP, JPY, SGD }
+    @SerializedName("currency")
+    private Currency currency;
 
     /** Whether this entry was manual or recurring */
     public enum Mode { MANUAL, RECURRING }
@@ -77,6 +84,27 @@ public class Transaction {
     }
     public void setMode(Mode mode) {
         this.mode = mode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public String getRecurrencePattern() {

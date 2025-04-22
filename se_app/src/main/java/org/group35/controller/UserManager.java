@@ -142,14 +142,14 @@ public class UserManager {
     public List<User> getByUser(String username) {
         LoggerHelper.trace("Filtering transactions for user: " + username);
         return users.stream()
-                .filter(tx -> username.equals(tx.getUsername()))
+                .filter(user -> username.equals(user.getUsername()))
                 .collect(Collectors.toList());
     }
 
     /** Sets the monthly budget for a specific user's future entries. */
     public void setMonthlyBudget(String username, BigDecimal budget) {
         LoggerHelper.info("Setting monthly budget for user " + username + " to " + budget);
-        getByUser(username).forEach(tx -> tx.setMonthlyBudget(budget));
+        getByUser(username).forEach(user -> user.setMonthlyBudget(budget));
         save();
     }
 }
