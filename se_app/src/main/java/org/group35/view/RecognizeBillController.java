@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
@@ -28,6 +29,7 @@ public class RecognizeBillController implements Initializable {
     @FXML private ImageView previewImage;
     @FXML private StackPane cameraContainer;
     @FXML private VBox      placeholderBox;
+    @FXML private ImageView BackButtonImageView;
 
     private final CameraUtils cameraService =
             ApplicationRuntime.getInstance().getCameraService();
@@ -37,6 +39,9 @@ public class RecognizeBillController implements Initializable {
     @Override
     public void initialize(URL loc, ResourceBundle res) {
         LoggerHelper.info("Initializing RecognizeBillController");
+
+        //associate with BackButton.jpg
+        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
 
         // disable buttons until first frame arrives
         captureButton.setDisable(true);
