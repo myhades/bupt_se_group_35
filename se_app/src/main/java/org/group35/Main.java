@@ -23,15 +23,15 @@ public class Main extends Application {
 
     private static void initialize() {
 
-        // Initialize settings
-        Settings settings = new Settings();
+        // Initialize settings (singleton)
+        Settings settings = Settings.getInstance();
         settings.setLogLevel("DEBUG");
         settings.setFileLoggingEnabled(false);
 
-        // Initialize logger
+        // Initialize logger (static)
         LoggerHelper.configureLogLevel(settings);
 
-        // Initialize persistent data manager
+        // Initialize persistent data manager (static)
         PersistentDataManager.initialize(settings);
 
         // Initialize application runtime (singleton)

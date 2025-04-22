@@ -17,6 +17,6 @@
 /* Root defaults */
 .root-container {
     -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-padding: 40px;
+    -fx-padding: 40 60 40 60;
     -fx-text-fill: #000000;
 }

@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
+import org.group35.util.LoggerHelper;
 
 public class ManualEntryController {
     @FXML private TextArea aiTextArea;
@@ -26,7 +27,7 @@ public class ManualEntryController {
 
     @FXML
     private void handleMicro(ActionEvent event) {
-        System.out.println("Micro button clicked.");
+        LoggerHelper.trace("Micro button has been clicked.");
         //Test code
         aiTextArea.setText("API here！");
         //api here

@@ -128,24 +128,6 @@ public final class ApplicationRuntime {
         setProgramStatus(ProgramStatus.LOGIN);
     }
 
-//    // [Deprecated]
-//
-//    public void gotoSpending() {
-//        setProgramStatus(ProgramStatus.SPENDING);
-//    }
-//
-//    public void gotoHome() {
-//        setProgramStatus(ProgramStatus.HOME);
-//    }
-//
-//    public void gotoManualEntry() {
-//        setProgramStatus(ProgramStatus.MANUAL_ENTRY);
-//    }
-//
-//    public void gotoRecogBill() {
-//        setProgramStatus(ProgramStatus.RECOG_BILL);
-//    }
-
     /**
      * Switch to the given scene / program status unless already there.
      */
@@ -165,6 +147,8 @@ public final class ApplicationRuntime {
             case LOGIN:          SceneManager.showLoginPage(); break;
             case HOME:           SceneManager.showHomePage(); break;
             case SPENDING:       SceneManager.showSpendingPage(); break;
+            case PLAN:           SceneManager.showPlanPage(); break;
+            case MORE:           SceneManager.showMorePage(); break;
             case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
             case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
             default:             LoggerHelper.warn("Unhandled ProgramStatus: " + status); break;

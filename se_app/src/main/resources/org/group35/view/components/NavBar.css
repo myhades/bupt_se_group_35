@@ -17,6 +17,12 @@
 }
 .nav-button:hover {
     -fx-background-color: rgba(0,0,0,0.05);
+    -fx-background-insets: -4;
+}
+.nav-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-background-color: rgba(0,0,0,0.15);
 }
 .nav-button.active {
     -fx-text-fill: #8B0000;
@@ -29,6 +35,11 @@
     -fx-fill: #000000;
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
+}
+/* Compensating for the smaller icon */
+#spendingBtn .nav-icon {
+    -fx-scale-x: 1.35;
+    -fx-scale-y: 1.35;
 }
 .avatar-container {
     -fx-background-color: #DDD;
