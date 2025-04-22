@@ -1,12 +1,12 @@
 package org.group35.util;
 
+import java.util.Objects;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Objects;
+import org.group35.config.Settings;
 
 /**
  * Manages switching between application scenes.
@@ -32,12 +32,13 @@ public class SceneManager {
      */
     public static void switchScene(String fxmlPath) {
         try {
+            Settings settings = Settings.getInstance();
             Parent root = FXMLLoader.load(Objects.requireNonNull(SceneManager.class.getResource(fxmlPath)));
-            Scene scene = new Scene(root, 1000, 560);
+            Scene scene = new Scene(root, settings.getWindowWidth(), settings.getWindowHeight());
             scene.getStylesheets().add(
                     Objects.requireNonNull(SceneManager.class.getResource("/org/group35/view/Global.css")).toExternalForm()
             );
-            primaryStage.setTitle("Monora");
+            primaryStage.setTitle(settings.appName);
             primaryStage.setScene(scene);
             primaryStage.show();
             LoggerHelper.info("Navigated to scene: " + fxmlPath);

@@ -26,7 +26,7 @@
 
             <!-- New Entry Section -->
             <HBox alignment="CENTER_LEFT" spacing="16" styleClass="new-entry-container">
-                <Label text="New entry:" styleClass="new-entry-label"/>
+                <Label text="New entry" styleClass="new-entry-label"/>
                 <Button text="Manual"
                         onAction="#gotoManualEntry"
                         styleClass="add-button,add-manual">

@@ -2,7 +2,7 @@
 
 /* New Entry Container */
 .new-entry-container {
-    -fx-padding: 30px 0 20px 6px;
+    -fx-padding: 40px 0 20px 6px;
 }
 
 /* Section Title */
@@ -16,7 +16,7 @@
 
 /* New Entry Label */
 .new-entry-label {
-    -fx-font-size: 20px;
+    -fx-font-size: 24px;
     -fx-font-family: 'Articulat CF Bold';
     -fx-text-fill: #000000;
 }
