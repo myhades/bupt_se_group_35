@@ -151,7 +151,6 @@ public final class ApplicationRuntime {
             case MORE:           SceneManager.showMorePage(); break;
             case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
             case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
-            case PLAN:           SceneManager.showPlanPage(); break;
             default:             LoggerHelper.warn("Unhandled ProgramStatus: " + status); break;
         }
     }
