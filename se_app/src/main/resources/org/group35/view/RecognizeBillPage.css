@@ -43,9 +43,9 @@
 }
 
 .page-title {
-    -fx-font-size: 24;
+    -fx-font-size: 36;
     -fx-font-weight: bold;
-    -fx-text-fill: #333;
+    -fx-text-fill: #000000;
 }
 
 .status-indicator {
@@ -87,4 +87,9 @@
 
 .primary-button:hover {
     -fx-background-color: #c0392b;
+}
+
+.Dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: #8b4527;
 }

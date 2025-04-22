@@ -19,15 +19,15 @@
         <NavBarController activePage="SPENDING" />
 
         <!-- Header Row: Back button, Title, and Status Indicator -->
-        <HBox styleClass="header-row" alignment="CENTER_LEFT" spacing="10">
+        <HBox styleClass="header-row" alignment="CENTER_LEFT" spacing="15">
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#gotoSpending" styleClass="back-button">
                 <graphic>
-                    <Label styleClass="back-arrow" text="←"/>
+                    <ImageView fx:id="BackButtonImageView" fitWidth="50" fitHeight="50"/>
                 </graphic>
             </Button>
             <Label text="Recognize Bill" styleClass="page-title" />
-            <Region HBox.hgrow="ALWAYS" />
-            <Label fx:id="statusIndicator" text="●" styleClass="status-indicator" />
+<!--            <Region HBox.hgrow="ALWAYS" />-->
+            <Label text="●" styleClass="Dot" />
         </HBox>
 
         <!-- Camera Preview / Placeholder -->
