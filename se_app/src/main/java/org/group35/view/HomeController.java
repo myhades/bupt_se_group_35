@@ -30,7 +30,9 @@ public class HomeController implements Initializable {
     public void setSpendingChartData(XYChart.Series<String, Number> series) {
         spendingChart.getData().clear();
         spendingChart.getData().add(series);
+        spendingChart.setTitle(null);
         spendingChart.setCreateSymbols(false);
+        spendingChart.setLegendVisible(false);
     }
 
     /**
@@ -40,6 +42,7 @@ public class HomeController implements Initializable {
     public void setCategoryPieData(List<PieChart.Data> data) {
         categoryPieChart.getData().clear();
         categoryPieChart.getData().addAll(data);
+        categoryPieChart.setLegendVisible(false);
     }
 
     /**

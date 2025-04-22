@@ -13,6 +13,11 @@ import org.group35.util.JsonUtils;
  */
 public class Settings {
 
+    private static Settings instance;
+
+    // App's name
+    public final String appName = "Monora";
+
     // The directory where data files are stored.
     // Default is the current working directory.
     private String dataFilePath;
@@ -30,10 +35,18 @@ public class Settings {
     // Default is "logs/app.log" (relative to the working directory).
     private String logFilePath;
 
+    // The width of the application window in pixels.
+    // Default is 1000.
+    private Integer windowWidth;
+
+    // The width of the application window in pixels.
+    // Default is 560.
+    private Integer windowHeight;
+
     /**
      * Default constructor that initializes settings with default values.
      */
-    public Settings() {
+    private Settings() {
         // Set the default data file location.
         this.dataFilePath = System.getProperty("user.dir") + "\\app_data\\data";
         // Set the default log level.
@@ -42,6 +55,21 @@ public class Settings {
         this.fileLoggingEnabled = true;
         // Set default log file path.
         this.logFilePath = System.getProperty("user.dir") + "\\app_data\\logs";
+        // Set default window width to 1000 pixels.
+        this.windowWidth = 1000;
+        // Set default window height to 560 pixels.
+        this.windowHeight = 560;
+    }
+
+    /**
+     * Returns the singleton Settings instance,
+     * loading defaults on first call.
+     */
+    public static synchronized Settings getInstance() {
+        if (instance == null) {
+            instance = new Settings();
+        }
+        return instance;
     }
 
     /**
@@ -115,6 +143,25 @@ public class Settings {
     public void setLogFilePath(String logFilePath) {
         this.logFilePath = logFilePath;
     }
+
+    /**
+     * Gets the window width in pixels.
+     *
+     * @return the width of the application window.
+     */
+    public Integer getWindowWidth() {
+        return windowWidth;
+    }
+
+    /**
+     * Gets the window height in pixels.
+     *
+     * @return the height of the application window.
+     */
+    public Integer getWindowHeight() {
+        return windowHeight;
+    }
+
 
     /**
      * Loads the settings from the specified JSON file.

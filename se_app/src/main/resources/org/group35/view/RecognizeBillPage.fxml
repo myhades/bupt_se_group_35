@@ -9,41 +9,56 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.text.Text?>
 <?import org.group35.view.components.NavBarController?>
+<?import javafx.scene.shape.SVGPath?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.group35.view.RecognizeBillController"
       stylesheets="@RecognizeBillPage.css" styleClass="root-container"
       spacing="20">
     <children>
         <!-- Top Nav Bar -->
-        <NavBarController activePage="HOME" />
+        <NavBarController activePage="SPENDING" />
 
         <!-- Header Row: Back button, Title, and Status Indicator -->
-        <HBox styleClass="header-row" alignment="CENTER_LEFT" spacing="10">
+        <HBox styleClass="header-row" alignment="CENTER_LEFT" spacing="15">
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#gotoSpending" styleClass="back-button">
                 <graphic>
-                    <Label styleClass="back-arrow" text="←"/>
+                    <ImageView fx:id="BackButtonImageView" fitWidth="50" fitHeight="50"/>
                 </graphic>
             </Button>
             <Label text="Recognize Bill" styleClass="page-title" />
-            <Region HBox.hgrow="ALWAYS" />
-            <Label fx:id="statusIndicator" text="●" styleClass="status-indicator" />
+<!--            <Region HBox.hgrow="ALWAYS" />-->
+            <Label text="●" styleClass="Dot" />
         </HBox>
 
         <!-- Camera Preview / Placeholder -->
         <StackPane fx:id="cameraContainer" styleClass="camera-container" maxWidth="700.0" maxHeight="400.0">
             <children>
                 <ImageView fx:id="previewImage" fitWidth="600" fitHeight="300" preserveRatio="true" styleClass="preview-image" />
-                <VBox fx:id="placeholderBox" alignment="CENTER" styleClass="frame-placeholder" maxWidth="650" maxHeight="350">
-                    <children>
-                        <ImageView fitWidth="50" fitHeight="50" preserveRatio="true">
-                            <image>
-                                <Image url="@assets/images/camera_icon.png" />
-                            </image>
-                        </ImageView>
-                        <Label text="Place your bill\ninside the frame" textAlignment="CENTER" styleClass="placeholder-text" />
-                    </children>
-                </VBox>
+<!--                <VBox fx:id="placeholderBox" alignment="CENTER" styleClass="frame-placeholder" maxWidth="650" maxHeight="350">-->
+<!--                    <children>-->
+<!--                        <ImageView fitWidth="50" fitHeight="50" preserveRatio="true">-->
+<!--                            <image>-->
+<!--                                <Image url="@assets/images/camera_icon.png" />-->
+<!--                            </image>-->
+<!--                        </ImageView>-->
+<!--                        <Label text="Place your bill\ninside the frame" textAlignment="CENTER" styleClass="placeholder-text" />-->
+<!--                    </children>-->
+<!--                </VBox>-->
+                <HBox alignment="CENTER_LEFT">
+                    <VBox fx:id="placeholderBox" alignment="CENTER" styleClass="frame-placeholder" maxWidth="350" maxHeight="350">
+                        <children>
+<!--                            <SVGPath content="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,13C9.33,13 4,14.33 4,17V20H20V17C20,14.33 14.67,13 12,13Z"-->
+<!--                                     styleClass="placeholder-icon"/>-->
+                            <SVGPath content="M20,4H16.83L15,2H9L7.17,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,18H4V6H8.05L9.88,4H14.12L15.95,6H20V18M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15Z"
+                                     styleClass="camera-icon-1"/>
+                            <Label text="Place your bill&#10;inside the frame" textAlignment="CENTER" styleClass="placeholder-text" />
+
+                        </children>
+                    </VBox>
+                </HBox>
             </children>
         </StackPane>
 
