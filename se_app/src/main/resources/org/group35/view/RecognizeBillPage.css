@@ -97,6 +97,12 @@
 
 .camera-icon-1 {
     -fx-fill: #000000;
-    -fx-scale-x: 1.5;  /* 水平放大 2 倍 */
-    -fx-scale-y: 1.5;  /* 垂直放大 2 倍 */
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+}
+
+.left-arrow-icon {
+    -fx-fill: #000000;
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
 }

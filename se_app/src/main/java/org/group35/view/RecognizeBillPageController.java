@@ -40,7 +40,7 @@ public class RecognizeBillPageController implements Initializable {
         LogUtils.info("Initializing RecognizeBillPageController");
 
         //associate with BackButton.jpg
-        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
+//        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
 
         // disable buttons until first frame arrives
         captureButton.setDisable(true);

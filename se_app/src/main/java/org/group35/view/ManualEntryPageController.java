@@ -21,8 +21,8 @@ public class ManualEntryPageController {
 
     @FXML
     private void initialize() {
-        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
-        MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
+//        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
+//        MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
     }
 
     @FXML
