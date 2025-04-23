@@ -51,10 +51,10 @@ public class Settings {
      * Default constructor that initializes settings with default values.
      */
     private Settings() {
-        this.dataFilePath = System.getProperty("user.dir") + "\\app_data\\data";
+        this.dataFilePath = System.getProperty("user.dir") + File.separator + "app_data" + File.separator + "data";
+        this.logFilePath = System.getProperty("user.dir") + File.separator + "app_data" + File.separator + "logs";
         this.logLevel = "INFO";
         this.fileLoggingEnabled = false;
-        this.logFilePath = System.getProperty("user.dir") + "\\app_data\\logs";
         this.windowWidth = 1000;
         this.windowHeight = 560;
     }
