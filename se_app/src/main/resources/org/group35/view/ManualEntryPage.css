@@ -82,3 +82,13 @@ VBox {
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
+
+.micro-icon {
+    -fx-fill: white;
+}
+
+.left-arrow-icon {
+    -fx-fill: #000000;
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+}
