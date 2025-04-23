@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 
-public class SpendingController {
+public class SpendingPageController {
 
     @FXML
     public void initialize() {}

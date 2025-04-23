@@ -9,7 +9,7 @@ import org.group35.runtime.ApplicationRuntime;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MoreController implements Initializable {
+public class MorePageController implements Initializable {
 
     @FXML private Label userLabel;
 

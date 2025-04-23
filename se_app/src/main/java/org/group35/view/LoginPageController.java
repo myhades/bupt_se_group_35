@@ -17,7 +17,7 @@ import org.group35.controller.UserManager;
 import java.util.Objects;
 import java.util.Optional;
 
-public class LoginController {
+public class LoginPageController {
 
     @FXML private Label warningLabel, confirmWarningLabel;
     @FXML private TextField usernameField;

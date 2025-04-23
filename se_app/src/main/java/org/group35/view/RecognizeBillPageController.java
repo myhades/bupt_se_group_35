@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RecognizeBillController implements Initializable {
+public class RecognizeBillPageController implements Initializable {
 
     @FXML private Button    captureButton;
     @FXML private Button    processButton;
@@ -37,7 +37,7 @@ public class RecognizeBillController implements Initializable {
 
     @Override
     public void initialize(URL loc, ResourceBundle res) {
-        LogUtils.info("Initializing RecognizeBillController");
+        LogUtils.info("Initializing RecognizeBillPageController");
 
         //associate with BackButton.jpg
         BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));

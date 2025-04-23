@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.SVGPath?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.group35.view.PlanController"
+      fx:controller="org.group35.view.PlanPageController"
       stylesheets="@PlanPage.css"
       styleClass="root-container">
 

@@ -16,7 +16,7 @@
 <?import org.group35.view.components.NavBarController?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.group35.view.SpendingController"
+            fx:controller="org.group35.view.SpendingPageController"
             stylesheets="@SpendingPage.css"
             styleClass="root-container">
 

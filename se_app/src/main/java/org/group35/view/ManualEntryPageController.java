@@ -11,7 +11,7 @@ import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 import org.group35.util.LogUtils;
 
-public class ManualEntryController {
+public class ManualEntryPageController {
     @FXML private TextArea aiTextArea;
     @FXML private TextField nameField;
     @FXML private TextField amountField;
