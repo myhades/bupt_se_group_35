@@ -5,7 +5,7 @@
     -fx-padding: 20 0 0 6;
 }
 .greeting-label {
-    -fx-font-size: 36px;
+    -fx-font-size: 30px;
     -fx-font-family: 'Articulat CF Bold';
 }
 
@@ -31,6 +31,11 @@
 .budget-amount {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
+}
+
+/* Percentage Gray Style */
+.percentage-gray {
+    -fx-text-fill: #808080;
 }
 
 /* Buttons */

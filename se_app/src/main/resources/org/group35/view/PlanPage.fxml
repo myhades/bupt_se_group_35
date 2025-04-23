@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.group35.view.components.NavBarController?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.shape.SVGPath?>
+        <?import org.group35.view.components.NavBarController?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.layout.ColumnConstraints?>
+        <?import javafx.scene.layout.GridPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.Region?>
+        <?import javafx.scene.layout.VBox?>
+        <?import javafx.scene.chart.PieChart?>
+        <?import javafx.scene.shape.SVGPath?>
+        <?import javafx.geometry.Insets?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.PlanPageController"
@@ -34,26 +35,42 @@
         <!-- Left: Budget Info -->
         <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="0">
             <Label text="Budget" styleClass="chart-title"/>
+            <!-- HBox for budget info and pie chart -->
             <HBox spacing="20">
-                <VBox spacing="15">
+                <VBox spacing="15" minWidth="220">
                     <HBox>
                         <VBox>
                             <Label text="Available" styleClass="info-label-big"/>
-                            <Label fx:id="availableAmount" text="\$200 20%" styleClass="budget-amount"/>
+                            <HBox spacing="10">
+                                <Label text="\$200" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: black;" minWidth="110"/>
+                                <Label text="20%" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: #808080;" minWidth="60"/>
+                            </HBox>
                         </VBox>
                     </HBox>
                     <HBox>
                         <VBox>
-                        <Label text="Used" styleClass="info-label-big"/>
-                        <Label fx:id="usedAmount" text="\$1600 80%" styleClass="budget-amount"/>
+                            <Label text="Used" styleClass="info-label-big"/>
+                            <HBox spacing="10">
+                                <Label text="\$1600" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: black;" minWidth="110"/>
+                                <Label text="80%" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: #808080;" minWidth="60"/>
+                            </HBox>
                         </VBox>
                     </HBox>
                     <Region minHeight="15"/>
                 </VBox>
-                <PieChart fx:id="budgetPieChart" styleClass="pie-chart" legendVisible="false" prefWidth="350" prefHeight="350" maxWidth="350"/>
+                <!-- PieChart with margin adjustment -->
+                <PieChart fx:id="budgetPieChart" styleClass="pie-chart" legendVisible="false" prefWidth="150" prefHeight="150" maxWidth="150" labelsVisible="false">
+                    <HBox.margin>
+                        <Insets top="-30"/>
+                    </HBox.margin>
+                </PieChart>
             </HBox>
 
-            <HBox spacing="20">
+            <!-- Buttons with adjusted spacing and position -->
+            <HBox spacing="30" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets left="20"/>
+                </padding>
                 <Button text="Edit Budget" styleClass="edit-button">
                     <graphic>
                         <SVGPath content="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"
@@ -72,19 +89,42 @@
         <!-- Right: Recommendation and Local Info -->
         <VBox styleClass="chart-container" spacing="10" GridPane.columnIndex="1">
             <Label text="Recommendation" styleClass="chart-title" graphicTextGap="10"/>
-            <Button fx:id="recommendationButton" text="Tap to get recommendations on restaurants, coupon sites and more." styleClass="recommendation-button" graphicTextGap="20">
+            <!-- Button with adjusted text wrapping and position -->
+            <Button fx:id="recommendationButton"
+                    wrapText="true"
+                    maxWidth="320"
+                    text="Tap to get recommendations on restaurants, coupon sites and more."
+                    styleClass="recommendation-button"
+                    graphicTextGap="20">
                 <graphic>
-                    <SVGPath content="M12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5M12,2A7,7 0 0,1 19,9C19,14.25 12,22 12,22C12,22 5,14.25 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9C7,10 7,12 12,18.71C17,12 17,10 17,9A5,5 0 0,0 12,4Z"
-                             styleClass="Here-icon"/>
+                    <HBox alignment="CENTER">
+                        <SVGPath content="M12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5M12,2A7,7 0 0,1 19,9C19,14.25 12,22 12,22C12,22 5,14.25 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9C7,10 7,12 12,18.71C17,12 17,10 17,9A5,5 0 0,0 12,4Z"
+                                 styleClass="Here-icon"/>
+                    </HBox>
                 </graphic>
             </Button>
-            <Label text="Local" styleClass="chart-title"/>
-            <VBox spacing="6">
-                <Label text="Time Zone: Asia/Shanghai" styleClass="info-label-small"/>
-                <Label text="Currency: RMB/Yuan" styleClass="info-label-small"/>
-                <Label text="Ratio: 7.29 per USD" styleClass="info-label-small"/>
-                <Label text="Last updated: 2025/3/18 21:14" styleClass="update-label"/>
-            </VBox>
+
+            <Label text="Local" styleClass="chart-title" style="-fx-padding: 15 0 0 0;"/>
+
+            <GridPane hgap="25" vgap="8">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="95"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Time Zone" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label text="Asia/Shanghai" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+
+                <Label text="Currency" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label text="RMB/Yuan" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+
+                <Label text="Ratio" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label text="7.29 per USD" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+            </GridPane>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Label text="Last updated: 2025/3/18 21:14" styleClass="update-label" style="-fx-padding: 10 0 0 0;"/>
+            </HBox>
         </VBox>
 
     </GridPane>
