@@ -1,7 +1,7 @@
 package org.group35.service;
 
 import okhttp3.*;
-import org.group35.util.LoggerHelper;
+import org.group35.util.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -101,7 +101,7 @@ public class AIAssistant {
                 "}";
 
         // 打印请求体以调试
-        LoggerHelper.debug("Request Body: \n" + requestBodyString);
+        LogUtils.debug("Request Body: \n" + requestBodyString);
 
         // 创建 OkHttpClient
         OkHttpClient client = new OkHttpClient.Builder()
@@ -127,27 +127,27 @@ public class AIAssistant {
             responseBody = response.body();
 
             if (response.isSuccessful()) {
-                LoggerHelper.info("Request successfully, status code: " + response.code());
+                LogUtils.info("Request successfully, status code: " + response.code());
                 // 打印成功响应内容
                 String responses = responseBody.string();
-                LoggerHelper.debug(responses);
+                LogUtils.debug(responses);
                 JSONObject responseJson = new JSONObject(responses);
                 JSONArray choices = responseJson.getJSONArray("choices");
                 JSONObject message = choices.getJSONObject(0).getJSONObject("message");
                 String content = message.getString("content");
-                LoggerHelper.debug("Response: " + content);
+                LogUtils.debug("Response: " + content);
                 return content;
             } else {
                 // 打印失败的响应状态码及响应内容
-                LoggerHelper.warn("Request failed, status code: " + response.code());
+                LogUtils.warn("Request failed, status code: " + response.code());
                 if (responseBody != null) {
-                    LoggerHelper.debug("Response body: " + responseBody.string());
+                    LogUtils.debug("Response body: " + responseBody.string());
                 }
 
                 return "";
             }
         } catch (IOException e) {
-            LoggerHelper.error(e.getMessage());
+            LogUtils.error(e.getMessage());
             //e.printStackTrace();
 
             return "";
@@ -166,18 +166,18 @@ public class AIAssistant {
         try {
             // 调用原有函数
             String response = ass.DeepSeekCalling(ass.buildSavingExpensesSuggestionPrompt(stringContent));
-            LoggerHelper.debug(response);
+            LogUtils.debug(response);
 
             // 调用AI Summary函数
             String aiSummary = ass.DeepSeekCalling(ass.buildAISummaryPrompt(stringContent));
-            LoggerHelper.debug("AI Summary: " + aiSummary);
+            LogUtils.debug("AI Summary: " + aiSummary);
 
 //            // 添加控制台输出，确保能看到结果
 //            System.out.println("==================================");
 //            System.out.println("AI Summary: " + aiSummary);
 //            System.out.println("==================================");
         } catch (IOException e) {
-            LoggerHelper.error(e.getMessage());
+            LogUtils.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

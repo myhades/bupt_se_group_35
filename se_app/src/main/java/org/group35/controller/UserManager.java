@@ -1,11 +1,10 @@
 package org.group35.controller;
 
-import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.util.ImageUtils;
+import org.group35.util.LogUtils;
 import org.group35.util.PasswordUtils;
-import org.group35.util.LoggerHelper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -16,36 +15,36 @@ import java.util.ArrayList;
 /**
  * Manages user registration and login operations.
  * Data persistence is handled by PersistentDataManager.
- * Logging is added via LoggerHelper.
+ * Logging is added via LogUtils.
  */
 public class UserManager {
 
     private List<User> users;
 
     public UserManager() {
-        LoggerHelper.debug("Initializing UserManager and loading users");
+        LogUtils.debug("Initializing UserManager and loading users");
         users = PersistentDataManager.getStore().getUsers();
         if (users == null) {
-            LoggerHelper.info("No existing users found, starting with empty list");
+            LogUtils.info("No existing users found, starting with empty list");
             users = new ArrayList<>();
         } else {
-            LoggerHelper.info("Loaded " + users.size() + " users from store");
+            LogUtils.info("Loaded " + users.size() + " users from store");
         }
     }
 
     /** Saves the current user list back to the persistent store. */
     private void save() {
-        LoggerHelper.debug("Persisting " + users.size() + " users to store");
+        LogUtils.debug("Persisting " + users.size() + " users to store");
         PersistentDataManager.getStore().setUsers(users);
         PersistentDataManager.saveStore();
-        LoggerHelper.info("Users saved successfully");
+        LogUtils.info("Users saved successfully");
     }
 
     /**
      * Register a new user: hash the password, add the user to the store.
      */
     public static void registerUser(String username, String plainPassword) {
-        LoggerHelper.debug("Attempting to register user: " + username);
+        LogUtils.debug("Attempting to register user: " + username);
         String hashed = PasswordUtils.hashPassword(plainPassword);
         User newUser = new User(username, hashed);
 
@@ -54,27 +53,27 @@ public class UserManager {
         // Save the updated user list to the persistent store
         PersistentDataManager.getStore().setUsers(userList);
         PersistentDataManager.saveStore();
-        LoggerHelper.info("User registered successfully: " + username);
+        LogUtils.info("User registered successfully: " + username);
     }
 
     /**
      * Verify user login credentials.
      */
     public static boolean loginUser(String username, String plainPassword) {
-        LoggerHelper.debug("Attempting login for user: " + username);
+        LogUtils.debug("Attempting login for user: " + username);
         List<User> users = getUsers();
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 boolean authenticated = PasswordUtils.checkPassword(plainPassword, u.getHashedPassword());
                 if (authenticated) {
-                    LoggerHelper.info("Login successful for user: " + username);
+                    LogUtils.info("Login successful for user: " + username);
                 } else {
-                    LoggerHelper.warn("Login failed for user: " + username + " - incorrect password");
+                    LogUtils.warn("Login failed for user: " + username + " - incorrect password");
                 }
                 return authenticated;
             }
         }
-        LoggerHelper.warn("Login failed for user: " + username + " - user not found");
+        LogUtils.warn("Login failed for user: " + username + " - user not found");
         return false;
     }
 
@@ -83,7 +82,7 @@ public class UserManager {
      */
     public static List<User> getUsers() {
         List<User> users = PersistentDataManager.getStore().getUsers();
-        LoggerHelper.trace("Number of users retrieved from persistent store: " + (users != null ? users.size() : 0));
+        LogUtils.trace("Number of users retrieved from persistent store: " + (users != null ? users.size() : 0));
         return users;
     }
 
@@ -91,10 +90,10 @@ public class UserManager {
      * Set the list of users in the persistent store (used for testing or bulk updates).
      */
     public static void setUsers(List<User> users) {
-        LoggerHelper.debug("Setting user list with " + (users != null ? users.size() : 0) + " entries");
+        LogUtils.debug("Setting user list with " + (users != null ? users.size() : 0) + " entries");
         PersistentDataManager.getStore().setUsers(users);
         PersistentDataManager.saveStore();
-        LoggerHelper.info("User list updated in persistent store");
+        LogUtils.info("User list updated in persistent store");
     }
 
     /**
@@ -103,7 +102,7 @@ public class UserManager {
      * @param imagePath path to the source image file
      */
     public static void setUserAvatar(String username, String imagePath) {
-        LoggerHelper.debug("Attempting to set avatar for user: " + username);
+        LogUtils.debug("Attempting to set avatar for user: " + username);
         List<User> users = getUsers();
         for (User u : users) {
             if (u.getUsername().equals(username)) {
@@ -113,14 +112,14 @@ public class UserManager {
                     u.setAvatar(base64);
                     PersistentDataManager.getStore().setUsers(users);
                     PersistentDataManager.saveStore();
-                    LoggerHelper.info("Avatar updated for user: " + username);
+                    LogUtils.info("Avatar updated for user: " + username);
                 } catch (IOException e) {
-                    LoggerHelper.error("Failed to process avatar image for user: " + username);
+                    LogUtils.error("Failed to process avatar image for user: " + username);
                 }
                 return;
             }
         }
-        LoggerHelper.warn("Failed to set avatar. User not found: " + username);
+        LogUtils.warn("Failed to set avatar. User not found: " + username);
     }
 
     /**
@@ -134,13 +133,13 @@ public class UserManager {
                 return u.getAvatar();
             }
         }
-        LoggerHelper.warn("Failed to get avatar. User not found: " + username);
+        LogUtils.warn("Failed to get avatar. User not found: " + username);
         return null;
     }
 
     /** Returns users for a given username. */
     public List<User> getByUser(String username) {
-        LoggerHelper.trace("Filtering transactions for user: " + username);
+        LogUtils.trace("Filtering transactions for user: " + username);
         return users.stream()
                 .filter(user -> username.equals(user.getUsername()))
                 .collect(Collectors.toList());
@@ -148,7 +147,7 @@ public class UserManager {
 
     /** Sets the monthly budget for a specific user's future entries. */
     public void setMonthlyBudget(String username, BigDecimal budget) {
-        LoggerHelper.info("Setting monthly budget for user " + username + " to " + budget);
+        LogUtils.info("Setting monthly budget for user " + username + " to " + budget);
         getByUser(username).forEach(user -> user.setMonthlyBudget(budget));
         save();
     }

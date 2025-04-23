@@ -24,7 +24,7 @@ public class SceneManager {
                 SceneManager.class.getResourceAsStream("/org/group35/util/assets/monora_icon.png")
         );
         primaryStage.getIcons().add(icon);
-        LoggerHelper.info("Primary stage configured");
+        LogUtils.info("Primary stage configured");
     }
 
     /**
@@ -41,9 +41,9 @@ public class SceneManager {
             primaryStage.setTitle(settings.appName);
             primaryStage.setScene(scene);
             primaryStage.show();
-            LoggerHelper.info("Navigated to scene: " + fxmlPath);
+            LogUtils.info("Navigated to scene: " + fxmlPath);
         } catch (Exception e) {
-            LoggerHelper.error("Failed to load scene '" + fxmlPath + "': " + e.getMessage());
+            LogUtils.error("Failed to load scene '" + fxmlPath + "': " + e.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class SceneManager {
      * Convenience method for showing the login page.
      */
     public static void showLoginPage() {
-        LoggerHelper.debug("Switching to LoginPage.fxml");
+        LogUtils.debug("Switching to LoginPage.fxml");
         switchScene("/org/group35/view/LoginPage.fxml");
     }
 
@@ -59,7 +59,7 @@ public class SceneManager {
      * Convenience method for showing the home page.
      */
     public static void showHomePage() {
-        LoggerHelper.debug("Switching to HomePage.fxml");
+        LogUtils.debug("Switching to HomePage.fxml");
         switchScene("/org/group35/view/HomePage.fxml");
     }
 
@@ -67,7 +67,7 @@ public class SceneManager {
      * Convenience method for showing the plan page.
      */
     public static void showPlanPage() {
-        LoggerHelper.debug("Switching to PlanPage.fxml");
+        LogUtils.debug("Switching to PlanPage.fxml");
         switchScene("/org/group35/view/PlanPage.fxml");
     }
 
@@ -75,7 +75,7 @@ public class SceneManager {
      * Convenience method for showing the more page.
      */
     public static void showMorePage() {
-        LoggerHelper.debug("Switching to MorePage.fxml");
+        LogUtils.debug("Switching to MorePage.fxml");
         switchScene("/org/group35/view/MorePage.fxml");
     }
 
@@ -83,12 +83,12 @@ public class SceneManager {
      * Convenience method for showing the bill recognition page.
      */
     public static void showRecognizeBillPage() {
-        LoggerHelper.debug("Switching to RecognizeBillPage.fxml");
+        LogUtils.debug("Switching to RecognizeBillPage.fxml");
         switchScene("/org/group35/view/RecognizeBillPage.fxml");
     }
 
     public static void showManualEntryPage() {
-        LoggerHelper.debug("Switching to ManualEntryPage.fxml");
+        LogUtils.debug("Switching to ManualEntryPage.fxml");
         switchScene("/org/group35/view/ManualEntryPage.fxml");
     }
 
@@ -96,7 +96,7 @@ public class SceneManager {
      * Convenience method for showing the spending page.
      */
     public static void showSpendingPage() {
-        LoggerHelper.debug("Switching to SpendingPage.fxml");
+        LogUtils.debug("Switching to SpendingPage.fxml");
         switchScene("/org/group35/view/SpendingPage.fxml");
     }
 }

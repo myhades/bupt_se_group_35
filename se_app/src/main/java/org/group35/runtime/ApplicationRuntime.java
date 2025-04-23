@@ -3,10 +3,9 @@ package org.group35.runtime;
 import org.group35.controller.TransactionManager;
 import org.group35.model.User;
 import org.group35.controller.UserManager;
-import org.group35.controller.TransactionManager;
 import org.group35.util.CameraUtils;
+import org.group35.util.LogUtils;
 import org.group35.util.SceneManager;
-import org.group35.util.LoggerHelper;
 
 /**
  * ApplicationRuntime is a singleton class that encapsulates all model manager instances.
@@ -53,7 +52,7 @@ public final class ApplicationRuntime {
 
         Runtime.getRuntime().addShutdownHook(new Thread(cameraService::shutdown));
 
-        LoggerHelper.debug("ApplicationRuntime singleton initialized");
+        LogUtils.debug("ApplicationRuntime singleton initialized");
     }
 
     /**
@@ -63,7 +62,7 @@ public final class ApplicationRuntime {
     public static synchronized ApplicationRuntime getInstance() {
         if (instance == null) {
             instance = new ApplicationRuntime();
-            LoggerHelper.trace("ApplicationRuntime instance created");
+            LogUtils.trace("ApplicationRuntime instance created");
         }
         return instance;
     }
@@ -105,15 +104,15 @@ public final class ApplicationRuntime {
     public void setCurrentUser(User user) {
         this.loggedInUser = user;
         if (user == null) {
-            LoggerHelper.info("Current user set to null");
+            LogUtils.info("Current user set to null");
         } else {
-            LoggerHelper.info("Current user set to: " + user.getUsername());
+            LogUtils.info("Current user set to: " + user.getUsername());
         }
     }
 
     public void loginUser(User user) {
         this.loggedInUser = user;
-        LoggerHelper.info("User logged in: " + user.getUsername());
+        LogUtils.info("User logged in: " + user.getUsername());
         setProgramStatus(ProgramStatus.HOME);
     }
 
@@ -122,7 +121,7 @@ public final class ApplicationRuntime {
      */
     public void logoutUser() {
         if (loggedInUser != null) {
-            LoggerHelper.info("User logged out: " + loggedInUser.getUsername());
+            LogUtils.info("User logged out: " + loggedInUser.getUsername());
         }
         this.loggedInUser = null;
         setProgramStatus(ProgramStatus.LOGIN);
@@ -142,7 +141,7 @@ public final class ApplicationRuntime {
      */
     public void setProgramStatus(ProgramStatus status) {
         this.programStatus = status;
-        LoggerHelper.debug("ProgramStatus changed to: " + status);
+        LogUtils.debug("ProgramStatus changed to: " + status);
         switch (status) {
             case LOGIN:          SceneManager.showLoginPage(); break;
             case HOME:           SceneManager.showHomePage(); break;
@@ -151,7 +150,7 @@ public final class ApplicationRuntime {
             case MORE:           SceneManager.showMorePage(); break;
             case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
             case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
-            default:             LoggerHelper.warn("Unhandled ProgramStatus: " + status); break;
+            default:             LogUtils.warn("Unhandled ProgramStatus: " + status); break;
         }
     }
 
@@ -160,7 +159,7 @@ public final class ApplicationRuntime {
      * to ensure all services are cleanly shut down.
      */
     public void shutdown() {
-        LoggerHelper.debug("ApplicationRuntime shutdown. Cleaning up services");
+        LogUtils.debug("ApplicationRuntime shutdown. Cleaning up services");
         cameraService.shutdown();
     }
 }

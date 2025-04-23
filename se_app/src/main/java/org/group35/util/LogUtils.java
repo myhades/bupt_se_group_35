@@ -14,13 +14,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * LoggerHelper provides methods to configure logging based on application settings
+ * LogUtils provides methods to configure logging based on application settings
  * and static convenience methods for logging at various levels.
  * Convenience methods now log via the caller's class logger.
  */
-public class LoggerHelper {
+public class LogUtils {
     // SLF4J logger for this helper (only used for internal configuration messages)
-    private static final Logger helperLogger = LoggerFactory.getLogger(LoggerHelper.class);
+    private static final Logger helperLogger = LoggerFactory.getLogger(LogUtils.class);
 
     /**
      * Configures the root logger level and optionally adds file logging.
