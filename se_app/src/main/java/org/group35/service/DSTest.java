@@ -2,7 +2,7 @@ package org.group35.service;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.group35.util.LoggerHelper;
+import org.group35.util.LogUtils;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +73,7 @@ public class DSTest{
             // 发送请求并获取响应
             try (Response response = client.newCall(request).execute()) {
                 if (response.isSuccessful()) {
-                    LoggerHelper.info("Request successfully, status code: " + response.code());
+                    LogUtils.info("Request successfully, status code: " + response.code());
                     // 打印成功响应内容
                     JSONObject responseJson = new JSONObject(response);
                     JSONArray choices = responseJson.getJSONArray("choices");
@@ -82,8 +82,8 @@ public class DSTest{
                     System.out.println("Response: " + response.body().string());
                 } else {
                     // 打印失败的响应状态码及响应内容
-                    LoggerHelper.warn("Request failed, status code: " + response.code());
-                    LoggerHelper.debug("Response body: " + response.body().string());
+                    LogUtils.warn("Request failed, status code: " + response.code());
+                    LogUtils.debug("Response body: " + response.body().string());
                 }
             }
         } catch (IOException e) {

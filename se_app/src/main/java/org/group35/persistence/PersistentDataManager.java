@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import org.group35.config.Settings;
 import org.group35.util.JsonUtils;
-import org.group35.util.LoggerHelper;
+import org.group35.util.LogUtils;
 
 /**
  * PersistentDataManager is responsible for loading and saving the entire persistent data store.
@@ -21,16 +21,16 @@ public class PersistentDataManager {
      * Initializes the persistent data manager based on the provided settings.
      */
     public static void initialize(Settings settings) {
-        LoggerHelper.debug("Initializing PersistentDataManager with dataFilePath: " + settings.getDataFilePath());
+        LogUtils.debug("Initializing PersistentDataManager with dataFilePath: " + settings.getDataFilePath());
         // Ensure the base folder exists.
         File baseFolder = new File(settings.getDataFilePath());
         if (!baseFolder.exists()) {
-            LoggerHelper.debug("Creating data directory: " + baseFolder.getAbsolutePath());
+            LogUtils.debug("Creating data directory: " + baseFolder.getAbsolutePath());
             baseFolder.mkdirs();
         }
         // Set the DATA_FILE path.
         DATA_FILE = settings.getDataFilePath() + File.separator + "persistent_data.json";
-        LoggerHelper.debug("Data file is set to: " + DATA_FILE);
+        LogUtils.debug("Data file is set to: " + DATA_FILE);
         // Load the store.
         loadStore();
     }
@@ -40,7 +40,7 @@ public class PersistentDataManager {
      */
     public static PersistentStore getStore() {
         if (store == null) {
-            LoggerHelper.debug("Store is null, loading store");
+            LogUtils.debug("Store is null, loading store");
             loadStore();
         }
         return store;
@@ -52,25 +52,25 @@ public class PersistentDataManager {
      */
     public static void loadStore() {
         if (DATA_FILE == null) {
-            LoggerHelper.warn("Data file is null, defaulting to 'persistent_data.json'");
+            LogUtils.warn("Data file is null, defaulting to 'persistent_data.json'");
             DATA_FILE = "persistent_data.json";
         }
         File file = new File(DATA_FILE);
         if (!file.exists()) {
-            LoggerHelper.info("Data file not found, initializing new PersistentStore");
+            LogUtils.info("Data file not found, initializing new PersistentStore");
             store = new PersistentStore();
         } else {
             try {
-                LoggerHelper.debug("Loading PersistentStore from file: " + DATA_FILE);
+                LogUtils.debug("Loading PersistentStore from file: " + DATA_FILE);
                 store = JsonUtils.readJsonFromFile(file, PersistentStore.class);
                 if (store == null) {
-                    LoggerHelper.warn("Loaded store was null, creating new PersistentStore");
+                    LogUtils.warn("Loaded store was null, creating new PersistentStore");
                     store = new PersistentStore();
                 } else {
-                    LoggerHelper.info("PersistentStore loaded successfully from file");
+                    LogUtils.info("PersistentStore loaded successfully from file");
                 }
             } catch (IOException e) {
-                LoggerHelper.error("Error reading PersistentStore: " + e.getMessage());
+                LogUtils.error("Error reading PersistentStore: " + e.getMessage());
                 store = new PersistentStore();
             }
         }
@@ -81,15 +81,15 @@ public class PersistentDataManager {
      */
     public static void saveStore() {
         if (DATA_FILE == null) {
-            LoggerHelper.warn("Data file is null on save, defaulting to 'persistent_data.json'");
+            LogUtils.warn("Data file is null on save, defaulting to 'persistent_data.json'");
             DATA_FILE = "persistent_data.json";
         }
         try {
-            LoggerHelper.debug("Saving PersistentStore to file: " + DATA_FILE);
+            LogUtils.debug("Saving PersistentStore to file: " + DATA_FILE);
             JsonUtils.writeJsonToFile(new File(DATA_FILE), getStore());
-            LoggerHelper.info("PersistentStore saved successfully to: " + DATA_FILE);
+            LogUtils.info("PersistentStore saved successfully to: " + DATA_FILE);
         } catch (IOException e) {
-            LoggerHelper.error("Error saving PersistentStore: " + e.getMessage());
+            LogUtils.error("Error saving PersistentStore: " + e.getMessage());
         }
     }
 }

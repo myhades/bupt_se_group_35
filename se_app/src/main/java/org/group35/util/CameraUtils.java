@@ -168,7 +168,7 @@ public class CameraUtils {
         if (isOpen()) {
             webcam.close();
             webcam = null;
-            LoggerHelper.info("Webcam closed in shutdown");
+            LogUtils.info("Webcam closed in shutdown");
         }
     }
 }

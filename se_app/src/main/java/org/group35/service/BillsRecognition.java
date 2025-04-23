@@ -2,7 +2,7 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.util.ImageUtils;
-import org.group35.util.LoggerHelper;
+import org.group35.util.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -112,7 +112,7 @@ public class BillsRecognition {
 //        payload.put("messages", messages);
 
 
-        LoggerHelper.debug("request body: " + payload.toString());
+        LogUtils.debug("request body: " + payload.toString());
         return payload.toString();
     }
 
@@ -141,24 +141,24 @@ public class BillsRecognition {
         // 发送请求并获取响应
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
-                LoggerHelper.info("Request successfully, status code: " + response.code());
+                LogUtils.info("Request successfully, status code: " + response.code());
                 // 打印成功响应内容
                 String responses = response.body().string();
-                LoggerHelper.debug(response.message());
+                LogUtils.debug(response.message());
                 JSONObject responseJson = new JSONObject(responses);
                 JSONArray choices = responseJson.getJSONArray("choices");
                 JSONObject message = choices.getJSONObject(0).getJSONObject("message");
                 String content = message.getString("content");
-                // LoggerHelper.debug("Response: " + content);
+                // LogUtils.debug("Response: " + content);
                 return content;
             } else {
                 // 打印失败的响应状态码及响应内容
-                LoggerHelper.warn("Request failed, status code: " + response.code());
-                LoggerHelper.debug("Response body: " + response.body().string());
+                LogUtils.warn("Request failed, status code: " + response.code());
+                LogUtils.debug("Response body: " + response.body().string());
                 return null;
             }
         } catch (IOException e) {
-            LoggerHelper.error(e.getMessage());
+            LogUtils.error(e.getMessage());
             //e.printStackTrace();
             return null;
         }
@@ -180,7 +180,7 @@ public class BillsRecognition {
             //TODO: 使用JsonUtil
             try (FileWriter fileWriter = new FileWriter(path)){
                 fileWriter.write(jsonArray.toString());
-                LoggerHelper.debug("Write successfully");
+                LogUtils.debug("Write successfully");
             }
 //            File file = new File(path);
 //            JsonUtils.writeJsonToFile(file, jsonArray);
@@ -198,10 +198,10 @@ public class BillsRecognition {
             String base64Image = ImageUtils.toBase64(imageData);
             String requestBody = ass.buildRequestBody(base64Image, ass.buildCapturePrompt());
             String response = ass.multimodelAPICalling(requestBody);
-            LoggerHelper.debug(response);
+            LogUtils.debug(response);
             ass.writeDataToJson(jsonDataPath, response);
         } catch (IOException e) {
-            LoggerHelper.error(e.getMessage());
+            LogUtils.error(e.getMessage());
             throw new RuntimeException(e);
         }
 

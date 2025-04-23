@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -16,7 +15,7 @@ import javafx.scene.layout.VBox;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 import org.group35.util.CameraUtils;
-import org.group35.util.LoggerHelper;
+import org.group35.util.LogUtils;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -38,7 +37,7 @@ public class RecognizeBillController implements Initializable {
 
     @Override
     public void initialize(URL loc, ResourceBundle res) {
-        LoggerHelper.info("Initializing RecognizeBillController");
+        LogUtils.info("Initializing RecognizeBillController");
 
         //associate with BackButton.jpg
         BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
@@ -81,7 +80,7 @@ public class RecognizeBillController implements Initializable {
             capturedImage = raw;
             WritableImage fx = SwingFXUtils.toFXImage(raw, null);
             Platform.runLater(() -> previewImage.setImage(fx));
-            LoggerHelper.info("Captured one frame.");
+            LogUtils.info("Captured one frame.");
         });
     }
 
