@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.SVGPath?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.group35.view.HomeController"
+      fx:controller="org.group35.view.HomePageController"
       stylesheets="@HomePage.css"
       styleClass="root-container">
 

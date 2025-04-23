@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class HomeController implements Initializable {
+public class HomePageController implements Initializable {
 
     @FXML private LineChart<String, Number> spendingChart;
     @FXML private PieChart categoryPieChart;

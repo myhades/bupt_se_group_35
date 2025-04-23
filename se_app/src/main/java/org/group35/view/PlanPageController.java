@@ -2,18 +2,12 @@ package org.group35.view;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-import org.group35.runtime.ApplicationRuntime;
-import org.group35.runtime.ApplicationRuntime.ProgramStatus;
-public class PlanController {
+public class PlanPageController {
     @FXML
     private Button recommendationButton;
     @FXML

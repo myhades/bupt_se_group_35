@@ -14,7 +14,7 @@
 <?import org.group35.view.components.NavBarController?>
 <?import javafx.scene.shape.SVGPath?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.group35.view.RecognizeBillController"
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.group35.view.RecognizeBillPageController"
       stylesheets="@RecognizeBillPage.css" styleClass="root-container"
       spacing="20">
     <children>

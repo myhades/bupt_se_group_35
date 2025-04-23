@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.SVGPath?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.group35.view.MoreController"
+      fx:controller="org.group35.view.MorePageController"
       stylesheets="@MorePage.css"
       styleClass="root-container">
 

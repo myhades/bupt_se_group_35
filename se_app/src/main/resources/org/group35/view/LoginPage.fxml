@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.SVGPath?>
 
 <HBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.group35.view.LoginController"
+      fx:controller="org.group35.view.LoginPageController"
       spacing="10"
       alignment="CENTER"
       stylesheets="@LoginPage.css"
