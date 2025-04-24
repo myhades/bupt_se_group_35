@@ -32,12 +32,11 @@
     -fx-background-insets: -6;
 }
 .item:pressed {
-    -fx-scale-x: 0.995;
-    -fx-scale-y: 0.98;
-    -fx-background-color: rgba(0,0,0,0.1);
+    -fx-background-insets: -6;
+    -fx-background-color: rgba(0,0,0,0.15);
 }
 .item-text {
-    -fx-spacing: -8px;
+    -fx-spacing: -5px;
 }
 .item-title {
     -fx-font-size: 20px;
@@ -53,8 +52,8 @@
 .item-icon-bg {
      -fx-background-color: #F0F0F0;
      -fx-background-radius: 8px;
-     -fx-pref-width: 42px;
-     -fx-pref-height: 42px;
+     -fx-pref-width: 40px;
+     -fx-pref-height: 40px;
  }
 .item-icon {
     -fx-fill: #FFFFFF;
