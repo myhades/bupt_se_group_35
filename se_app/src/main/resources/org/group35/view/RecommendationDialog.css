@@ -1,0 +1,26 @@
+.dialog-container {
+    -fx-background-color: #f2f2f2;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+
+.dialog-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.title-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+.local-icon {
+    -fx-fill: #000000;
+    /*-fx-scale-x: 1.5;*/
+    /*-fx-scale-y: 1.5;*/
+}
