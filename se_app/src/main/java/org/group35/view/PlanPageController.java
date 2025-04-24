@@ -2,20 +2,32 @@ package org.group35.view;
 
 import java.util.Arrays;
 import java.util.List;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import java.io.IOException;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+
 
 public class PlanPageController {
     @FXML
     private Button recommendationButton;
     @FXML
     private PieChart budgetPieChart;
+    @FXML
+    private Button editBudgetButton;
+
     public void initialize() {
         recommendationButton.setWrapText(true);
         budgetPieChart.getStyleClass().add("pie-chart");
         insertBudgetData();
+
+        editBudgetButton.setOnAction(e -> showEditBudgetDialog());
     }
     /**
      * Clears and sets the budget pie chart with the given data.
@@ -39,4 +51,26 @@ public class PlanPageController {
         budgetPieChart.getData().get(0).getNode().setStyle("-fx-pie-color: #115371;");
         budgetPieChart.getData().get(1).getNode().setStyle("-fx-pie-color: #8498a9;");
     }
+
+    private void showEditBudgetDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/group35/view/EditBudgetDialog.fxml"));
+            Parent dialogRoot = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Budget");
+            dialogStage.getIcons().add(new Image(getClass().getResourceAsStream("/org/group35/util/assets/monora_icon.png")));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setResizable(false);
+            dialogStage.setScene(new Scene(dialogRoot));
+
+            EditBudgetDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
