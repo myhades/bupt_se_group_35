@@ -28,6 +28,7 @@ public class PlanPageController {
         insertBudgetData();
 
         editBudgetButton.setOnAction(e -> showEditBudgetDialog());
+        recommendationButton.setOnAction(e -> showRecommendationDialog());
     }
     /**
      * Clears and sets the budget pie chart with the given data.
@@ -65,6 +66,27 @@ public class PlanPageController {
             dialogStage.setScene(new Scene(dialogRoot));
 
             EditBudgetDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showRecommendationDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/group35/view/RecommendationDialog.fxml"));
+            Parent dialogRoot = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Recommendation");
+            dialogStage.getIcons().add(new Image(getClass().getResourceAsStream("/org/group35/util/assets/monora_icon.png")));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setResizable(false);
+            dialogStage.setScene(new Scene(dialogRoot));
+
+            RecommendationDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
 
             dialogStage.showAndWait();
