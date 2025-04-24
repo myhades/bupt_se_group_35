@@ -21,6 +21,8 @@ public class PlanPageController {
     private PieChart budgetPieChart;
     @FXML
     private Button editBudgetButton;
+    @FXML
+    private Button AIButton;
 
     public void initialize() {
         recommendationButton.setWrapText(true);
@@ -29,6 +31,7 @@ public class PlanPageController {
 
         editBudgetButton.setOnAction(e -> showEditBudgetDialog());
         recommendationButton.setOnAction(e -> showRecommendationDialog());
+        AIButton.setOnAction(e -> showAIDialog());
     }
     /**
      * Clears and sets the budget pie chart with the given data.
@@ -87,6 +90,27 @@ public class PlanPageController {
             dialogStage.setScene(new Scene(dialogRoot));
 
             RecommendationDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAIDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/group35/view/AIDialog.fxml"));
+            Parent dialogRoot = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("AI Suggestions");
+            dialogStage.getIcons().add(new Image(getClass().getResourceAsStream("/org/group35/util/assets/monora_icon.png")));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setResizable(false);
+            dialogStage.setScene(new Scene(dialogRoot));
+
+            AIDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
 
             dialogStage.showAndWait();

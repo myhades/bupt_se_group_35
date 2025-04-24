@@ -22,7 +22,12 @@ public class EditBudgetDialogController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
-
+    // Set New Budget
+    public void setNewBudget(String newBudget) {
+        this.newBudget = newBudget;
+        System.out.println(newBudget);
+        // Add more
+    }
     // Get New Budget
     public String getNewBudget() {
         return newBudget;

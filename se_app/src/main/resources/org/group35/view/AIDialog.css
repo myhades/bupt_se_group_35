@@ -1,0 +1,51 @@
+.dialog-container {
+    -fx-background-color: #f2f2f2;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+
+.title-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+.local-icon {
+    -fx-fill: #000000;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(0,0,0,0.2); /* 或完全透明 rgba(0,0,0,0.0) */
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.suggestion-text {
+    -fx-font-size: 14px;
+    -fx-fill: #444;
+}
+
+.dialog-button {
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 5 15;
+}
