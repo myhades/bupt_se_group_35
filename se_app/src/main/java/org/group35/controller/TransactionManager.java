@@ -45,7 +45,7 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
-    /** Returns transactions within the given amount range. */
+    /** Returns transactions within the given amount range. bigger or equal, smaller or equal */
     public List<Transaction> getByAmountRange(BigDecimal minAmount, BigDecimal maxAmount) {
         LogUtils.trace("Filtering transactions by amount range: " + minAmount + " - " + maxAmount);
         if (minAmount != null && maxAmount != null && minAmount.compareTo(maxAmount) > 0) {

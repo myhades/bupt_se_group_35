@@ -1,0 +1,47 @@
+{
+  "users": [],
+  "transactions": [
+    {
+      "id": "d0063f72-68da-480f-a726-60c887003ff3",
+      "username": "TestUser",
+      "name": "TestTransaction1",
+      "timestamp": "2025-05-21T02:09:28.4849786",
+      "amount": 100.00
+    },
+    {
+      "id": "02aecb8c-33c1-4141-89cf-849ff7452854",
+      "username": "TestUser",
+      "name": "TestTransaction2",
+      "timestamp": "2025-05-21T02:09:28.4860551",
+      "amount": 200.00
+    },
+    {
+      "id": "0bbe5088-e096-4ce7-bb28-45c2ab8b3d64",
+      "username": "TestUser",
+      "name": "TestTransaction3",
+      "timestamp": "2025-05-21T02:09:28.4870506",
+      "amount": -50.00
+    },
+    {
+      "id": "5a37d068-d6a5-4e63-9adb-424b69dd5777",
+      "username": "TestUser",
+      "name": "TestTransaction4",
+      "timestamp": "2025-05-21T02:09:28.4870506",
+      "amount": -150.00
+    },
+    {
+      "id": "e3b5921d-cb69-4150-8d30-d5ef92f5c7a0",
+      "username": "TestUser",
+      "name": "TestMerchant",
+      "timestamp": "2025-05-21T02:09:28.5050877",
+      "amount": 100.00
+    },
+    {
+      "id": "cf8d201c-bff9-40b7-b6a0-d55b5a513f6d",
+      "username": "TestUser",
+      "name": "CoffeeShop",
+      "timestamp": "2025-05-21T02:09:28.5062863",
+      "amount": -25.50
+    }
+  ]
+}
