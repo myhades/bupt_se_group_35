@@ -106,10 +106,4 @@ public class Transaction {
         this.recurrencePattern = recurrencePattern;
     }
 
-//    public BigDecimal getMonthlyBudget() {
-//        return monthlyBudget;
-//    }
-//    public void setMonthlyBudget(BigDecimal monthlyBudget) {
-//        this.monthlyBudget = monthlyBudget;
-//    }
 }
