@@ -14,7 +14,6 @@ public class Transaction {
     private String name;
     private LocalDateTime timestamp;
     private BigDecimal amount;
-    private boolean income;
     private String location;
     private String category; //TODO: add category field as enum
 
@@ -70,13 +69,6 @@ public class Transaction {
     }
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public boolean isIncome() {
-        return income;
-    }
-    public void setIncome(boolean income) {
-        this.income = income;
     }
 
     public Mode getMode() {

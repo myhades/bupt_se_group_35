@@ -2,8 +2,11 @@ package org.group35.controller;
 
 import org.group35.model.Transaction;
 import org.group35.persistence.PersistentDataManager;
+import org.group35.runtime.ApplicationRuntime;
+import org.group35.service.CsvImport;
 import org.group35.util.LogUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.stream.Collectors;
  */
 public class TransactionManager {
     private List<Transaction> transactions;
+    private final CsvImport csvImportService = new CsvImport();
 
     public TransactionManager() {
         LogUtils.debug("Initializing TransactionManager and loading transactions");
@@ -72,12 +76,22 @@ public class TransactionManager {
         save();
     }
 
-//    /** Sets the monthly budget for a specific user's future entries. */
-//    public void setMonthlyBudget(String username, BigDecimal budget) {
-//        LogUtils.info("Setting monthly budget for user " + username + " to " + budget);
-//        getByUser(username).forEach(tx -> tx.setMonthlyBudget(budget));
-//        save();
-//    }
+    /**
+     * Import a CSV, tag each Transaction with the current user,
+     * and add them to the store.
+     */
+    public void importFromCsv(String filePath) throws IOException {
+        String currentUser = ApplicationRuntime
+                .getInstance()
+                .getCurrentUser()
+                .getUsername();
+
+        List<Transaction> txs = csvImportService.parseTransactions(filePath);
+        for (Transaction tx : txs) {
+            tx.setUsername(currentUser);
+            add(tx);
+        }
+    }
 
     /** Save the current transaction list back to the persistent store. */
     private void save() {
