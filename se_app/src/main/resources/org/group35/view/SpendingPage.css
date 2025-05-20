@@ -64,7 +64,13 @@
 .add-bill:hover {
     -fx-background-color: derive(#8B4513, 25%);
 }
-.add-icon, .camera-icon {
+.add-import {
+    -fx-background-color: #215F9A;
+}
+.add-import:hover {
+    -fx-background-color: derive(#215F9A, 25%);
+}
+.add-icon, .camera-icon, .import-icon {
     -fx-fill: white;
 }
 
