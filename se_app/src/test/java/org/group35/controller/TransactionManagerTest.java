@@ -231,7 +231,7 @@ class TransactionManagerTest {
 
         Transaction tx = transactions.get(0);
         LocalDateTime originalTime = tx.getTimestamp();
-        LocalDateTime newTime = LocalDateTime.now().minusDays(1); // 设置一个旧时间
+        LocalDateTime newTime = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         txManager.updateTimestamp(tx.getId(), newTime);
 
@@ -290,10 +290,34 @@ class TransactionManagerTest {
 
     @Test
     void updateCurrency() {
+        List<Transaction> transactions = txManager.getAll();
+        assertFalse(transactions.isEmpty());
+
+        Transaction tx = transactions.get(0);
+        Transaction.Currency originalCurrency = tx.getCurrency();
+        Transaction.Currency newCurrency = Transaction.Currency.USD;
+
+        txManager.updateCurrency(tx.getId(), newCurrency);
+
+        Transaction updated = txManager.getById(tx.getId());
+        assertEquals(newCurrency, updated.getCurrency());
+        assertNotEquals(originalCurrency, updated.getCurrency());
     }
 
     @Test
     void updateMode() {
+        List<Transaction> transactions = txManager.getAll();
+        assertFalse(transactions.isEmpty());
+
+        Transaction tx = transactions.get(0);
+        Transaction.Mode originalMode = tx.getMode();
+        Transaction.Mode newMode = Transaction.Mode.RECURRING;
+
+        txManager.updateMode(tx.getId(), newMode);
+
+        Transaction updated = txManager.getById(tx.getId());
+        assertEquals(newMode, updated.getMode());
+        assertNotEquals(originalMode, updated.getMode());
     }
 
     @Test
