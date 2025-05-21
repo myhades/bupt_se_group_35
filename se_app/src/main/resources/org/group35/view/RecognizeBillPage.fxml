@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import org.group35.view.components.NavBarController?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import org.group35.view.components.NavBarController?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.SVGPath?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.RecognizeBillPageController"
       stylesheets="@RecognizeBillPage.css"
@@ -31,15 +37,39 @@
             <Label text="●" styleClass="title-dot"/>
         </HBox>
 
-        <!-- Camera Preview -->
-        <HBox styleClass="preview-container">
-            <VBox styleClass="hint-container">
+        <!-- Camera Preview Container -->
+        <GridPane styleClass="preview-container">
+
+            <columnConstraints>
+                <ColumnConstraints percentWidth="40" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="60" hgrow="ALWAYS"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="100" vgrow="ALWAYS"/>
+            </rowConstraints>
+
+            <!-- Hint Container -->
+            <VBox styleClass="hint-container"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="0">
                 <SVGPath content="M20,4H16.83L15,2H9L7.17,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,18H4V6H8.05L9.88,4H14.12L15.95,6H20V18M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15Z"
                          styleClass="camera-hint-icon"/>
-                <Label text="Place your bill&#10;inside the frame"
-                       styleClass="camera-hint-text" />
+                <Text text="Place in the frame&#10;then click to capture"
+                      styleClass="camera-hint-text" />
             </VBox>
-        </HBox>
+
+            <!-- Preview Stack -->
+            <StackPane fx:id="previewStack"
+                       styleClass="preview-stack"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="0">
+                <GridPane.margin>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </GridPane.margin>
+                <ImageView fx:id="cameraView"/>
+            </StackPane>
+
+        </GridPane>
 
     </VBox>
 </VBox>
