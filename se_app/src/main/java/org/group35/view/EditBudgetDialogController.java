@@ -4,9 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Modality;
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 public class EditBudgetDialogController {
 
@@ -14,33 +16,74 @@ public class EditBudgetDialogController {
     private TextField budgetInputField;
     @FXML
     private Label errorLabel;
+
     private Stage dialogStage;
     private String newBudget;
     private boolean confirmed = false;
 
-    // Stage switch
+    // 父控制器引用，用于更新预算显示
+    private PlanPageController parentController;
+
+    public void initialize() {
+        // 需要的初始化代码
+    }
+
+    // 设置父控制器引用以更新预算值
+    public void setParentController(PlanPageController controller) {
+        this.parentController = controller;
+    }
+
+    // 在特定坐标显示弹窗的方法
+    public void showAsPopup(Stage ownerStage, double x, double y) {
+        if (dialogStage == null) {
+            dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.TRANSPARENT);
+            dialogStage.setAlwaysOnTop(true);
+            dialogStage.initModality(Modality.NONE);
+
+            Scene scene = dialogStage.getScene();
+            if (scene != null) {
+                scene.setFill(Color.TRANSPARENT);
+            }
+        }
+
+        // 计算位置 - 可以根据所有者窗口进行调整
+        dialogStage.setX(x);
+        dialogStage.setY(y);
+
+        // 显示对话框
+        dialogStage.show();
+
+        // 聚焦到输入框
+        Platform.runLater(() -> budgetInputField.requestFocus());
+    }
+
+    // Stage设置器 - 向后兼容
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
-    // Set New Budget
+
+    // 设置新预算
     public void setNewBudget(String newBudget) {
         this.newBudget = newBudget;
         System.out.println(newBudget);
-        // Add more
     }
-    // Get New Budget
+
+    // 获取新预算
     public String getNewBudget() {
         return newBudget;
     }
 
-    // Check "Confirm"
+    // 检查"确认"状态
     public boolean isConfirmed() {
         return confirmed;
     }
 
     @FXML
     private void handleCancel() {
-        dialogStage.close();
+        if (dialogStage != null) {
+            dialogStage.close();
+        }
     }
 
     @FXML
@@ -49,24 +92,43 @@ public class EditBudgetDialogController {
         if (isNumeric(input)) {
             newBudget = input;
             confirmed = true;
+
+            // 更新错误标签为成功消息
             errorLabel.setText("New budget has been updated.");
-            errorLabel.getStyleClass().removeAll("error-text");
-            if (!errorLabel.getStyleClass().contains("success-text"))
-                errorLabel.getStyleClass().add("success-text");
+            errorLabel.setStyle("-fx-text-fill: green;");
             errorLabel.setVisible(true);
+
             System.out.println("New Budget: " + newBudget);
 
-            // Delay for 1.5s
+            // 如果存在父控制器，则更新预算
+            if (parentController != null) {
+                try {
+                    // 尝试更新父控制器的预算
+                    // 这取决于你的实现
+                    double budget = Double.parseDouble(newBudget);
+                    // 你需要在PlanPageController中添加一个更新预算的方法
+                    // 例如：parentController.updateTotalBudget(budget);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // 延迟1.5秒
             new Thread(() -> {
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Platform.runLater(() -> dialogStage.close());
+                Platform.runLater(() -> {
+                    if (dialogStage != null) {
+                        dialogStage.close();
+                    }
+                });
             }).start();
         } else {
             errorLabel.setText("Improper input for budget setting.");
+            errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setVisible(true);
         }
     }

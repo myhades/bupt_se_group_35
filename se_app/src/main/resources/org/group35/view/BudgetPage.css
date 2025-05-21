@@ -1,0 +1,109 @@
+/* BudgetPage.css */
+.main-container {
+    -fx-background-color: #f5f5f7;
+}
+
+.page-header {
+    -fx-background-color: #115371;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.page-subtitle {
+    -fx-font-size: 14px;
+    -fx-fill: #d0d0d0;
+}
+
+.content-scrollpane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.content-container {
+    -fx-background-color: transparent;
+}
+
+.overview-card, .history-card, .action-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+    -fx-padding: 20px;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.info-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+}
+
+.amount-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #115371;
+}
+
+.percent-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.card-description {
+    -fx-font-size: 13px;
+    -fx-fill: #666666;
+}
+
+.action-button, .card-button {
+    -fx-background-color: #115371;
+    -fx-text-fill: white;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+    -fx-font-size: 13px;
+}
+
+.action-button:hover, .card-button:hover {
+    -fx-background-color: #1e6c8e;
+}
+
+.budget-chart {
+    -fx-background-color: transparent;
+    -fx-min-width: 250px;
+    -fx-min-height: 250px;
+}
+
+.budget-info {
+    -fx-min-width: 400px;
+    -fx-spacing: 15;
+}
+
+/* 饼图样式 */
+.pie-chart {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+}
+
+.chart-pie {
+    -fx-border-color: derive(-fx-pie-color, -30%);
+    -fx-border-width: 0px;
+}
+
+.chart-pie-label {
+    -fx-font-size: 1em;
+    -fx-fill: white;
+    -fx-font-family: "Arial";
+}
