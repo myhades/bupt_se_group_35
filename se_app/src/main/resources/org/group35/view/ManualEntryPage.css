@@ -1,7 +1,31 @@
 /* ManualEntryPage.css */
 
-VBox {
-    -fx-background-radius: 20px;
+/* Main Container */
+.main-container{
+    -fx-spacing: 20px;
+    -fx-padding: 20px 0 0 0;
+}
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: green;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
 }
 
 /* TextField */
@@ -10,7 +34,6 @@ VBox {
     -fx-text-fill: white;
     -fx-prompt-text-fill: white;
     -fx-font-size: 14px;
-    -fx-font-family: "Arial";
 }
 
 /* Handle_Button */
@@ -19,22 +42,14 @@ VBox {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-cursor: hand;
-    -fx-font-family: "Arial";
-}
-
-/* Back_Button */
-.Back_Button {
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
 }
 
 /* Convert_Button */
 .Convert_Button {
-    -fx-background-color: #d2691e;
+    -fx-background-color: #C04F15;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-cursor: hand;
-    -fx-font-family: "Arial";
 }
 
 /* Micro_Button */
@@ -57,14 +72,12 @@ VBox {
     -fx-prompt-text-fill: white;
     -fx-font-size: 14px;
     -fx-padding: 0;
-    -fx-font-family: "Arial";
 }
 .text-area:focused {
     -fx-background-insets: 0;
     -fx-background-color: #a5a5a5;
     -fx-faint-focus-color: transparent;
     -fx-focus-color: transparent;
-    -fx-font-family: "Arial";
 }
 
 .AI_Rec_Character {
@@ -72,23 +85,11 @@ VBox {
     -fx-font-weight: bold;
 }
 
-.Dot {
-    -fx-font-size: 20px;
-    -fx-text-fill: green;
-}
-
-.ManualEntry_Character {
-    -fx-font-size: 36px;
-    -fx-font-weight: bold;
-    -fx-text-fill: black;
-}
-
 .micro-icon {
     -fx-fill: white;
 }
 
-.left-arrow-icon {
-    -fx-fill: #000000;
-    -fx-scale-x: 1.5;
-    -fx-scale-y: 1.5;
+.convert-icon {
+    -fx-fill: white;
+    -fx-scale: 0.9;
 }
