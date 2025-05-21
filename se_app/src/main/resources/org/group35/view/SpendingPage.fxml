@@ -3,12 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ScrollPane?>
@@ -26,7 +24,7 @@
             <NavBarController activePage="SPENDING"/>
 
             <!-- New Entry Section -->
-            <HBox alignment="CENTER_LEFT" spacing="16" styleClass="new-entry-container">
+            <HBox styleClass="new-entry-container">
                 <Label text="New entry" styleClass="new-entry-label"/>
                 <Button text="Manual"
                         onAction="#gotoManualEntry"
@@ -55,116 +53,40 @@
         </VBox>
     </top>
 
+    <!-- Main Content Area -->
     <center>
-        <!-- Main Content Area -->
-        <HBox spacing="20" styleClass="content-container" VBox.vgrow="ALWAYS">
-            <!-- Left: Spending List -->
-            <VBox spacing="15" styleClass="spending-list" HBox.hgrow="ALWAYS" maxWidth="600">
+        <HBox styleClass="content-container">
+
+            <!-- Left Side: Spending List -->
+            <VBox styleClass="spending-list-container" HBox.hgrow="ALWAYS">
                 <Label text="Spendings" styleClass="section-title"/>
-                <!-- ScrollPane containing only the spending items -->
-                <ScrollPane styleClass="spending-scrollpane" fitToWidth="true" VBox.vgrow="ALWAYS" maxHeight="Infinity" minHeight="200">
-                    <VBox spacing="15" styleClass="spending-list">
-                        <!-- Rent -->
-                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                            <StackPane>
-                                <Circle radius="20" styleClass="icon-circle-dark-blue"/>
-                                <Label text="R" styleClass="icon-letter"/>
-                            </StackPane>
-                            <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <Label text="Rent" styleClass="spending-name"/>
-                                    <Label text="Manual" styleClass="spending-type-manual-small"/>
-                                </HBox>
-                                <Label text="November 30th" styleClass="spending-date"/>
-                            </VBox>
-                            <Label text="\$ 1200" styleClass="spending-amount"/>
-                        </HBox>
-
-                        <!-- Netflix -->
-                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                            <StackPane>
-                                <Circle radius="20" styleClass="icon-circle-red"/>
-                                <Label text="N" styleClass="icon-letter"/>
-                            </StackPane>
-                            <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <Label text="Netflix Family" styleClass="spending-name"/>
-                                    <Label text="Recurring" styleClass="spending-type-recurring-small"/>
-                                </HBox>
-                                <Label text="December 11st" styleClass="spending-date"/>
-                            </VBox>
-                            <Label text="\$ 29.9" styleClass="spending-amount"/>
-                        </HBox>
-
-                        <!-- Utilities -->
-                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                            <StackPane>
-                                <Circle radius="20" styleClass="icon-circle-orange"/>
-                                <Label text="U" styleClass="icon-letter"/>
-                            </StackPane>
-                            <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <Label text="Utilities" styleClass="spending-name"/>
-                                </HBox>
-                                <Label text="December 25th" styleClass="spending-date"/>
-                            </VBox>
-                            <Label text="\$ 189.45" styleClass="spending-amount"/>
-                        </HBox>
-
-                        <!-- McDonald -->
-                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                            <StackPane>
-                                <Circle radius="20" styleClass="icon-circle-yellow"/>
-                                <Label text="M" styleClass="icon-letter"/>
-                            </StackPane>
-                            <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <Label text="McDonald" styleClass="spending-name"/>
-                                </HBox>
-                                <Label text="December 25th" styleClass="spending-date"/>
-                            </VBox>
-                            <Label text="\$ 15.9" styleClass="spending-amount"/>
-                        </HBox>
-
-                        <!-- Dinner -->
-                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="spending-item">
-                            <StackPane>
-                                <Circle radius="20" styleClass="icon-circle-gray"/>
-                                <Label text="D" styleClass="icon-letter"/>
-                            </StackPane>
-                            <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <Label text="Dinner" styleClass="spending-name"/>
-                                </HBox>
-                                <Label text="December 27th" styleClass="spending-date"/>
-                            </VBox>
-                            <Label text="\$ 98.7" styleClass="spending-amount"/>
-                        </HBox>
-                    </VBox>
+                <ScrollPane styleClass="spending-scrollpane">
+                    <VBox fx:id="spendingListVBox"
+                          styleClass="spending-list"/>
                 </ScrollPane>
             </VBox>
 
+            <!-- Right Side: Info Container -->
+            <VBox styleClass="info-container">
 
-            <!-- Right: Budget and AI Summary -->
-            <VBox spacing="20" styleClass="info-panel" minWidth="300" maxWidth="350">
-                <!-- Budget Panel -->
-                <VBox spacing="10" styleClass="budget-panel">
+                <!-- Budget Section -->
+                <VBox styleClass="budget-section">
                     <Label text="Budget" styleClass="section-title"/>
-                    <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <HBox styleClass="budget-info">
                         <Label text="\$ 200" styleClass="budget-amount"/>
                         <Label text="left to spend" styleClass="budget-left-text"/>
                     </HBox>
-                    <ProgressBar progress="0.6" styleClass="budget-progress" maxWidth="Infinity"/>
+                    <ProgressBar styleClass="budget-progress"/>
                 </VBox>
 
+                <!-- Separator -->
                 <Separator styleClass="divider"/>
 
-                <!-- AI Summary Panel -->
-                <VBox spacing="10" styleClass="ai-panel">
+                <!-- AI Section -->
+                <VBox styleClass="ai-section">
                     <Label text="AI Summary" styleClass="section-title"/>
-                    <Text styleClass="ai-summary"
-                          text="Most of your recent spending went to essential expenses like rent and utilities, with discretionary spending such as dining out and entertainment..."
-                          wrappingWidth="270"/>
+                    <Label styleClass="ai-summary"
+                          text="Most of your recent spending went to essential expenses like rent and utilities, with discretionary spending such as dining out and entertainment..."/>
                 </VBox>
             </VBox>
         </HBox>

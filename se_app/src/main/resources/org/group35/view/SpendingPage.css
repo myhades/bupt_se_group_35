@@ -2,16 +2,16 @@
 
 /* New Entry Container */
 .new-entry-container {
+    -fx-alignment: center-left;
+    -fx-spacing: 16px;
     -fx-padding: 40px 0 20px 6px;
 }
 
 /* Section Title */
 .section-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
+    -fx-font-size: 20px;
     -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-text-fill: #333333;
-    -fx-padding: 5 0 10 0;
+    -fx-padding: 0 0 0 5;
 }
 
 /* New Entry Label */
@@ -23,18 +23,59 @@
 
 /* Content Container */
 .content-container {
-    -fx-padding: 0 15px 25px 15px;
-    -fx-fill-height: true;
-    -fx-max-height: Infinity;
+    -fx-spacing: 20px;
 }
 
-.spending-container {
+/* Spending List Container */
+.spending-list-container {
     -fx-background-color: #ffffff;
     -fx-background-radius: 20px;
     -fx-padding: 15px;
     -fx-spacing: 10px;
     -fx-min-width: 450px;
     -fx-max-width: 600px;
+}
+.content-container > .spending-list-container {
+    -fx-hgrow: always;
+}
+
+/* Spending List */
+.spending-list {
+    -fx-spacing: 5px;
+}
+
+/* Spending Item */
+.spending-item {
+    -fx-padding: 5px 5px;
+    -fx-spacing: 20px;
+    -fx-background-color: transparent;
+    -fx-min-height: 50px;
+    -fx-max-height: 70px;
+}
+
+/* Spending Text */
+.spending-name {
+    -fx-font-size: 18px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+}
+.spending-date {
+    -fx-font-size: 16px;
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-text-fill: #666666;
+}
+.spending-amount {
+    -fx-font-size: 24px;
+    -fx-font-family: 'Articulat CF Normal';
+}
+
+/* Icon Styles */
+.icon-circle {
+    /* fill set in code */
+}
+.icon-letter {
+    -fx-font-size: 18px;
+    -fx-font-family: 'Articulat CF Bold';
+    -fx-text-fill: white;
 }
 
 /* Button Styles */
@@ -74,214 +115,98 @@
     -fx-fill: white;
 }
 
-/* Spending List */
-.spending-list {
-    -fx-padding: 15px 15px 25px 15px; /* 15px */
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 20px;
-    -fx-spacing: 15px;
-    -fx-min-width: 450px;
-    -fx-max-width: 600px;
-    -fx-margin-bottom: 10px;
-}
-
-.spending-item {
-    -fx-padding: 6px 15px;
-    -fx-background-color: transparent;
-    -fx-min-height: 50px;
-    -fx-max-height: 70px;
-}
-
-.spending-name {
-    -fx-font-size: 16px;
-    -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-text-fill: #000000;
-}
-
-.spending-date {
-    -fx-font-size: 14px;
-    -fx-font-family: 'Articulat CF Normal';
-    -fx-text-fill: #666666;
-}
-
-.spending-amount {
-    -fx-font-size: 16px;
-    -fx-font-family: 'Articulat CF Demi Bold';
-    -fx-text-fill: #000000;
-}
-
-.spending-type-manual-small {
-    -fx-background-color: #3B7D23;
-    -fx-font-size: 12px;
-    -fx-padding: 3px 8px;
-    -fx-font-family: 'Articulat CF Normal';
-    -fx-text-fill: white;
-    -fx-background-radius: 20px;
-}
-
-.spending-type-recurring-small {
-    -fx-background-color: #4169E1;
-    -fx-font-size: 12px;
-    -fx-padding: 3px 8px;
-    -fx-font-family: 'Articulat CF Normal';
-    -fx-text-fill: white;
-    -fx-background-radius: 20px;
-}
-
-/* Icon Circles */
-.icon-circle-dark-blue {
-    -fx-fill: #2C6298;
-}
-
-.icon-circle-red {
-    -fx-fill: #E50914;
-}
-
-.icon-circle-orange {
-    -fx-fill: #FF8C00;
-}
-
-.icon-circle-yellow {
-    -fx-fill: #FF0000;  /* McDonald's red */
-}
-
-.icon-circle-gray {
-    -fx-fill: #555555;
-}
-
-.icon-letter {
-    -fx-font-size: 18px;
-    -fx-font-family: 'Articulat CF Bold';
-    -fx-text-fill: white;
-}
-
-/* Info Panel */
-.info-panel {
+/* Info Container */
+.info-container {
     -fx-padding: 15px;
     -fx-background-color: #ffffff;
     -fx-background-radius: 20px;
     -fx-spacing: 15px;
-    -fx-min-width: 280px;
-    -fx-max-width: 320px;
+    -fx-min-width: 300px;
+    -fx-max-width: 350px;
 }
 
-/* Budget Panel */
-.budget-panel {
-    -fx-padding: 15px;
+/* Budget Section */
+.budget-section {
     -fx-background-color: #ffffff;
     -fx-background-radius: 20px;
     -fx-spacing: 8px;
-    -fx-alignment: CENTER_LEFT;
+    -fx-alignment: center-left;
 }
-
+.budget-info {
+    -fx-spacing: 5px;
+    -fx-padding: 0 5px;
+    -fx-alignment: baseline-left;
+}
 .budget-amount {
     -fx-font-size: 24px;
-    -fx-font-weight: bold;
+    -fx-font-family: 'Articulat CF Bold';
     -fx-text-fill: #4CAF50;
 }
-
 .budget-left-text {
     -fx-font-size: 16px;
     -fx-text-fill: #333333;
 }
-
 .budget-progress {
     -fx-pref-height: 5px;
     -fx-accent: #4CAF50;
     -fx-control-inner-background: #e0e0e0;
     -fx-background-insets: 0;
-    -fx-padding: 0;
+    -fx-padding: 0 5px;
 }
 
-/* AI Panel */
-.ai-panel {
-    -fx-padding: 15px;
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 20px;
-    -fx-alignment: TOP_LEFT;
-    -fx-spacing: 12px;
-}
-
-.ai-summary {
-    -fx-font-size: 14px;
-    -fx-text-fill: #333333;
-    -fx-line-spacing: 5px;
-    -fx-wrap-text: true;
-    -fx-pref-width: 280px;
-}
-
+/* Divider */
 .divider {
     -fx-padding: 5px 0;
 }
 
-/* Icon Styles */
-.icon-circle-dark-blue {
-    -fx-fill: #2C6298;
+/* AI Section */
+.ai-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-alignment: top-left;
+    -fx-spacing: 12px;
 }
-
-.icon-circle-red {
-    -fx-fill: #E50914;
-}
-
-.icon-circle-orange {
-    -fx-fill: #FF8C00;
-}
-
-.icon-circle-yellow {
-    -fx-fill: #FF0000;  /* McDonald's red */
-}
-
-.icon-circle-gray {
-    -fx-fill: #555555;
-}
-
-.icon-letter {
+.ai-summary {
+    -fx-padding: 0 5px;
     -fx-font-size: 18px;
-    -fx-font-family: 'Articulat CF Bold';
-    -fx-text-fill: white;
+    -fx-text-fill: #0D3512;
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-wrap-text: true;
 }
 
 /* ScrollPane Styling */
 .spending-scrollpane {
     -fx-background-color: transparent;
-    -fx-background: transparent;
     -fx-border-color: transparent;
     -fx-padding: 0;
     -fx-min-width: 450px;
     -fx-max-width: 600px;
     -fx-min-height: 200px;
     -fx-pref-height: -1;
-    -fx-max-height: Infinity;
+    -fx-max-height: infinity;
     -fx-fit-to-width: true;
     -fx-fit-to-height: true;
     -fx-pannable: true;
     -fx-hbar-policy: never;
     -fx-vbar-policy: as-needed;
 }
-
 .spending-scrollpane > .viewport {
     -fx-background-color: transparent;
 }
-
 .spending-scrollpane > .scroll-bar:vertical {
     -fx-background-color: transparent;
-    -fx-background-radius: 0;
     -fx-padding: 0 0 0 5;
 }
-
 .spending-scrollpane > .scroll-bar:vertical > .thumb {
     -fx-background-color: #cccccc;
     -fx-background-radius: 5px;
 }
-
 .spending-scrollpane > .scroll-bar:vertical > .thumb:hover {
     -fx-background-color: #aaaaaa;
 }
-
 .spending-scrollpane > .scroll-bar:vertical > .thumb:pressed {
     -fx-background-color: #888888;
 }
-
 .spending-scrollpane > .scroll-bar > .increment-button,
 .spending-scrollpane > .scroll-bar > .decrement-button {
     -fx-padding: 0;
