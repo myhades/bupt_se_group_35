@@ -23,7 +23,10 @@ public final class ApplicationRuntime {
         PLAN,
         MORE,
         MANUAL_ENTRY,
-        RECOGNIZE_BILL
+        RECOGNIZE_BILL,
+        EDIT_BUDGET,
+        AI_SUGGESTION,
+        RECOMMENDATION
         // Add other statuses as needed.
     }
 
@@ -150,6 +153,9 @@ public final class ApplicationRuntime {
             case MORE:           SceneManager.showMorePage(); break;
             case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
             case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
+            case EDIT_BUDGET: SceneManager.showEditBudgetPage(); break;
+            case AI_SUGGESTION: SceneManager.showAISuggestionPage(); break;
+            case RECOMMENDATION: SceneManager.showRecommendationPage(); break;
             default:             LogUtils.warn("Unhandled ProgramStatus: " + status); break;
         }
     }
