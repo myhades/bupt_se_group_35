@@ -95,7 +95,7 @@ public class BudgetPageController {
     }
 
     /**
-     * 更新预算显示
+     *更新预算显示
      */
     private void updateBudgetDisplay() {
         // 计算可用金额和百分比
