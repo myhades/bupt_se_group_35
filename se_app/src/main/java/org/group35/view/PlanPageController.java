@@ -2,6 +2,8 @@ package org.group35.view;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,6 +14,7 @@ import javafx.scene.chart.PieChart;
 import java.io.IOException;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import org.group35.runtime.ApplicationRuntime;
 
 
 public class PlanPageController {
@@ -29,10 +32,25 @@ public class PlanPageController {
         budgetPieChart.getStyleClass().add("pie-chart");
         insertBudgetData();
 
-        editBudgetButton.setOnAction(e -> showEditBudgetDialog());
-        recommendationButton.setOnAction(e -> showRecommendationDialog());
-        AIButton.setOnAction(e -> showAIDialog());
+//        editBudgetButton.setOnAction(e -> showEditBudgetDialog());
+//        recommendationButton.setOnAction(e -> showRecommendationDialog());
+//        AIButton.setOnAction(e -> showAIDialog());
     }
+
+    @FXML
+    private void gotoEditBudget(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.EDIT_BUDGET);
+    }
+
+    @FXML
+    private void gotoRecommendation(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.RECOMMENDATION);
+    }
+    @FXML
+    private void gotoAISuggestion(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.AI_SUGGESTION);
+    }
+
     /**
      * Clears and sets the budget pie chart with the given data.
      * @param data the list of PieChart.Data to display

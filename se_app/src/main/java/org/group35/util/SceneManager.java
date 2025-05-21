@@ -99,4 +99,28 @@ public class SceneManager {
         LogUtils.debug("Switching to SpendingPage.fxml");
         switchScene("/org/group35/view/SpendingPage.fxml");
     }
+
+    /**
+     * Convenience method for showing the edit_budget page.
+     */
+    public static void showEditBudgetPage() {
+        LogUtils.debug("Switching to EditBudgetPage.fxml");
+        switchScene("/org/group35/view/SpendingPage.fxml");
+    }
+
+    /**
+     * Convenience method for showing the AI suggestion page.
+     */
+    public static void showAISuggestionPage() {
+        LogUtils.debug("Switching to AISuggestionPage.fxml");
+        switchScene("/org/group35/view/SpendingPage.fxml");
+    }
+
+    /**
+     * Convenience method for showing the AI suggestion page.
+     */
+    public static void showRecommendationPage() {
+        LogUtils.debug("Switching to RecommendationPage.fxml");
+        switchScene("/org/group35/view/SpendingPage.fxml");
+    }
 }
