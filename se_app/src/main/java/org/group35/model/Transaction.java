@@ -43,6 +43,10 @@ public class Transaction {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -106,10 +110,4 @@ public class Transaction {
         this.recurrencePattern = recurrencePattern;
     }
 
-//    public BigDecimal getMonthlyBudget() {
-//        return monthlyBudget;
-//    }
-//    public void setMonthlyBudget(BigDecimal monthlyBudget) {
-//        this.monthlyBudget = monthlyBudget;
-//    }
 }
