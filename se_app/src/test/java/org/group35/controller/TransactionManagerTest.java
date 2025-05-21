@@ -1,9 +1,11 @@
 package org.group35.controller;
 
+import org.group35.config.Settings;
 import org.group35.model.Transaction;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.model.User;
+import org.group35.util.LogUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,6 +28,11 @@ class TransactionManagerTest {
 
     @BeforeEach
     void setUp() {
+        // Initialization
+        Settings settings = Settings.getInstance();
+        settings.setRelativePath("app_data_test");
+        PersistentDataManager.initialize(settings);
+
         // Ensure a clean persistent store
         PersistentDataManager.getStore().setTransactions(new java.util.ArrayList<>());
         PersistentDataManager.saveStore();
