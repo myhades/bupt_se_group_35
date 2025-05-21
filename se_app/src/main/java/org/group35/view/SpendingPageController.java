@@ -85,7 +85,7 @@ public class SpendingPageController {
                 .toLocalDate()
                 .format(DATE_FMT));
         dateLbl.getStyleClass().add("spending-date");
-        VBox info = new VBox(2, nameLbl, dateLbl);
+        VBox info = new VBox(0, nameLbl, dateLbl);
         HBox.setHgrow(info, Priority.ALWAYS);
 
         // Amount
