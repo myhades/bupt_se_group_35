@@ -49,11 +49,11 @@
             <version>20210307</version>
         </dependency>
 
-        <!-- Webcam support: webcam-capture -->
+        <!-- Webcam support: opencv -->
         <dependency>
-            <groupId>com.github.sarxos</groupId>
-            <artifactId>webcam-capture</artifactId>
-            <version>0.3.12</version>
+          <groupId>org.openpnp</groupId>
+          <artifactId>opencv</artifactId>
+          <version>4.9.0-0</version>
         </dependency>
 
         <!-- Image support: thumbnailator -->

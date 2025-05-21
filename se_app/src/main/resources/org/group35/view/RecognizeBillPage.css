@@ -1,108 +1,50 @@
-.header {
-    -fx-background-color: white;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+/* RecognizeBillPage.css */
+
+/* Main Container */
+.main-container{
+    -fx-padding: 20px 0 0 0;
+    -fx-vgrow: always;
 }
 
-.close-button {
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+}
+.title-back-button {
+    -fx-cursor: hand;
     -fx-background-color: transparent;
-    -fx-cursor: hand;
 }
-
-.close-button:hover {
-    -fx-background-color: #f0f0f0;
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
 }
-
-.small-button {
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
-}
-
-.small-button:hover {
-    -fx-background-color: #f0f0f0;
-}
-
-.content-area {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 1);
-    -fx-margin: 20;
-}
-
-.back-button {
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
-}
-
-.back-button:hover {
-    -fx-background-color: #f5f5f5;
-}
-
-.back-arrow {
-    -fx-font-size: 20;
-    -fx-text-fill: #333;
-}
-
-.page-title {
-    -fx-font-size: 36;
-    -fx-font-weight: bold;
-    -fx-text-fill: #000000;
-}
-
-.status-indicator {
-    -fx-font-size: 16;
-}
-
-.camera-container {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
-}
-
-.preview-image {
-    -fx-border-color: white;
-    -fx-border-width: 2;
-}
-
-.frame-placeholder {
-    -fx-border-color: white;
-    -fx-border-width: 2;
-    -fx-border-style: solid;
-}
-
-.placeholder-text {
-    -fx-font-size: 18px;
-    -fx-text-fill: #000000;
-    -fx-text-alignment: left;
-    -fx-padding: 10 0 0 100;
-    -fx-wrap-text: true; /* 添加此行 */
-}
-
-.primary-button {
-    -fx-background-color: #e74c3c;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 10 20;
-    -fx-cursor: hand;
-    -fx-background-radius: 5;
-}
-
-.primary-button:hover {
-    -fx-background-color: #c0392b;
-}
-
-.Dot {
+.title-dot {
     -fx-font-size: 20px;
-    -fx-text-fill: #8b4527;
+    -fx-text-fill: #80350E;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
 }
 
-.camera-icon-1 {
-    -fx-fill: #000000;
-    -fx-scale-x: 1.5;
-    -fx-scale-y: 1.5;
+/* Camera Preview */
+.preview-container {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 16px;
+    -fx-vgrow: always;
+    -fx-alignment: center;
 }
-
-.left-arrow-icon {
-    -fx-fill: #000000;
-    -fx-scale-x: 1.5;
-    -fx-scale-y: 1.5;
+.hint-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 15;
+}
+.camera-hint-icon{
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+}
+.camera-hint-text {
+    -fx-font-size: 20px;
+    -fx-line-spacing: -6px;
 }

@@ -63,7 +63,7 @@
     -fx-stroke: transparent;
 }
 #spendingChart .chart-series-line {
-    -fx-stroke: #2C6298;    /* your blue */
+    -fx-stroke: #2C6298;
     -fx-stroke-width: 2px;
 }
 #spendingChart .chart-line-symbol {
