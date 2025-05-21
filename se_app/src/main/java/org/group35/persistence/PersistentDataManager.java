@@ -36,11 +36,11 @@ public class PersistentDataManager {
     }
 
     /**
-     * Returns the persistent store from memory. If not yet loaded, loads it.
+     * Returns the persistent store from memory. If not yet loaded, load it.
      */
     public static PersistentStore getStore() {
         if (store == null) {
-            LogUtils.debug("Store is null, loading store");
+            LogUtils.debug("Persistent store is null, attempting to load store...");
             loadStore();
         }
         return store;

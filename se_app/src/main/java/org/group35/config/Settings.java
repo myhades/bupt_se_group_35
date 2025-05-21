@@ -96,6 +96,11 @@ public class Settings {
     public Integer getWindowHeight() { return windowHeight; }
     public void setWindowHeight(Integer windowHeight) { this.windowHeight = windowHeight; }
 
+    public void setRelativePath(String filePath) {
+        this.dataFilePath = System.getProperty("user.dir") + File.separator + filePath + File.separator + "data";
+        this.logFilePath = System.getProperty("user.dir") + File.separator + filePath + File.separator + "logs";
+    }
+
     /**
      * Loads the settings from the specified JSON file.
      * If the file does not exist or an error occurs, default settings are returned.
