@@ -1,5 +1,33 @@
 /* ManualEntryPage.css */
 
+/* Main Container */
+.main-container{
+    -fx-spacing: 20px;
+    -fx-padding: 20px 0 0 0;
+}
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: green;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
 /* TextField */
 .text-field {
     -fx-background-color: #a5a5a5;
@@ -13,12 +41,6 @@
     -fx-background-color: black;
     -fx-text-fill: white;
     -fx-font-size: 16px;
-    -fx-cursor: hand;
-}
-
-/* Back_Button */
-.Back_Button {
-    -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
@@ -63,17 +85,6 @@
     -fx-font-weight: bold;
 }
 
-.Dot {
-    -fx-font-size: 20px;
-    -fx-text-fill: green;
-}
-
-.ManualEntry_Character {
-    -fx-font-size: 36px;
-    -fx-font-weight: bold;
-    -fx-text-fill: black;
-}
-
 .micro-icon {
     -fx-fill: white;
 }
@@ -81,10 +92,4 @@
 .convert-icon {
     -fx-fill: white;
     -fx-scale: 0.9;
-}
-
-.left-arrow-icon {
-    -fx-fill: #000000;
-    -fx-scale-x: 1.5;
-    -fx-scale-y: 1.5;
 }
