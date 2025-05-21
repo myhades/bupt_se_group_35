@@ -1,16 +1,11 @@
 /* ManualEntryPage.css */
 
-VBox {
-    -fx-background-radius: 20px;
-}
-
 /* TextField */
 .text-field {
     -fx-background-color: #a5a5a5;
     -fx-text-fill: white;
     -fx-prompt-text-fill: white;
     -fx-font-size: 14px;
-    -fx-font-family: "Arial";
 }
 
 /* Handle_Button */
@@ -19,7 +14,6 @@ VBox {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-cursor: hand;
-    -fx-font-family: "Arial";
 }
 
 /* Back_Button */
@@ -30,11 +24,10 @@ VBox {
 
 /* Convert_Button */
 .Convert_Button {
-    -fx-background-color: #d2691e;
+    -fx-background-color: #C04F15;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-cursor: hand;
-    -fx-font-family: "Arial";
 }
 
 /* Micro_Button */
@@ -57,14 +50,12 @@ VBox {
     -fx-prompt-text-fill: white;
     -fx-font-size: 14px;
     -fx-padding: 0;
-    -fx-font-family: "Arial";
 }
 .text-area:focused {
     -fx-background-insets: 0;
     -fx-background-color: #a5a5a5;
     -fx-faint-focus-color: transparent;
     -fx-focus-color: transparent;
-    -fx-font-family: "Arial";
 }
 
 .AI_Rec_Character {
@@ -85,6 +76,11 @@ VBox {
 
 .micro-icon {
     -fx-fill: white;
+}
+
+.convert-icon {
+    -fx-fill: white;
+    -fx-scale: 0.9;
 }
 
 .left-arrow-icon {
