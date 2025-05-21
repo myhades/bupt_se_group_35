@@ -89,4 +89,15 @@ public class ImageUtils {
             return null;
         }
     }
+
+    /**
+     * Converts a JavaFX Image to raw bytes in the specified format (e.g., "png" or "jpg").
+     */
+    public static byte[] fxImageToBytes(Image fxImage, String format) throws IOException {
+        BufferedImage bImage = SwingFXUtils.fromFXImage(fxImage, null);
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(bImage, format, baos);
+            return baos.toByteArray();
+        }
+    }
 }

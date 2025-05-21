@@ -4,6 +4,7 @@
 .main-container{
     -fx-padding: 20px 0 0 0;
     -fx-vgrow: always;
+    -fx-spacing: 20px;
 }
 
 /* Title Row */
@@ -32,19 +33,27 @@
 .preview-container {
     -fx-background-color: white;
     -fx-background-radius: 20px;
-    -fx-padding: 16px;
+    -fx-pref-height: 320px;
     -fx-vgrow: always;
     -fx-alignment: center;
 }
 .hint-container{
+    -fx-spacing: 25px;
+    -fx-padding: 20px;
     -fx-alignment: center-left;
-    -fx-spacing: 15;
 }
 .camera-hint-icon{
     -fx-scale-x: 1.8;
     -fx-scale-y: 1.8;
+    -fx-translate-x: 40px
 }
 .camera-hint-text {
     -fx-font-size: 20px;
-    -fx-line-spacing: -6px;
+    -fx-line-spacing: -3px;
+    -fx-translate-x: 32px
+}
+.preview-stack {
+    -fx-alignment: center;
+    -fx-background-color: black;
+    -fx-cursor: hand;
 }
