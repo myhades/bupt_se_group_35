@@ -39,3 +39,4 @@ build/
 
 ## Application Runtime Data ##
 app_data/
+app_data_test/
