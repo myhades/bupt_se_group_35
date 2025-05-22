@@ -129,50 +129,51 @@ public class User {
      * Define a new category dynamically.
      *
      * @param name the name of the category (e.g., "Salary", "Rent")
-     * @return the newly created Category instance
+     * @return  whether new category is created or not
      */
-    public Category addCategory(String name) {
+    public Boolean addCategory(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Category name cannot be null or empty");
+            return false;
+//            throw new IllegalArgumentException("Category name cannot be null or empty");
         }
         if (categoryMap.containsKey(name)) {
-            throw new IllegalArgumentException("Category with name '" + name + "' already exists.");
+            return false;
+//            throw new IllegalArgumentException("Category with name '" + name + "' already exists.");
         }
         Category newCategory = new Category(name);
         categoryMap.put(name, newCategory);
-        return newCategory;
+        return true;
     }
 
-    /**
-     * Retrieve an existing category by its name.
-     *
-     * @param name the name of the category
-     * @return the corresponding Category instance
-     */
-    public Category getCategory(String name) {
-        Category category = categoryMap.get(name);
-        if (category == null) {
-            throw new IllegalArgumentException("No such category: " + name);
-        }
-        return category;
-    }
 
     /**
      * Get all defined categories.
      *
      * @return an unmodifiable collection of all categories
      */
-    public Collection<Category> getAllCategories() {
-        return Collections.unmodifiableCollection(categoryMap.values());
+    public Collection<String> getCategory() {
+
+        return Collections.unmodifiableCollection(categoryMap.keySet());
     }
 
     /**
      * Remove a category by name.
      *
      * @param name the name of the category to remove
+     * @return  whether target category is deleted or not
      */
-    public void removeCategory(String name) {
+    public boolean removeCategory(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+//            throw new IllegalArgumentException("Category name cannot be null or empty");
+        }
+        if (categoryMap.containsKey(name)) {
+            return false;
+//            throw new IllegalArgumentException("Category with name '" + name + "' already exists.");
+        }
         categoryMap.remove(name);
+        return true;
+//        return Collections.unmodifiableCollection(categoryMap.keySet());
     }
 
 }

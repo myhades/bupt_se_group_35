@@ -10,15 +10,24 @@ import org.group35.util.PasswordUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 /**
  * Manages user registration and login operations.
  * Data persistence is handled by PersistentDataManager.
  * Logging is added via LogUtils.
+ * <br><br>
+ * Usage Example:
+ * <br>
+ * {@code ApplicationRuntime runtime = ApplicationRuntime.getInstance();}
+ * <br>
+ * {@code UserManager uManager = runtime.getUserManager();}
+ * <br>
+ * {@code List<User> tx = uManager.getByUser(runtime.getCurrentUser().getUsername());}
+ * <br> or <br>
+ * {@code User user = UserManager.getCurrentUser();}
  */
 public class UserManager {
 
@@ -97,6 +106,20 @@ public class UserManager {
     public List<User> getUsers() {
         LogUtils.trace("Number of users retrieved from runtime store: " + (users != null ? users.size() : 0));
         return users;
+    }
+
+    /**
+     * Get the user by name from the runtime store.
+     */
+    public User getUser(String username) throws NoSuchElementException{
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(username)) {
+                LogUtils.debug("Get user: " + username);
+                return users.get(i);
+            }
+        }
+        LogUtils.warn("User not found: " + username);
+        throw new NoSuchElementException("User not found: " + username);
     }
 
     /**
@@ -228,6 +251,10 @@ public class UserManager {
         save();
     }
 
+    /**
+     * Get the budget for a specific user.
+     * @param username the user to update
+     */
     public BigDecimal getMonthlyBudget(String username) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
@@ -238,6 +265,9 @@ public class UserManager {
         return BigDecimal.ZERO;
     }
 
+    /**
+     * Get the budget for a specific user.
+     */
     public BigDecimal getMonthlyBudget() {
         User user = ApplicationRuntime.getInstance().getCurrentUser();
         return getMonthlyBudget(user.getUsername());
@@ -306,4 +336,98 @@ public class UserManager {
         User user = ApplicationRuntime.getInstance().getCurrentUser();
         return user.getTimezone();
     }
+
+    /**
+     * Get the categories for current user.
+     */
+    public Collection<String> getCategory() {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        return user.getCategory();
+    }
+
+    /**
+     * Get the categories for a specific user.
+     */
+    public Collection<String> getCategory(String username) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                LogUtils.info("Categories for user: " + username + " are " + u.getCategory());
+                return u.getCategory();
+            }
+        }
+        return Collections.emptyList(); //FIXME
+    }
+
+    /**
+     * Add new category for a specific user.
+     * @param username the user to update
+     * @param category the category to add
+     */
+    public boolean addCategory(String username, String category) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                if (! u.addCategory(category)) {
+                    LogUtils.error("Category " + category + " already exists for user: " + username);
+                    return false;
+                }
+                save();
+                LogUtils.info("Category " + category + " added for user: " + username);
+                return true;
+            }
+        }
+        LogUtils.error("User " + username + " does not exist.");
+        return false;
+    }
+
+    /**
+     * Add new category for current user.
+     * @param category the category to add
+     */
+    public boolean addCategory(String category) {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        if (! user.addCategory(category)){
+            LogUtils.error("Category " + category + " already exists for user: " + user.getUsername());
+            return false;
+        }
+        save();
+        LogUtils.info("Category " + category + " added for current user: " + user.getUsername());
+        return true;
+    }
+
+    /**
+     * remove a category for a specific user.
+     * @param username the user to update
+     * @param category the category to add
+     */
+    public boolean removeCategory(String username, String category) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                if (! u.removeCategory(category)) {
+                    LogUtils.error("Category " + category + " does not exist for user: " + username);
+                    return false;
+                }
+                save();
+                LogUtils.info("Category " + category + " removed for user: " + username);
+                return true;
+            }
+        }
+        LogUtils.error("User " + username + " does not exist.");
+        return false;
+    }
+
+    /**
+     * remove a category for current user.
+     * @param category the category to add
+     */
+    public boolean removeCategory(String category) {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        if (! user.removeCategory(category)) {
+            LogUtils.error("Category " + category + " does not exist for current user: " + user.getUsername());
+            return false;
+        }
+        save();
+        LogUtils.info("Category " + category + " removed for current user: " + user.getUsername());
+        return true;
+    }
+
 }
