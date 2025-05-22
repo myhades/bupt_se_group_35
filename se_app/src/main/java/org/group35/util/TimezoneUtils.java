@@ -4,11 +4,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import okhttp3.*;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class TimezoneUtil {
+public class TimezoneUtils {
 
     private static final String GEONAMES_SEARCH_URL = "http://api.geonames.org/searchJSON";
     private static final String GEONAMES_TIMEZONE_URL = "http://api.geonames.org/timezoneJSON";
@@ -79,6 +80,7 @@ public class TimezoneUtil {
                 LogUtils.warn("finding error:" + errorMsg);
                 throw new RuntimeException("fail to find TimeZone: " + errorMsg);
             }
+            LogUtils.info("timezoneid:" + jsonResponse.get("timezoneId").getAsString());
 
             return jsonResponse.get("timezoneId").getAsString();
         }
@@ -89,10 +91,15 @@ public class TimezoneUtil {
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         return zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
+    private static LocalDateTime getFormattedCurrentTimeByZone(String timeZoneId) {
+        ZoneId zoneId = ZoneId.of(timeZoneId);
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
+        return zonedDateTime.toLocalDateTime();
+    }
 
     public static void main(String[] args) {
         try {
-            String location = "Tokyo, Japan";
+            String location = "Tokyo";
             String localTime = getLocalTime(location); // example
             LogUtils.info("input:" + location);
             LogUtils.info(" 当前时间: " + localTime);

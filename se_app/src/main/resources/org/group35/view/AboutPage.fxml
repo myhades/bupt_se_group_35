@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ScrollPane?>
+
+<?import org.group35.view.components.NavBarController?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.group35.view.AboutPageController"
+            stylesheets="@AboutPage.css"
+            styleClass="root-container">
+
+    <top>
+        <VBox>
+            <!-- NavBar -->
+            <NavBarController activePage="MORE"/>
+        </VBox>
+    </top>
+
+    <!-- Main Content Area -->
+    <center>
+        <VBox styleClass="main-container" VBox.vgrow="ALWAYS">
+
+            <!-- Title Row -->
+            <HBox styleClass="title-container">
+                <Button styleClass="title-back-button" onAction="#goBack">
+                    <graphic>
+                        <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+                                 styleClass="title-back-icon"/>
+                    </graphic>
+                </Button>
+                <Label text="About" styleClass="title-text"/>
+                <Label text="●" styleClass="title-dot"/>
+            </HBox>
+
+            <!-- Info Area Container -->
+            <HBox spacing="50" alignment="CENTER" VBox.vgrow="ALWAYS">
+                <!-- Left Side: Software Info -->
+                <VBox styleClass="info-content-container" HBox.hgrow="ALWAYS">
+                    <Label text="Software Information" styleClass="section-title"/>
+                    <ScrollPane styleClass="info-scrollpane" fitToWidth="true">
+                        <VBox fx:id="softwareInfoVBox" styleClass="info-text-container" spacing="15">
+                            <Label text="Application Version" styleClass="info-subtitle"/>
+                            <Label text="Financial Planner v1.0.0" styleClass="info-text"/>
+
+                            <Label text="Development Team" styleClass="info-subtitle"/>
+                            <Label text="Group 35 - Software Engineering Practice" styleClass="info-text"/>
+
+                            <Label text="Development Framework" styleClass="info-subtitle"/>
+                            <Label text="JavaFX 17 - Modern Java Application UI Framework" styleClass="info-text"/>
+
+                            <Label text="Data Storage" styleClass="info-subtitle"/>
+                            <Label text="This application uses local JSON format to store data, ensuring your financial data is secure and easily accessible. All data is stored on your device and is not uploaded to any servers." styleClass="info-text" wrapText="true"/>
+
+                            <Label text="Key Features" styleClass="info-subtitle"/>
+                            <VBox spacing="5" styleClass="feature-list">
+                                <Label text="• Personal budget management and tracking" styleClass="info-text"/>
+                                <Label text="• Expense analysis and visualization" styleClass="info-text"/>
+                                <Label text="• AI-assisted budget recommendations" styleClass="info-text"/>
+                                <Label text="• Localized currency and timezone support" styleClass="info-text"/>
+                                <Label text="• Private and secure financial planning tools" styleClass="info-text"/>
+                            </VBox>
+
+                            <Label text="Contact Us" styleClass="info-subtitle"/>
+                            <Label text="If you have any questions or suggestions, please contact us at: Email: support@group35.org Project Home: github.com/group35/financial-planner" styleClass="info-text" wrapText="true"/>
+
+                            <Label text="System Requirements" styleClass="info-subtitle"/>
+                            <VBox spacing="5" styleClass="feature-list">
+                                <Label text="• Java 17 or higher" styleClass="info-text"/>
+                                <Label text="• Windows/macOS/Linux" styleClass="info-text"/>
+                                <Label text="• Minimum screen resolution: 1280x720" styleClass="info-text"/>
+                                <Label text="• Memory: 512MB RAM" styleClass="info-text"/>
+                                <Label text="• Storage: 100MB" styleClass="info-text"/>
+                            </VBox>
+
+                            <Label text="Acknowledgements" styleClass="info-subtitle"/>
+                            <Label text="Special thanks to all users who participated in testing and feedback. Your valuable opinions help us continuously improve our product." styleClass="info-text" wrapText="true"/>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Right Side: Privacy Policy -->
+                <VBox styleClass="info-content-container">
+                    <Label text="Privacy Policy" styleClass="section-title"/>
+                    <ScrollPane styleClass="info-scrollpane" fitToWidth="true">
+                        <VBox fx:id="privacyPolicyVBox" styleClass="info-text-container" spacing="15">
+                            <Label text="Introduction" styleClass="info-subtitle"/>
+                            <Label text="Financial Planner application values your privacy. This Privacy Policy explains how we collect, use, and protect your personal information. By using this application, you agree to the terms of this Privacy Policy." styleClass="info-text" wrapText="true"/>
+
+                            <Label text="Data Collection" styleClass="info-subtitle"/>
+                            <Label text="This application only collects and stores the following information on your local device:" styleClass="info-text" wrapText="true"/>
+                            <VBox spacing="5" styleClass="feature-list">
+                                <Label text="• Personal profile information provided by users" styleClass="info-text"/>
+                                <Label text="• Budget and expense data" styleClass="info-text"/>
+                                <Label text="• Application settings and preferences" styleClass="info-text"/>
+                            </VBox>
+
+                            <Label text="Data Usage" styleClass="info-subtitle"/>
+                            <Label text="We use collected data only for:" styleClass="info-text" wrapText="true"/>
+                            <VBox spacing="5" styleClass="feature-list">
+                                <Label text="• Providing personalized budget recommendations" styleClass="info-text"/>
+                                <Label text="• Generating expense analysis charts" styleClass="info-text"/>
+                                <Label text="• Improving user experience" styleClass="info-text"/>
+                                <Label text="• Localization settings (such as currency, timezone)" styleClass="info-text"/>
+                            </VBox>
+
+                            <Label text="Data Security" styleClass="info-subtitle"/>
+                            <Label text="Your data is stored only on your local device. We do not upload your financial data to any servers or share it with third parties. This application does not require an internet connection to function normally, ensuring the privacy of your financial information." styleClass="info-text" wrapText="true"/>
+
+                            <Label text="Third-Party Services" styleClass="info-subtitle"/>
+                            <Label text="This application may include integration with currency exchange rate APIs. When you use these features, network requests may occur, but your personal financial data is not transmitted." styleClass="info-text" wrapText="true"/>
+
+                            <Label text="User Rights" styleClass="info-subtitle"/>
+                            <Label text="As a user, you have the right to:" styleClass="info-text" wrapText="true"/>
+                            <VBox spacing="5" styleClass="feature-list">
+                                <Label text="• Delete your data at any time" styleClass="info-text"/>
+                                <Label text="• Export your data" styleClass="info-text"/>
+                                <Label text="• Change or update your information" styleClass="info-text"/>
+                                <Label text="• Decline the use of personalized features" styleClass="info-text"/>
+                            </VBox>
+
+                            <Label text="Last Updated: March 18, 2025" styleClass="update-date"/>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
