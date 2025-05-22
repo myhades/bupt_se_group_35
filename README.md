@@ -100,7 +100,7 @@ All development is done on separate branches based on `main`. Branch naming conv
 Supported categories are the same with commit types. Example branch names:
 
 ```bash
-feature/logger-integration
+feat/logger-integration
 fix/login-validation
 ```
 
