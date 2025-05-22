@@ -2,43 +2,65 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Pos?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.shape.SVGPath?>
-
 <?import javafx.scene.text.Text?>
+
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.group35.view.AIDialogController"
             stylesheets="@AIDialog.css"
-            styleClass="dialog-container"
-            prefWidth="350" prefHeight="220">
-    <!-- Title -->
-    <Label text="AI Suggestions for Budget" styleClass="title-label"
-           AnchorPane.topAnchor="14" AnchorPane.leftAnchor="55"/>
-    <SVGPath content="M11,3L12,2L13,3V5H20A1,1 0 0,1 21,6V16A1,1 0 0,1 20,17H13V20A2,2 0 0,1 15,22H9A2,2 0 0,1 11,20V17H4A1,1 0 0,1 3,16V6A1,1 0 0,1 4,5H11V3M6,8V10H18V8H6M6,12V14H13V12H6Z"
-             styleClass="local-icon" AnchorPane.topAnchor="18" AnchorPane.leftAnchor="25">
-    </SVGPath>
-    <!-- Background -->
-    <VBox alignment="TOP_LEFT" spacing="15" styleClass="card"
-          AnchorPane.topAnchor="50" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+            styleClass="ai-overlay-panel"
+            prefWidth="490"
+            prefHeight="210">
 
-        <!-- Scrollable Text -->
+    <!-- Header with title and back button - 完全照搬Recommendation的结构 -->
+    <HBox alignment="CENTER_RIGHT" spacing="80"
+          AnchorPane.topAnchor="10" AnchorPane.leftAnchor="12" AnchorPane.rightAnchor="10">
+
+        <!-- Title Section -->
+        <HBox alignment="CENTER_LEFT" spacing="12" HBox.hgrow="ALWAYS">
+            <Label text="🤖 AI Budget Suggestions" styleClass="title-label"/>
+
+            <!-- Back Button - 移到外层，独立放置 -->
+            <Button styleClass="title-back-button" onAction="#handleBack">
+                <graphic>
+                    <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+                             styleClass="title-back-icon"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </HBox>
+
+    <!-- Main Content Card -->
+    <VBox alignment="TOP_LEFT" spacing="10" styleClass="card"
+          AnchorPane.topAnchor="50" AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="5">
+
+        <!-- Scrollable Text Content -->
         <ScrollPane fx:id="suggestionScrollPane"
                     fitToWidth="true"
                     hbarPolicy="NEVER"
                     vbarPolicy="AS_NEEDED"
-                    prefHeight="170"
-                    styleClass="scroll-pane">
+                    VBox.vgrow="ALWAYS"
+                    styleClass="scroll-pane"
+                    prefWidth="450">
             <VBox alignment="TOP_LEFT" spacing="10">
-                <Text fx:id="suggestionText" wrappingWidth="280" styleClass="suggestion-text"/>
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Text fx:id="suggestionText"
+                      wrappingWidth="420"
+                      styleClass="suggestion-text"
+                      text="Loading AI suggestions..."/>
             </VBox>
         </ScrollPane>
 
-
-        <!-- Apply Button -->
-        <HBox alignment="BOTTOM_RIGHT">
-            <Button text="Apply" onAction="#handleApply" styleClass="dialog-button" />
+        <!-- Button Section -->
+        <HBox alignment="CENTER_RIGHT" spacing="15">
+            <padding>
+                <Insets top="10" right="0" bottom="5" left="0"/>
+            </padding>
         </HBox>
     </VBox>
 </AnchorPane>
