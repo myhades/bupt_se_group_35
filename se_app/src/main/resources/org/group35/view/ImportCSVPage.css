@@ -1,0 +1,214 @@
+/* SpendingPage.css */
+
+/* New Entry Container */
+.new-entry-container {
+    -fx-alignment: center-left;
+    -fx-spacing: 16px;
+    -fx-padding: 40px 0 20px 6px;
+}
+
+/* Section Title */
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-padding: 0 0 0 5;
+}
+
+/* New Entry Label */
+.new-entry-label {
+    -fx-font-size: 24px;
+    -fx-font-family: 'Articulat CF Bold';
+    -fx-text-fill: #000000;
+}
+
+/* Content Container */
+.content-container {
+    -fx-spacing: 20px;
+}
+
+/* Spending List Container */
+.spending-list-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-min-width: 450px;
+    -fx-max-width: 600px;
+}
+.content-container > .spending-list-container {
+    -fx-hgrow: always;
+}
+
+/* Spending List */
+.spending-list {
+    -fx-spacing: 5px;
+}
+
+/* Spending Item */
+.spending-item {
+    -fx-padding: 5px 5px;
+    -fx-spacing: 20px;
+    -fx-background-color: transparent;
+    -fx-min-height: 50px;
+    -fx-max-height: 70px;
+}
+
+/* Spending Text */
+.spending-name {
+    -fx-font-size: 18px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+}
+.spending-date {
+    -fx-font-size: 16px;
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-text-fill: #666666;
+}
+.spending-amount {
+    -fx-font-size: 24px;
+    -fx-font-family: 'Articulat CF Normal';
+}
+
+/* Icon Styles */
+.icon-circle {
+    /* fill set in code */
+}
+.icon-letter {
+    -fx-font-size: 18px;
+    -fx-font-family: 'Articulat CF Bold';
+    -fx-text-fill: white;
+}
+
+/* Button Styles */
+.add-button {
+    -fx-text-fill: white;
+    -fx-padding: 6px 16px;
+    -fx-font-size: 16px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 8px;
+}
+.add-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-opacity: 0.6;
+}
+.add-manual {
+    -fx-background-color: #3B7D23;
+}
+.add-manual:hover {
+    -fx-background-color: derive(#3B7D23, 25%);
+}
+.add-bill {
+    -fx-background-color: #8B4513;
+}
+.add-bill:hover {
+    -fx-background-color: derive(#8B4513, 25%);
+}
+.add-import {
+    -fx-background-color: #215F9A;
+}
+.add-import:hover {
+    -fx-background-color: derive(#215F9A, 25%);
+}
+.add-icon, .camera-icon, .import-icon {
+    -fx-fill: white;
+}
+
+/* Info Container */
+.info-container {
+    -fx-padding: 15px;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-spacing: 15px;
+    -fx-min-width: 300px;
+    -fx-max-width: 350px;
+}
+
+/* Budget Section */
+.budget-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-spacing: 8px;
+    -fx-alignment: center-left;
+}
+.budget-info {
+    -fx-spacing: 5px;
+    -fx-padding: 0 5px;
+    -fx-alignment: baseline-left;
+}
+.budget-amount {
+    -fx-font-size: 24px;
+    -fx-font-family: 'Articulat CF Bold';
+    -fx-text-fill: #4CAF50;
+}
+.budget-left-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}
+.budget-progress {
+    -fx-pref-height: 5px;
+    -fx-accent: #4CAF50;
+    -fx-control-inner-background: #e0e0e0;
+    -fx-background-insets: 0;
+    -fx-padding: 0 5px;
+}
+
+/* Divider */
+.divider {
+    -fx-padding: 5px 0;
+}
+
+/* AI Section */
+.ai-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-alignment: top-left;
+    -fx-spacing: 12px;
+}
+.ai-summary {
+    -fx-padding: 0 5px;
+    -fx-font-size: 18px;
+    -fx-text-fill: #0D3512;
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-wrap-text: true;
+}
+
+/* ScrollPane Styling */
+.spending-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-min-width: 450px;
+    -fx-max-width: 600px;
+    -fx-min-height: 200px;
+    -fx-pref-height: -1;
+    -fx-max-height: infinity;
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+    -fx-pannable: true;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: as-needed;
+}
+.spending-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+.spending-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5px;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+    -fx-background-color: #888888;
+}
+.spending-scrollpane > .scroll-bar > .increment-button,
+.spending-scrollpane > .scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}

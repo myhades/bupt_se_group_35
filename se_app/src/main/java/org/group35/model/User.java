@@ -1,6 +1,7 @@
 package org.group35.model;
 
 import com.google.gson.annotations.SerializedName;
+import org.group35.util.TimezoneUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -68,6 +69,8 @@ public class User {
         this.hashedPassword = hashedPassword;
         this.avatar = null;
         this.monthlyBudget = BigDecimal.ZERO;
+        this.location = "China, Shanghai";
+//        this.timezone = TimezoneUtil.getTimeZoneId();
         //TODO: add default location and timezone
 
         // Initialize default categories
