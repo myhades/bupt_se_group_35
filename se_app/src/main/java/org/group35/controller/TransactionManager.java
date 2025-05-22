@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 /**
  * Manages loading, saving, and querying financial transactions.
@@ -67,6 +68,7 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /** Returns transactions within the given timestamp range. bigger or equal, smaller or equal */
     public List<Transaction> getByTimestampRange(LocalDateTime start, LocalDateTime end) {
         LogUtils.trace("Filtering transactions by timestamp range: " + start + " - " + end);
         if (start != null && end != null && start.isAfter(end)) {
@@ -86,6 +88,34 @@ public class TransactionManager {
                         return true;
                     }
                 })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * sort by amount
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByAmount(boolean ascending) {
+        Comparator<Transaction> comparator = Comparator.comparing(Transaction::getAmount);
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+        return transactions.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * sort by timestamp
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByTimestamp(boolean ascending) {
+        Comparator<Transaction> comparator = Comparator.comparing(Transaction::getTimestamp);
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+        return transactions.stream()
+                .sorted(comparator)
                 .collect(Collectors.toList());
     }
 

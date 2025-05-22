@@ -158,7 +158,35 @@ class TransactionManagerTest {
         List<Transaction> ByTimestampRange = txManager.getByTimestampRange(start, end);
 
         assertEquals(3, ByTimestampRange.size());
-        assertEquals(new BigDecimal("-150.00"), ByTimestampRange.get(0).getAmount());
+        assertEquals(new BigDecimal("100.00"), ByTimestampRange.get(0).getAmount());
+    }
+
+    @Test
+    void sortByAmount_Ascending() {
+        List<Transaction> sorted = txManager.sortByAmount(true);
+        assertEquals(new BigDecimal("-150.00"), sorted.get(0).getAmount()); // biggest
+        assertEquals(new BigDecimal("200.00"), sorted.get(3).getAmount()); // smallest
+    }
+
+    @Test
+    void sortByAmount_Descending() {
+        List<Transaction> sorted = txManager.sortByAmount(false);
+        assertEquals(new BigDecimal("200.00"), sorted.get(0).getAmount()); // biggest
+        assertEquals(new BigDecimal("-150.00"), sorted.get(3).getAmount()); // smallest
+    }
+
+    @Test
+    void sortByTimestamp_Ascending() {
+        List<Transaction> sorted = txManager.sortByTimestamp(true);
+        assertEquals(LocalDateTime.of(2025, 5, 20, 10, 0), sorted.get(0).getTimestamp()); // earliest
+        assertEquals(LocalDateTime.of(2025, 5, 22, 14, 0), sorted.get(3).getTimestamp()); // latest
+    }
+
+    @Test
+    void sortByTimestamp_Descending() {
+        List<Transaction> sorted = txManager.sortByTimestamp(false);
+        assertEquals(LocalDateTime.of(2025, 5, 22, 14, 0), sorted.get(0).getTimestamp()); // lastest
+        assertEquals(LocalDateTime.of(2025, 5, 20, 10, 0), sorted.get(3).getTimestamp()); // earliest
     }
 
     @Test
