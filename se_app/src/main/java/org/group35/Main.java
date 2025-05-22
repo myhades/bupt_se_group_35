@@ -42,6 +42,7 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         PersistentDataManager.saveStore();
+        ApplicationRuntime.getInstance().shutdown();
         super.stop();
     }
 }

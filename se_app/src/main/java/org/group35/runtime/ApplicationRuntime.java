@@ -1,8 +1,8 @@
 package org.group35.runtime;
 
 import org.group35.controller.TransactionManager;
-import org.group35.model.User;
 import org.group35.controller.UserManager;
+import org.group35.model.User;
 import org.group35.util.CameraUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.SceneManager;
@@ -143,6 +143,13 @@ public final class ApplicationRuntime {
      * @param status the new program status.
      */
     public void setProgramStatus(ProgramStatus status) {
+        if (this.programStatus == status)
+            return;
+        if (this.programStatus == ProgramStatus.RECOGNIZE_BILL) {
+            LogUtils.debug("Leaving bill recognition page, shutting down camera...");
+            cameraService.shutdown();
+        }
+
         this.programStatus = status;
         LogUtils.debug("ProgramStatus changed to: " + status);
         switch (status) {
@@ -153,19 +160,18 @@ public final class ApplicationRuntime {
             case MORE:           SceneManager.showMorePage(); break;
             case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
             case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
-            case EDIT_BUDGET: SceneManager.showEditBudgetPage(); break;
-            case AI_SUGGESTION: SceneManager.showAISuggestionPage(); break;
+            case EDIT_BUDGET:    SceneManager.showEditBudgetPage(); break;
+            case AI_SUGGESTION:  SceneManager.showAISuggestionPage(); break;
             case RECOMMENDATION: SceneManager.showRecommendationPage(); break;
             default:             LogUtils.warn("Unhandled ProgramStatus: " + status); break;
         }
     }
 
     /**
-     * Call this when your application is closing (e.g. in JavaFX Application.stop())
-     * to ensure all services are cleanly shut down.
+     * Clean up method.
      */
     public void shutdown() {
-        LogUtils.debug("ApplicationRuntime shutdown. Cleaning up services");
+        LogUtils.debug("ApplicationRuntime is being shut down, doing some clean up...");
         cameraService.shutdown();
     }
 }
