@@ -47,41 +47,26 @@ public class SceneManager {
         }
     }
 
-    /**
-     * Convenience method for showing the login page.
-     */
     public static void showLoginPage() {
         LogUtils.debug("Switching to LoginPage.fxml");
         switchScene("/org/group35/view/LoginPage.fxml");
     }
 
-    /**
-     * Convenience method for showing the home page.
-     */
     public static void showHomePage() {
         LogUtils.debug("Switching to HomePage.fxml");
         switchScene("/org/group35/view/HomePage.fxml");
     }
 
-    /**
-     * Convenience method for showing the plan page.
-     */
     public static void showPlanPage() {
         LogUtils.debug("Switching to PlanPage.fxml");
         switchScene("/org/group35/view/PlanPage.fxml");
     }
 
-    /**
-     * Convenience method for showing the more page.
-     */
     public static void showMorePage() {
         LogUtils.debug("Switching to MorePage.fxml");
         switchScene("/org/group35/view/MorePage.fxml");
     }
 
-    /**
-     * Convenience method for showing the bill recognition page.
-     */
     public static void showRecognizeBillPage() {
         LogUtils.debug("Switching to RecognizeBillPage.fxml");
         switchScene("/org/group35/view/RecognizeBillPage.fxml");
@@ -92,33 +77,26 @@ public class SceneManager {
         switchScene("/org/group35/view/ManualEntryPage.fxml");
     }
 
-    /**
-     * Convenience method for showing the spending page.
-     */
+    public static void showConfirmEntryPage() {
+        LogUtils.debug("Switching to ConfirmEntryPage.fxml");
+        switchScene("/org/group35/view/ConfirmEntryPage.fxml");
+    }
+
     public static void showSpendingPage() {
         LogUtils.debug("Switching to SpendingPage.fxml");
         switchScene("/org/group35/view/SpendingPage.fxml");
     }
 
-    /**
-     * Convenience method for showing the edit_budget page.
-     */
     public static void showEditBudgetPage() {
         LogUtils.debug("Switching to EditBudgetPage.fxml");
         switchScene("/org/group35/view/SpendingPage.fxml");
     }
 
-    /**
-     * Convenience method for showing the AI suggestion page.
-     */
     public static void showAISuggestionPage() {
         LogUtils.debug("Switching to AISuggestionPage.fxml");
         switchScene("/org/group35/view/SpendingPage.fxml");
     }
 
-    /**
-     * Convenience method for showing the AI suggestion page.
-     */
     public static void showRecommendationPage() {
         LogUtils.debug("Switching to RecommendationPage.fxml");
         switchScene("/org/group35/view/SpendingPage.fxml");
