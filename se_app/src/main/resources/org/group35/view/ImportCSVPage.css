@@ -14,6 +14,31 @@
     -fx-padding: 0 0 0 5;
 }
 
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: green;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
+
+
 /* New Entry Label */
 .new-entry-label {
     -fx-font-size: 24px;

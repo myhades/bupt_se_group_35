@@ -112,6 +112,7 @@ public class ManualEntryPageController {
         alert.showAndWait();
     }
 
+    @FXML
     public void gotoSpending(ActionEvent actionEvent) {
         ApplicationRuntime.getInstance().navigateTo(ProgramStatus.SPENDING);
     }
