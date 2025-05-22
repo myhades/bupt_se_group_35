@@ -7,6 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
@@ -16,12 +19,15 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import org.group35.runtime.ApplicationRuntime;
 import javafx.scene.Node;
+import javafx.stage.StageStyle;
+import javafx.scene.paint.Color;
+import javafx.geometry.Bounds;
 
 public class PlanPageController {
     @FXML
     private Button recommendationButton;
     @FXML
-    private PieChart budgetPieChart;
+    public PieChart budgetPieChart;
     @FXML
     private Button editBudgetButton;
     @FXML
@@ -135,11 +141,17 @@ public class PlanPageController {
 
     @FXML
     private void gotoRecommendation(ActionEvent event) {
-        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.RECOMMENDATION);
+        // 原有的导航逻辑（如果需要保留的话）
+        // ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.RECOMMENDATION);
+
+        // 新增：显示推荐覆盖层
+        System.out.println("Recommendation button clicked");
+        RecommendationDialogController.showRecommendationOverlay(this);
     }
     @FXML
     private void gotoAISuggestion(ActionEvent event) {
-        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.AI_SUGGESTION);
+        System.out.println("AI Suggestion button clicked");
+        AIDialogController.showAISuggestionOverlay(this);
     }
 
     /**
@@ -246,22 +258,53 @@ public class PlanPageController {
 
     private void showAIDialog() {
         try {
+            System.out.println("Loading AI Suggestion overlay...");
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/group35/view/AIDialog.fxml"));
             Parent dialogRoot = loader.load();
 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("AI Suggestions");
-            dialogStage.getIcons().add(new Image(getClass().getResourceAsStream("/org/group35/util/assets/monora_icon.png")));
-            dialogStage.initModality(Modality.APPLICATION_MODAL);
-            dialogStage.setResizable(false);
-            dialogStage.setScene(new Scene(dialogRoot));
+            dialogStage.setTitle("AI Budget Suggestions");
 
+            // 设置为无装饰窗口
+            dialogStage.initStyle(StageStyle.UNDECORATED);
+            dialogStage.initModality(Modality.NONE);
+            dialogStage.setAlwaysOnTop(true);
+            dialogStage.setResizable(false);
+
+            // 创建场景
+            Scene scene = new Scene(dialogRoot);
+            scene.setFill(Color.TRANSPARENT);
+            dialogStage.setScene(scene);
+
+            // 获取AI控制器并设置
             AIDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
+            controller.setPlanPageController(this);
 
-            dialogStage.showAndWait();
+            // 简单的位置设置 - 获取当前窗口位置
+            try {
+                Stage currentStage = (Stage) budgetPieChart.getScene().getWindow();
+                double currentX = currentStage.getX();
+                double currentY = currentStage.getY();
+
+                // 设置弹窗位置在饼状图区域
+                dialogStage.setX(currentX + 80); // 向右偏移150像素
+                dialogStage.setY(currentY + 262); // 向下偏移
+            } catch (Exception e) {
+                System.out.println("Could not calculate precise position, using default");
+                dialogStage.centerOnScreen();
+            }
+
+            System.out.println("Showing AI overlay");
+            dialogStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Failed to load AI suggestion overlay: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Unexpected error while showing AI suggestion: " + e.getMessage());
         }
     }
 }
