@@ -1,7 +1,6 @@
 package org.group35.model;
 
 import com.google.gson.annotations.SerializedName;
-import org.group35.util.TimezoneUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -74,15 +73,15 @@ public class User {
         //TODO: add default location and timezone
 
         // Initialize default categories
-        defineCategory("Entertainment");
-        defineCategory("Cater");
-        defineCategory("Education");
-        defineCategory("Shopping");
-        defineCategory("Rent");
-        defineCategory("Transportation");
-        defineCategory("Salary");
-        defineCategory("Transfer");
-        defineCategory("Investment");
+        addCategory("Entertainment");
+        addCategory("Cater");
+        addCategory("Education");
+        addCategory("Shopping");
+        addCategory("Rent");
+        addCategory("Transportation");
+        addCategory("Salary");
+        addCategory("Transfer");
+        addCategory("Investment");
     }
 
     public String getUsername() {
@@ -132,7 +131,7 @@ public class User {
      * @param name the name of the category (e.g., "Salary", "Rent")
      * @return the newly created Category instance
      */
-    public Category defineCategory(String name) {
+    public Category addCategory(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Category name cannot be null or empty");
         }
