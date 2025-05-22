@@ -12,6 +12,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.scene.control.TextArea?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.PlanPageController"
       stylesheets="@PlanPage.css"
@@ -88,44 +89,14 @@
 
         <!-- Right: Recommendation and Local Info -->
         <VBox styleClass="chart-container" spacing="10" GridPane.columnIndex="1">
-            <Label text="Recommendation" styleClass="chart-title" graphicTextGap="10"/>
-            <!-- Button with adjusted text wrapping and position -->
-            <Button fx:id="recommendationButton"
-                    wrapText="true"
-                    maxWidth="320"
-                    text="Tap to get recommendations on restaurants, coupon sites and more."
-                    styleClass="recommendation-button"
-                    onAction="#gotoRecommendation"
-                    graphicTextGap="20">
-                <graphic>
-                    <HBox alignment="CENTER">
-                        <SVGPath content="M12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5M12,2A7,7 0 0,1 19,9C19,14.25 12,22 12,22C12,22 5,14.25 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9C7,10 7,12 12,18.71C17,12 17,10 17,9A5,5 0 0,0 12,4Z"
-                                 styleClass="Here-icon"/>
-                    </HBox>
-                </graphic>
-            </Button>
-
-            <Label text="Local" styleClass="chart-title" style="-fx-padding: 15 0 0 0;"/>
-
-            <GridPane hgap="25" vgap="8">
-                <columnConstraints>
-                    <ColumnConstraints prefWidth="95"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
-
-                <Label text="Time Zone" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label text="Asia/Shanghai" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
-
-                <Label text="Currency" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <Label text="RMB/Yuan" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
-
-                <Label text="Ratio" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <Label text="7.29 per USD" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
-            </GridPane>
-
-            <HBox alignment="CENTER_RIGHT">
-                <Label text="Last updated: 2025/3/18 21:14" styleClass="update-label" style="-fx-padding: 10 0 0 0;"/>
-            </HBox>
+            <Label text="AI Recommendation" styleClass="chart-title"/>
+            <TextArea fx:id="aiRecommendationTextArea"
+                      prefWidth="100"
+                      prefHeight="300"
+                      wrapText="true"
+                      editable="false"
+                      styleClass="recommendation-textarea"
+                      promptText="AI-generated recommendations will appear here..."/>
         </VBox>
 
     </GridPane>

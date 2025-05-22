@@ -30,6 +30,8 @@ public class PlanPageController {
     private Label usedAmountLabel;
     @FXML
     private Label usedPercentLabel;
+    @FXML
+    private TextArea aiSuggestionTextArea;
 
     public void initialize() {
         try {
@@ -46,6 +48,9 @@ public class PlanPageController {
             System.err.println("Error in PlanPageController.initialize(): " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    public void setAISuggestion(String suggestion) {
+        aiSuggestionTextArea.setText(suggestion);
     }
 
     private void loadBudgetData() {

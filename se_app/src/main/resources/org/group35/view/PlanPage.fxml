@@ -95,7 +95,7 @@
                     prefWidth="-1"
                     maxWidth="Infinity"
                     prefHeight="-1"
-                    minHeight="80"
+                    minHeight="60"
                     text="Tap to get recommendations on restaurants, coupon sites and more."
                     styleClass="recommendation-button"
                     onAction="#gotoRecommendation"
