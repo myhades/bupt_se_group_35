@@ -31,15 +31,17 @@ class UserManagerTest {
         // Ensure a clean persistent store
         PersistentDataManager.getStore().setUsers(new ArrayList<>());
         PersistentDataManager.saveStore();
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
 
         // Initialize UserManager
         UserManager uManager = new UserManager();
-        UserManager.registerUser("TestUser", "abcd1234");
+        // runtime.getUserManager().registerUser //TODO: used in production code
+        uManager.registerUser("TestUser", "abcd1234");
 
         // Set current user in runtime
-        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+
         User testUser = uManager.getByUser("TestUser").get(0);
-        UserManager.setMonthlyBudget("TestUser", BigDecimal.valueOf(100));
+        uManager.setMonthlyBudget("TestUser", BigDecimal.valueOf(100));
         runtime.setCurrentUser(testUser);
 
 

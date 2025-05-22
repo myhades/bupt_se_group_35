@@ -16,6 +16,8 @@ import java.util.Comparator;
 
 /**
  * Manages loading, saving, and querying financial transactions.
+ *
+ *
  */
 public class TransactionManager {
     private List<Transaction> transactions;
@@ -32,11 +34,24 @@ public class TransactionManager {
         }
     }
 
-    /** Returns all transactions. */
-    public List<Transaction> getAll() {
+    /**
+     * Get the list of transactions from the runtime store.
+     */
+    public List<Transaction> getTransactions() {
         LogUtils.trace("Retrieving all transactions, count: " + transactions.size());
-        return new ArrayList<>(transactions);
+//        return new ArrayList<>(transactions); //TODO: return copy maybe safer?
+        return transactions;
     }
+
+    /**
+     * Get the list of transactions from the persistent store.
+     */
+    public List<Transaction> getPersistentTxs() {
+        List<Transaction> transactions = PersistentDataManager.getStore().getTransactions();
+        LogUtils.trace("Retrieving all transactions, count: " + (transactions != null ? transactions.size() : 0));
+        return transactions;
+    }
+
 
     /** Returns transactions for a given user. */
     public List<Transaction> getByUser(String username) {
@@ -174,6 +189,7 @@ public class TransactionManager {
             tx.setUsername(currentUser);
             add(tx);
         }
+        save();
     }
 
     /** Save the current transaction list back to the persistent store. */
@@ -204,6 +220,7 @@ public class TransactionManager {
         } else {
             LogUtils.warn("Transaction not found: " + id);
         }
+        save();
     }
 
     /** Sets the name of the transaction with the given ID. */
@@ -216,6 +233,7 @@ public class TransactionManager {
         } else {
             LogUtils.warn("Transaction not found: " + id);
         }
+        save();
     }
 
     /** Sets the timestamp of the transaction with the given ID. */

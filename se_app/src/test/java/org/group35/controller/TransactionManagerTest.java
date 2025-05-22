@@ -44,6 +44,7 @@ class TransactionManagerTest {
         runtime.setCurrentUser(testUser);
 
         // Initialize TransactionManager
+//        txManager = runtime.getTranscationManager(); //TODO: used in production code
         txManager = new TransactionManager();
         // Add some transactions to the store for testing
         Transaction tx1 = new Transaction();
@@ -89,7 +90,7 @@ class TransactionManagerTest {
         txManager.importFromCsv(csvFile.toString());
 
         // Verify transactions were added
-        List<Transaction> all = txManager.getAll();
+        List<Transaction> all = txManager.getTransactions();
         assertEquals(6, all.size(), "Should import two transactions");
 
         Transaction first = all.get(4);
@@ -107,7 +108,7 @@ class TransactionManagerTest {
 
     @Test
     void getAll() {
-        List<Transaction> all = txManager.getAll();
+        List<Transaction> all = txManager.getTransactions();
         assertEquals(4, all.size(), "Should exist 4 transaction by now");
     }
 
@@ -146,7 +147,7 @@ class TransactionManagerTest {
         tx.setAmount(new BigDecimal("50.00"));
         txManager.add(tx);
 
-        List<Transaction> all = txManager.getAll();
+        List<Transaction> all = txManager.getTransactions();
         assertEquals(5, all.size(), "Should add a new transaction");
         assertEquals("TestTransaction7", all.get(4).getName());
     }
@@ -234,7 +235,7 @@ class TransactionManagerTest {
         // Invoke delete() and verify
         txManager.delete(targetid);
 
-        List<Transaction> all = txManager.getAll();
+        List<Transaction> all = txManager.getTransactions();
         assertEquals(3, all.size(), "Should leave 3 transaction");
     }
 
@@ -257,7 +258,7 @@ class TransactionManagerTest {
     @Test
     void setTxManager() {
         // 获取已有交易
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
 
         Transaction tx = transactions.get(0);
         String originalUsername = tx.getUsername();
@@ -274,7 +275,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxName() {
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
         assertFalse(transactions.isEmpty());
 
         Transaction tx = transactions.get(0);
@@ -290,7 +291,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxTimestamp() {
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
         assertFalse(transactions.isEmpty());
 
         Transaction tx = transactions.get(0);
@@ -306,7 +307,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxAmount() {
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
         assertFalse(transactions.isEmpty());
 
         Transaction tx = transactions.get(0);
@@ -322,7 +323,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxLocation() {
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
         assertFalse(transactions.isEmpty());
 
         Transaction tx = transactions.get(0);
@@ -338,7 +339,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxCategory() {
-//        List<Transaction> transactions = txManager.getAll();
+//        List<Transaction> transactions = txManager.getTransactions();
 //        assertFalse(transactions.isEmpty());
 //
 //        Transaction tx = transactions.get(0);
@@ -354,7 +355,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxCurrency() {
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
         assertFalse(transactions.isEmpty());
 
         Transaction tx = transactions.get(0);
@@ -370,7 +371,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxMode() {
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
         assertFalse(transactions.isEmpty());
 
         Transaction tx = transactions.get(0);
@@ -386,7 +387,7 @@ class TransactionManagerTest {
 
     @Test
     void setTxRecurrencePattern() {
-        List<Transaction> transactions = txManager.getAll();
+        List<Transaction> transactions = txManager.getTransactions();
         assertFalse(transactions.isEmpty());
 
         Transaction tx = transactions.get(0);
