@@ -1,174 +1,133 @@
-// src/main/java/org/group35/util/CameraUtils.java
 package org.group35.util;
 
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamResolution;
 import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import nu.pattern.OpenCV;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.videoio.VideoCapture;
 
-import java.awt.image.BufferedImage;
-import java.util.List;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.nio.file.Path;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * Utility for controlling the webcam: live preview and snapshot capture,
+ * with error handling and controlled logging via LogUtils.
+ */
 public class CameraUtils {
+    static {
+        // Suppress OpenCV native logs by temporarily redirecting stderr
+        PrintStream originalErr = System.err;
+        try {
+            System.setErr(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int b) { /* ignore */ }
+            }));
+            OpenCV.loadLocally();
+        } catch (Exception e) {
+            LogUtils.error("Failed to load OpenCV native library");
+            throw new RuntimeException(e);
+        } finally {
+            System.setErr(originalErr);
+        }
+    }
 
-    private Webcam webcam;
+    private final VideoCapture capture = new VideoCapture();
     private ScheduledExecutorService executor;
-    private final List<Consumer<BufferedImage>>  rawFrameListeners = new CopyOnWriteArrayList<>();
-    private final List<Consumer<WritableImage>>  fxFrameListeners  = new CopyOnWriteArrayList<>();
-    private final List<Consumer<Exception>>      errorListeners    = new CopyOnWriteArrayList<>();
-    private final AtomicBoolean                  previewing        = new AtomicBoolean(false);
-    private volatile int                         fps               = 30;
+    private volatile boolean cameraActive = false;
 
-    public CameraUtils() {
-        // ensure cleanup if the JVM shuts down
-        Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
-    }
-
-    /** Initialize the default webcam at VGA resolution (or throw if none). */
-    public void initCamera() {
-        initCamera(Webcam.getDefault(), WebcamResolution.VGA);
-    }
-
-    /** Initialize a specific webcam & resolution. */
-    public void initCamera(Webcam cam, WebcamResolution resolution) {
-        if (cam == null) {
-            throw new IllegalStateException("No webcam available");
+    /**
+     * Starts camera preview in the given ImageView at ~30 FPS.
+     */
+    public synchronized void startCamera(ImageView view) {
+        if (cameraActive) {
+            LogUtils.warn("Camera already active, startCamera() ignored");
+            return;
         }
-        this.webcam = cam;
-        webcam.setViewSize(resolution.getSize());
-        webcam.open();
-    }
-
-    /** Switch among available cameras by index (must be stopped first). */
-    public void selectCamera(int index, WebcamResolution res) {
-        if (previewing.get()) {
-            throw new IllegalStateException("Stop preview before switching cameras");
+        try {
+            if (!capture.open(0)) {
+                LogUtils.error("Cannot open camera device (it may be in use)");
+                return;
+            }
+        } catch (Exception e) {
+            LogUtils.error("Exception opening camera device");
+            return;
         }
-        Webcam[] cams = Webcam.getWebcams().toArray(new Webcam[0]);
-        initCamera(cams[index], res);
-    }
-
-    public boolean isOpen()       { return webcam != null && webcam.isOpen(); }
-    public boolean isPreviewing() { return previewing.get(); }
-
-    /** Adjust resolution on the fly. */
-    public void setResolution(WebcamResolution res) {
-        if (isOpen()) {
-            webcam.setViewSize(res.getSize());
-        }
-    }
-
-    /** Adjust target framerate (restarts preview if already running). */
-    public void setFPS(int fps) {
-        this.fps = fps;
-        if (previewing.get()) restartPreview();
-    }
-
-    // ─── Listener registration ──────────────────────────────────────
-
-    public void addRawFrameListener(Consumer<BufferedImage> l)   { rawFrameListeners.add(l); }
-    public void removeRawFrameListener(Consumer<BufferedImage> l){ rawFrameListeners.remove(l); }
-
-    public void addFXFrameListener(Consumer<WritableImage> l)    { fxFrameListeners.add(l); }
-    public void removeFXFrameListener(Consumer<WritableImage> l) { fxFrameListeners.remove(l); }
-
-    public void addErrorListener(Consumer<Exception> l)          { errorListeners.add(l); }
-    public void removeErrorListener(Consumer<Exception> l)       { errorListeners.remove(l); }
-
-    // ─── Preview lifecycle ─────────────────────────────────────────
-
-    /** Start pushing frames to all registered listeners. */
-    public void startPreview() {
-        if (!isOpen()) {
-            throw new IllegalStateException("Camera not initialized");
-        }
-        if (previewing.getAndSet(true)) {
-            return; // already running
-        }
-
-        executor = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "CameraPreviewThread");
-            t.setDaemon(true);
-            return t;
-        });
-        long periodMs = 1000L / fps;
-
+        cameraActive = true;
+        executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
-            if (!previewing.get()) return;
             try {
-                BufferedImage raw = webcam.getImage();
-                if (raw == null) return;
-
-                // notify raw listeners
-                rawFrameListeners.forEach(l -> l.accept(raw));
-
-                // convert once, then notify FX listeners on the FX thread
-                if (!fxFrameListeners.isEmpty()) {
-                    WritableImage fxImg = SwingFXUtils.toFXImage(raw, null);
-                    Platform.runLater(() -> fxFrameListeners.forEach(l -> l.accept(fxImg)));
+                Mat frame = new Mat();
+                if (capture.read(frame) && !frame.empty()) {
+                    Image img = matToImage(frame);
+                    Platform.runLater(() -> view.setImage(img));
                 }
-
             } catch (Exception e) {
-                errorListeners.forEach(l -> l.accept(e));
+                LogUtils.error("Error reading frame from camera");
+                stopCamera();
             }
-        }, 0, periodMs, TimeUnit.MILLISECONDS);
+        }, 0, 33, TimeUnit.MILLISECONDS);
+        LogUtils.info("Camera preview has started");
     }
 
-    /** Temporarily pause pushing frames (camera stays open). */
-    public void pausePreview() {
-        previewing.set(false);
-    }
-
-    /** Resume pushing frames again. */
-    public void resumePreview() {
-        if (!isOpen()) throw new IllegalStateException("Camera not initialized");
-        previewing.set(true);
-    }
-
-    /** Fully stop and tear down the preview executor (camera stays open). */
-    public void stopPreview() {
-        previewing.set(false);
-        if (executor != null) {
-            executor.shutdownNow();
-            executor = null;
+    /**
+     * Stops camera preview and releases resources.
+     */
+    public synchronized void stopCamera() {
+        if (!cameraActive) return;
+        cameraActive = false;
+        try {
+            if (executor != null && !executor.isShutdown()) {
+                executor.shutdownNow();
+            }
+            capture.release();
+            LogUtils.debug("Camera preview stopped and device released");
+        } catch (Exception e) {
+            LogUtils.error("Exception occurred when shutting down camera");
         }
     }
 
-    /** Convenience to stop & immediately restart preview (e.g. after FPS change). */
-    public void restartPreview() {
-        stopPreview();
-        startPreview();
-    }
-
-    /** Capture exactly one frame asynchronously on its own thread. */
-    public void captureFrame(Consumer<BufferedImage> callback) {
-        Executors.newSingleThreadExecutor(r -> {
-            Thread t = new Thread(r, "CameraCaptureThread");
-            t.setDaemon(true);
-            return t;
-        }).submit(() -> {
-            try {
-                if (!isOpen()) throw new IllegalStateException("Camera not initialized");
-                BufferedImage raw = webcam.getImage();
-                callback.accept(raw);
-            } catch (Exception e) {
-                errorListeners.forEach(l -> l.accept(e));
+    /**
+     * Captures a snapshot and returns it as a JavaFX Image.
+     * @return Image of the captured frame, or null if failed
+     */
+    public Image captureSnapshot() {
+        try {
+            Mat frame = new Mat();
+            if (capture.read(frame) && !frame.empty()) {
+                Image img = matToImage(frame);
+                LogUtils.info("Snapshot captured");
+                return img;
+            } else {
+                LogUtils.error("Failed to capture snapshot: no frame data");
             }
-        });
+        } catch (Exception e) {
+            LogUtils.error("Exception occurred when capturing snapshot");
+        }
+        return null;
     }
 
-    /** Clean up everything: stop preview, close camera, shut down executors. */
+    /**
+     * Cleanly shutdown the camera (alias for stopCamera()).
+     */
     public void shutdown() {
-        stopPreview();
-        if (isOpen()) {
-            webcam.close();
-            webcam = null;
-            LogUtils.info("Webcam closed in shutdown");
-        }
+        stopCamera();
+    }
+
+    /**
+     * Convert OpenCV Mat to JavaFX Image.
+     */
+    private Image matToImage(Mat frame) {
+        MatOfByte buffer = new MatOfByte();
+        Imgcodecs.imencode(".png", frame, buffer);
+        return new Image(new ByteArrayInputStream(buffer.toArray()));
     }
 }

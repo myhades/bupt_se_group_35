@@ -14,7 +14,6 @@ public class Transaction {
     private String name;
     private LocalDateTime timestamp;
     private BigDecimal amount;
-    private boolean income;
     private String location;
     private String category; //TODO: add category field as enum
 
@@ -44,6 +43,10 @@ public class Transaction {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -70,13 +73,6 @@ public class Transaction {
     }
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public boolean isIncome() {
-        return income;
-    }
-    public void setIncome(boolean income) {
-        this.income = income;
     }
 
     public Mode getMode() {
@@ -114,10 +110,4 @@ public class Transaction {
         this.recurrencePattern = recurrencePattern;
     }
 
-//    public BigDecimal getMonthlyBudget() {
-//        return monthlyBudget;
-//    }
-//    public void setMonthlyBudget(BigDecimal monthlyBudget) {
-//        this.monthlyBudget = monthlyBudget;
-//    }
 }

@@ -16,27 +16,18 @@ public class ManualEntryPageController {
     @FXML private TextField nameField;
     @FXML private TextField amountField;
     @FXML private TextField categoryField;
-    @FXML private ImageView BackButtonImageView;
-    @FXML private ImageView MicrophoneImageView;
 
     @FXML
-    private void initialize() {
-//        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
-//        MicrophoneImageView.setImage(new Image("/org/group35/view/assets/Micro.jpg"));
-    }
+    private void initialize() {}
 
     @FXML
     private void handleMicro(ActionEvent event) {
-        LogUtils.trace("Micro button has been clicked.");
-        //Test code
-        aiTextArea.setText("API here！");
-        //api here
+        LogUtils.debug("Micro button has been clicked.");
     }
 
     @FXML
     private void handleConvert(ActionEvent event) {
-        System.out.println("Convert button clicked.");
-        // To tell whether aiTextArea is Empty
+        LogUtils.debug("Convert button clicked.");
         if (aiTextArea.getText().trim().isEmpty()) {
             showAlertDialog("Input Error", "Please enter some text in the AI Recognition area before converting.", "OK");
             return;

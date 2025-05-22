@@ -2,8 +2,12 @@ package org.group35.controller;
 
 import org.group35.model.Transaction;
 import org.group35.persistence.PersistentDataManager;
+import org.group35.runtime.ApplicationRuntime;
+import org.group35.service.CsvImport;
 import org.group35.util.LogUtils;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
  */
 public class TransactionManager {
     private List<Transaction> transactions;
+    private final CsvImport csvImportService = new CsvImport();
 
     public TransactionManager() {
         LogUtils.debug("Initializing TransactionManager and loading transactions");
@@ -37,6 +42,28 @@ public class TransactionManager {
         LogUtils.trace("Filtering transactions for user: " + username);
         return transactions.stream()
                 .filter(tx -> username.equals(tx.getUsername()))
+                .collect(Collectors.toList());
+    }
+
+    /** Returns transactions within the given amount range. bigger or equal, smaller or equal */
+    public List<Transaction> getByAmountRange(BigDecimal minAmount, BigDecimal maxAmount) {
+        LogUtils.trace("Filtering transactions by amount range: " + minAmount + " - " + maxAmount);
+        if (minAmount != null && maxAmount != null && minAmount.compareTo(maxAmount) > 0) {
+            LogUtils.warn("Invalid amount range: minAmount > maxAmount");
+            return new ArrayList<>();
+        }
+        return transactions.stream()
+                .filter(tx -> {
+                    if (minAmount != null && maxAmount != null) {
+                        return tx.getAmount().compareTo(minAmount) >= 0 && tx.getAmount().compareTo(maxAmount) <= 0;
+                    } else if (minAmount != null) {
+                        return tx.getAmount().compareTo(minAmount) >= 0;
+                    } else if (maxAmount != null) {
+                        return tx.getAmount().compareTo(maxAmount) <= 0;
+                    } else {
+                        return true;
+                    }
+                })
                 .collect(Collectors.toList());
     }
 
@@ -72,12 +99,22 @@ public class TransactionManager {
         save();
     }
 
-//    /** Sets the monthly budget for a specific user's future entries. */
-//    public void setMonthlyBudget(String username, BigDecimal budget) {
-//        LogUtils.info("Setting monthly budget for user " + username + " to " + budget);
-//        getByUser(username).forEach(tx -> tx.setMonthlyBudget(budget));
-//        save();
-//    }
+    /**
+     * Import a CSV, tag each Transaction with the current user,
+     * and add them to the store.
+     */
+    public void importFromCsv(String filePath) throws IOException {
+        String currentUser = ApplicationRuntime
+                .getInstance()
+                .getCurrentUser()
+                .getUsername();
+
+        List<Transaction> txs = csvImportService.parseTransactions(filePath);
+        for (Transaction tx : txs) {
+            tx.setUsername(currentUser);
+            add(tx);
+        }
+    }
 
     /** Save the current transaction list back to the persistent store. */
     private void save() {
@@ -86,4 +123,123 @@ public class TransactionManager {
         PersistentDataManager.saveStore();
         LogUtils.info("Transactions saved successfully");
     }
+    
+
+    /** Returns the transaction with the given ID. */
+    public Transaction getById(String id) {
+        LogUtils.trace("Retrieving transaction by ID: " + id);
+        return transactions.stream()
+                .filter(tx -> id.equals(tx.getId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /** Sets the username of the transaction with the given ID. */
+    public void updateUsername(String id, String username) {
+        LogUtils.debug("Setting username for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setUsername(username);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the name of the transaction with the given ID. */
+    public void updateName(String id, String name) {
+        LogUtils.debug("Setting name for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setName(name);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the timestamp of the transaction with the given ID. */
+    public void updateTimestamp(String id, LocalDateTime timestamp) {
+        LogUtils.debug("Setting timestamp for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setTimestamp(timestamp);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the amount of the transaction with the given ID. */
+    public void updateAmount(String id, BigDecimal amount) {
+        LogUtils.debug("Setting amount for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setAmount(amount);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the location of the transaction with the given ID. */
+    public void updateLocation(String id, String location) {
+        LogUtils.debug("Setting location for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setLocation(location);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the category of the transaction with the given ID. */
+    public void updateCategory(String id, String category) {
+        LogUtils.debug("Setting category for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setCategory(category);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the currency of the transaction with the given ID. */
+    public void updateCurrency(String id, Transaction.Currency currency) {
+        LogUtils.debug("Setting currency for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setCurrency(currency);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the mode of the transaction with the given ID. */
+    public void updateMode(String id, Transaction.Mode mode) {
+        LogUtils.debug("Setting mode for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setMode(mode);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the recurrence pattern of the transaction with the given ID. */
+    public void updateRecurrencePattern(String id, String recurrencePattern) {
+        LogUtils.debug("Setting recurrence pattern for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            tx.setRecurrencePattern(recurrencePattern);
+            save();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
 }

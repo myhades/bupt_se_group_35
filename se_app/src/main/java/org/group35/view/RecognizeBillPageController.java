@@ -1,121 +1,69 @@
 package org.group35.view;
 
-import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 import org.group35.util.CameraUtils;
 import org.group35.util.LogUtils;
 
-import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 public class RecognizeBillPageController implements Initializable {
 
-    @FXML private Button    captureButton;
-    @FXML private Button    processButton;
-    @FXML private ImageView previewImage;
-    @FXML private StackPane cameraContainer;
-    @FXML private VBox      placeholderBox;
-    @FXML private ImageView BackButtonImageView;
-
-    private final CameraUtils cameraService =
-            ApplicationRuntime.getInstance().getCameraService();
-
-    private BufferedImage capturedImage;
+    @FXML private StackPane previewStack;
+    @FXML private ImageView cameraView;
+    private final CameraUtils cameraUtils = ApplicationRuntime.getInstance().getCameraService();
 
     @Override
-    public void initialize(URL loc, ResourceBundle res) {
-        LogUtils.info("Initializing RecognizeBillPageController");
-
-        //associate with BackButton.jpg
-//        BackButtonImageView.setImage(new Image("/org/group35/view/assets/BackButton.jpg"));
-
-        // disable buttons until first frame arrives
-        captureButton.setDisable(true);
-        processButton.setDisable(true);
-
-        // register for new frames and errors
-        cameraService.addFXFrameListener(this::onNewFrame);
-        cameraService.addErrorListener(this::onError);
+    public void initialize(URL location, ResourceBundle resources) {
+        cameraView.setPreserveRatio(true);
+        cameraView.fitWidthProperty().bind(previewStack.widthProperty());
+        cameraView.fitHeightProperty().bind(previewStack.heightProperty());
+        cameraView.setOnMouseClicked(this::handleCapture);
+        cameraUtils.startCamera(cameraView);
     }
 
-    /** Called on each new frame (JavaFX thread). */
-    private void onNewFrame(WritableImage fxImage) {
-        if (placeholderBox.isVisible()) {
-            placeholderBox.setVisible(false);
-            captureButton.setDisable(false);
+    /**
+     * Handle click on the camera preview to capture a photo.
+     */
+    private void handleCapture(MouseEvent event) {
+
+        // Take snapshot
+        Image snapshot = cameraUtils.captureSnapshot();
+        if (snapshot != null) {
+            // [API] Placeholder
+            LogUtils.info("Snapshot captured and ready for upload.");
+        } else {
+            LogUtils.warn("Snapshot capture failed.");
         }
-        previewImage.setImage(fxImage);
-    }
 
-    /** Called on camera errors. */
-    private void onError(Exception e) {
-        Platform.runLater(() ->
-                showAlert("Camera Error", e.getMessage())
+        // Play animation
+        Rectangle flash = new Rectangle(
+                previewStack.getWidth(),
+                previewStack.getHeight(),
+                Color.WHITE
         );
-    }
-
-    @FXML
-    private void handleCaptureButton(ActionEvent evt) {
-        captureButton.setDisable(true);
-        processButton.setDisable(false);
-
-        // pause the shared preview
-        cameraService.pausePreview();
-
-        // capture exactly one frame asynchronously
-        cameraService.captureFrame(raw -> {
-            capturedImage = raw;
-            WritableImage fx = SwingFXUtils.toFXImage(raw, null);
-            Platform.runLater(() -> previewImage.setImage(fx));
-            LogUtils.info("Captured one frame.");
+        flash.setOpacity(1);
+        previewStack.getChildren().add(flash);
+        FadeTransition fade = new FadeTransition(Duration.millis(400), flash);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.0);
+        fade.setOnFinished(e -> {
+            previewStack.getChildren().remove(flash);
         });
-    }
-
-    @FXML
-    private void handleProcessButton(ActionEvent evt) {
-        // TODO: implement Base64 + OCR logic using `capturedImage`
-        showAlert("Info", "Processing is not implemented yet.");
-    }
-
-    @FXML
-    private void handleLogoutButton(ActionEvent evt) {
-        ApplicationRuntime.getInstance().logoutUser();
-    }
-
-    @FXML
-    private void handleCloseButton(ActionEvent evt) {
-        destroy();
-        Platform.exit();
-    }
-
-    @FXML private void handlePlanButton(ActionEvent e)    {}
-    @FXML private void handleMoreButton(ActionEvent e)    {}
-
-    private void showAlert(String title, String content) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(title);
-        a.setHeaderText(null);
-        a.setContentText(content);
-        a.showAndWait();
-    }
-
-    /** Unregister this controller’s camera listeners. */
-    public void destroy() {
-        cameraService.removeFXFrameListener(this::onNewFrame);
-        cameraService.removeErrorListener(this::onError);
+        fade.play();
     }
 
     public void gotoSpending(ActionEvent actionEvent) {

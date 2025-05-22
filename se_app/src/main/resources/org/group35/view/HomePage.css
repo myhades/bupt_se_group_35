@@ -37,25 +37,23 @@
     -fx-opacity: 0.6;
 }
 /* Chart Row */
+.chart,
 .chart-row {
     -fx-padding: 30 0 0 0;
 }
 .chart-title {
     -fx-font-size: 20px;
     -fx-font-family: 'Articulat CF Demi Bold';
-}
-.chart,
-.pie-chart {
-    -fx-pref-height: 500px;
-    -fx-padding: 0 0 -16px 0;
+    -fx-padding: 0 0 0 5;
 }
 .chart-container {
     -fx-background-color: white;
     -fx-background-radius: 20px;
     -fx-padding: 16px;
 }
-.chart-container .chart-title {
-    -fx-padding: 0 0 0 5px;
+.pie-chart {
+    -fx-pref-height: 500px;
+    -fx-padding: 0 0 -16px 0;
 }
 #spendingChart .chart-plot-background {
     -fx-background-color: transparent;
@@ -65,7 +63,7 @@
     -fx-stroke: transparent;
 }
 #spendingChart .chart-series-line {
-    -fx-stroke: #2C6298;    /* your blue */
+    -fx-stroke: #2C6298;
     -fx-stroke-width: 2px;
 }
 #spendingChart .chart-line-symbol {
