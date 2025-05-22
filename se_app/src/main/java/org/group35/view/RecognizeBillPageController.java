@@ -4,12 +4,14 @@ import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
@@ -17,6 +19,8 @@ import org.group35.util.CameraUtils;
 import org.group35.util.LogUtils;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -24,13 +28,29 @@ public class RecognizeBillPageController implements Initializable {
 
     @FXML private StackPane previewStack;
     @FXML private ImageView cameraView;
+    @FXML private Text hintText;
+    @FXML private Button retakeButton;
+    @FXML private Button continueButton;
+
     private final CameraUtils cameraUtils = ApplicationRuntime.getInstance().getCameraService();
+    private boolean previewPaused = false;
+    private Image snapshot;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Bind cameraView to fill container
         cameraView.setPreserveRatio(true);
         cameraView.fitWidthProperty().bind(previewStack.widthProperty());
         cameraView.fitHeightProperty().bind(previewStack.heightProperty());
+
+        // Initial hint and button visibility
+        hintText.setText("Place in the frame\nthen click to capture");
+        retakeButton.managedProperty().bind(retakeButton.visibleProperty());
+        continueButton.managedProperty().bind(continueButton.visibleProperty());
+        retakeButton.setVisible(false);
+        continueButton.setVisible(false);
+
+        // Click to capture
         cameraView.setOnMouseClicked(this::handleCapture);
         cameraUtils.startCamera(cameraView);
     }
@@ -39,14 +59,14 @@ public class RecognizeBillPageController implements Initializable {
      * Handle click on the camera preview to capture a photo.
      */
     private void handleCapture(MouseEvent event) {
+        if (previewPaused) return;
 
         // Take snapshot
-        Image snapshot = cameraUtils.captureSnapshot();
+        snapshot = cameraUtils.captureSnapshot();
         if (snapshot != null) {
-            // [API] Placeholder
-            LogUtils.info("Snapshot captured and ready for upload.");
+            cameraView.setImage(snapshot);
         } else {
-            LogUtils.warn("Snapshot capture failed.");
+            return;
         }
 
         // Play animation
@@ -64,6 +84,39 @@ public class RecognizeBillPageController implements Initializable {
             previewStack.getChildren().remove(flash);
         });
         fade.play();
+
+        // Pause preview and update UI
+        cameraUtils.stopCamera();
+        previewPaused = true;
+        hintText.setText("Image captured");
+        retakeButton.setVisible(true);
+        continueButton.setVisible(true);
+    }
+
+    /**
+     * Discard snapshot and resume live preview.
+     */
+    @FXML
+    private void handleRetake(ActionEvent event) {
+        if (!previewPaused) return;
+        previewPaused = false;
+        retakeButton.setVisible(false);
+        continueButton.setVisible(false);
+        hintText.setText("Place in the frame\nthen click to capture");
+        cameraUtils.startCamera(cameraView);
+    }
+
+    /**
+     * Continue with captured image.
+     */
+    @FXML
+    private void handleContinue(ActionEvent event) {
+        ApplicationRuntime rt = ApplicationRuntime.getInstance();
+        Map<String,Object> params = new HashMap<>();
+        params.put("fromPage",   "Recognize Bill");
+        params.put("fromStatus", rt.getProgramStatus());
+        params.put("snapshot",   snapshot);
+        rt.navigateTo(ProgramStatus.CONFIRM_ENTRY, params);
     }
 
     public void gotoSpending(ActionEvent actionEvent) {
