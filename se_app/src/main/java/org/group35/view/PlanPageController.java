@@ -22,16 +22,14 @@ public class PlanPageController {
     private Button editBudgetButton;
     @FXML
     private Button AIButton;
-
-    // 添加FXML标签引用用于显示预算信息
     @FXML
-    private Label availableAmountLabel;  // 显示可用金额，如 $200
+    private Label availableAmountLabel;
     @FXML
-    private Label availablePercentLabel; // 显示可用百分比，如 20%
+    private Label availablePercentLabel;
     @FXML
-    private Label usedAmountLabel;       // 显示已使用金额，如 $1600
+    private Label usedAmountLabel;
     @FXML
-    private Label usedPercentLabel;      // 显示已使用百分比，如 80%
+    private Label usedPercentLabel;
 
     public void initialize() {
         try {
@@ -50,36 +48,29 @@ public class PlanPageController {
         }
     }
 
-    // 加载预算数据
     private void loadBudgetData() {
         try {
-            // 简化版本，暂时不做任何复杂操作
             System.out.println("Loading budget data...");
         } catch (Exception e) {
             System.err.println("Error loading budget data: " + e.getMessage());
         }
     }
 
-    // 更新预算显示
     private void updateBudgetDisplay() {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
 
-            // 从UserManager获取总预算
             BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget();
             double totalBudget = totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
 
-            // 临时使用固定值，避免复杂计算导致错误
-            double usedBudget = 1600.0; // calculateUsedBudget();
+            double usedBudget = calculateUsedBudget();
 
             double availableBudget = totalBudget - usedBudget;
             if (availableBudget < 0) availableBudget = 0;
 
-            // 计算百分比
             double usedPercentage = totalBudget > 0 ? (usedBudget / totalBudget) * 100 : 0;
             double availablePercentage = totalBudget > 0 ? (availableBudget / totalBudget) * 100 : 0;
 
-            // 更新饼图数据
             if (budgetPieChart != null) {
                 List<PieChart.Data> budgetData = Arrays.asList(
                         new PieChart.Data("Used", usedBudget),
@@ -87,24 +78,21 @@ public class PlanPageController {
                 );
                 setBudgetPieData(budgetData);
 
-                // 设置饼图样式
                 if (!budgetPieChart.getData().isEmpty()) {
                     budgetPieChart.getData().get(0).getNode().setStyle("-fx-pie-color: #115371;");
                     budgetPieChart.getData().get(1).getNode().setStyle("-fx-pie-color: #8498a9;");
                 }
             }
 
-            // 更新标签显示
             updateBudgetLabels(totalBudget, usedBudget, availableBudget, usedPercentage, availablePercentage);
 
-            System.out.println("Budget display updated successfully");
+            System.out.println("Budget display updated - Total: $" + totalBudget + ", Used: $" + usedBudget);
         } catch (Exception e) {
             System.err.println("Error updating budget display: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // 其余方法保持简单...
     private void updateBudgetLabels(double total, double used, double available, double usedPercent, double availablePercent) {
         try {
             if (availableAmountLabel != null) {
@@ -158,8 +146,45 @@ public class PlanPageController {
         }
     }
 
+    private double calculateUsedBudget() {
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        User currentUser = runtime.getCurrentUser();
+
+        if (currentUser == null) {
+            return 0.0;
+        }
+
+        try {
+            List<Transaction> transactions = runtime.getTranscationManager().getByUser(currentUser.getUsername());
+
+            LocalDateTime now = LocalDateTime.now();
+            int currentMonth = now.getMonthValue();
+            int currentYear = now.getYear();
+
+            double totalExpenses = 0.0;
+            for (Transaction transaction : transactions) {
+                // check whether this transaction happens in this month
+                LocalDateTime transactionTime = transaction.getTimestamp();
+                if (transactionTime != null &&
+                        transactionTime.getMonthValue() == currentMonth &&
+                        transactionTime.getYear() == currentYear) {
+
+                    BigDecimal amount = transaction.getAmount();
+                    if (amount != null) {
+                        totalExpenses += Math.abs(amount.doubleValue());
+                    }
+                }
+            }
+
+            return totalExpenses;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
     public double getUsedBudget() {
-        return 1600.0; // 临时返回固定值
+      return calculateUsedBudget();
     }
 
     public double getTotalBudget() {
