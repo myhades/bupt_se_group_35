@@ -122,6 +122,7 @@ public class UserManager {
         LogUtils.warn("Failed to set avatar. User not found: " + username);
     }
 
+
     /**
      * Retrieves the Base64‑encoded avatar string for a user.
      * @param username the user to look up
@@ -145,10 +146,23 @@ public class UserManager {
                 .collect(Collectors.toList());
     }
 
-    /** Sets the monthly budget for a specific user's future entries. */
-    public void setMonthlyBudget(String username, BigDecimal budget) {
+    /**
+     * Sets the budget for a specific user.
+     * @param username the user to update
+     * @param budget the new budget amount
+     */
+    public static void setMonthlyBudget(String username, BigDecimal budget) {
         LogUtils.info("Setting monthly budget for user " + username + " to " + budget);
-        getByUser(username).forEach(user -> user.setMonthlyBudget(budget));
-        save();
+        List<User> users = getUsers();
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                u.setMonthlyBudget(budget);
+                PersistentDataManager.getStore().setUsers(users);
+                PersistentDataManager.saveStore();
+                LogUtils.info("Budget updated for user: " + username);
+                return;
+            }
+        }
     }
+
 }
