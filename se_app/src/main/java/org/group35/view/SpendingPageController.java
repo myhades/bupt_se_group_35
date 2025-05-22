@@ -1,6 +1,7 @@
 package org.group35.view;
 
 import javafx.scene.layout.HBox;
+import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
@@ -38,7 +39,11 @@ public class SpendingPageController {
 
     @FXML
     public void initialize() {
-        setTransactionList(getSampleTransactions());
+//        setTransactionList(getSampleTransactions());
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        TransactionManager txManager = runtime.getTranscationManager();
+        List<Transaction> tx = txManager.getTransactions();
+        setTransactionList(tx);
     }
 
     @FXML
