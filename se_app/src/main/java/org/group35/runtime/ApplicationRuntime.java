@@ -17,21 +17,30 @@ import java.util.Map;
 public final class ApplicationRuntime {
 
     /**
-     * The possible statuses of the application.
+     * The possible statuses of the application represented as enum.
      */
     public enum ProgramStatus {
-        LOGIN,
-        HOME,
-        SPENDING,
-        PLAN,
-        MORE,
-        MANUAL_ENTRY,
-        RECOGNIZE_BILL,
-        CONFIRM_ENTRY,
-        EDIT_BUDGET,
-        AI_SUGGESTION,
-        RECOMMENDATION
-        // Add other statuses as needed.
+        LOGIN("/org/group35/view/LoginPage.fxml"),
+        HOME("/org/group35/view/HomePage.fxml"),
+        SPENDING("/org/group35/view/SpendingPage.fxml"),
+        PLAN("/org/group35/view/PlanPage.fxml"),
+        MORE("/org/group35/view/MorePage.fxml"),
+        MANUAL_ENTRY("/org/group35/view/ManualEntryPage.fxml"),
+        RECOGNIZE_BILL("/org/group35/view/RecognizeBillPage.fxml"),
+        CONFIRM_ENTRY("/org/group35/view/ConfirmEntryPage.fxml"),
+        EDIT_BUDGET("/org/group35/view/EditBudgetPage.fxml"),
+        AI_SUGGESTION("/org/group35/view/AISuggestionPage.fxml"),
+        RECOMMENDATION("/org/group35/view/RecommendationPage.fxml");
+
+        private final String fxmlPath;
+
+        ProgramStatus(String fxmlPath) {
+            this.fxmlPath = fxmlPath;
+        }
+
+        public String getFxmlPath() {
+            return fxmlPath;
+        }
     }
 
     // Singleton instance of ApplicationRuntime.
@@ -186,20 +195,7 @@ public final class ApplicationRuntime {
 
         this.programStatus = status;
         LogUtils.debug("ProgramStatus changed to: " + status);
-        switch (status) {
-            case LOGIN:          SceneManager.showLoginPage(); break;
-            case HOME:           SceneManager.showHomePage(); break;
-            case SPENDING:       SceneManager.showSpendingPage(); break;
-            case PLAN:           SceneManager.showPlanPage(); break;
-            case MORE:           SceneManager.showMorePage(); break;
-            case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
-            case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
-            case CONFIRM_ENTRY:  SceneManager.showConfirmEntryPage(); break;
-            case EDIT_BUDGET:    SceneManager.showEditBudgetPage(); break;
-            case AI_SUGGESTION:  SceneManager.showAISuggestionPage(); break;
-            case RECOMMENDATION: SceneManager.showRecommendationPage(); break;
-            default:             LogUtils.warn("Unhandled ProgramStatus: " + status); break;
-        }
+        SceneManager.showPage(status);
     }
 
     /**

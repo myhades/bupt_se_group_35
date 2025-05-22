@@ -54,6 +54,10 @@
     -fx-line-spacing: -3px;
     -fx-translate-x: 32px
 }
+.button-panel {
+    -fx-spacing: 15px;
+    -fx-alignment: CENTER-LEFT;
+}
 .action-button {
     -fx-font-family: 'Articulat CF Normal';
     -fx-font-size: 16px;

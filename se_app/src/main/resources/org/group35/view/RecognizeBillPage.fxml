@@ -60,15 +60,16 @@
                       text="Hint text"
                       styleClass="camera-hint-text" />
 
-                <!-- Action Buttons (hidden by default) -->
-                <Button fx:id="retakeButton"
-                        text="Retake"
-                        styleClass="action-button, retake-button"
-                        onAction="#handleRetake"/>
-                <Button fx:id="continueButton"
-                        text="Continue"
-                        styleClass="action-button, continue-button"
-                        onAction="#handleContinue"/>
+                <!-- Button Panel -->
+                <HBox fx:id="buttonPanel" styleClass="button-panel">
+                    <Button text="Retake"
+                            onAction="#handleRetake"
+                            styleClass="action-button,retake-button"/>
+                    <Button text="Continue"
+                            onAction="#handleContinue"
+                            styleClass="action-button,continue-button"/>
+                </HBox>
+
             </VBox>
 
             <!-- Preview Stack -->
