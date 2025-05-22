@@ -21,9 +21,11 @@ public class ConfirmEntryPageController implements Initializable {
     @FXML private Label previousPageLabel;
     @FXML private VBox hintContainer;
     @FXML private VBox loadContainer;
+    @FXML private VBox inputContainer;
     @FXML private Arc spinnerArc;
 
     private ProgramStatus fromStatus;
+    private Boolean isProcessing;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -38,8 +40,10 @@ public class ConfirmEntryPageController implements Initializable {
 
         hintContainer.managedProperty().bind(hintContainer.visibleProperty());
         loadContainer.managedProperty().bind(loadContainer.visibleProperty());
+        inputContainer.managedProperty().bind(inputContainer.visibleProperty());
         hintContainer.setVisible(false);
         loadContainer.setVisible(true);
+        inputContainer.setVisible(false);
 
         spinnerArc.setRadiusX(24);
         spinnerArc.setRadiusY(24);
@@ -56,6 +60,10 @@ public class ConfirmEntryPageController implements Initializable {
 
     @FXML
     private void handleCancel(ActionEvent event) {
+        isProcessing = false;
+        loadContainer.setVisible(false);
+        hintContainer.setVisible(true);
+        inputContainer.setVisible(true);
     }
 
     @FXML
