@@ -71,7 +71,6 @@ public class AudioRecognition {
                 .addFormDataPart("model", model)
                 .addFormDataPart("language", "en")
                 .addFormDataPart("prompt", prompt)
-// 如果需要，可以在这里添加其他参数，例如 response_format, temperature
                 .build();
 
         Request request = new Request.Builder()
