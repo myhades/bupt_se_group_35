@@ -67,6 +67,28 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    public List<Transaction> getByTimestampRange(LocalDateTime start, LocalDateTime end) {
+        LogUtils.trace("Filtering transactions by timestamp range: " + start + " - " + end);
+        if (start != null && end != null && start.isAfter(end)) {
+            LogUtils.warn("Invalid timestamp range: start > end");
+            return new ArrayList<>();
+        }
+        return transactions.stream()
+                .filter(tx -> {
+                    if (start != null && end != null) {
+                        return (tx.getTimestamp().isEqual(start) || tx.getTimestamp().isAfter(start)) &&
+                                (tx.getTimestamp().isEqual(end) || tx.getTimestamp().isBefore(end));
+                    } else if (start != null) {
+                        return tx.getTimestamp().isEqual(start) || tx.getTimestamp().isAfter(start);
+                    } else if (end != null) {
+                        return tx.getTimestamp().isEqual(end) || tx.getTimestamp().isBefore(end);
+                    } else {
+                        return true;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
         tx.setTimestamp(LocalDateTime.now());
@@ -135,7 +157,7 @@ public class TransactionManager {
     }
 
     /** Sets the username of the transaction with the given ID. */
-    public void updateUsername(String id, String username) {
+    public void setTxUsername(String id, String username) {
         LogUtils.debug("Setting username for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -147,7 +169,7 @@ public class TransactionManager {
     }
 
     /** Sets the name of the transaction with the given ID. */
-    public void updateName(String id, String name) {
+    public void setTxName(String id, String name) {
         LogUtils.debug("Setting name for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -159,7 +181,7 @@ public class TransactionManager {
     }
 
     /** Sets the timestamp of the transaction with the given ID. */
-    public void updateTimestamp(String id, LocalDateTime timestamp) {
+    public void setTxTimestamp(String id, LocalDateTime timestamp) {
         LogUtils.debug("Setting timestamp for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -171,7 +193,7 @@ public class TransactionManager {
     }
 
     /** Sets the amount of the transaction with the given ID. */
-    public void updateAmount(String id, BigDecimal amount) {
+    public void setTxAmount(String id, BigDecimal amount) {
         LogUtils.debug("Setting amount for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -183,7 +205,7 @@ public class TransactionManager {
     }
 
     /** Sets the location of the transaction with the given ID. */
-    public void updateLocation(String id, String location) {
+    public void setTxLocation(String id, String location) {
         LogUtils.debug("Setting location for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -195,7 +217,7 @@ public class TransactionManager {
     }
 
     /** Sets the category of the transaction with the given ID. */
-    public void updateCategory(String id, String category) {
+    public void setTxCategory(String id, String category) {
         LogUtils.debug("Setting category for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -207,7 +229,7 @@ public class TransactionManager {
     }
 
     /** Sets the currency of the transaction with the given ID. */
-    public void updateCurrency(String id, Transaction.Currency currency) {
+    public void setTxCurrency(String id, Transaction.Currency currency) {
         LogUtils.debug("Setting currency for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -219,7 +241,7 @@ public class TransactionManager {
     }
 
     /** Sets the mode of the transaction with the given ID. */
-    public void updateMode(String id, Transaction.Mode mode) {
+    public void setTxMode(String id, Transaction.Mode mode) {
         LogUtils.debug("Setting mode for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
@@ -231,7 +253,7 @@ public class TransactionManager {
     }
 
     /** Sets the recurrence pattern of the transaction with the given ID. */
-    public void updateRecurrencePattern(String id, String recurrencePattern) {
+    public void setTxRecurrencePattern(String id, String recurrencePattern) {
         LogUtils.debug("Setting recurrence pattern for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {

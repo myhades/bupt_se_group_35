@@ -5,7 +5,6 @@ import org.group35.model.Transaction;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.model.User;
-import org.group35.util.LogUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -51,24 +50,28 @@ class TransactionManagerTest {
         tx1.setName("TestTransaction1");
         tx1.setAmount(new BigDecimal("100.00"));
         txManager.add(tx1);
+        tx1.setTimestamp(LocalDateTime.of(2025, 5, 20, 10, 0));
 
         Transaction tx2 = new Transaction();
         tx2.setUsername("TestUser");
         tx2.setName("TestTransaction2");
         tx2.setAmount(new BigDecimal("200.00"));
         txManager.add(tx2);
+        tx2.setTimestamp(LocalDateTime.of(2025, 5, 21, 9, 0));
 
         Transaction tx3 = new Transaction();
         tx3.setUsername("TestUser");
         tx3.setName("TestTransaction3");
         tx3.setAmount(new BigDecimal("-50.00"));
         txManager.add(tx3);
+        tx3.setTimestamp(LocalDateTime.of(2025, 5, 22, 8, 0));
 
         Transaction tx4 = new Transaction();
         tx4.setUsername("TestUser");
         tx4.setName("TestTransaction4");
         tx4.setAmount(new BigDecimal("-150.00"));
         txManager.add(tx4);
+        tx4.setTimestamp(LocalDateTime.of(2025, 5, 22, 14, 0));
     }
 
     @Test
@@ -148,6 +151,17 @@ class TransactionManagerTest {
     }
 
     @Test
+    void getByTimestampRange() {
+        LocalDateTime start = LocalDateTime.of(2025, 5, 20, 10, 0);
+        LocalDateTime end = LocalDateTime.of(2025, 5, 22, 10, 0);
+
+        List<Transaction> ByTimestampRange = txManager.getByTimestampRange(start, end);
+
+        assertEquals(3, ByTimestampRange.size());
+        assertEquals(new BigDecimal("-150.00"), ByTimestampRange.get(0).getAmount());
+    }
+
+    @Test
     void update() {
 
         List<Transaction> TargetTransaction = txManager.getByAmountRange(new BigDecimal("199.00"), new BigDecimal("200.00"));
@@ -198,7 +212,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateUsername() {
+    void setTxManager() {
         // 获取已有交易
         List<Transaction> transactions = txManager.getAll();
 
@@ -207,7 +221,7 @@ class TransactionManagerTest {
         String newUsername = "NewUserName";
 
         // 执行更新
-        txManager.updateUsername(tx.getId(), newUsername);
+        txManager.setTxUsername(tx.getId(), newUsername);
 
         // 验证用户名被修改
         Transaction updated = txManager.getById(tx.getId());
@@ -216,7 +230,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateName() {
+    void setTxName() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -224,7 +238,7 @@ class TransactionManagerTest {
         String originalName = tx.getName();
         String newName = "NewTransactionName";
 
-        txManager.updateName(tx.getId(), newName);
+        txManager.setTxName(tx.getId(), newName);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newName, updated.getName());
@@ -232,7 +246,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateTimestamp() {
+    void setTxTimestamp() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -240,7 +254,7 @@ class TransactionManagerTest {
         LocalDateTime originalTime = tx.getTimestamp();
         LocalDateTime newTime = LocalDateTime.of(2025, 1, 1, 12, 0);
 
-        txManager.updateTimestamp(tx.getId(), newTime);
+        txManager.setTxTimestamp(tx.getId(), newTime);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newTime, updated.getTimestamp());
@@ -248,7 +262,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateAmount() {
+    void setTxAmount() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -256,7 +270,7 @@ class TransactionManagerTest {
         BigDecimal originalAmount = tx.getAmount();
         BigDecimal newAmount = new BigDecimal("999.99");
 
-        txManager.updateAmount(tx.getId(), newAmount);
+        txManager.setTxAmount(tx.getId(), newAmount);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newAmount, updated.getAmount());
@@ -264,7 +278,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateLocation() {
+    void setTxLocation() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -272,7 +286,7 @@ class TransactionManagerTest {
         String originalLocation = tx.getLocation();
         String newLocation = "New York";
 
-        txManager.updateLocation(tx.getId(), newLocation);
+        txManager.setTxLocation(tx.getId(), newLocation);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newLocation, updated.getLocation());
@@ -280,7 +294,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateCategory() {
+    void setTxCategory() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -288,7 +302,7 @@ class TransactionManagerTest {
         String originalCategory = tx.getCategory();
         String newCategory = "Entertainment";
 
-        txManager.updateCategory(tx.getId(), newCategory);
+        txManager.setTxCategory(tx.getId(), newCategory);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newCategory, updated.getCategory());
@@ -296,7 +310,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateCurrency() {
+    void setTxCurrency() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -304,7 +318,7 @@ class TransactionManagerTest {
         Transaction.Currency originalCurrency = tx.getCurrency();
         Transaction.Currency newCurrency = Transaction.Currency.USD;
 
-        txManager.updateCurrency(tx.getId(), newCurrency);
+        txManager.setTxCurrency(tx.getId(), newCurrency);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newCurrency, updated.getCurrency());
@@ -312,7 +326,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateMode() {
+    void setTxMode() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -320,7 +334,7 @@ class TransactionManagerTest {
         Transaction.Mode originalMode = tx.getMode();
         Transaction.Mode newMode = Transaction.Mode.RECURRING;
 
-        txManager.updateMode(tx.getId(), newMode);
+        txManager.setTxMode(tx.getId(), newMode);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newMode, updated.getMode());
@@ -328,7 +342,7 @@ class TransactionManagerTest {
     }
 
     @Test
-    void updateRecurrencePattern() {
+    void setTxRecurrencePattern() {
         List<Transaction> transactions = txManager.getAll();
         assertFalse(transactions.isEmpty());
 
@@ -336,7 +350,7 @@ class TransactionManagerTest {
         String originalPattern = tx.getRecurrencePattern();
         String newPattern = "Every Monday";
 
-        txManager.updateRecurrencePattern(tx.getId(), newPattern);
+        txManager.setTxRecurrencePattern(tx.getId(), newPattern);
 
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newPattern, updated.getRecurrencePattern());
