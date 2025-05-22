@@ -2,7 +2,7 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.util.LogUtils;
-import org.group35.util.TimezoneUtil;
+import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -201,7 +201,7 @@ public class AIAssistant {
         }
     }
     public static String AIRecommendation(String location, String stringContent) throws IOException {
-        String localTime = TimezoneUtil.getLocalTime(location);
+        String localTime = TimezoneUtils.getLocalTime(location);
         try{
             String response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
             LogUtils.debug(response);
@@ -211,6 +211,7 @@ public class AIAssistant {
             throw new RuntimeException(e);
         }
     }
+
 
     public static void main(String[] args) throws IOException {
         //api using example
