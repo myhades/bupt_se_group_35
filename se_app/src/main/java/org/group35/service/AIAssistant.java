@@ -2,7 +2,6 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.controller.UserManager;
-import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
