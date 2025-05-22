@@ -55,7 +55,7 @@ public class LoginPageController {
             return;
         }
 
-        Optional<User> opt = UserManager.getUsers().stream()
+        Optional<User> opt = UserManager.getPersistentUsers().stream()
                 .filter(u -> u.getUsername().equals(username))
                 .findFirst();
         if (opt.isEmpty()) {
@@ -78,7 +78,7 @@ public class LoginPageController {
             showWarning("Username can only contain letters and digits.");
             return;
         }
-        if (UserManager.getUsers().stream()
+        if (UserManager.getPersistentUsers().stream()
                 .anyMatch(u -> u.getUsername().equals(username))) {
             showWarning("That username is already taken.");
             return;
@@ -117,7 +117,9 @@ public class LoginPageController {
             return;
         }
         // Perform registration
-        UserManager.registerUser(pendingUsername, pendingPassword);
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        runtime.getUserManager().registerUser(pendingUsername, pendingPassword);
+//        UserManager.registerUser(pendingUsername, pendingPassword);
         showAlert(Alert.AlertType.INFORMATION, "Registration Successful", null,
                 "Account created.");
 

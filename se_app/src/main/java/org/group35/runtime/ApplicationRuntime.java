@@ -97,6 +97,11 @@ public final class ApplicationRuntime {
      * @return the current User, or null if no user is logged in.
      */
     public User getCurrentUser() {
+        if (loggedInUser == null) {
+            LogUtils.debug("Current user is null");
+        } else {
+            LogUtils.debug("Current user set to: " + loggedInUser.getUsername());
+        }
         return loggedInUser;
     }
 

@@ -1,7 +1,9 @@
 package org.group35.controller;
 
+import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.persistence.PersistentDataManager;
+import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.ImageUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.PasswordUtils;
@@ -34,7 +36,7 @@ public class UserManager {
 
     /** Saves the current user list back to the persistent store. */
     private void save() {
-        LogUtils.debug("Persisting " + users.size() + " users to store");
+        LogUtils.debug("Persisting " + (users != null ? users.size() : 0) + " users to store");
         PersistentDataManager.getStore().setUsers(users);
         PersistentDataManager.saveStore();
         LogUtils.info("Users saved successfully");
@@ -43,16 +45,18 @@ public class UserManager {
     /**
      * Register a new user: hash the password, add the user to the store.
      */
-    public static void registerUser(String username, String plainPassword) {
+    public void registerUser(String username, String plainPassword) {
         LogUtils.debug("Attempting to register user: " + username);
         String hashed = PasswordUtils.hashPassword(plainPassword);
         User newUser = new User(username, hashed);
 
-        List<User> userList = getUsers();
-        userList.add(newUser);
+//        List<User> userList = getPersistentUsers();
+//        userList.add(newUser);
         // Save the updated user list to the persistent store
-        PersistentDataManager.getStore().setUsers(userList);
-        PersistentDataManager.saveStore();
+//        PersistentDataManager.getStore().setUsers(userList);
+//        PersistentDataManager.saveStore();
+        users.add(newUser);
+        save();
         LogUtils.info("User registered successfully: " + username);
     }
 
@@ -61,7 +65,7 @@ public class UserManager {
      */
     public static boolean loginUser(String username, String plainPassword) {
         LogUtils.debug("Attempting login for user: " + username);
-        List<User> users = getUsers();
+        List<User> users = getPersistentUsers();
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 boolean authenticated = PasswordUtils.checkPassword(plainPassword, u.getHashedPassword());
@@ -80,10 +84,26 @@ public class UserManager {
     /**
      * Get the list of users from the persistent store.
      */
-    public static List<User> getUsers() {
+    public static List<User> getPersistentUsers() {
         List<User> users = PersistentDataManager.getStore().getUsers();
         LogUtils.trace("Number of users retrieved from persistent store: " + (users != null ? users.size() : 0));
         return users;
+    }
+
+    /**
+     * Get the list of users from the runtime store.
+     */
+    public List<User> getUsers() {
+        LogUtils.trace("Number of users retrieved from runtime store: " + (users != null ? users.size() : 0));
+        return users;
+    }
+
+    /**
+     * Get the current logged user.
+     */
+    public static User getCurrentUser(){
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        return runtime.getCurrentUser();
     }
 
     /**
@@ -96,6 +116,20 @@ public class UserManager {
         LogUtils.info("User list updated in persistent store");
     }
 
+    /** Updates an existing user by name. */
+    public void update(User updated) {
+        LogUtils.debug("Updating user: " + updated.getUsername());
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(updated.getUsername())) {
+                users.set(i, updated);
+                LogUtils.info("Transaction updated: " + updated.getUsername());
+                save();
+                return;
+            }
+        }
+        LogUtils.warn("Transaction not found: " + updated.getUsername());
+    }
+
     /**
      * Compresses, crops to square, encodes to Base64 and stores as the user's avatar.
      * @param username  the user to update
@@ -103,7 +137,7 @@ public class UserManager {
      */
     public static void setUserAvatar(String username, String imagePath) {
         LogUtils.debug("Attempting to set avatar for user: " + username);
-        List<User> users = getUsers();
+        List<User> users = getPersistentUsers();
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 try {
@@ -122,14 +156,33 @@ public class UserManager {
         LogUtils.warn("Failed to set avatar. User not found: " + username);
     }
 
+    /**
+     * Set current user's avatar.
+     * @param imagePath path to the source image file
+     */
+    public void setAvatar(String imagePath) {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        LogUtils.debug("Attempting to set avatar for current user: " + user.getUsername());
+        try {
+            byte[] compressed = ImageUtils.loadCompressImage(imagePath);
+            String base64 = ImageUtils.toBase64(compressed);
+            user.setAvatar(base64);
+            save();
+            LogUtils.info("Avatar updated for user: " + user.getUsername());
+        } catch (IOException e) {
+            LogUtils.error("Failed to process avatar image for user: " + user.getUsername());
+        }
+        LogUtils.warn("Failed to set avatar. User not found: " + user.getUsername());
+    }
+
 
     /**
      * Retrieves the Base64‑encoded avatar string for a user.
      * @param username the user to look up
      * @return Base64 avatar or null if not set / user not found
      */
-    public static String getUserAvatar(String username) {
-        for (User u : getUsers()) {
+    public String getUserAvatar(String username) {
+        for (User u : users) {
             if (u.getUsername().equals(username)) {
                 return u.getAvatar();
             }
@@ -151,9 +204,8 @@ public class UserManager {
      * @param username the user to update
      * @param budget the new budget amount
      */
-    public static void setMonthlyBudget(String username, BigDecimal budget) {
+    public void setMonthlyBudget(String username, BigDecimal budget) {
         LogUtils.info("Setting monthly budget for user " + username + " to " + budget);
-        List<User> users = getUsers();
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 u.setMonthlyBudget(budget);

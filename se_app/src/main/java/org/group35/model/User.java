@@ -23,9 +23,10 @@ public class User {
     private BigDecimal monthlyBudget;
 
     // Each user has their own categories
+    @SerializedName("category")
     private final Map<String, Category> categoryMap = new HashMap<>();
 
-    // Dynamic Category enum to represent user-defined categories
+    /** Dynamic Category enum to represent user-defined categories */
     public class Category {
         private final String name;
 
