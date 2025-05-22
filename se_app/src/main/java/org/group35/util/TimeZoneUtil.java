@@ -94,7 +94,8 @@ public class TimeZoneUtil {
         try {
             String location = "Tokyo, Japan";
             String localTime = getLocalTime(location); // example
-            LogUtils.info(location + " 当前时间: " + localTime);
+            LogUtils.info("input:" + location);
+            LogUtils.info(" 当前时间: " + localTime);
         } catch (Exception e) {
             LogUtils.error( e.getMessage());
         }

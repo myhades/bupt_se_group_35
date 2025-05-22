@@ -2,13 +2,13 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.util.LogUtils;
+import org.group35.util.TimeZoneUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 
 public class AIAssistant {
     private static final String API_URL = "https://api.deepseek.com/chat/completions";  // DeepSeek API URL
@@ -44,25 +44,27 @@ public class AIAssistant {
         return prompt;
     }
     private static String buildAIRecommendationPrompt(String location, String Date, String transactionData) {
-        return "As a financial advisor specialized in regional expenditure patterns, analyze the user's location and upcoming local holidays.\n" +
-                "User Context:\n"+
-                "- Location: " + location + "\n" +
-                "- Current Date: " + Date + "\n" +
-                "- Transaction History (JSON):\n" + transactionData + "\n\n" +
-                "Tasks:\n"+
-                "1. Identify ONE upcoming holiday in/after " + Date + " within the next 90 days that typically causes high spending.\n" +
-                "2. Calculate days remaining until this holiday.\n"+
-                "3. Estimate potential extra expenses based on:\n"+
-                "   a) Local holiday traditions\n"+
-                "   b) User's historical spending during similar periods\n"+
-                "4. Generate concise recommendations including:\n"+
-                "   - Specific expense categories at risk\n"+
-                "   - Suggested budget preparation\n"+
-                "   - Practical saving strategies\n"+
-                "Response Requirements:\n"+
-                "- 150 words max\n"+
-                "- Use natural paragraph breaks (no numbering)\n"+
-                "- Mention days remaining, monetary amounts, and concrete action steps";
+        return "As a financial advisor specialized in regional expenditure patterns, analyze the user's location and upcoming local holidays.\\n" +
+                "User Context:\\n"+
+                "- Location: " + location + "\\n" +
+                "- Current Date: " + Date + "\\n" +
+                "- Transaction History (JSON):\\n" + transactionData + "\\n\\n" +
+                "Tasks:\\n"+
+                "1. Identify ONE upcoming holiday in/after " + Date + " within the next 90 days that typically causes high spending.\\n" +
+                "2. Calculate days remaining until this holiday.\\n"+
+                "3. Estimate potential extra expenses based on:\\n"+
+                "   a) Local holiday traditions\\n"+
+                "   b) User's historical spending during similar periods\\n"+
+                "4. Generate concise recommendations including:\\n"+
+                "   - Specific expense categories at risk\\n"+
+                "   - Suggested budget preparation\\n"+
+                "   - Practical saving strategies\\n"+
+                "Response Requirements:\\n"+
+                "- 150 words max\\n"+
+                "- Use natural paragraph breaks (no numbering)\\n"+
+                "- Mention days remaining, monetary amounts, and concrete action steps\\n" +
+                "- Present it in the form of paragraphs and do not use labels for segmentation\\n" +
+                "- No other answers should appear except for the content required to be answered";
     }
     private static String buildAISummaryPrompt(String usrContent){
         String prompt = "Smart Financial Assistant for summarizing spending patterns.\\n" +
@@ -198,10 +200,10 @@ public class AIAssistant {
             throw new RuntimeException(e);
         }
     }
-    public static String AIRecommendation(String location, String stringContent) {
-        String date = "11";
+    public static String AIRecommendation(String location, String stringContent) throws IOException {
+        String localTime = TimeZoneUtil.getLocalTime(location);
         try{
-            String response = DeepSeekCalling(buildAIRecommendationPrompt(location, date, stringContent));
+            String response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
             LogUtils.debug(response);
             return response;
         } catch (IOException e) {
@@ -212,14 +214,17 @@ public class AIAssistant {
 
     public static void main(String[] args) throws IOException {
         //api using example
-        int income = 5000, goal = 5000; // fixed income in a month, saving goal
+//        int income = 5000, goal = 5000; // fixed income in a month, saving goal
         String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
                 "2025-04-03,expense,1000,food\\n" +
                 "2025-04-05,expense,3000,Utilities\\n"; // data in any format
-        String sugg = AISuggestion(income,goal,stringContent);
-        String summ = AISummary(stringContent);
-        LogUtils.info(sugg);
-        LogUtils.info(summ);
+//        String sugg = AISuggestion(income,goal,stringContent);
+//        String summ = AISummary(stringContent);
+//        LogUtils.info(sugg);
+//        LogUtils.info(summ);
+        String location = "Tokyo, Japan";
+        String response = AIRecommendation(location, stringContent);
+        LogUtils.info(response);
 
     }
 }
