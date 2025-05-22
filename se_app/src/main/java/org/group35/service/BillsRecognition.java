@@ -120,9 +120,9 @@ public class BillsRecognition {
 
         // 创建 OkHttpClient
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)  // 设置连接超时为30秒
-                .readTimeout(60, TimeUnit.SECONDS)     // 设置读取超时为60秒
-                .writeTimeout(30, TimeUnit.SECONDS)    // 设置写入超时为30秒
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .build();
 
         RequestBody body = RequestBody.create(

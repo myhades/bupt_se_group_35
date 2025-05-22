@@ -2,23 +2,23 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.util.LogUtils;
+import org.group35.util.TimezoneUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+
 public class AIAssistant {
     private static final String API_URL = "https://api.deepseek.com/chat/completions";  // DeepSeek API URL
     private static final String API_TOKEN = "sk-8c5a64ad52574f3e93a27b2d97055aab";  // DeepSeek API token
-    private double savingGoal;
-    private double monIncome;
-    public AIAssistant(double savingGoal,double monIncome){
-        this.savingGoal = savingGoal;
-        this.monIncome = monIncome;
+
+    public AIAssistant(){
+
     }
 
-    private String buildSavingExpensesSuggestionPrompt(String usrContent){
+    private static String buildSavingExpensesSuggestionPrompt(int income, int goal, String usrContent){
         //TODO: Customized user input
         String prompt = "Smart Financial Assistant for customizing users' suggestions.\\n" +
                 "You are an intelligent financial assistant dedicated to helping users achieve their financial goals through expert analysis and personalized advice.\\n" +
@@ -31,8 +31,8 @@ public class AIAssistant {
                 "- Provide rational, professional advice.\\n" +
                 "## Input Data\\n" +
                 "JSON Records (date,type,amount,merchant):\\n" + usrContent +
-                "Fixed Income: " + 5000 + " yuan per month\\n" + //TODO: Customized user input
-                "Expected expenses: " + 7000 + " yuan per month\\n" + //TODO: Customized user input
+                "Fixed Income: " + income + " yuan per month\\n" + //TODO: Customized user input
+                "Expected expenses: " + goal + " yuan per month\\n" + //TODO: Customized user input
                 "Savings Timeline: 1 months\\n" +
                 "## Task\\n" +
                 "1. Categorize the JSON records into different expense types (e.g., food, utilities, salary ...).\\n" +
@@ -43,8 +43,30 @@ public class AIAssistant {
                 "   - Feasible plan of meeting the expected expenses.\\n" ;
         return prompt;
     }
-
-    private String buildAISummaryPrompt(String usrContent){
+    private static String buildAIRecommendationPrompt(String location, String Date, String transactionData) {
+        return "As a financial advisor specialized in regional expenditure patterns, analyze the user's location and upcoming local holidays.\\n" +
+                "User Context:\\n"+
+                "- Location: " + location + "\\n" +
+                "- Current Date: " + Date + "\\n" +
+                "- Transaction History (JSON):\\n" + transactionData + "\\n\\n" +
+                "Tasks:\\n"+
+                "1. Identify ONE upcoming holiday in/after " + Date + " within the next 90 days that typically causes high spending.\\n" +
+                "2. Calculate days remaining until this holiday.\\n"+
+                "3. Estimate potential extra expenses based on:\\n"+
+                "   a) Local holiday traditions\\n"+
+                "   b) User's historical spending during similar periods\\n"+
+                "4. Generate concise recommendations including:\\n"+
+                "   - Specific expense categories at risk\\n"+
+                "   - Suggested budget preparation\\n"+
+                "   - Practical saving strategies\\n"+
+                "Response Requirements:\\n"+
+                "- 150 words max\\n"+
+                "- Use natural paragraph breaks (no numbering)\\n"+
+                "- Mention days remaining, monetary amounts, and concrete action steps\\n" +
+                "- Present it in the form of paragraphs and do not use labels for segmentation\\n" +
+                "- No other answers should appear except for the content required to be answered";
+    }
+    private static String buildAISummaryPrompt(String usrContent){
         String prompt = "Smart Financial Assistant for summarizing spending patterns.\\n" +
                 "You are an intelligent financial assistant dedicated to helping users understand their spending patterns through concise and insightful summaries.\\n" +
                 "Goals:\\n" +
@@ -69,7 +91,7 @@ public class AIAssistant {
         return prompt;
     }
 
-    private String DeepSeekCalling(String prompts) throws IOException {
+    private static String DeepSeekCalling(String prompts) throws IOException {
         // 修正JSON格式，特别是转义字符
         String requestBodyString = "{\n" +
                 "  \"messages\": [\n" +
@@ -157,28 +179,55 @@ public class AIAssistant {
             }
         }
     }
-
-    public static void main(String[] args) {
-        AIAssistant ass = new AIAssistant(7000,5000);
-        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
-                "2025-04-03,expense,1000,food\\n" +
-                "2025-04-05,expense,3000,Utilities\\n"; // data ,test
-        try {
-            // 调用原有函数
-            String response = ass.DeepSeekCalling(ass.buildSavingExpensesSuggestionPrompt(stringContent));
+    //api
+    public static String AISuggestion(int userSavingGoal, int userMonIncome, String stringContent) {
+        try{
+            String response = DeepSeekCalling(buildSavingExpensesSuggestionPrompt(userMonIncome, userSavingGoal, stringContent));
             LogUtils.debug(response);
-
-            // 调用AI Summary函数
-            String aiSummary = ass.DeepSeekCalling(ass.buildAISummaryPrompt(stringContent));
-            LogUtils.debug("AI Summary: " + aiSummary);
-
-//            // 添加控制台输出，确保能看到结果
-//            System.out.println("==================================");
-//            System.out.println("AI Summary: " + aiSummary);
-//            System.out.println("==================================");
+            return response;
         } catch (IOException e) {
             LogUtils.error(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+    public static String AISummary(String stringContent) {
+        try{
+            String response = DeepSeekCalling(buildAISummaryPrompt(stringContent));
+            LogUtils.debug(response);
+            return response;
+        } catch (IOException e) {
+            LogUtils.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+    public static String AIRecommendation(String location, String stringContent) throws IOException {
+        String localTime = TimezoneUtil.getLocalTime(location);
+        try{
+            String response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
+            LogUtils.debug(response);
+            return response;
+        } catch (IOException e) {
+            LogUtils.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        //api using example
+        int income = 5000, goal = 5000; // fixed income in a month, saving goal
+        String location = "Tokyo, Japan";
+        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
+                "2025-04-03,expense,1000,food\\n" +
+                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
+
+        String sugg = AISuggestion(income,goal,stringContent);
+        LogUtils.info(sugg);
+
+        String summ = AISummary(stringContent);
+        LogUtils.info(summ);
+
+        String response = AIRecommendation(location, stringContent);
+        LogUtils.info(response);
+
     }
 }
