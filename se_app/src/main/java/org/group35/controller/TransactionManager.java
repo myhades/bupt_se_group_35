@@ -1,14 +1,18 @@
 package org.group35.controller;
 
 import org.group35.model.Transaction;
+import org.group35.model.User;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.service.CsvImport;
 import org.group35.util.LogUtils;
+import org.group35.util.TimezoneUtil;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +20,15 @@ import java.util.Comparator;
 
 /**
  * Manages loading, saving, and querying financial transactions.
- *
+ * <br><br>
+ * Usage Example:
+ * <br>
+ * {@code ApplicationRuntime runtime = ApplicationRuntime.getInstance();}
+ * <br>
+ * {@code TransactionManager txManager = runtime.getTranscationManager();}
+ * <br>
+ * {@code List<Transaction> tx = txManager.getByUser(runtime.getCurrentUser().getUsername());}
+ * <br>
  *
  */
 public class TransactionManager {
@@ -144,7 +156,17 @@ public class TransactionManager {
 
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
-        tx.setTimestamp(LocalDateTime.now());
+//        tx.setTimestamp(LocalDateTime.now());
+        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
+        Instant instant = Instant.now();
+        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
+//        try{
+//            tx.setTimestamp(TimezoneUtil.getLocalTime(currentUser.getTimezone()); //TODO
+//        }
+//        catch (IOException e){
+//            LogUtils.error("Failed to set timestamp for transaction: " + tx.getId());
+//        }
         transactions.add(tx);
         LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
         save();

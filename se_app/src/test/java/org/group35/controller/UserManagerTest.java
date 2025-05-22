@@ -42,6 +42,7 @@ class UserManagerTest {
 
         User testUser = uManager.getByUser("TestUser").get(0);
         uManager.setMonthlyBudget("TestUser", BigDecimal.valueOf(100));
+        uManager.setTimezone("TestUser", "Asia/Shanghai");
         runtime.setCurrentUser(testUser);
 
 
