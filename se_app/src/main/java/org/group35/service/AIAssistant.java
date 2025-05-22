@@ -1,12 +1,17 @@
 package org.group35.service;
 
 import okhttp3.*;
+import org.group35.controller.UserManager;
+import org.group35.model.Transaction;
+import org.group35.model.User;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
+import org.group35.util.TransactionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
 
@@ -18,7 +23,7 @@ public class AIAssistant {
 
     }
 
-    private static String buildSavingExpensesSuggestionPrompt(int income, int goal, String usrContent){
+    private static String buildSavingExpensesSuggestionPrompt( BigDecimal goal, String usrContent){
         //TODO: Customized user input
         String prompt = "Smart Financial Assistant for customizing users' suggestions.\\n" +
                 "You are an intelligent financial assistant dedicated to helping users achieve their financial goals through expert analysis and personalized advice.\\n" +
@@ -30,14 +35,14 @@ public class AIAssistant {
                 "- Adhere to financial ethics and regulations.\\n" +
                 "- Provide rational, professional advice.\\n" +
                 "## Input Data\\n" +
-                "JSON Records (date,type,amount,merchant):\\n" + usrContent +
-                "Fixed Income: " + income + " yuan per month\\n" + //TODO: Customized user input
-                "Expected expenses: " + goal + " yuan per month\\n" + //TODO: Customized user input
+                "JSON Records :\\n" + usrContent +
+                "Do not need to consider the fixed income, only consider the amount in the transaction. The amount is positive means income and negtive means expense\\n" +
+                "Expected budget(expense): " + goal + " yuan per month\\n" +
                 "Savings Timeline: 1 months\\n" +
                 "## Task\\n" +
-                "1. Categorize the JSON records into different expense types (e.g., food, utilities, salary ...).\\n" +
-                "2. Return a JSON object with the categorized list.\\n" +
-                "3. Analyze the data with the fixed income, savings goal, and timeline to suggest:\\n" +
+                "1. Categorize the JSON records into different expense types .\\n" +
+                "2. Analize the amount in each categorize.\\n" +
+                "3. Analyze the data with the fixed income, and timeline to suggest:\\n" +
                 "   - Monthly savings potential.\\n" +
                 "   - Areas to reduce spending.\\n" +
                 "   - Feasible plan of meeting the expected expenses.\\n" ;
@@ -49,6 +54,7 @@ public class AIAssistant {
                 "- Location: " + location + "\\n" +
                 "- Current Date: " + Date + "\\n" +
                 "- Transaction History (JSON):\\n" + transactionData + "\\n\\n" +
+                "The amount is positive means income and negtive means expense\\n" +
                 "Tasks:\\n"+
                 "1. Identify ONE upcoming holiday in/after " + Date + " within the next 90 days that typically causes high spending.\\n" +
                 "2. Calculate days remaining until this holiday.\\n"+
@@ -76,11 +82,12 @@ public class AIAssistant {
                 "3. Offer reliable and feasible suggestions for saving expenses for next month based on monthly income and savings goal.\\n" +
                 "## Constraints\\n" +
                 "- Provide a concise, human-readable summary without mentioning specific numbers.\\n" +
-                "- Compare essential expenses (housing, utilities, groceries) with discretionary spending (entertainment, dining, shopping).\\n" +
+                "- Compare essential expenses with discretionary spending .\\n" +
                 "- Use natural language that feels personal and helpful.\\n" +
                 "- Focus on highlighting the balance or imbalance between different spending categories.\\n" +
                 "## Input Data\\n" +
-                "JSON Records (date,type,amount,merchant):\\n" + usrContent +
+                "JSON Records :\\n" + usrContent +
+                "The amount is positive means income and negtive means expense\\n" +
                 "## Task\\n" +
                 "1. Analyze the data to identify major spending categories.\\n" +
                 "2. Determine the balance between essential and discretionary spending.\\n" +
@@ -180,9 +187,9 @@ public class AIAssistant {
         }
     }
     //api
-    public static String AISuggestion(int userSavingGoal, int userMonIncome, String stringContent) {
+    public static String AISuggestion(BigDecimal userSavingGoal, String stringContent) {
         try{
-            String response = DeepSeekCalling(buildSavingExpensesSuggestionPrompt(userMonIncome, userSavingGoal, stringContent));
+            String response = DeepSeekCalling(buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent));
             LogUtils.debug(response);
             return response;
         } catch (IOException e) {
@@ -215,13 +222,15 @@ public class AIAssistant {
 
     public static void main(String[] args) throws IOException {
         //api using example
-        int income = 5000, goal = 5000; // fixed income in a month, saving goal
+        User usr = UserManager.getCurrentUser();
+        BigDecimal budget = usr.getMonthlyBudget();
         String location = "Tokyo, Japan";
-        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
-                "2025-04-03,expense,1000,food\\n" +
-                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
+        String stringContent = TransactionUtils.transferTransaction();
+//        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
+//                "2025-04-03,expense,1000,food\\n" +
+//                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
 
-        String sugg = AISuggestion(income,goal,stringContent);
+        String sugg = AISuggestion(budget, stringContent);
         LogUtils.info(sugg);
 
         String summ = AISummary(stringContent);
