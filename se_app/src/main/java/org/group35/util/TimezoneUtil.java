@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class TimeZoneUtil {
+public class TimezoneUtil {
 
     private static final String GEONAMES_SEARCH_URL = "http://api.geonames.org/searchJSON";
     private static final String GEONAMES_TIMEZONE_URL = "http://api.geonames.org/timezoneJSON";

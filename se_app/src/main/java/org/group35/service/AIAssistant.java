@@ -2,7 +2,7 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.util.LogUtils;
-import org.group35.util.TimeZoneUtil;
+import org.group35.util.TimezoneUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -201,7 +201,7 @@ public class AIAssistant {
         }
     }
     public static String AIRecommendation(String location, String stringContent) throws IOException {
-        String localTime = TimeZoneUtil.getLocalTime(location);
+        String localTime = TimezoneUtil.getLocalTime(location);
         try{
             String response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
             LogUtils.debug(response);
@@ -214,15 +214,18 @@ public class AIAssistant {
 
     public static void main(String[] args) throws IOException {
         //api using example
-//        int income = 5000, goal = 5000; // fixed income in a month, saving goal
+        int income = 5000, goal = 5000; // fixed income in a month, saving goal
+        String location = "Tokyo, Japan";
         String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
                 "2025-04-03,expense,1000,food\\n" +
                 "2025-04-05,expense,3000,Utilities\\n"; // data in any format
-//        String sugg = AISuggestion(income,goal,stringContent);
-//        String summ = AISummary(stringContent);
-//        LogUtils.info(sugg);
-//        LogUtils.info(summ);
-        String location = "Tokyo, Japan";
+
+        String sugg = AISuggestion(income,goal,stringContent);
+        LogUtils.info(sugg);
+
+        String summ = AISummary(stringContent);
+        LogUtils.info(summ);
+
         String response = AIRecommendation(location, stringContent);
         LogUtils.info(response);
 
