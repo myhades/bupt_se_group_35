@@ -1,0 +1,106 @@
+/* InfoPage.css */
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+    -fx-padding: 10 0 20 6;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: gray;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
+/* Section Title */
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-padding: 0 0 0 5;
+}
+
+/* Information Containers */
+.info-content-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-min-width: 400px;
+    -fx-max-width: 550px;
+}
+
+/* Info Text Styling */
+.info-text-container {
+    -fx-padding: 5px;
+    -fx-spacing: 10px;
+}
+
+.info-subtitle {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #275317;
+    -fx-padding: 10 0 0 0;
+}
+
+.info-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #323232;
+    -fx-wrap-text: true;
+}
+
+.feature-list {
+    -fx-padding: 0 0 0 15;
+}
+
+.update-date {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7F7F7F;
+    -fx-font-style: italic;
+    -fx-padding: 20 0 0 0;
+}
+
+/* ScrollPane Styling */
+.info-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-min-height: 450px;
+    -fx-max-height: 500px;
+    -fx-fit-to-width: true;
+    -fx-pannable: true;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: as-needed;
+}
+.info-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+.info-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+.info-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5px;
+}
+.info-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+.info-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+    -fx-background-color: #888888;
+}
+.info-scrollpane > .scroll-bar > .increment-button,
+.info-scrollpane > .scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
