@@ -17,7 +17,6 @@ import javafx.util.Duration;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 import org.group35.util.CameraUtils;
-import org.group35.util.LogUtils;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -107,14 +106,12 @@ public class RecognizeBillPageController implements Initializable {
      */
     @FXML
     private void handleContinue(ActionEvent event) {
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
         Map<String,Object> params = new HashMap<>();
-        params.put("fromPage",   "Recognize Bill");
-        params.put("fromStatus", rt.getProgramStatus());
-        params.put("snapshot",   snapshot);
-        rt.navigateTo(ProgramStatus.CONFIRM_ENTRY, params);
+        params.put("snapshot", snapshot);
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.CONFIRM_ENTRY, params);
     }
 
+    @FXML
     public void gotoSpending(ActionEvent actionEvent) {
         ApplicationRuntime.getInstance().navigateTo(ProgramStatus.SPENDING);
     }

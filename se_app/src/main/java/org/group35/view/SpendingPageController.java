@@ -15,7 +15,9 @@ import javafx.scene.shape.Circle;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SpendingPageController {
 
@@ -43,11 +45,18 @@ public class SpendingPageController {
 
     @FXML
     private void gotoManualEntry(ActionEvent event) {
-        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.MANUAL_ENTRY);
+        Map<String,Object> params = new HashMap<>();
+        params.put("fromPage", "Manual");
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.CONFIRM_ENTRY, params);
     }
 
     @FXML
-    private void gotoRecogBill(ActionEvent event) {
+    private void gotoDescribe(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.DESCRIBE);
+    }
+
+    @FXML
+    private void gotoRecognizeBill(ActionEvent event) {
         ApplicationRuntime.getInstance().navigateTo(ProgramStatus.RECOGNIZE_BILL);
     }
 

@@ -3,20 +3,19 @@
 <?import org.group35.view.components.NavBarController?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.SVGPath?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.geometry.Insets?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.group35.view.RecognizeBillPageController"
-      stylesheets="@RecognizeBillPage.css"
+      fx:controller="org.group35.view.DescribePageController"
+      stylesheets="@DescribePage.css"
       styleClass="root-container">
 
     <!-- Nav Bar -->
@@ -33,12 +32,12 @@
                              styleClass="title-back-icon"/>
                 </graphic>
             </Button>
-            <Label text="Recognize Bill" styleClass="title-text"/>
+            <Label text="Describe" styleClass="title-text"/>
             <Label text="●" styleClass="title-dot"/>
         </HBox>
 
-        <!-- Camera Preview Container -->
-        <GridPane styleClass="preview-container">
+        <!-- Describe Container -->
+        <GridPane styleClass="describe-container">
 
             <columnConstraints>
                 <ColumnConstraints percentWidth="40" hgrow="ALWAYS"/>
@@ -52,37 +51,50 @@
             <VBox styleClass="hint-container"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="0">
-                <SVGPath content="M20,4H16.83L15,2H9L7.17,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,18H4V6H8.05L9.88,4H14.12L15.95,6H20V18M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15Z"
+                <SVGPath content="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2M20 16H5.2L4 17.2V4H20V16Z"
                          styleClass="hint-icon"/>
 
                 <!-- Hint Text -->
-                <Text fx:id="hintText"
-                      text="Hint text"
+                <Text text="Type or record&#10;using natural language"
                       styleClass="hint-text" />
 
                 <!-- Button Panel -->
-                <HBox fx:id="buttonPanel" styleClass="button-panel">
-                    <Button text="Retake"
-                            onAction="#handleRetake"
-                            styleClass="action-button,retake-button"/>
+                <HBox styleClass="button-panel">
+                    <Button fx:id="recordButton"
+                            text="Record"
+                            onAction="#handleRecord"
+                            styleClass="action-button,record-button"/>
+                    <Button fx:id="stopButton"
+                            text="Stop"
+                            onAction="#handleStop"
+                            styleClass="action-button,stop-button"/>
                     <Button text="Continue"
                             onAction="#handleContinue"
                             styleClass="action-button,continue-button"/>
                 </HBox>
 
+                <Label fx:id="hintProcessLabel"
+                       text="Processing recording..."
+                       styleClass="hint-process-label"
+                       graphicTextGap="14">
+                <graphic>
+                    <SVGPath content="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
+                    styleClass="hint-process-icon"/>
+                </graphic>
+            </Label>
+
             </VBox>
 
-            <!-- Preview Stack -->
-            <StackPane fx:id="previewStack"
-                       styleClass="preview-stack"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="0">
+            <!-- Input Area -->
+            <TextArea fx:id="describeArea"
+                      promptText="Start here. Your transcription will be added to the existing content."
+                      styleClass="describe-area"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="0">
                 <GridPane.margin>
                     <Insets top="30" right="30" bottom="30" left="30"/>
                 </GridPane.margin>
-                <ImageView fx:id="cameraView"/>
-            </StackPane>
-
+            </TextArea>
         </GridPane>
 
     </VBox>

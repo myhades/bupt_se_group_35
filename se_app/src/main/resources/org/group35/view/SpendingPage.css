@@ -99,6 +99,12 @@
 .add-manual:hover {
     -fx-background-color: derive(#3B7D23, 25%);
 }
+.add-describe {
+    -fx-background-color: #CC9B00;
+}
+.add-describe:hover {
+    -fx-background-color: derive(#CC9B00, 25%);
+}
 .add-bill {
     -fx-background-color: #8B4513;
 }
