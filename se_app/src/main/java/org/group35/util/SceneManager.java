@@ -1,5 +1,6 @@
 package org.group35.util;
 
+import java.io.InputStream;
 import java.util.Objects;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
@@ -7,12 +8,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.group35.config.Settings;
+import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 
 /**
  * Manages switching between application scenes.
  */
 public class SceneManager {
+
     private static Stage primaryStage;
+
+    private static final Settings CFG        = Settings.getInstance();
+    private static final double   BASE_W     = CFG.getWindowWidth();
+    private static final double   BASE_H     = CFG.getWindowHeight();
+    private static final String   APP_TITLE  = CFG.appName;
+    private static final String   ICON_PATH  = "/org/group35/util/assets/monora_icon.png";
+    private static final String   GLOBAL_CSS = SceneManager.class.getResource("/org/group35/view/Global.css")
+                                                        .toExternalForm();
 
     /**
      * Sets the primary stage for the application.
@@ -20,10 +31,15 @@ public class SceneManager {
     public static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
         primaryStage.setResizable(false);
-        Image icon = new Image(
-                SceneManager.class.getResourceAsStream("/org/group35/util/assets/monora_icon.png")
-        );
-        primaryStage.getIcons().add(icon);
+        try (InputStream icon = SceneManager.class.getResourceAsStream(ICON_PATH)) {
+            if (icon != null) {
+                primaryStage.getIcons().add(new Image(icon));
+            } else {
+                LogUtils.warn("App icon not found at");
+            }
+        } catch (Exception e) {
+            LogUtils.error("Error loading app icon");
+        }
         LogUtils.info("Primary stage configured");
     }
 
@@ -32,13 +48,10 @@ public class SceneManager {
      */
     public static void switchScene(String fxmlPath) {
         try {
-            Settings settings = Settings.getInstance();
             Parent root = FXMLLoader.load(Objects.requireNonNull(SceneManager.class.getResource(fxmlPath)));
-            Scene scene = new Scene(root, settings.getWindowWidth(), settings.getWindowHeight());
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(SceneManager.class.getResource("/org/group35/view/Global.css")).toExternalForm()
-            );
-            primaryStage.setTitle(settings.appName);
+            Scene scene = new Scene(root, BASE_W, BASE_H);
+            scene.getStylesheets().add(GLOBAL_CSS);
+            primaryStage.setTitle(APP_TITLE);
             primaryStage.setScene(scene);
             primaryStage.show();
             LogUtils.info("Navigated to scene: " + fxmlPath);
@@ -47,80 +60,12 @@ public class SceneManager {
         }
     }
 
-    /**
-     * Convenience method for showing the login page.
-     */
-    public static void showLoginPage() {
-        LogUtils.debug("Switching to LoginPage.fxml");
-        switchScene("/org/group35/view/LoginPage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the home page.
-     */
-    public static void showHomePage() {
-        LogUtils.debug("Switching to HomePage.fxml");
-        switchScene("/org/group35/view/HomePage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the plan page.
-     */
-    public static void showPlanPage() {
-        LogUtils.debug("Switching to PlanPage.fxml");
-        switchScene("/org/group35/view/PlanPage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the more page.
-     */
-    public static void showMorePage() {
-        LogUtils.debug("Switching to MorePage.fxml");
-        switchScene("/org/group35/view/MorePage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the bill recognition page.
-     */
-    public static void showRecognizeBillPage() {
-        LogUtils.debug("Switching to RecognizeBillPage.fxml");
-        switchScene("/org/group35/view/RecognizeBillPage.fxml");
-    }
-
-    public static void showManualEntryPage() {
-        LogUtils.debug("Switching to ManualEntryPage.fxml");
-        switchScene("/org/group35/view/ManualEntryPage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the spending page.
-     */
-    public static void showSpendingPage() {
-        LogUtils.debug("Switching to SpendingPage.fxml");
-        switchScene("/org/group35/view/SpendingPage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the edit_budget page.
-     */
-    public static void showEditBudgetPage() {
-        LogUtils.debug("Switching to EditBudgetPage.fxml");
-        switchScene("/org/group35/view/SpendingPage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the AI suggestion page.
-     */
-    public static void showAISuggestionPage() {
-        LogUtils.debug("Switching to AISuggestionPage.fxml");
-        switchScene("/org/group35/view/SpendingPage.fxml");
-    }
-
-    /**
-     * Convenience method for showing the AI suggestion page.
-     */
-    public static void showRecommendationPage() {
-        LogUtils.debug("Switching to RecommendationPage.fxml");
-        switchScene("/org/group35/view/SpendingPage.fxml");
+    public static void showPage(ProgramStatus status) {
+        String fxml = status.getFxmlPath();
+        if (fxml == null) {
+            LogUtils.warn("No FXML bound for status: " + status);
+            return;
+        }
+        switchScene(fxml);
     }
 }

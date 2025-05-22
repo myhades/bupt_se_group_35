@@ -1,0 +1,42 @@
+/* ConfirmEntryPage.css */
+
+/* Main Container */
+.main-container{
+    -fx-padding: 20px 0 0 0;
+    -fx-vgrow: always;
+    -fx-spacing: 20px;
+}
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-text-from {
+    -fx-text-fill: gray;
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: #EAB200;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
+/* Confirm Entry */
+.confirm-container {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-pref-height: 320px;
+    -fx-vgrow: always;
+    -fx-alignment: center;
+}

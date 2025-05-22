@@ -1,56 +1,56 @@
+/* EditBudgetDialog.css */
 .dialog-container {
-    -fx-background-color: #f2f2f2;
+    -fx-background-color: transparent;
 }
 
 .card {
     -fx-background-color: white;
-    -fx-background-radius: 15;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);
     -fx-padding: 20;
 }
 
-.dialog-label {
+.title-label {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-}
-
-.dialog-button {
-    -fx-background-color: #000000;
-    -fx-text-fill: #ffffff;
-    /*-fx-background-radius: 10;*/
-    -fx-padding: 5 15;
-}
-
-.error-label {
-    -fx-font-size: 12px;
-    -fx-text-fill: #be1c1c;
-}
-
-.success-text {
-    -fx-text-fill: green;
-}
-
-.title-label {
-    -fx-font-size: 20px;
-    -fx-text-fill: #333;
-    -fx-font-weight: bold;
-}
-
-.input-field {
-    -fx-background-color: #CCCCCC;
-    -fx-text-fill: #000000;
-    -fx-prompt-text-fill: #635f5f;
-    -fx-font-size: 12px;
-    -fx-pref-width: 140px;
-    -fx-pref-height: 20px;
+    -fx-font-family: "System";
 }
 
 .update-icon {
-    -fx-fill: #000000;
-    -fx-scale-x: 1.5;
-    -fx-scale-y: 1.5;
+    -fx-fill: #4285F4;
 }
 
 .Dot {
-    -fx-font-size: 20px;
-    -fx-text-fill: green;
+    -fx-font-size: 12px;
+    -fx-text-fill: #4285F4;
+    -fx-padding: 0;
+}
+
+.dialog-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: "System";
+}
+
+.input-field {
+    -fx-pref-width: 150px;
+}
+
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 12px;
+}
+
+.dialog-button {
+    -fx-background-color: #4285F4;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-padding: 5 15;
+    -fx-cursor: hand;
+    -fx-font-family: "System";
+    -fx-font-weight: bold;
+}
+
+.dialog-button:hover {
+    -fx-background-color: #2b5cd9;
 }

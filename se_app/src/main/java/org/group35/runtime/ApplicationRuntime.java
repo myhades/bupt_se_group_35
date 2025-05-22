@@ -7,6 +7,9 @@ import org.group35.util.CameraUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.SceneManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * ApplicationRuntime is a singleton class that encapsulates all model manager instances.
  * It allows different parts of the application to access model managers conveniently.
@@ -14,20 +17,30 @@ import org.group35.util.SceneManager;
 public final class ApplicationRuntime {
 
     /**
-     * The possible statuses of the application.
+     * The possible statuses of the application represented as enum.
      */
     public enum ProgramStatus {
-        LOGIN,
-        HOME,
-        SPENDING,
-        PLAN,
-        MORE,
-        MANUAL_ENTRY,
-        RECOGNIZE_BILL,
-        EDIT_BUDGET,
-        AI_SUGGESTION,
-        RECOMMENDATION
-        // Add other statuses as needed.
+        LOGIN("/org/group35/view/LoginPage.fxml"),
+        HOME("/org/group35/view/HomePage.fxml"),
+        SPENDING("/org/group35/view/SpendingPage.fxml"),
+        PLAN("/org/group35/view/PlanPage.fxml"),
+        MORE("/org/group35/view/MorePage.fxml"),
+        MANUAL_ENTRY("/org/group35/view/ManualEntryPage.fxml"),
+        RECOGNIZE_BILL("/org/group35/view/RecognizeBillPage.fxml"),
+        CONFIRM_ENTRY("/org/group35/view/ConfirmEntryPage.fxml"),
+        EDIT_BUDGET("/org/group35/view/EditBudgetPage.fxml"),
+        AI_SUGGESTION("/org/group35/view/AISuggestionPage.fxml"),
+        RECOMMENDATION("/org/group35/view/RecommendationPage.fxml");
+
+        private final String fxmlPath;
+
+        ProgramStatus(String fxmlPath) {
+            this.fxmlPath = fxmlPath;
+        }
+
+        public String getFxmlPath() {
+            return fxmlPath;
+        }
     }
 
     // Singleton instance of ApplicationRuntime.
@@ -43,6 +56,7 @@ public final class ApplicationRuntime {
     // Runtime state
     private User           loggedInUser;
     private ProgramStatus  programStatus;
+    private final Map<String,Object> navParams = new HashMap<>();
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -68,6 +82,14 @@ public final class ApplicationRuntime {
             LogUtils.trace("ApplicationRuntime instance created");
         }
         return instance;
+    }
+
+    /**
+     * Getter for the current ProgramStatus enum.
+     * @return the current ProgramStatus
+     */
+    public ProgramStatus getProgramStatus() {
+        return this.programStatus;
     }
 
     /**
@@ -97,6 +119,11 @@ public final class ApplicationRuntime {
      * @return the current User, or null if no user is logged in.
      */
     public User getCurrentUser() {
+        if (loggedInUser == null) {
+            LogUtils.debug("Current user is null");
+        } else {
+            LogUtils.debug("Current user set to: " + loggedInUser.getUsername());
+        }
         return loggedInUser;
     }
 
@@ -131,11 +158,27 @@ public final class ApplicationRuntime {
     }
 
     /**
-     * Switch to the given scene / program status unless already there.
+     * Scene navigation method
      */
     public void navigateTo(ProgramStatus target) {
-        if (this.programStatus == target) return;
         setProgramStatus(target);
+    }
+
+    /**
+     * Overloaded scene navigation method with parameter transfer
+     */
+    public void navigateTo(ProgramStatus target, Map<String,Object> params) {
+        this.navParams.clear();
+        if (params != null) navParams.putAll(params);
+        setProgramStatus(target);
+    }
+
+    /**
+     * Retrieve parameters passed from last call to navigate
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getNavParam(String key) {
+        return (T) navParams.get(key);
     }
 
     /**
@@ -152,19 +195,7 @@ public final class ApplicationRuntime {
 
         this.programStatus = status;
         LogUtils.debug("ProgramStatus changed to: " + status);
-        switch (status) {
-            case LOGIN:          SceneManager.showLoginPage(); break;
-            case HOME:           SceneManager.showHomePage(); break;
-            case SPENDING:       SceneManager.showSpendingPage(); break;
-            case PLAN:           SceneManager.showPlanPage(); break;
-            case MORE:           SceneManager.showMorePage(); break;
-            case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
-            case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
-            case EDIT_BUDGET:    SceneManager.showEditBudgetPage(); break;
-            case AI_SUGGESTION:  SceneManager.showAISuggestionPage(); break;
-            case RECOMMENDATION: SceneManager.showRecommendationPage(); break;
-            default:             LogUtils.warn("Unhandled ProgramStatus: " + status); break;
-        }
+        SceneManager.showPage(status);
     }
 
     /**
