@@ -7,6 +7,9 @@ import org.group35.util.CameraUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.SceneManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * ApplicationRuntime is a singleton class that encapsulates all model manager instances.
  * It allows different parts of the application to access model managers conveniently.
@@ -24,6 +27,7 @@ public final class ApplicationRuntime {
         MORE,
         MANUAL_ENTRY,
         RECOGNIZE_BILL,
+        CONFIRM_ENTRY,
         EDIT_BUDGET,
         AI_SUGGESTION,
         RECOMMENDATION
@@ -43,6 +47,7 @@ public final class ApplicationRuntime {
     // Runtime state
     private User           loggedInUser;
     private ProgramStatus  programStatus;
+    private final Map<String,Object> navParams = new HashMap<>();
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -68,6 +73,14 @@ public final class ApplicationRuntime {
             LogUtils.trace("ApplicationRuntime instance created");
         }
         return instance;
+    }
+
+    /**
+     * Getter for the current ProgramStatus enum.
+     * @return the current ProgramStatus
+     */
+    public ProgramStatus getProgramStatus() {
+        return this.programStatus;
     }
 
     /**
@@ -136,11 +149,27 @@ public final class ApplicationRuntime {
     }
 
     /**
-     * Switch to the given scene / program status unless already there.
+     * Scene navigation method
      */
     public void navigateTo(ProgramStatus target) {
-        if (this.programStatus == target) return;
         setProgramStatus(target);
+    }
+
+    /**
+     * Overloaded scene navigation method with parameter transfer
+     */
+    public void navigateTo(ProgramStatus target, Map<String,Object> params) {
+        this.navParams.clear();
+        if (params != null) navParams.putAll(params);
+        setProgramStatus(target);
+    }
+
+    /**
+     * Retrieve parameters passed from last call to navigate
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getNavParam(String key) {
+        return (T) navParams.get(key);
     }
 
     /**
@@ -165,6 +194,7 @@ public final class ApplicationRuntime {
             case MORE:           SceneManager.showMorePage(); break;
             case MANUAL_ENTRY:   SceneManager.showManualEntryPage(); break;
             case RECOGNIZE_BILL: SceneManager.showRecognizeBillPage(); break;
+            case CONFIRM_ENTRY:  SceneManager.showConfirmEntryPage(); break;
             case EDIT_BUDGET:    SceneManager.showEditBudgetPage(); break;
             case AI_SUGGESTION:  SceneManager.showAISuggestionPage(); break;
             case RECOMMENDATION: SceneManager.showRecommendationPage(); break;

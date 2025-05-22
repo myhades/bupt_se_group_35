@@ -68,7 +68,6 @@
     -fx-border-radius: 0;
     -fx-background-insets: 0;
     -fx-border-insets: 0;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2,0,0,1);
 }
 .login-button {
     -fx-background-color: #000000;

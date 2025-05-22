@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.group35.view.components.NavBarController?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.ConfirmEntryPageController"
+      stylesheets="@ConfirmEntryPage.css"
+      styleClass="root-container">
+
+    <!-- Nav Bar -->
+    <NavBarController activePage="SPENDING" />
+
+    <!-- Main Container -->
+    <VBox styleClass="main-container">
+
+        <!-- Title Row -->
+        <HBox styleClass="title-container">
+            <Button styleClass="title-back-button" onAction="#goBack">
+                <graphic>
+                    <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+                             styleClass="title-back-icon"/>
+                </graphic>
+            </Button>
+            <Label fx:id="previousPageLabel"
+                   text="Previous" styleClass="title-text, title-text-from"/>
+            <Label text=">" styleClass="title-text, title-text-from"/>
+            <Label text="Confirm Entry" styleClass="title-text"/>
+            <Label text="●" styleClass="title-dot"/>
+        </HBox>
+
+        <!-- Confirm Entry Container -->
+        <GridPane styleClass="confirm-container">
+
+        </GridPane>
+
+    </VBox>
+</VBox>
