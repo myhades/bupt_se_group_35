@@ -6,7 +6,7 @@ import org.group35.persistence.PersistentDataManager;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.service.CsvImport;
 import org.group35.util.LogUtils;
-import org.group35.util.TimezoneUtil;
+import org.group35.util.TimezoneUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -162,7 +162,7 @@ public class TransactionManager {
         Instant instant = Instant.now();
         tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
 //        try{
-//            tx.setTimestamp(TimezoneUtil.getLocalTime(currentUser.getTimezone()); //TODO
+//            tx.setTimestamp(TimezoneUtils.getLocalTime(currentUser.getTimezone()); //TODO
 //        }
 //        catch (IOException e){
 //            LogUtils.error("Failed to set timestamp for transaction: " + tx.getId());
