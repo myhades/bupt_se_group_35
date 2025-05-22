@@ -7,8 +7,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.shape.SVGPath?>
-
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.StackPane?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Arc?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.ConfirmEntryPageController"
       stylesheets="@ConfirmEntryPage.css"
@@ -29,7 +36,9 @@
                 </graphic>
             </Button>
             <Label fx:id="previousPageLabel"
-                   text="Previous" styleClass="title-text, title-text-from"/>
+                   text="Previous"
+                   styleClass="title-text, title-text-from"
+                   onMouseClicked="#goBack"/>
             <Label text=">" styleClass="title-text, title-text-from"/>
             <Label text="Confirm Entry" styleClass="title-text"/>
             <Label text="●" styleClass="title-dot"/>
@@ -38,12 +47,89 @@
         <!-- Confirm Entry Container -->
         <GridPane styleClass="confirm-container">
 
-            <!-- Loading Animation -->
-            <ProgressIndicator fx:id="loadingSpinner"
-                               progress="-1.0"
-                               styleClass="loading-spinner"/>
+            <columnConstraints>
+                <ColumnConstraints percentWidth="40" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="60" hgrow="ALWAYS"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="100" vgrow="ALWAYS"/>
+            </rowConstraints>
+
+            <!-- Hint Container -->
+            <VBox fx:id="hintContainer"
+                  styleClass="hint-container"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="0">
+                <SVGPath content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                         styleClass="hint-icon"/>
+
+                <!-- Hint Text -->
+                <Text text="Double check&#10;all the information"
+                      styleClass="hint-text" />
+
+                <!-- Button Panel -->
+                <HBox styleClass="button-panel">
+                    <Button text="Save"
+                            onAction="#handleSave"
+                            styleClass="action-button,save-button"/>
+                </HBox>
+
+            </VBox>
+
+            <!-- Load Container -->
+            <VBox fx:id="loadContainer"
+                  styleClass="hint-container"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="0">
+
+<!--                <SVGPath content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"-->
+<!--                         styleClass="hint-icon"/>-->
+
+                <!-- Loading Icon -->
+                <Arc fx:id="spinnerArc"
+                     length="216"
+                     styleClass="loading-arc"/>
+
+                <!-- Hint Text -->
+                <Text text="Please wait..."
+                      styleClass="hint-text" />
+
+                <!-- Button Panel -->
+                <HBox styleClass="button-panel">
+                    <Button text="Cancel Operation"
+                            onAction="#handleCancel"
+                            styleClass="action-button,cancel-button"/>
+                </HBox>
+
+            </VBox>
+
+            <!-- Input Area -->
+            <VBox styleClass="input-container"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="0">
+                <GridPane.margin>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </GridPane.margin>
+                <StackPane styleClass="icon-field">
+                    <TextField fx:id="nameField"
+                               promptText="Name"
+                               styleClass="input-field"/>
+                    <SVGPath content="M21.41 11.58L12.41 2.58A2 2 0 0 0 11 2H4A2 2 0 0 0 2 4V11A2 2 0 0 0 2.59 12.42L11.59 21.42A2 2 0 0 0 13 22A2 2 0 0 0 14.41 21.41L21.41 14.41A2 2 0 0 0 22 13A2 2 0 0 0 21.41 11.58M13 20L4 11V4H11L20 13M6.5 5A1.5 1.5 0 1 1 5 6.5A1.5 1.5 0 0 1 6.5 5Z"
+                             styleClass="input-icon"
+                             StackPane.alignment="CENTER_RIGHT">
+                    </SVGPath>
+                </StackPane>
+                <StackPane styleClass="icon-field">
+                    <TextField fx:id="amountField"
+                               promptText="Amount"
+                               styleClass="input-field"/>
+                    <SVGPath content="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9M1,10H3V20H19V22H1V10Z"
+                             styleClass="input-icon"
+                             StackPane.alignment="CENTER_RIGHT">
+                    </SVGPath>
+                </StackPane>
+            </VBox>
 
         </GridPane>
-
     </VBox>
 </VBox>
