@@ -46,7 +46,7 @@ class TransactionManagerTest {
 
         // Initialize TransactionManager
 //        txManager = runtime.getTranscationManager(); //TODO: used in production code
-        txManager = new TransactionManager();
+        this.txManager = new TransactionManager();
         // Add some transactions to the store for testing
         Transaction tx1 = new Transaction();
         tx1.setUsername("TestUser");

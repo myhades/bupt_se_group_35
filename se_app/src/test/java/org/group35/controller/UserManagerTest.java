@@ -7,6 +7,7 @@ import org.group35.runtime.ApplicationRuntime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.group35.util.LogUtils;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;
@@ -18,7 +19,7 @@ class UserManagerTest {
 
     @TempDir
     Path tempDir;
-    private TransactionManager uManager;
+    private UserManager uManager;
 
     /** Each JUnit test has the same initial conditions when running */
     @BeforeEach
@@ -34,7 +35,7 @@ class UserManagerTest {
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
 
         // Initialize UserManager
-        UserManager uManager = new UserManager();
+        this.uManager = new UserManager();
         // runtime.getUserManager().registerUser //TODO: used in production code
         uManager.registerUser("TestUser", "abcd1234");
 
@@ -45,8 +46,20 @@ class UserManagerTest {
         uManager.setTimezone("TestUser", "Asia/Shanghai");
         runtime.setCurrentUser(testUser);
 
+    }
 
+    @Test
+    void AddExistingCategory() {
+        String categoryName = "Entertainment";
+        assertFalse(uManager.addCategory("TestUser", categoryName));
+        LogUtils.info("Category: " + uManager.getCategory("TestUser"));
+    }
 
+    @Test
+    void AddCategory() {
+        String categoryName = "Test Category";
+        assertTrue(uManager.addCategory("TestUser", categoryName));
+        LogUtils.info("Category: " + uManager.getCategory("TestUser"));
     }
 
     @Test
