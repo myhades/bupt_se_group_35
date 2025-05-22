@@ -22,42 +22,18 @@ public class AudioRecognition {
     }
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS) // 连接超时
+            .connectTimeout(60, TimeUnit.SECONDS) // 连接超时
             .writeTimeout(60, TimeUnit.SECONDS) // 写入超时（对于上传大文件很重要）
             .readTimeout(60, TimeUnit.SECONDS) // 读取超时（转录可能需要一些时间）
             .build();
 
-    public static void main(String[] args) {
-
-        String filePath = "path/to/your/audiofile.mp3"; // 支持的格式: mp3, mp4, mpeg, mpga, m4a, wav, webm
-
-        File audioFile = new File(filePath);
-        if (!audioFile.exists()) {
-            System.err.println("错误：在 '" + filePath + "' 未找到音频文件。");
-            return;
-        }
-
-        // OpenAI API 对音频文件大小限制为 25MB
-        if (audioFile.length() > 25 * 1024 * 1024) {
-            System.err.println("错误：音频文件大小超过 25MB 限制。");
-            return;
-        }
-
-        try {
-            String transcribedText = transcribeAudio(audioFile, buildAudioPrompt());
-            System.out.println("转录文本:");
-            System.out.println(transcribedText);
-        } catch (Exception e) {
-            System.err.println("转录过程中发生错误: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
     private static String transcribeAudio(File audioFile, String prompt) throws IOException {
         String mimeType = getMimeType(audioFile);
+        LogUtils.info(mimeType);
 
         if (mimeType == null) {
-            System.err.println("警告: 无法确定文件 " + audioFile.getName() + " 的 MIME 类型。将尝试使用 'application/octet-stream'。");
+            LogUtils.error("警告: 无法确定文件 " + audioFile.getName() + " 的 MIME 类型。将尝试使用 'application/octet-stream'。");
             mimeType = "application/octet-stream"; // OpenAI 应该仍然可以处理它，但最好提供正确的类型
         }
 
@@ -122,7 +98,7 @@ public class AudioRecognition {
                 return contentType;
             }
         } catch (IOException e) {
-            System.err.println("读取文件MIME类型时发生IO错误: " + file.getName() + " - " + e.getMessage());
+            LogUtils.error("读取文件MIME类型时发生IO错误: " + file.getName() + " - " + e.getMessage());
         }
 
 // 基于文件扩展名的回退机制
@@ -136,5 +112,32 @@ public class AudioRecognition {
         if (fileName.endsWith(".webm")) return "audio/webm";
 
         return null; // 如果无法通过扩展名确定
+    }
+
+    //example
+    public static void main(String[] args) {
+
+        String filePath = "F:\\BUPT lessons\\JavaProject\\read.wav"; // 支持的格式: mp3, mp4, mpeg, mpga, m4a, wav, webm
+
+        File audioFile = new File(filePath);
+        if (!audioFile.exists()) {
+            LogUtils.error("错误：在 '" + filePath + "' 未找到音频文件。");
+            return;
+        }
+
+        // OpenAI API 对音频文件大小限制为 25MB
+        if (audioFile.length() > 25 * 1024 * 1024) {
+            LogUtils.error("错误：音频文件大小超过 25MB 限制。");
+            return;
+        }
+
+        try {
+            String transcribedText = transcribeAudio(audioFile, buildAudioPrompt());
+            LogUtils.info("转录文本:");
+            LogUtils.info(transcribedText);
+        } catch (Exception e) {
+            LogUtils.error("转录过程中发生错误: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
