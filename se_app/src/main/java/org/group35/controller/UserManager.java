@@ -11,6 +11,7 @@ import org.group35.util.PasswordUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -209,12 +210,100 @@ public class UserManager {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 u.setMonthlyBudget(budget);
-                PersistentDataManager.getStore().setUsers(users);
-                PersistentDataManager.saveStore();
+                save();
                 LogUtils.info("Budget updated for user: " + username);
                 return;
             }
         }
     }
 
+    /**
+     * Sets the budget for current user.
+     * @param budget the new budget amount
+     */
+    public void setMonthlyBudget(BigDecimal budget) {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        LogUtils.info("Setting monthly budget for user " + user.getUsername() + " to " + budget);
+        user.setMonthlyBudget(budget);
+        save();
+    }
+
+    public BigDecimal getMonthlyBudget(String username) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                LogUtils.info("Budget for user: " + username + " is " + u.getMonthlyBudget());
+                return u.getMonthlyBudget();
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getMonthlyBudget() {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        return getMonthlyBudget(user.getUsername());
+    }
+
+    public void setLocation(String username, String location) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                u.setLocation(location);
+                save();
+                LogUtils.info("Location updated for user: " + username);
+            }
+        }
+    }
+
+    public void setLocation(String location) {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        user.setLocation(location);
+        save();
+        LogUtils.info("Location updated for user: " + user.getUsername());
+    }
+
+    public String getLocation(String username) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                LogUtils.info("Location for user: " + username + " is " + u.getLocation());
+                return u.getLocation();
+            }
+        }
+        return "noplace"; //FIXME
+    }
+
+    public String getLocation() {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        return user.getLocation();
+    }
+
+    public void setTimezone(String username, String timezone) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                u.setTimezone(timezone);
+                save();
+                LogUtils.info("Timezone updated for user: " + username);
+            }
+        }
+    }
+
+    public void setTimezone(String timezone) {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        user.setTimezone(timezone);
+        save();
+        LogUtils.info("Timezone updated for user: " + user.getUsername());
+    }
+
+    public String getTimezone(String username) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                LogUtils.info("Timezone for user: " + username + " is " + u.getTimezone());
+                return u.getTimezone();
+            }
+        }
+        return "notimezone"; //FIXME
+    }
+
+    public String getTimezone() {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        return user.getTimezone();
+    }
 }

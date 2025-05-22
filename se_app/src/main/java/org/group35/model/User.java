@@ -22,6 +22,12 @@ public class User {
     @SerializedName("monthlyBudget")
     private BigDecimal monthlyBudget;
 
+    /** User's current location, country or city */
+    private String location;
+
+    /** User's current time zone */
+    private String timezone;
+
     // Each user has their own categories
     @SerializedName("category")
     private final Map<String, Category> categoryMap = new HashMap<>();
@@ -62,6 +68,7 @@ public class User {
         this.hashedPassword = hashedPassword;
         this.avatar = null;
         this.monthlyBudget = BigDecimal.ZERO;
+        //TODO: add default location and timezone
 
         // Initialize default categories
         defineCategory("Entertainment");
@@ -98,6 +105,22 @@ public class User {
     }
     public void setMonthlyBudget(BigDecimal monthlyBudget) {
         this.monthlyBudget = monthlyBudget;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 
     /**
