@@ -1,5 +1,6 @@
 package org.group35.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -8,6 +9,7 @@ import org.group35.runtime.ApplicationRuntime;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.input.MouseEvent;
 
 public class MorePageController implements Initializable {
 
@@ -21,5 +23,10 @@ public class MorePageController implements Initializable {
         } else {
             userLabel.setText("Guest");
         }
+    }
+
+    @FXML
+    private void gotoAbout(MouseEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.ABOUT);
     }
 }

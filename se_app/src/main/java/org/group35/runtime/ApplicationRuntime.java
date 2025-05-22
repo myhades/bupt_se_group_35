@@ -29,9 +29,10 @@ public final class ApplicationRuntime {
         RECOGNIZE_BILL("/org/group35/view/RecognizeBillPage.fxml"),
         IMPORT_CSV("/org/group35/view/ImportCSVPage.fxml"),
         CONFIRM_ENTRY("/org/group35/view/ConfirmEntryPage.fxml"),
-        EDIT_BUDGET("/org/group35/view/EditBudgetDialog.fxml"),
-        AI_SUGGESTION("/org/group35/view/AIDialog.fxml"),
-        RECOMMENDATION("/org/group35/view/RecommendationDialog.fxml");
+        EDIT_BUDGET("/org/group35/view/EditBudgetPage.fxml"),
+        AI_SUGGESTION("/org/group35/view/AISuggestionPage.fxml"),
+        RECOMMENDATION("/org/group35/view/RecommendationPage.fxml"),
+        ABOUT("/org/group35/view/AboutPage.fxml");
 
         private final String fxmlPath;
 
