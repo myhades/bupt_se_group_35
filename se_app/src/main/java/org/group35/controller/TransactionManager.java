@@ -46,6 +46,14 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /** Returns transactions for a given name. */
+    public List<Transaction> getByName(String name) {
+        LogUtils.trace("Filtering transactions for user: " + name);
+        return transactions.stream()
+                .filter(tx -> name.equals(tx.getName()))
+                .collect(Collectors.toList());
+    }
+
     /** Returns transactions within the given amount range. bigger or equal, smaller or equal */
     public List<Transaction> getByAmountRange(BigDecimal minAmount, BigDecimal maxAmount) {
         LogUtils.trace("Filtering transactions by amount range: " + minAmount + " - " + maxAmount);
