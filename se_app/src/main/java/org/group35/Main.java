@@ -6,6 +6,7 @@ import org.group35.config.Settings;
 import org.group35.util.LogUtils;
 import org.group35.util.SceneManager;
 import org.group35.runtime.ApplicationRuntime;
+import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 import org.group35.persistence.PersistentDataManager;
 
 public class Main extends Application {
@@ -13,7 +14,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         SceneManager.setPrimaryStage(primaryStage);
-        SceneManager.showLoginPage();
+        SceneManager.showPage(ProgramStatus.LOGIN);
     }
 
     public static void main(String[] args) {

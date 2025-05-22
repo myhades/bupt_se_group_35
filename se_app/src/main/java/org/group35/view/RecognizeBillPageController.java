@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -29,8 +30,7 @@ public class RecognizeBillPageController implements Initializable {
     @FXML private StackPane previewStack;
     @FXML private ImageView cameraView;
     @FXML private Text hintText;
-    @FXML private Button retakeButton;
-    @FXML private Button continueButton;
+    @FXML private HBox buttonPanel;
 
     private final CameraUtils cameraUtils = ApplicationRuntime.getInstance().getCameraService();
     private boolean previewPaused = false;
@@ -45,10 +45,8 @@ public class RecognizeBillPageController implements Initializable {
 
         // Initial hint and button visibility
         hintText.setText("Place in the frame\nthen click to capture");
-        retakeButton.managedProperty().bind(retakeButton.visibleProperty());
-        continueButton.managedProperty().bind(continueButton.visibleProperty());
-        retakeButton.setVisible(false);
-        continueButton.setVisible(false);
+        buttonPanel.managedProperty().bind(buttonPanel.visibleProperty());
+        buttonPanel.setVisible(false);
 
         // Click to capture
         cameraView.setOnMouseClicked(this::handleCapture);
@@ -61,15 +59,7 @@ public class RecognizeBillPageController implements Initializable {
     private void handleCapture(MouseEvent event) {
         if (previewPaused) return;
 
-        // Take snapshot
-        snapshot = cameraUtils.captureSnapshot();
-        if (snapshot != null) {
-            cameraView.setImage(snapshot);
-        } else {
-            return;
-        }
-
-        // Play animation
+        // Prepare animation
         Rectangle flash = new Rectangle(
                 previewStack.getWidth(),
                 previewStack.getHeight(),
@@ -77,20 +67,27 @@ public class RecognizeBillPageController implements Initializable {
         );
         flash.setOpacity(1);
         previewStack.getChildren().add(flash);
-        FadeTransition fade = new FadeTransition(Duration.millis(400), flash);
+        FadeTransition fade = new FadeTransition(Duration.millis(800), flash);
         fade.setFromValue(1.0);
         fade.setToValue(0.0);
         fade.setOnFinished(e -> {
             previewStack.getChildren().remove(flash);
         });
+
+        // Take snapshot
+        snapshot = cameraUtils.captureSnapshot();
+        if (snapshot != null) {
+            cameraView.setImage(snapshot);
+        } else {
+            return;
+        }
         fade.play();
 
         // Pause preview and update UI
         cameraUtils.stopCamera();
         previewPaused = true;
         hintText.setText("Image captured");
-        retakeButton.setVisible(true);
-        continueButton.setVisible(true);
+        buttonPanel.setVisible(true);
     }
 
     /**
@@ -100,8 +97,7 @@ public class RecognizeBillPageController implements Initializable {
     private void handleRetake(ActionEvent event) {
         if (!previewPaused) return;
         previewPaused = false;
-        retakeButton.setVisible(false);
-        continueButton.setVisible(false);
+        buttonPanel.setVisible(false);
         hintText.setText("Place in the frame\nthen click to capture");
         cameraUtils.startCamera(cameraView);
     }
