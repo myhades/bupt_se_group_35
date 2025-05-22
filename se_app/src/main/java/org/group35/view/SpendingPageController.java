@@ -51,6 +51,11 @@ public class SpendingPageController {
         ApplicationRuntime.getInstance().navigateTo(ProgramStatus.RECOGNIZE_BILL);
     }
 
+    @FXML
+    private void gotoImportCSV(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.IMPORT_CSV);
+    }
+
     /**
      * Clears and repopulates the list with the given transactions.
      */

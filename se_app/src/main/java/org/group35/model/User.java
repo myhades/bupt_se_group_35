@@ -68,18 +68,20 @@ public class User {
         this.hashedPassword = hashedPassword;
         this.avatar = null;
         this.monthlyBudget = BigDecimal.ZERO;
+        this.location = "China, Shanghai";
+//        this.timezone = TimezoneUtil.getTimeZoneId();
         //TODO: add default location and timezone
 
         // Initialize default categories
-        defineCategory("Entertainment");
-        defineCategory("Cater");
-        defineCategory("Education");
-        defineCategory("Shopping");
-        defineCategory("Rent");
-        defineCategory("Transportation");
-        defineCategory("Salary");
-        defineCategory("Transfer");
-        defineCategory("Investment");
+        addCategory("Entertainment");
+        addCategory("Cater");
+        addCategory("Education");
+        addCategory("Shopping");
+        addCategory("Rent");
+        addCategory("Transportation");
+        addCategory("Salary");
+        addCategory("Transfer");
+        addCategory("Investment");
     }
 
     public String getUsername() {
@@ -129,7 +131,7 @@ public class User {
      * @param name the name of the category (e.g., "Salary", "Rent")
      * @return the newly created Category instance
      */
-    public Category defineCategory(String name) {
+    public Category addCategory(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Category name cannot be null or empty");
         }

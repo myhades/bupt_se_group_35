@@ -41,6 +41,7 @@ class TransactionManagerTest {
         // Set current user in runtime
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
         User testUser = new User("TestUser", "xx");
+        testUser.setTimezone("Asia/Shanghai");
         runtime.setCurrentUser(testUser);
 
         // Initialize TransactionManager

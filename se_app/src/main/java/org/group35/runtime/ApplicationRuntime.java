@@ -27,6 +27,7 @@ public final class ApplicationRuntime {
         MORE("/org/group35/view/MorePage.fxml"),
         MANUAL_ENTRY("/org/group35/view/ManualEntryPage.fxml"),
         RECOGNIZE_BILL("/org/group35/view/RecognizeBillPage.fxml"),
+        IMPORT_CSV("/org/group35/view/ImportCSVPage.fxml"),
         CONFIRM_ENTRY("/org/group35/view/ConfirmEntryPage.fxml"),
         EDIT_BUDGET("/org/group35/view/EditBudgetPage.fxml"),
         AI_SUGGESTION("/org/group35/view/AISuggestionPage.fxml"),

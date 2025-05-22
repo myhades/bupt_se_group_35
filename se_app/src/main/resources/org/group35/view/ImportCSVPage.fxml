@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ScrollPane?>
+
+<?import org.group35.view.components.NavBarController?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.group35.view.ImportCSVPageController"
+            stylesheets="@ImportCSVPage.css"
+            styleClass="root-container">
+
+    <top>
+        <VBox>
+            <!-- NavBar -->
+            <NavBarController activePage="SPENDING"/>
+        </VBox>
+    </top>
+
+    <!-- Main Content Area -->
+    <center>
+        <VBox styleClass="main-container" VBox.vgrow="ALWAYS">
+
+            <!-- Title Row -->
+            <HBox styleClass="title-container">
+                <Button styleClass="title-back-button" onAction="#gotoSpending">
+                    <graphic>
+                        <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+                                 styleClass="title-back-icon"/>
+                    </graphic>
+                </Button>
+                <Label text="Import CSV" styleClass="title-text"/>
+                <Label text="●" styleClass="title-dot"/>
+            </HBox>
+
+            <!-- Input Area Container -->
+            <HBox spacing="50" alignment="CENTER" VBox.vgrow="ALWAYS">
+                <!-- Left Side: Spending List -->
+                <VBox styleClass="spending-list-container" HBox.hgrow="ALWAYS">
+                    <Label text="Spendings" styleClass="section-title"/>
+                    <ScrollPane styleClass="spending-scrollpane">
+                        <VBox fx:id="spendingListVBox"
+                              styleClass="spending-list"/>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Right Side: Info Container -->
+                <VBox styleClass="info-container">
+
+                    <!-- Budget Section -->
+                    <VBox styleClass="budget-section">
+                        <Label text="Budget" styleClass="section-title"/>
+                        <HBox styleClass="budget-info">
+                            <Label text="\$ 200" styleClass="budget-amount"/>
+                            <Label text="left to spend" styleClass="budget-left-text"/>
+                        </HBox>
+                        <ProgressBar styleClass="budget-progress"/>
+                    </VBox>
+
+                    <!-- Separator -->
+                    <Separator styleClass="divider"/>
+
+                    <!-- AI Section -->
+                    <VBox styleClass="ai-section">
+                        <Label text="AI Summary" styleClass="section-title"/>
+                        <Label styleClass="ai-summary"
+                               text="Most of your recent spending went to essential expenses like rent and utilities, with discretionary spending such as dining out and entertainment..."/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
