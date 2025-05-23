@@ -41,6 +41,7 @@
 /* Input fields */
 .input-field {
     -fx-background-color: #CCCCCC;
+    -fx-control-inner-background: #CCCCCC;
     -fx-text-fill: #000000;
     -fx-prompt-text-fill: #635f5f;
     -fx-font-size: 16px;

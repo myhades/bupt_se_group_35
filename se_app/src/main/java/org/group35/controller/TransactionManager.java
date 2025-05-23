@@ -81,6 +81,37 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Fuzzy search transaction records and perform partial matching based on the name or category fields.
+     *
+     * @param keyword keyword to search
+     * @return matched transactions
+     */
+    public List<Transaction> searchByKeyword(String keyword) {
+        return searchByKeyword(transactions, keyword);
+    }
+
+    /**
+     * Fuzzy search transaction records and perform partial matching based on the name or category fields.
+     *
+     * @param txs list of transactions to search from
+     * @param keyword keyword to search
+     * @return matched transactions
+     */
+    public List<Transaction> searchByKeyword(List<Transaction> txs, String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return new ArrayList<>();
+        }
+
+        LogUtils.trace("Fuzzy searching transactions by name or category with keyword: " + keyword);
+        String lowerKeyword = keyword.trim().toLowerCase();
+
+        return txs.stream()
+                .filter(tx -> tx.getName() != null && tx.getName().toLowerCase().contains(lowerKeyword)
+                        || tx.getCategory() != null && tx.getCategory().toLowerCase().contains(lowerKeyword))
+                .collect(Collectors.toList());
+    }
+
     /** Returns transactions within the given amount range. bigger or equal, smaller or equal */
     public List<Transaction> getByAmountRange(BigDecimal minAmount, BigDecimal maxAmount) {
         LogUtils.trace("Filtering transactions by amount range: " + minAmount + " - " + maxAmount);
@@ -131,45 +162,84 @@ public class TransactionManager {
      * @param ascending = true sort by ascending，= false sort by descending
      */
     public List<Transaction> sortByAmount(boolean ascending) {
+        return sortByAmount(transactions, ascending);
+    }
+
+    /**
+     * sort by amount
+     * @param txs list of transactions to sort
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByAmount(List<Transaction> txs, boolean ascending) {
         Comparator<Transaction> comparator = Comparator.comparing(Transaction::getAmount);
         if (!ascending) {
             comparator = comparator.reversed();
         }
-        return transactions.stream()
+        return txs.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
 
     /**
-     * sort by timestamp
+     * Sort by timestamp
      * @param ascending = true sort by ascending，= false sort by descending
      */
     public List<Transaction> sortByTimestamp(boolean ascending) {
+        return sortByTimestamp(transactions, ascending);
+    }
+
+    /**
+     * Sort by timestamp
+     * @param txs list of transactions to sort
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByTimestamp(List<Transaction> txs, boolean ascending) {
         Comparator<Transaction> comparator = Comparator.comparing(Transaction::getTimestamp);
         if (!ascending) {
             comparator = comparator.reversed();
         }
-        return transactions.stream()
+        return txs.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * sort by name
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByName(boolean ascending) {
+        return sortByName(transactions, ascending);
+    }
+
+    /**
+     * sort by name
+     * @param txs list of transactions to sort
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByName(List<Transaction> txs, boolean ascending) {
+        Comparator<Transaction> comparator = Comparator.comparing(Transaction::getName);
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+        return txs.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
 
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
-//        tx.setTimestamp(LocalDateTime.now());
-        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
-        Instant instant = Instant.now();
-        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
-//        try{
-//            tx.setTimestamp(TimezoneUtils.getLocalTime(currentUser.getTimezone()); //TODO
-//        }
-//        catch (IOException e){
-//            LogUtils.error("Failed to set timestamp for transaction: " + tx.getId());
-//        }
         transactions.add(tx);
         LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
         save();
+    }
+
+    public void add(Transaction tx, String category) {
+        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+        tx.setCategory(currentUser.getCategory().contains(category) ? category : null);
+        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
+        transactions.add(tx);
+        save();
+        LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
     }
 
     /** Updates an existing transaction by ID. */
@@ -340,6 +410,77 @@ public class TransactionManager {
         } else {
             LogUtils.warn("Transaction not found: " + id);
         }
+    }
+
+    /**
+     * Retrieves the list of transactions for the current user.
+     *
+     * @return List of Transaction objects associated with the current user.
+     */
+    public static List<Transaction> getTransaction() {
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        TransactionManager txManager = runtime.getTranscationManager();
+        return txManager.getByUser(runtime.getCurrentUser().getUsername());
+    }
+
+    /**
+     * Converts the list of transactions to a JSON-like string representation.
+     * Each transaction is converted to a string with special characters escaped.
+     *
+     * @return A JSON-like string representing all transactions.
+     */
+    public static String transferTransaction() {
+        List<Transaction> transactions = getTransaction();
+        StringBuilder result = new StringBuilder();
+        result.append("["); // Start of JSON array
+
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction t = transactions.get(i);
+            if (i > 0) result.append(", ");
+            result.append(convertTransactionToEscapedString(t)); // Convert each transaction to string
+        }
+
+        result.append("]"); // End of JSON array
+        return result.toString();
+    }
+
+    /**
+     * Converts a single Transaction object into a string, escaping special characters
+     * to ensure valid JSON formatting.
+     *
+     * @param t The Transaction object to convert.
+     * @return A string representation of the transaction in JSON-like format with escaped characters.
+     */
+    private static String convertTransactionToEscapedString(Transaction t) {
+        return String.format(
+                "{\"id\":\"%s\",\"username\":\"%s\",\"name\":\"%s\",\"timestamp\":\"%s\"," +
+                        "\"amount\":%.2f,\"category\":\"%s\",\"currency\":\"%s\"}",
+                escapeString(t.getId()),
+                escapeString(t.getUsername()),
+                escapeString(t.getName()),
+                escapeString(t.getTimestamp().toString()),
+                t.getAmount(),
+                escapeString(t.getCategory()),
+                escapeString(t.getCurrency().name())
+        );
+    }
+
+    /**
+     * Escapes special characters in a string to ensure proper formatting for JSON output.
+     * The following characters are escaped: backslash, double quotes, newlines, carriage
+     * returns, and tabs.
+     *
+     * @param input The input string to escape.
+     * @return A string with escaped special characters.
+     */
+    private static String escapeString(String input) {
+        if (input == null) return "";
+        return input
+                .replace("\\", "\\\\")   // Escape backslash
+                .replace("\"", "\\\"")   // Escape double quotes
+                .replace("\n", "\\n")    // Escape newline
+                .replace("\r", "\\r")    // Escape carriage return
+                .replace("\t", "\\t");   // Escape tab
     }
 
 }
