@@ -39,7 +39,6 @@ public class ConfirmEntryPageController implements Initializable {
     @FXML private VBox inputContainer;
     @FXML private VBox emptyInputContainer;
     @FXML private Arc spinnerArc;
-
     @FXML private TextField nameField;
     @FXML private TextField amountField;
     @FXML private TextField datetimeField;
@@ -55,10 +54,13 @@ public class ConfirmEntryPageController implements Initializable {
         ApplicationRuntime rt = ApplicationRuntime.getInstance();
         Object fromPageObj = rt.getNavParam("fromPage");
         Object fromStatusObj = rt.getNavParam("fromStatus");
+        Object needsProcessObj = rt.getNavParam("needsProcess");
         String prevPage = (fromPageObj instanceof String)
                 ? ((String) fromPageObj) : "UNKNOWN";
         fromStatus = (fromStatusObj instanceof ProgramStatus)
                 ? ((ProgramStatus) fromStatusObj) : ProgramStatus.HOME;
+        Boolean needsProcess = (needsProcessObj instanceof Boolean)
+                ? ((Boolean) needsProcessObj) : Boolean.FALSE;
         previousPageLabel.setText(prevPage);
 
         warningLabel.managedProperty().bind(warningLabel.visibleProperty());
@@ -73,7 +75,7 @@ public class ConfirmEntryPageController implements Initializable {
         emptyInputContainer.setVisible(true);
 
         setCategoryBox();
-        toggleProcessing(true);
+        toggleProcessing(needsProcess);
 
     }
 
@@ -86,6 +88,10 @@ public class ConfirmEntryPageController implements Initializable {
     private void toggleProcessing(boolean isProcessing) {
         this.isProcessing = isProcessing;
         if (isProcessing){
+            hintContainer.setVisible(false);
+            loadContainer.setVisible(true);
+            inputContainer.setVisible(false);
+            emptyInputContainer.setVisible(true);
             spinnerArc.setRadiusX(24);
             spinnerArc.setRadiusY(24);
             RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), spinnerArc);

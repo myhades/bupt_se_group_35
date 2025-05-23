@@ -13,11 +13,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Comparator;
 
@@ -90,16 +92,26 @@ public class TransactionManager {
      * @param keyword keyword to search
      * @return matched transactions
      */
-    public List<Transaction> searchByNameOrCategory(String keyword) {
+    public List<Transaction> searchByKeyword(String keyword) {
+        return searchByKeyword(transactions, keyword);
+    }
+
+    /**
+     * Fuzzy search transaction records and perform partial matching based on the name or category fields.
+     *
+     * @param txs list of transactions to search from
+     * @param keyword keyword to search
+     * @return matched transactions
+     */
+    public List<Transaction> searchByKeyword(List<Transaction> txs, String keyword) {
         if (keyword == null || keyword.isBlank()) {
-            LogUtils.warn("Search keyword is empty or null");
             return new ArrayList<>();
         }
 
         LogUtils.trace("Fuzzy searching transactions by name or category with keyword: " + keyword);
         String lowerKeyword = keyword.trim().toLowerCase();
 
-        return transactions.stream()
+        return txs.stream()
                 .filter(tx -> tx.getName() != null && tx.getName().toLowerCase().contains(lowerKeyword)
                         || tx.getCategory() != null && tx.getCategory().toLowerCase().contains(lowerKeyword))
                 .collect(Collectors.toList());
@@ -155,25 +167,43 @@ public class TransactionManager {
      * @param ascending = true sort by ascending，= false sort by descending
      */
     public List<Transaction> sortByAmount(boolean ascending) {
+        return sortByAmount(transactions, ascending);
+    }
+
+    /**
+     * sort by amount
+     * @param txs list of transactions to sort
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByAmount(List<Transaction> txs, boolean ascending) {
         Comparator<Transaction> comparator = Comparator.comparing(Transaction::getAmount);
         if (!ascending) {
             comparator = comparator.reversed();
         }
-        return transactions.stream()
+        return txs.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
 
     /**
-     * sort by timestamp
+     * Sort by timestamp
      * @param ascending = true sort by ascending，= false sort by descending
      */
     public List<Transaction> sortByTimestamp(boolean ascending) {
+        return sortByTimestamp(transactions, ascending);
+    }
+
+    /**
+     * Sort by timestamp
+     * @param txs list of transactions to sort
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByTimestamp(List<Transaction> txs, boolean ascending) {
         Comparator<Transaction> comparator = Comparator.comparing(Transaction::getTimestamp);
         if (!ascending) {
             comparator = comparator.reversed();
         }
-        return transactions.stream()
+        return txs.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
@@ -183,29 +213,29 @@ public class TransactionManager {
      * @param ascending = true sort by ascending，= false sort by descending
      */
     public List<Transaction> sortByName(boolean ascending) {
+        return sortByName(transactions, ascending);
+    }
+
+    /**
+     * sort by name
+     * @param txs list of transactions to sort
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByName(List<Transaction> txs, boolean ascending) {
         Comparator<Transaction> comparator = Comparator.comparing(Transaction::getName);
         if (!ascending) {
             comparator = comparator.reversed();
         }
-        return transactions.stream()
+        return txs.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
 
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
-//        tx.setTimestamp(LocalDateTime.now());
-//        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-//        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
-//        Instant instant = Instant.now();
-//        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
-//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
-//        tx.setCategory(tx.getCategory()==null ? currentUser.getCategory().get(0) : tx.getCategory()); //FIXME: fuzzy match
-//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone()));
-//        tx.setCategory(currentUser.getCategory().get(0));
         transactions.add(tx);
-        save();
         LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
+        save();
     }
 
     public void add(Transaction tx, String category) {
@@ -499,6 +529,29 @@ public class TransactionManager {
                 .replace("\n", "\\n")    // Escape newline
                 .replace("\r", "\\r")    // Escape carriage return
                 .replace("\t", "\\t");   // Escape tab
+    }
+
+    public static Transaction fromMap(Map<String,Object> row, String username) {
+        Transaction tx = new Transaction();
+        tx.setUsername(username);
+
+        Object payee = row.get("payee");
+        tx.setName(payee != null ? payee.toString() : "Unknown");
+
+        Object dateObj = row.get("date");
+        if (dateObj instanceof LocalDate ld) {
+            tx.setTimestamp(ld.atStartOfDay());
+        } else {
+            tx.setTimestamp(LocalDateTime.now());
+        }
+
+        Object amt = row.get("amount");
+        if (amt instanceof BigDecimal bd) {
+            tx.setAmount(bd);
+        } else {
+            tx.setAmount(BigDecimal.ZERO);
+        }
+        return tx;
     }
 
 }
