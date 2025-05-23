@@ -19,7 +19,6 @@ import org.group35.util.FileUtils;
 import org.group35.controller.TransactionManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
@@ -61,17 +60,26 @@ public class ImportCSVPageController {
         importButton.setVisible(false);
     }
 
+    private void showStatus(String message) {
+        showStatus(message, false);
+    }
+
     private void showStatus(String message, boolean isWarning) {
         statusLabel.setVisible(!message.isEmpty());
         statusLabel.setText(message);
-        if (isWarning) statusLabel.getStyleClass().add("warning");
-        else statusLabel.getStyleClass().removeAll("warning");
+        if (isWarning) {
+            statusLabel.getStyleClass().add("warning");
+        }
+        else {
+            statusLabel.getStyleClass().remove("warning");
+        }
     }
 
     @FXML
     public void handleSelect(ActionEvent actionEvent) {
         importedTxs.clear();
         importButton.setVisible(false);
+        showStatus("");
         refreshList();
 
         Window win = statusLabel.getScene().getWindow();
@@ -107,10 +115,10 @@ public class ImportCSVPageController {
 
             refreshList();
             if (!importedTxs.isEmpty()) importButton.setVisible(true);
-            showStatus("Loaded " + importedTxs.size() + " transactions.", false);
-        } catch (IOException e) {
+            showStatus("Loaded " + importedTxs.size() + " transactions.");
+        } catch (Exception e) {
             importedTxs.clear();
-            showStatus("Failed to read CSV: " + e.getMessage(), false);
+            showStatus("Failed to read CSV: " + e.getMessage(), true);
         }
     }
 
