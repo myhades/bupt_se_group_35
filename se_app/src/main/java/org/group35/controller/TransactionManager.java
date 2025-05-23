@@ -248,15 +248,48 @@ public class TransactionManager {
 
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        if (tx.getLocation() == null || tx.getLocation().isEmpty()) {
+            tx.setLocation("");
+        }
+        if (tx.getCategory() == null || tx.getCategory().isEmpty()) {
+            tx.setCategory("Unclassified");
+        }
+        if (tx.getTimestamp() == null) {
+            tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(user.getTimezone()));
+        }
+        if (tx.getAmount() == null) {
+            tx.setAmount(BigDecimal.ZERO);
+        }
+        if (tx.getName() == null || tx.getName().isEmpty()) {
+            tx.setName(user.getUsername());
+        }
+        if (tx.getCurrency() == null) {
+            tx.setCurrency(Transaction.Currency.CNY);
+        }
         transactions.add(tx);
         LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
         save();
     }
 
     public void add(Transaction tx, String category) {
-        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-        tx.setCategory(currentUser.getCategory().contains(category) ? category : null);
-//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        tx.setCategory(user.getCategory().contains(category) ? category : "Unclassified");
+        if (tx.getLocation() == null || tx.getLocation().isEmpty()) {
+            tx.setLocation("");
+        }
+        if (tx.getTimestamp() == null) {
+            tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(user.getTimezone()));
+        }
+        if (tx.getAmount() == null) {
+            tx.setAmount(BigDecimal.ZERO);
+        }
+        if (tx.getName() == null || tx.getName().isEmpty()) {
+            tx.setName(user.getUsername());
+        }
+        if (tx.getCurrency() == null) {
+            tx.setCurrency(Transaction.Currency.CNY);
+        }
         transactions.add(tx);
         save();
         LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
