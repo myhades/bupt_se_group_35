@@ -70,14 +70,10 @@
 /* pie chart */
 .pie-chart {
     -fx-pref-height: 500px;
+    -fx-pref-width: 600px;
     -fx-padding: 0 0 -16px 0;
-    -fx-pie-chart-inner-radius: 0.4;
 }
 
-.small-button {
-    -fx-padding: 4px 8px;
-    -fx-font-size: 12px;
-}
 
 #spendingChart .chart-plot-background {
     -fx-background-color: transparent;

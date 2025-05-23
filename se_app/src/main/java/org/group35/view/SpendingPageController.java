@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.SVGPath;
 import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
+import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
 
@@ -17,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -93,10 +95,14 @@ public class SpendingPageController {
         this.setAISummary();
     }
 
-    // TODO: provide setters for budget left and AI summary
-
     private void setBudgetLeftAmount(){
         ApplicationRuntime rt = ApplicationRuntime.getInstance();
+        BigDecimal totalBudgetBD = rt.getUserManager().getMonthlyBudget();
+        double totalBudget = totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
+        double usedBudget = calculateUsedBudget();
+        double availableBudget = totalBudget - usedBudget;
+        if (availableBudget < 0) availableBudget = 0;
+        budgetLeftAmount.setText("$"+String.format("%.0f", availableBudget));
     }
 
     private void setAISummary(){
@@ -234,5 +240,41 @@ public class SpendingPageController {
             return COLOR_PALETTE[idx];
         }
         return Color.web("#555555");
+    }
+
+    private double calculateUsedBudget() {
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        User currentUser = runtime.getCurrentUser();
+
+        if (currentUser == null) {
+            return 0.0;
+        }
+
+        try {
+            List<Transaction> transactions = runtime.getTranscationManager().getByUser(currentUser.getUsername());
+
+            LocalDateTime now = LocalDateTime.now();
+            int currentMonth = now.getMonthValue();
+            int currentYear = now.getYear();
+
+            double totalExpenses = 0.0;
+            for (Transaction transaction : transactions) {
+                // check whether this transaction happens in this month
+                LocalDateTime transactionTime = transaction.getTimestamp();
+                if (transactionTime != null &&
+                        transactionTime.getMonthValue() == currentMonth &&
+                        transactionTime.getYear() == currentYear) {
+
+                    BigDecimal amount = transaction.getAmount();
+                    if (amount != null && amount.compareTo(BigDecimal.ZERO) < 0) {
+                        totalExpenses += amount.abs().doubleValue(); // less than 0
+                    }
+                }
+            }
+            return totalExpenses;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
     }
 }
