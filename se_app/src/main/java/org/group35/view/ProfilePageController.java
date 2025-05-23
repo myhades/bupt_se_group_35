@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -45,6 +46,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,6 +82,7 @@ public class ProfilePageController implements Initializable {
         setTimezones();
         setCategoryBox();
 
+        categoryBox.setValue(categoryBox.getItems().get(0));
         LocationField.setPromptText(uManager.getLocation(currentname));
 
         Image avatar = ImageUtils.fromBase64(uManager.getUserAvatar(currentname));
@@ -202,5 +205,34 @@ public class ProfilePageController implements Initializable {
     @FXML
     public void gotoMore(Event e) {
         ApplicationRuntime.getInstance().navigateTo(ProgramStatus.MORE);
+    }
+
+    @FXML
+    private void addCategory(ActionEvent event) {
+        // 实现添加分类的逻辑
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add Category");
+        dialog.setHeaderText("Enter new category name");
+        dialog.setContentText("Category:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(category -> {
+            if (!category.isEmpty()) {
+                categoryBox.getItems().add(category);
+                categoryBox.getSelectionModel().select(category);
+            }
+        });
+    }
+
+    @FXML
+    private void removeCategory(ActionEvent event) {
+        // 实现删除分类的逻辑
+        String selected = categoryBox.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            categoryBox.getItems().remove(selected);
+        } else {
+            // 可以显示警告信息
+            showError("Please select a category to remove");
+        }
     }
 }

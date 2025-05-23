@@ -191,3 +191,20 @@
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 20px;
 }
+
+/* 分类控制容器 */
+.category-control-box {
+    -fx-alignment: CENTER_LEFT;
+}
+
+
+/* 分类按钮 */
+.category-button {
+    -fx-background-color: transparent;
+    -fx-padding: 3;
+    -fx-cursor: hand;
+}
+
+.category-button-icon {
+    -fx-fill: #666666;
+}
