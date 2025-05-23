@@ -3,6 +3,7 @@ package org.group35.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
+import javafx.scene.image.Image;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -10,6 +11,7 @@ import org.group35.util.TimezoneUtils;
 
 import static org.group35.util.TimezoneUtils.getCoordinates;
 import static org.group35.util.TimezoneUtils.getTimeZoneId;
+import org.group35.util.ImageUtils;
 
 /**
  * User data model, including username and encrypted password etc.
@@ -72,7 +74,6 @@ public class User {
     public User(String username, String hashedPassword) {
         this.username = username;
         this.hashedPassword = hashedPassword;
-        this.avatar = null;
         this.monthlyBudget = BigDecimal.ZERO;
         this.location = "China, Shanghai"; //TODO: add default location and timezone
         try {
@@ -81,6 +82,13 @@ public class User {
        catch (IOException e) {
                 this.timezone = "Asia/Shanghai";
        }
+        try {
+            Image defaultAvatar = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/group35/view/assets/images/default_avatar.png")));
+            this.avatar = ImageUtils.toBase64(defaultAvatar,"png");
+        }
+        catch (Exception e){
+            this.avatar = null;
+        }
 
         // Initialize default categories
         addCategory("Entertainment");

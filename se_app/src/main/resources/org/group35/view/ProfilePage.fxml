@@ -70,7 +70,7 @@
                                fitWidth="96" fitHeight="96"
                                styleClass="avatar-image">
 <!--                        <image>-->
-<!--                            <Image url="@/org/group35/view/assets/images/default_avatar.jpg" />-->
+<!--                            <Image url="@/org/group35/view/assets/images/default_avatar.png" />-->
 <!--                        </image>-->
                         <clip>
                             <Circle centerX="48" centerY="48" radius="48"/>

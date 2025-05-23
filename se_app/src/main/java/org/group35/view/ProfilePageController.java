@@ -52,14 +52,11 @@ import java.util.stream.Collectors;
 
 public class ProfilePageController implements Initializable {
 
-    @FXML private Label previousPageLabel;
     @FXML private Label warningLabel;
     @FXML private VBox hintContainer;
-    @FXML private VBox loadContainer;
-    @FXML private VBox inputContainer;
-    @FXML private VBox emptyInputContainer;
 
     @FXML private ImageView avatarImage;
+    @FXML final Image defaultAvatar = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/group35/view/assets/images/default_avatar.png")));
     @FXML private TextField nameField;
     @FXML private TextField passwordField;
     @FXML private ComboBox<String> TimezoneField;
@@ -69,8 +66,6 @@ public class ProfilePageController implements Initializable {
     private Boolean isWarning;
 
     private User currentuser;
-
-    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -99,8 +94,7 @@ public class ProfilePageController implements Initializable {
 
 
     private void populateFields(Transaction tx) {
-        nameField.setText(tx.getName());
-        passwordField.setText(tx.getAmount().toPlainString());
+        passwordField.setText(tx.getName());
         LocalDateTime ts = tx.getTimestamp();
         String loc = tx.getLocation();
         LocationField.setText(loc != null ? loc : "");
@@ -132,40 +126,18 @@ public class ProfilePageController implements Initializable {
     /**
      * Show an inline warning message above the input field.
      */
-//    private void showWarning(String msg, boolean isWarning) { //TODO
-//        if (loginGroup.isVisible()) {
-//            warningLabel.setText(msg);
-//            warningLabel.setVisible(true);
-//            warningLabel.setManaged(true);
-//        } else {
-//            confirmWarningLabel.setText(msg);
-//            confirmWarningLabel.setVisible(true);
-//            confirmWarningLabel.setManaged(true);
-//        }
-//    }
+    private void showWarning(String msg, boolean isWarning) {
+        //TODO
+
+    }
 
     /**
      * Hide the inline warning label.
      */
-    private void hideWarning() { //TODO
+    private void hideWarning() {
+        //TODO
         warningLabel.setVisible(false);
         warningLabel.setManaged(false);
-    }
-
-    private void toggleProcessing(boolean isProcessing) {
-//        this.isProcessing = isProcessing;
-        if (isProcessing){
-            hintContainer.setVisible(false);
-            loadContainer.setVisible(true);
-            inputContainer.setVisible(false);
-            emptyInputContainer.setVisible(true);
-        }
-        else {
-            hintContainer.setVisible(true);
-            loadContainer.setVisible(false);
-            inputContainer.setVisible(true);
-            emptyInputContainer.setVisible(false);
-        }
     }
 
 
@@ -205,25 +177,6 @@ public class ProfilePageController implements Initializable {
     @FXML
     private void handleSave(ActionEvent event) {
         hideWarning();
-//        toggleProcessing(false);
-
-//        String username = nameField.getText().trim();
-//
-//        if (username.isEmpty()) {
-//            showError("Please enter a username.");
-//            return;
-//        }
-//        if (!username.matches("[A-Za-z0-9]+")) {
-//            showError("Username can only contain letters and digits.");
-//            return;
-//        }
-//        if (UserManager.getPersistentUsers().stream()
-//                .anyMatch(u -> u.getUsername().equals(username))) {
-//            showError("That username is already taken.");
-//            return;
-//        }
-        //TODO: Store to User
-
 
         String initialPwd = passwordField.getText().trim();
         if (initialPwd.isEmpty()) {
@@ -250,27 +203,14 @@ public class ProfilePageController implements Initializable {
 
         //TODO: add more validation
 
-        // switch to confirm group
-//        loginGroup.setManaged(false);
-//        loginGroup.setVisible(false);
-//        confirmGroup.setManaged(true);
-//        confirmGroup.setVisible(true);
-//        confirmPasswordField.clear();
-//        Platform.runLater(confirmPasswordField::requestFocus);
-
 
     }
 
     @FXML
     private void handleCancel(ActionEvent event) {
-//        toggleProcessing(false);
         //TODO: clear all textfiled
     }
 
-//    @FXML
-//    public void goBack(Event e) {
-//        ApplicationRuntime.getInstance().navigateTo(fromStatus);
-//    }
 
     @FXML
     public void gotoMore(Event e) {
