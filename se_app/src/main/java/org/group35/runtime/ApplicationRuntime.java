@@ -36,7 +36,8 @@ public final class ApplicationRuntime {
         AI_SUGGESTION("/org/group35/view/AIDialog.fxml"),
         RECOMMENDATION("/org/group35/view/RecommendationDialog.fxml"),
         ABOUT("/org/group35/view/AboutPage.fxml"),
-        SUBSCRIPTION("/org/group35/view/SubscriptionPage.fxml");
+        SUBSCRIPTION("/org/group35/view/SubscriptionPage.fxml"),
+        FEEDBACK("/org/group35/view/FeedbackPage.fxml");
 
         private final String fxmlPath;
 

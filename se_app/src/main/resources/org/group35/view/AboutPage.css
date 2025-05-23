@@ -16,7 +16,7 @@
 }
 .title-dot {
     -fx-font-size: 20px;
-    -fx-text-fill: gray;
+    -fx-text-fill: #215F9A;
 }
 .title-back-icon{
     -fx-scale-x: 2;
