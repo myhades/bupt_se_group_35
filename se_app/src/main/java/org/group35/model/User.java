@@ -2,8 +2,14 @@ package org.group35.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+
+import org.group35.util.TimezoneUtils;
+
+import static org.group35.util.TimezoneUtils.getCoordinates;
+import static org.group35.util.TimezoneUtils.getTimeZoneId;
 
 /**
  * User data model, including username and encrypted password etc.
@@ -68,9 +74,13 @@ public class User {
         this.hashedPassword = hashedPassword;
         this.avatar = null;
         this.monthlyBudget = BigDecimal.ZERO;
-        this.location = "China, Shanghai";
-//        this.timezone = TimezoneUtil.getTimeZoneId();
-        //TODO: add default location and timezone
+        this.location = "China, Shanghai"; //TODO: add default location and timezone
+        try {
+            this.timezone = TimezoneUtils.getTimeZoneId(getCoordinates(this.location)[0], getCoordinates(this.location)[1]);
+        }
+       catch (IOException e) {
+                this.timezone = "Asia/Shanghai";
+       }
 
         // Initialize default categories
         addCategory("Entertainment");
@@ -149,11 +159,11 @@ public class User {
     /**
      * Get all defined categories.
      *
-     * @return an unmodifiable collection of all categories
+     * @return an unmodifiable List of all categories
      */
-    public Collection<String> getCategory() {
+    public List<String> getCategory() {
 
-        return Collections.unmodifiableCollection(categoryMap.keySet());
+        return Collections.unmodifiableList(new ArrayList<>(categoryMap.keySet()));
     }
 
     /**
@@ -167,9 +177,9 @@ public class User {
             return false;
 //            throw new IllegalArgumentException("Category name cannot be null or empty");
         }
-        if (categoryMap.containsKey(name)) {
+        if (! categoryMap.containsKey(name)) {
             return false;
-//            throw new IllegalArgumentException("Category with name '" + name + "' already exists.");
+//            throw new IllegalArgumentException("Category with name '" + name + "' doesnt exist.");
         }
         categoryMap.remove(name);
         return true;
