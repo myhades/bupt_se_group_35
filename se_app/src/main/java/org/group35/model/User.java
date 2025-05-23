@@ -92,6 +92,7 @@ public class User {
         addCategory("Salary");
         addCategory("Transfer");
         addCategory("Investment");
+        addCategory("Other");
     }
 
     public String getUsername() {
