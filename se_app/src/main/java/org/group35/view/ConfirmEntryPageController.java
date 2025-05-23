@@ -28,8 +28,6 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.Thread.sleep;
-
 public class ConfirmEntryPageController implements Initializable {
 
     @FXML private Label previousPageLabel;
