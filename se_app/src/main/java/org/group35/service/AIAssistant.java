@@ -3,6 +3,7 @@ package org.group35.service;
 import okhttp3.*;
 import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
+import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -10,7 +11,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -213,10 +217,12 @@ public class AIAssistant {
         }
         return response;
     }
-    public static CompletableFuture<String> AISummaryAsyn(String stringContent) {
+    public static CompletableFuture<String> AISummaryAsyn() {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
+            String stringContent = null;//TransactionManager.transferTransaction();
             String prompt = buildAISummaryPrompt(stringContent);
+            LogUtils.info("debug:" + stringContent);
             DeepSeekCalling(prompt, new RecognitionCallback() {
                 @Override
                 public void onSuccess(String content) {
@@ -268,24 +274,24 @@ public class AIAssistant {
 //        User usr = UserManager.getCurrentUser();
 //        BigDecimal budget = usr.getMonthlyBudget();
 
-
-        BigDecimal budget = BigDecimal.valueOf(5000);
-        String location = "Tokyo, Japan";
-        //String stringContent = TransactionUtils.transferTransaction();
-        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
-                "2025-04-03,expense,1000,food\\n" +
-                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
-
-        CompletableFuture<String> suggFuture = AISuggestionAsyn(budget, stringContent);
-        CompletableFuture<String> summFuture = AISummaryAsyn(stringContent);
-        CompletableFuture<String> recFuture = AIRecommendationAsyn(location, stringContent);
-
-        // Wait for all futures to complete (for demonstration)
-        CompletableFuture.allOf(suggFuture, summFuture, recFuture).join();
-
-        LogUtils.info(suggFuture.join());
-        LogUtils.info(summFuture.join());
-        LogUtils.info(recFuture.join());
+//
+//        BigDecimal budget = BigDecimal.valueOf(5000);
+//        String location = "Tokyo, Japan";
+//        //String stringContent = TransactionUtils.transferTransaction();
+//        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
+//                "2025-04-03,expense,1000,food\\n" +
+//                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
+//
+//        CompletableFuture<String> suggFuture = AISuggestionAsyn(budget, stringContent);
+//        CompletableFuture<String> summFuture = AISummaryAsyn();
+//        CompletableFuture<String> recFuture = AIRecommendationAsyn(location, stringContent);
+//
+//        // Wait for all futures to complete (for demonstration)
+//        CompletableFuture.allOf(suggFuture, summFuture, recFuture).join();
+//
+//        LogUtils.info(suggFuture.join());
+//        LogUtils.info(summFuture.join());
+//        LogUtils.info(recFuture.join());
 
     }
 }
