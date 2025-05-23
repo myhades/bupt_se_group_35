@@ -5,6 +5,8 @@ import org.group35.model.Transaction;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.model.User;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -50,28 +52,28 @@ class TransactionManagerTest {
         // Add some transactions to the store for testing
         Transaction tx1 = new Transaction();
         tx1.setUsername("TestUser");
-        tx1.setName("TestTransaction1");
+        tx1.setName("ATestTransaction1");
         tx1.setAmount(new BigDecimal("100.00"));
         txManager.add(tx1);
         tx1.setTimestamp(LocalDateTime.of(2025, 5, 20, 10, 0));
 
         Transaction tx2 = new Transaction();
         tx2.setUsername("TestUser");
-        tx2.setName("TestTransaction2");
+        tx2.setName("BTestTransaction2");
         tx2.setAmount(new BigDecimal("200.00"));
         txManager.add(tx2);
         tx2.setTimestamp(LocalDateTime.of(2025, 5, 21, 9, 0));
 
         Transaction tx3 = new Transaction();
         tx3.setUsername("TestUser");
-        tx3.setName("TestTransaction3");
+        tx3.setName("CTestTransaction3");
         tx3.setAmount(new BigDecimal("-50.00"));
         txManager.add(tx3);
         tx3.setTimestamp(LocalDateTime.of(2025, 5, 22, 8, 0));
 
         Transaction tx4 = new Transaction();
         tx4.setUsername("TestUser");
-        tx4.setName("TestTransaction4");
+        tx4.setName("DTestTransaction4");
         tx4.setAmount(new BigDecimal("-150.00"));
         txManager.add(tx4);
         tx4.setTimestamp(LocalDateTime.of(2025, 5, 22, 14, 0));
@@ -204,6 +206,20 @@ class TransactionManagerTest {
         List<Transaction> sorted = txManager.sortByTimestamp(false);
         assertEquals(LocalDateTime.of(2025, 5, 22, 14, 0), sorted.get(0).getTimestamp()); // lastest
         assertEquals(LocalDateTime.of(2025, 5, 20, 10, 0), sorted.get(3).getTimestamp()); // earliest
+    }
+
+    @Test
+    void sortByName_Ascending() {
+        List<Transaction> sorted = txManager.sortByName(true);
+        assertEquals("ATestTransaction1", sorted.get(0).getName()); // smallest
+        assertEquals("DTestTransaction4", sorted.get(3).getName()); // biggest
+    }
+
+    @Test
+    void sortByName_Descending() {
+        List<Transaction> sorted = txManager.sortByName(false);
+        assertEquals("DTestTransaction4", sorted.get(0).getName()); // biggest
+        assertEquals("ATestTransaction1", sorted.get(3).getName()); // smallest
     }
 
     @Test
@@ -400,5 +416,95 @@ class TransactionManagerTest {
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newPattern, updated.getRecurrencePattern());
         assertNotEquals(originalPattern, updated.getRecurrencePattern());
+    }
+
+    @Test
+    void testPartialMatchName() {
+        List<Transaction> result = txManager.searchByNameOrCategory("D");
+        assertEquals(1, result.size());
+        assertEquals("DTestTransaction4", result.get(0).getName());
+    }
+
+    @AfterEach
+    void tearDown() {
+        Transaction tx1 = new Transaction();
+        tx1.setUsername("TestUser");
+        tx1.setName("Starbucks Coffee");
+        tx1.setAmount(new BigDecimal("-50.00"));
+        tx1.setCurrency(Transaction.Currency.CNY);
+        txManager.add(tx1, "Cater");
+        tx1.setTimestamp(LocalDateTime.of(2025, 5, 20, 10, 0));
+
+        Transaction tx2 = new Transaction();
+        tx2.setUsername("TestUser");
+        tx2.setName("Ginza Mall");
+        tx2.setAmount(new BigDecimal("-200.00"));
+        tx2.setCurrency(Transaction.Currency.CNY);
+        txManager.add(tx2, "Shopping");
+        tx2.setTimestamp(LocalDateTime.of(2025, 5, 21, 9, 0));
+
+        Transaction tx3 = new Transaction();
+        tx3.setUsername("TestUser");
+        tx3.setName("Beijing Subway");
+        tx3.setAmount(new BigDecimal("-6.00"));
+        tx3.setCurrency(Transaction.Currency.CNY);
+        txManager.add(tx3, "Transportation");
+        tx3.setTimestamp(LocalDateTime.of(2025, 5, 21, 12, 0));
+
+        Transaction tx4 = new Transaction();
+        tx4.setUsername("TestUser");
+        tx4.setName("ByteDance");
+        tx4.setAmount(new BigDecimal("5000.00"));
+        tx4.setCurrency(Transaction.Currency.CNY);
+        txManager.add(tx4, "Salary");
+        tx4.setTimestamp(LocalDateTime.of(2025, 5, 22, 11, 12));
+
+        Transaction tx5 = new Transaction();
+        tx5.setUsername("TestUser");
+        tx5.setName("Wechat Pay");
+        tx5.setAmount(new BigDecimal("200.00"));
+        tx5.setCurrency(Transaction.Currency.CNY);
+        txManager.add(tx5, "Transfer");
+        tx5.setTimestamp(LocalDateTime.of(2025, 5, 22, 21, 05));
+
+        Transaction tx6 = new Transaction();
+        tx6.setUsername("TestUser");
+        tx6.setName("Coursera");
+        tx6.setAmount(new BigDecimal("-199.00"));
+        tx6.setCurrency(Transaction.Currency.CNY);
+        tx6.setTimestamp(LocalDateTime.of(2025, 5, 23, 14, 30));
+        txManager.add(tx6, "Education");
+
+        Transaction tx7 = new Transaction();
+        tx7.setUsername("TestUser");
+        tx7.setName("Apple Store");
+        tx7.setAmount(new BigDecimal("-8999.00"));
+        tx7.setCurrency(Transaction.Currency.CNY);
+        tx7.setTimestamp(LocalDateTime.of(2025, 5, 23, 16, 45));
+        txManager.add(tx7, "Shopping");
+
+        Transaction tx8 = new Transaction();
+        tx8.setUsername("TestUser");
+        tx8.setName("iQIYI VIP");
+        tx8.setAmount(new BigDecimal("-30.00"));
+        tx8.setCurrency(Transaction.Currency.CNY);
+        tx8.setTimestamp(LocalDateTime.of(2025, 5, 24, 10, 15));
+        txManager.add(tx8, "Entertainment");
+
+        Transaction tx9 = new Transaction();
+        tx9.setUsername("TestUser");
+        tx9.setName("Alibaba Rent");
+        tx9.setAmount(new BigDecimal("-3500.00"));
+        tx9.setCurrency(Transaction.Currency.CNY);
+        tx9.setTimestamp(LocalDateTime.of(2025, 5, 24, 11, 0));
+        txManager.add(tx9, "Rent");
+
+        Transaction tx10 = new Transaction();
+        tx10.setUsername("TestUser");
+        tx10.setName("Fund Investment");
+        tx10.setAmount(new BigDecimal("-2000.00"));
+        tx10.setCurrency(Transaction.Currency.CNY);
+        tx10.setTimestamp(LocalDateTime.of(2025, 5, 25, 9, 30));
+        txManager.add(tx10, "Investment");
     }
 }

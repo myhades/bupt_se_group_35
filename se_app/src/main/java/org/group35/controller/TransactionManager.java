@@ -81,6 +81,27 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Fuzzy search transaction records and perform partial matching based on the name or category fields.
+     *
+     * @param keyword keyword to search
+     * @return matched transactions
+     */
+    public List<Transaction> searchByNameOrCategory(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            LogUtils.warn("Search keyword is empty or null");
+            return new ArrayList<>();
+        }
+
+        LogUtils.trace("Fuzzy searching transactions by name or category with keyword: " + keyword);
+        String lowerKeyword = keyword.trim().toLowerCase();
+
+        return transactions.stream()
+                .filter(tx -> tx.getName() != null && tx.getName().toLowerCase().contains(lowerKeyword)
+                        || tx.getCategory() != null && tx.getCategory().toLowerCase().contains(lowerKeyword))
+                .collect(Collectors.toList());
+    }
+
     /** Returns transactions within the given amount range. bigger or equal, smaller or equal */
     public List<Transaction> getByAmountRange(BigDecimal minAmount, BigDecimal maxAmount) {
         LogUtils.trace("Filtering transactions by amount range: " + minAmount + " - " + maxAmount);
@@ -154,22 +175,43 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * sort by name
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByName(boolean ascending) {
+        Comparator<Transaction> comparator = Comparator.comparing(Transaction::getName);
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+        return transactions.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
 //        tx.setTimestamp(LocalDateTime.now());
-        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
-        Instant instant = Instant.now();
-        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
-//        try{
-//            tx.setTimestamp(TimezoneUtils.getLocalTime(currentUser.getTimezone()); //TODO
-//        }
-//        catch (IOException e){
-//            LogUtils.error("Failed to set timestamp for transaction: " + tx.getId());
-//        }
+//        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+//        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
+//        Instant instant = Instant.now();
+//        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
+//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
+//        tx.setCategory(tx.getCategory()==null ? currentUser.getCategory().get(0) : tx.getCategory()); //FIXME: fuzzy match
+//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone()));
+//        tx.setCategory(currentUser.getCategory().get(0));
         transactions.add(tx);
-        LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
         save();
+        LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
+    }
+
+    public void add(Transaction tx, String category) {
+        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+        tx.setCategory(currentUser.getCategory().contains(category) ? category : null);
+        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
+        transactions.add(tx);
+        save();
+        LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
     }
 
     /** Updates an existing transaction by ID. */

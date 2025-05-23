@@ -1,66 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
+<?import org.group35.view.components.NavBarController?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.shape.SVGPath?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.group35.view.RecommendationDialogController"
-            stylesheets="@RecommendationDialog.css"
-            styleClass="recommendation-overlay-panel"
-            prefWidth="330" prefHeight="320">
+<?import javafx.scene.control.TextArea?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.RecommendationDialogController"
+      stylesheets="@RecommendationDialog.css"
+      styleClass="root-container">
 
-    <!-- Header with title and back button -->
-    <HBox alignment="CENTER_LEFT" spacing="80"
-          AnchorPane.topAnchor="10" AnchorPane.leftAnchor="12" AnchorPane.rightAnchor="30">
+    <!-- NavBar -->
+    <NavBarController activePage="PLAN"/>
 
-        <!-- Title Section -->
-        <HBox alignment="CENTER_LEFT" spacing="12" HBox.hgrow="ALWAYS">
-            <Label text="Recommendation" styleClass="title-label"/>
-
-            <!-- Back Button -->
-            <Button styleClass="title-back-button" onAction="#handleBack"
-                    HBox.hgrow="NEVER">
-                <graphic>
-                    <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                             styleClass="title-back-icon"/>
-                </graphic>
-            </Button>
-        </HBox>
-    </HBox>
-
-    <!-- Main Content Card -->
-    <VBox alignment="TOP_LEFT" spacing="20" styleClass="card"
-          AnchorPane.topAnchor="50" AnchorPane.leftAnchor="15"
-          AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="10">
-
-        <!-- Scrollable Text Content -->
-        <ScrollPane fx:id="recommendationScrollPane"
-                    fitToWidth="true"
-                    hbarPolicy="NEVER"
-                    vbarPolicy="AS_NEEDED"
-                    VBox.vgrow="ALWAYS"
-                    styleClass="scroll-pane"
-                    prefWidth="300">
-            <VBox alignment="TOP_LEFT" spacing="10">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-                <Text fx:id="recommendationText"
-                      wrappingWidth="240"
-                      styleClass="recommendation-text"
-                      text="Loading recommendations..."/>
-            </VBox>
-        </ScrollPane>
-
-        <!-- Button Section -->
-        <HBox alignment="CENTER_RIGHT" spacing="15">
-            <padding>
-                <Insets top="10" right="0" bottom="5" left="0"/>
-            </padding>
-        </HBox>
+    <!-- Title Section -->
+    <VBox styleClass="greeting-row" spacing="10">
+        <Label text="Local Recommendations for you." styleClass="greeting-label"/>
     </VBox>
-</AnchorPane>
+
+    <!-- Main Content -->
+    <GridPane styleClass="chart-row" hgap="20" vgap="20">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="40"/>
+        </columnConstraints>
+
+        <!-- Left: Budget Info -->
+        <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="0">
+            <Label text="Budget" styleClass="chart-title"/>
+            <!-- HBox for budget info and pie chart -->
+            <HBox spacing="20">
+                <VBox spacing="15" minWidth="220">
+                    <HBox>
+                        <VBox>
+                            <Label text="Available" styleClass="info-label-big"/>
+                            <HBox spacing="10">
+                                <Label fx:id="availableAmountLabel" text="\$200" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: black;" minWidth="110"/>
+                                <Label fx:id="availablePercentLabel" text="20%" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: #808080;" minWidth="60"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                    <HBox>
+                        <VBox>
+                            <Label text="Used" styleClass="info-label-big"/>
+                            <HBox spacing="10">
+                                <Label fx:id="usedAmountLabel" text="\$1600" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: black;" minWidth="110"/>
+                                <Label fx:id="usedPercentLabel" text="80%" styleClass="budget-amount" style="-fx-font-size: 30px; -fx-text-fill: #808080;" minWidth="60"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                    <Region minHeight="15"/>
+                </VBox>
+                <!-- PieChart with margin adjustment -->
+                <PieChart fx:id="budgetPieChart" styleClass="pie-chart" legendVisible="false" prefWidth="150" prefHeight="150" maxWidth="150" labelsVisible="false">
+                    <HBox.margin>
+                        <Insets top="-30"/>
+                    </HBox.margin>
+                </PieChart>
+            </HBox>
+
+            <!-- Buttons with adjusted spacing and position -->
+            <HBox spacing="30" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets left="20"/>
+                </padding>
+                <Button fx:id="editBudgetButton" text="Edit Budget" styleClass="edit-button" onAction="#gotoEditBudget">
+                    <graphic>
+                        <SVGPath content="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"
+                                 styleClass="edit-icon"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="AIButton" text="Get AI Suggestion" styleClass="ai-suggestion-button" onAction="#gotoAISuggestion">
+                    <graphic>
+                        <SVGPath content="M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,20 0.9,19.35 1.29,18.96L12.96,7.29C13.35,6.9 14,6.9 14.37,7.29Z"
+                                 styleClass="edit-icon"/>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+
+        <!-- Right: Recommendation and Local Info -->
+        <VBox styleClass="chart-container" spacing="10" GridPane.columnIndex="1">
+            <Label text="AI Recommendation" styleClass="chart-title"/>
+            <TextArea fx:id="aiRecommendationTextArea"
+                      prefWidth="100"
+                      prefHeight="300"
+                      wrapText="true"
+                      editable="false"
+                      styleClass="recommendation-textarea"
+                      promptText="AI-generated recommendations will appear here..."/>
+        </VBox>
+
+    </GridPane>
+
+</VBox>

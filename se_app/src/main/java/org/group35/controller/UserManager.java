@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * <br>
  * {@code UserManager uManager = runtime.getUserManager();}
  * <br>
- * {@code List<User> tx = uManager.getByUser(runtime.getCurrentUser().getUsername());}
+ * {@code List<User> tx = uManager.getUser("username");}
  * <br> or <br>
  * {@code User user = UserManager.getCurrentUser();}
  */

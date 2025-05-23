@@ -179,11 +179,6 @@
     -fx-padding: 0 5px;
 }
 
-/* Divider */
-.divider {
-    -fx-padding: 5px 0;
-}
-
 /* AI Section */
 .ai-section {
     -fx-background-color: #ffffff;

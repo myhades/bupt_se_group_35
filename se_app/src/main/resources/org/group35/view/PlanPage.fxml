@@ -22,7 +22,7 @@
 
     <!-- Title Section -->
     <VBox styleClass="greeting-row" spacing="10">
-        <Label text="You're currently on a budget." styleClass="greeting-label"/>
+        <Label fx:id="budgetStatusLabel" text="You're currently on a budget." styleClass="greeting-label"/>
     </VBox>
 
     <!-- Main Content -->
@@ -92,7 +92,10 @@
             <!-- Button with adjusted text wrapping and position -->
             <Button fx:id="recommendationButton"
                     wrapText="true"
-                    maxWidth="320"
+                    prefWidth="-1"
+                    maxWidth="Infinity"
+                    prefHeight="-1"
+                    minHeight="60"
                     text="Tap to get recommendations on restaurants, coupon sites and more."
                     styleClass="recommendation-button"
                     onAction="#gotoRecommendation"
