@@ -1,56 +1,104 @@
-/* EditBudgetDialog.css */
-.dialog-container {
-    -fx-background-color: transparent;
+/* PlanPage.css */
+
+/* Greeting Bar */
+.greeting-row {
+    -fx-padding: 20 0 0 6;
+}
+.greeting-label {
+    -fx-font-size: 30px;
+    -fx-font-family: 'Articulat CF Bold';
 }
 
-.card {
+/* Chart Row */
+.chart-row {
+    -fx-padding: 30 0 0 0;
+}
+.chart-title {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+}
+.chart-container {
     -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);
-    -fx-padding: 20;
+    -fx-background-radius: 20px;
+    -fx-padding: 20px;
+}
+.pie-chart {
+    -fx-pref-height: 350px;
+    -fx-padding: 0 0 0 0;
 }
 
-.title-label {
+/* Budget Info */
+.budget-amount {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+/* Percentage Gray Style */
+.percentage-gray {
+    -fx-text-fill: #808080;
+}
+
+/* Buttons */
+.recommendation-button {
     -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-font-family: "System";
-}
-
-.update-icon {
-    -fx-fill: #4285F4;
-}
-
-.Dot {
-    -fx-font-size: 12px;
-    -fx-text-fill: #4285F4;
-    -fx-padding: 0;
-}
-
-.dialog-label {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-font-family: "System";
-}
-
-.input-field {
-    -fx-pref-width: 150px;
-}
-
-.error-label {
-    -fx-text-fill: red;
-    -fx-font-size: 12px;
-}
-
-.dialog-button {
-    -fx-background-color: #4285F4;
-    -fx-text-fill: white;
-    -fx-background-radius: 5;
-    -fx-padding: 5 15;
+    -fx-text-fill: #D76A03;
+    -fx-padding: 6 0 0 0;
+    -fx-background-color: transparent;
     -fx-cursor: hand;
-    -fx-font-family: "System";
-    -fx-font-weight: bold;
+}
+.confirm-button{
+    -fx-padding: 7 22;
+    -fx-font-size: 14px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #585858;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+.cancel-button {
+    -fx-padding: 7 22;
+    -fx-font-size: 14px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #275317;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+/*.edit-button:hover, .ai-suggestion-button:hover {*/
+/*    -fx-background-color: derive(#595959, 50%);*/
+/*}*/
+.edit-icon {
+    -fx-fill: #fdfdfd;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
-.dialog-button:hover {
-    -fx-background-color: #2b5cd9;
+.Here-icon {
+    -fx-fill: #D76A03;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+/* Recommendation Button */
+.recommendation-button {
+    -fx-font-size: 16px;
+    -fx-text-fill: #D76A03;
+    -fx-padding: 6 0 0 0;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+/* Local Info */
+.info-label-small {
+    -fx-font-size: 16px;
+    -fx-text-fill: #7F7F7F;
+}
+.info-label-big {
+    -fx-font-size: 20px;
+    -fx-text-fill: #323232;
+}
+.update-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2E7D32; /* green */
+    -fx-padding: 10 0 0 0;
 }
