@@ -231,7 +231,7 @@ public class BillsRecognition {
         }
     }
 
-    public static CompletableFuture<Transaction> imageRecognitionAsyn(String base64Image){
+    public static CompletableFuture<Transaction> imageRecognitionAsync(String base64Image){
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
@@ -263,7 +263,7 @@ public class BillsRecognition {
         }
         return cf;
     }
-    public static CompletableFuture<Transaction> textRecognitionAsyn(String text){
+    public static CompletableFuture<Transaction> textRecognitionAsync(String text){
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
