@@ -193,7 +193,7 @@
 
 /* Info Containers */
 .info-container {
-    -fx-spacing: 15px;
+    -fx-spacing: 20px;
     -fx-font-size: 18px;
 }
 .budget-info {

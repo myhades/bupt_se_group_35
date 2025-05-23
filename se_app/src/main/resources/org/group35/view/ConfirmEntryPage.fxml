@@ -99,7 +99,7 @@
 
                 <!-- Button Panel -->
                 <HBox styleClass="button-panel">
-                    <Button text="Cancel Operation"
+                    <Button text="Cancel"
                             onAction="#handleCancel"
                             styleClass="action-button,cancel-button"/>
                 </HBox>

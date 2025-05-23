@@ -145,11 +145,12 @@ public class ConfirmEntryPageController implements Initializable {
         String location = locationField.getText();
 
         // 5) Validate category
-        String category = categoryBox.getValue();
-        if (category == null || category.trim().isEmpty()) {
-            showError("Please select a category.");
-            return;
-        }
+        // TODO: Not implemented just yet
+//        String category = categoryBox.getValue();
+//        if (category == null || category.trim().isEmpty()) {
+//            showError("Please select a category.");
+//            return;
+//        }
 
         // 6) Construct transaction model
         Transaction tx = new Transaction();
@@ -161,7 +162,7 @@ public class ConfirmEntryPageController implements Initializable {
         tx.setName(name);
         tx.setAmount(amount);
         tx.setTimestamp(timestamp);
-        tx.setCategory(category);
+//        tx.setCategory(category);
         String loc = locationField.getText().trim();
         if (!loc.isEmpty()) {
             tx.setLocation(loc);
