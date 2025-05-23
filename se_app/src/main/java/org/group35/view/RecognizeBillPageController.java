@@ -107,7 +107,9 @@ public class RecognizeBillPageController implements Initializable {
     @FXML
     private void handleContinue(ActionEvent event) {
         Map<String,Object> params = new HashMap<>();
-        params.put("snapshot", snapshot);
+        params.put("snapshot",     snapshot);
+        params.put("needsProcess", Boolean.TRUE);
+        params.put("processType",  "image");
         ApplicationRuntime.getInstance().navigateTo(ProgramStatus.CONFIRM_ENTRY, params);
     }
 

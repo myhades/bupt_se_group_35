@@ -11,6 +11,8 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Insets?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.ImportCSVPageController"
       stylesheets="@ImportCSVPage.css"
@@ -57,18 +59,36 @@
                       text="Select the file"
                       styleClass="hint-text" />
 
+                <!-- Warning Message -->
+                <Label fx:id="statusLabel"
+                       text=""
+                       styleClass="status-label"/>
+
                 <!-- Button Panel -->
                 <HBox fx:id="buttonPanel" styleClass="button-panel">
                     <Button fx:id="selectButton"
                             text="Select"
                             onAction="#handleSelect"
                             styleClass="action-button,select-button"/>
-                    <Button fx:id="saveButton"
-                            text="Save"
-                            onAction="#handleSave"
-                            styleClass="action-button,save-button"/>
+                    <Button fx:id="importButton"
+                            text="Import"
+                            onAction="#handleImport"
+                            styleClass="action-button,import-button"/>
                 </HBox>
 
+            </VBox>
+
+            <!-- Preview Container -->
+            <VBox styleClass="preview-container"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="0">
+                <GridPane.margin>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </GridPane.margin>
+                <ScrollPane styleClass="spending-scrollpane">
+                    <VBox fx:id="spendingListVBox"
+                          styleClass="spending-list"/>
+                </ScrollPane>
             </VBox>
 
         </GridPane>

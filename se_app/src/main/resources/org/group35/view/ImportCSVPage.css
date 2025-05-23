@@ -61,6 +61,16 @@
     -fx-line-spacing: -3px;
     -fx-translate-x: 32px
 }
+.status-label {
+    -fx-text-fill: grey;
+    -fx-font-size: 16px;
+    -fx-translate-x: 32px;
+    -fx-wrap-text: true;
+    -fx-max-width: 300px;
+}
+.status-label .warning {
+    -fx-text-fill: #bf1c1c;
+}
 .button-panel {
     -fx-spacing: 15px;
     -fx-alignment: CENTER-LEFT;
@@ -89,9 +99,85 @@
 .select-button:hover {
     -fx-background-color: derive(#13501B, 50%);
 }
-.save-button {
+.import-button {
     -fx-background-color: #000000;
 }
-.save-button:hover {
+.import-button:hover {
     -fx-background-color: derive(#000000, 50%);
+}
+
+/* Spending Preview */
+.preview-container {
+    -fx-spacing: 13px;
+    -fx-background-color: #F2F2F2;
+    -fx-background-radius: 20px;
+    -fx-vgrow: always;
+    -fx-alignment: center;
+    -fx-padding: 10px 25px;
+}
+
+/* ScrollPane Styling */
+.spending-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 15px 0;
+    -fx-min-width: 200px;
+    -fx-min-height: 200px;
+    -fx-pref-height: -1;
+    -fx-fit-to-width: true;
+    -fx-pannable: true;
+    -fx-hbar-policy: never;
+}
+.spending-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+.spending-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5px;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+    -fx-background-color: #888888;
+}
+.spending-scrollpane > .scroll-bar > .increment-button,
+.spending-scrollpane > .scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+/* Spending Item */
+.spending-item {
+    -fx-padding: 5px 5px;
+    -fx-spacing: 20px;
+    -fx-background-color: transparent;
+    -fx-min-height: 50px;
+    -fx-max-height: 70px;
+}
+
+/* Spending Text and Icon */
+.icon-circle {
+}
+.icon-letter {
+    -fx-font-size: 18px;
+    -fx-font-family: 'Articulat CF Bold';
+    -fx-text-fill: white;
+}
+.spending-name {
+    -fx-font-size: 18px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+}
+.spending-date {
+    -fx-font-size: 16px;
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-text-fill: #666666;
+}
+.spending-amount {
+    -fx-font-size: 24px;
+    -fx-font-family: 'Articulat CF Normal';
 }
