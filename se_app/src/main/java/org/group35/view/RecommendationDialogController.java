@@ -1,134 +1,227 @@
 package org.group35.view;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.Parent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.application.Platform;
-import javafx.scene.paint.Color;
-import java.io.IOException;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.*;
+import org.group35.model.Transaction;
+import org.group35.model.User;
+import org.group35.runtime.ApplicationRuntime;
 
 public class RecommendationDialogController {
+    @FXML
+    private Button recommendationButton;
+    @FXML
+    public PieChart budgetPieChart;
+    @FXML
+    private Button editBudgetButton;
+    @FXML
+    private Button AIButton;
+    @FXML
+    private Label budgetStatusLabel;
+    @FXML
+    private Label availableAmountLabel;
+    @FXML
+    private Label availablePercentLabel;
+    @FXML
+    private Label usedAmountLabel;
+    @FXML
+    private Label usedPercentLabel;
+    @FXML
+    private TextArea aiSuggestionTextArea;
+    @FXML
+    private TextArea aiRecommendationTextArea;
 
     @FXML
-    private Text recommendationText;
-
-    private Stage dialogStage;
-    private PlanPageController planPageController;
-
-    // 初始化方法
     public void initialize() {
-        // 设置默认的推荐内容
-        String defaultRecommendations = generateDefaultRecommendations();
-
-        if (recommendationText != null) {
-            recommendationText.setText(defaultRecommendations);
-        }
-
-        System.out.println("Recommendation Dialog initialized successfully");
-    }
-
-    // 设置对话框舞台
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-
-    // 设置Plan页面控制器的引用
-    public void setPlanPageController(PlanPageController controller) {
-        this.planPageController = controller;
-    }
-
-    // 生成默认的推荐内容
-    private String generateDefaultRecommendations() {
-        return "Recommendations For You\n\n" +
-                "🏪 Popular Restaurants:\n" +
-                "• McDonald's Shanghai Plaza - Fast food, ¥25-45\n" +
-                "• Haidilao Hotpot - Chinese cuisine, ¥80-120\n" +
-                "• Starbucks Coffee - Beverages & snacks, ¥30-60\n" +
-                "• Pizza Hut Century Park - Western food, ¥60-100\n\n" +
-                "🛍️ Shopping & Discounts:\n" +
-                "• Carrefour Supermarket - Groceries 15% off weekend\n" +
-                "• Uniqlo Flagship Store - Winter clothing 30% off\n"
-                // ... 更多内容以确保可以滚动
-                ;
-    }
-
-    // API接口：设置推荐内容
-    public void setRecommendationContent(String content) {
-        if (recommendationText != null) {
-            recommendationText.setText(content);
-        }
-    }
-
-    // 处理返回按钮点击
-    @FXML
-    private void handleBack() {
-        System.out.println("Back button clicked");
-        closeDialog();
-    }
-
-    // 处理关闭按钮点击
-    @FXML
-    private void handleClose() {
-        System.out.println("Close button clicked");
-        closeDialog();
-    }
-
-    // 关闭对话框的统一方法
-    private void closeDialog() {
-        if (dialogStage != null) {
-            dialogStage.close();
-        }
-    }
-
-    // 静态方法：显示推荐覆盖层
-    public static void showRecommendationOverlay(PlanPageController planController) {
+        aiRecommendationTextArea.setMouseTransparent(true);
+        aiRecommendationTextArea.setFocusTraversable(false);
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    RecommendationDialogController.class.getResource("/org/group35/view/RecommendationDialog.fxml")
-            );
-            Parent recommendationPane = loader.load();
+            if (recommendationButton != null) {
+                recommendationButton.setWrapText(true);
+            }
+            if (budgetPieChart != null) {
+                budgetPieChart.getStyleClass().add("pie-chart");
+            }
+            loadBudgetData();
+            updateBudgetDisplay();
+            System.out.println("PlanPageController initialized successfully");
+        } catch (Exception e) {
+            System.err.println("Error in PlanPageController.initialize(): " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public void setAISuggestion(String suggestion) {
+        aiSuggestionTextArea.setText(suggestion);
+    }
 
-            RecommendationDialogController controller = loader.getController();
-            controller.setPlanPageController(planController);
+    private void loadBudgetData() {
+        try {
+            System.out.println("Loading budget data...");
+        } catch (Exception e) {
+            System.err.println("Error loading budget data: " + e.getMessage());
+        }
+    }
 
-            // 创建一个无装饰的悬浮窗口来模拟覆盖效果
-            Stage overlayStage = new Stage();
-            overlayStage.setTitle("Local Recommendations");
-            overlayStage.initStyle(javafx.stage.StageStyle.UNDECORATED);
-            overlayStage.initModality(javafx.stage.Modality.NONE);
-            overlayStage.setAlwaysOnTop(true);
-            overlayStage.setResizable(false);
+    private void updateBudgetDisplay() {
+        try {
+            ApplicationRuntime runtime = ApplicationRuntime.getInstance();
 
-            javafx.scene.Scene scene = new javafx.scene.Scene(recommendationPane);
-            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-            overlayStage.setScene(scene);
+            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget();
+            double totalBudget = totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
 
-            controller.setDialogStage(overlayStage);
+            double usedBudget = calculateUsedBudget();
 
-            // 计算位置，使其覆盖在右侧区域
-            try {
-                Stage currentStage = (Stage) planController.budgetPieChart.getScene().getWindow();
-                double currentX = currentStage.getX();
-                double currentY = currentStage.getY();
+            double availableBudget = totalBudget - usedBudget;
+            if (availableBudget < 0) availableBudget = 0;
 
-                // 设置弹窗位置在右侧推荐区域
-                overlayStage.setX(currentX + 610); // 向右偏移到推荐区域
-                overlayStage.setY(currentY + 220); // 向下偏移到合适位置
-            } catch (Exception e) {
-                System.out.println("Could not calculate precise position, using default");
-                overlayStage.centerOnScreen();
+            double usedPercentage = totalBudget > 0 ? (usedBudget / totalBudget) * 100 : 0;
+            double availablePercentage = totalBudget > 0 ? (availableBudget / totalBudget) * 100 : 0;
+
+            if (budgetPieChart != null) {
+                List<PieChart.Data> budgetData = Arrays.asList(
+                        new PieChart.Data("Used", usedBudget),
+                        new PieChart.Data("Available", availableBudget)
+                );
+                setBudgetPieData(budgetData);
+
+                if (!budgetPieChart.getData().isEmpty()) {
+                    budgetPieChart.getData().get(0).getNode().setStyle("-fx-pie-color: #115371;");
+                    budgetPieChart.getData().get(1).getNode().setStyle("-fx-pie-color: #8498a9;");
+                }
             }
 
-            overlayStage.show();
+            updateBudgetLabels(totalBudget, usedBudget, availableBudget, usedPercentage, availablePercentage);
+            if (budgetStatusLabel != null) {
 
-        } catch (IOException e) {
+                if (totalBudgetBD == null || totalBudget <= 0.0) {
+                    budgetStatusLabel.setText("Welcome to set your budget here.");
+                } else if (usedBudget > totalBudget) {
+                    budgetStatusLabel.setText("Oops! It seems that you are over budget!");
+                } else {
+                    budgetStatusLabel.setText("You're currently on a budget.");
+                }
+            }
+
+            System.out.println("Budget display updated - Total: $" + totalBudget + ", Used: $" + usedBudget);
+        } catch (Exception e) {
+            System.err.println("Error updating budget display: " + e.getMessage());
             e.printStackTrace();
-            System.err.println("Unable to load recommendation interface: " + e.getMessage());
         }
+    }
+
+    private void updateBudgetLabels(double total, double used, double available, double usedPercent, double availablePercent) {
+        try {
+            if (availableAmountLabel != null) {
+                availableAmountLabel.setText("$" + String.format("%.0f", available));
+            }
+            if (availablePercentLabel != null) {
+                availablePercentLabel.setText(String.format("%.0f", availablePercent) + "%");
+            }
+            if (usedAmountLabel != null) {
+                usedAmountLabel.setText("$" + String.format("%.0f", used));
+            }
+            if (usedPercentLabel != null) {
+                usedPercentLabel.setText(String.format("%.0f", usedPercent) + "%");
+            }
+        } catch (Exception e) {
+            System.err.println("Error updating budget labels: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void gotoEditBudget(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.EDIT_BUDGET);
+    }
+
+    @FXML
+    private void gotoRecommendation(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.RECOMMENDATION);
+    }
+
+    @FXML
+    private void gotoAISuggestion(ActionEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.AI_SUGGESTION);
+    }
+
+    public void setBudgetPieData(List<PieChart.Data> data) {
+        if (budgetPieChart != null) {
+            budgetPieChart.getData().clear();
+            budgetPieChart.getData().addAll(data);
+        }
+    }
+
+    public void updateTotalBudget(double newBudget) {
+        try {
+            ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+            BigDecimal newBudgetBD = BigDecimal.valueOf(newBudget);
+            runtime.getUserManager().setMonthlyBudget(newBudgetBD);
+            updateBudgetDisplay();
+            System.out.println("Total budget updated to: $" + String.format("%.0f", newBudget));
+        } catch (Exception e) {
+            System.err.println("Error updating total budget: " + e.getMessage());
+        }
+    }
+
+    private double calculateUsedBudget() {
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        User currentUser = runtime.getCurrentUser();
+
+        if (currentUser == null) {
+            return 0.0;
+        }
+
+        try {
+            List<Transaction> transactions = runtime.getTranscationManager().getByUser(currentUser.getUsername());
+
+            LocalDateTime now = LocalDateTime.now();
+            int currentMonth = now.getMonthValue();
+            int currentYear = now.getYear();
+
+            double totalExpenses = 0.0;
+            for (Transaction transaction : transactions) {
+                // check whether this transaction happens in this month
+                LocalDateTime transactionTime = transaction.getTimestamp();
+                if (transactionTime != null &&
+                        transactionTime.getMonthValue() == currentMonth &&
+                        transactionTime.getYear() == currentYear) {
+
+                    BigDecimal amount = transaction.getAmount();
+                    if (amount != null && amount.compareTo(BigDecimal.ZERO) < 0) {
+                        totalExpenses += amount.abs().doubleValue(); // less than 0
+                    }
+                }
+            }
+
+            return totalExpenses;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    public double getUsedBudget() {
+        return calculateUsedBudget();
+    }
+
+    public double getTotalBudget() {
+        try {
+            ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget();
+            return totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
+        } catch (Exception e) {
+            System.err.println("Error getting total budget: " + e.getMessage());
+            return 2000.0;
+        }
+    }
+
+    public void addExpense(double expenseAmount) {
+        System.out.println("Added expense: $" + String.format("%.2f", expenseAmount));
+        updateBudgetDisplay();
     }
 }
