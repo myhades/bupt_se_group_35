@@ -1,85 +1,8 @@
-//package org.group35.view;
-//
-//import javafx.fxml.FXML;
-//import javafx.fxml.Initializable;
-//import javafx.scene.chart.LineChart;
-//import javafx.scene.chart.XYChart;
-//import javafx.scene.chart.PieChart;
-//
-//import java.net.URL;
-//import java.util.Arrays;
-//import java.util.List;
-//import java.util.ResourceBundle;
-//
-//public class HomePageController implements Initializable {
-//
-//    @FXML private LineChart<String, Number> spendingChart;
-//    @FXML private PieChart categoryPieChart;
-//
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//        spendingChart.getStyleClass().add("chart");
-//        categoryPieChart.getStyleClass().add("pie-chart");
-//        insertDemoData();
-//    }
-//
-//    /**
-//     * Clears and sets the spending line chart with the given series.
-//     * @param series the data series to display
-//     */
-//    public void setSpendingChartData(XYChart.Series<String, Number> series) {
-//        spendingChart.getData().clear();
-//        spendingChart.getData().add(series);
-//        spendingChart.setTitle(null);
-//        spendingChart.setCreateSymbols(false);
-//        spendingChart.setLegendVisible(false);
-//    }
-//
-//    /**
-//     * Clears and sets the category pie chart with the given data.
-//     * @param data the list of PieChart.Data to display
-//     */
-//    public void setCategoryPieData(List<PieChart.Data> data) {
-//        categoryPieChart.getData().clear();
-//        categoryPieChart.getData().addAll(data);
-//        categoryPieChart.setLegendVisible(false);
-//    }
-//
-//    /**
-//     * Inserts demo data into both charts.
-//     * You can remove or replace this call when injecting real data.
-//     */
-//    public void insertDemoData() {
-//        // Demo for line chart
-//        XYChart.Series<String, Number> demoSeries = new XYChart.Series<>();
-//        demoSeries.setName("Spending Distribution");
-//        demoSeries.getData().addAll(
-//                new XYChart.Data<>("Jan", 50),
-//                new XYChart.Data<>("Feb", 420),
-//                new XYChart.Data<>("Mar", 200),
-//                new XYChart.Data<>("Apr", 470),
-//                new XYChart.Data<>("May", 100),
-//                new XYChart.Data<>("Jun", 850),
-//                new XYChart.Data<>("Jul", 270),
-//                new XYChart.Data<>("Aug", 500)
-//        );
-//        setSpendingChartData(demoSeries);
-//
-//        // Demo for pie chart
-//        List<PieChart.Data> demoPie = Arrays.asList(
-//                new PieChart.Data("Food", 30),
-//                new PieChart.Data("Transport", 20),
-//                new PieChart.Data("Entertainment", 25),
-//                new PieChart.Data("Others", 25)
-//        );
-//        setCategoryPieData(demoPie);
-//    }
-//}
-
 package org.group35.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
@@ -104,6 +27,7 @@ public class HomePageController implements Initializable {
     @FXML private LineChart<String, Number> spendingChart;
     @FXML private PieChart categoryPieChart;
     @FXML private Button toggleIncomeExpenseBtn;
+    @FXML private NumberAxis yAxis;
 
     private boolean showIncome = true; // 默认显示收入
 
@@ -145,7 +69,7 @@ public class HomePageController implements Initializable {
     @FXML
     private void onToggleIncomeExpense(ActionEvent event) {
         showIncome = !showIncome;
-        toggleIncomeExpenseBtn.setText("Toggle: " + (showIncome ? "Income" : "Expense"));
+        toggleIncomeExpenseBtn.setText((showIncome ? " Income" : "Expense"));
 
 //        String currentUser = ApplicationRuntime.getInstance().getCurrentUser().getUsername();
         List<Transaction> transactions = txManager.getByUser(currentUser.getUsername());
@@ -171,6 +95,50 @@ public class HomePageController implements Initializable {
         List<PieChart.Data> categoryData = generateCategoryPieData(transactions);
         setCategoryPieData(categoryData);
         applyCategoryBasedColoring();
+        setupYAxis(transactions);
+    }
+
+    /**
+     * Dynamically adjusts the Y-axis tick unit and range based on current data.
+     */
+    private void setupYAxis(List<Transaction> transactions) {
+        if (transactions.isEmpty()) {
+            yAxis.setLabel("Amount");
+            yAxis.setTickUnit(100);
+            yAxis.setAutoRanging(true);
+            return;
+        }
+
+        double maxAmount = transactions.stream()
+            .map(Transaction::getAmount)
+            .map(BigDecimal::abs)
+            .mapToDouble(BigDecimal::doubleValue)
+            .max()
+            .orElse(1000);
+
+        double minAmount = transactions.stream()
+            .map(Transaction::getAmount)
+            .mapToDouble(BigDecimal::doubleValue)
+            .min()
+            .orElse(0);
+
+        double tickUnit;
+
+        if (maxAmount-minAmount < 100) {
+            tickUnit = 20;
+        } else if (maxAmount-minAmount < 500) {
+            tickUnit = 50;
+        } else if (maxAmount-minAmount < 1000) {
+            tickUnit = 100;
+        } else if (maxAmount-minAmount < 5000) {
+            tickUnit = 500;
+        } else {
+            tickUnit = 1000;
+        }
+
+        yAxis.setLabel("Amount");
+        yAxis.setAutoRanging(true);
+        yAxis.setTickUnit(tickUnit);
     }
 
     /**
@@ -186,7 +154,15 @@ public class HomePageController implements Initializable {
             LocalDate date = tx.getTimestamp().toLocalDate();
             String month = date.format(DateTimeFormatter.ofPattern("MMM")); // e.g. Jan, Feb
 
-            monthlySpending.put(month, monthlySpending.getOrDefault(month, BigDecimal.ZERO).add(tx.getAmount()));
+            BigDecimal amount = tx.getAmount();
+            if (!showIncome && amount.compareTo(BigDecimal.ZERO) < 0) {
+                amount = amount.abs();
+            }
+            if (showIncome && amount.compareTo(BigDecimal.ZERO) <= 0) {
+                continue;
+            }
+
+            monthlySpending.put(month, monthlySpending.getOrDefault(month, BigDecimal.ZERO).add(amount));
         }
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -258,6 +234,10 @@ public class HomePageController implements Initializable {
      * Applies dynamic coloring to the pie chart based on category's first letter.
      */
     public void applyCategoryBasedColoring() {
+        double innerRadiusPercent = 0.4;
+        categoryPieChart.setLegendVisible(false);
+        categoryPieChart.setStyle("-fx-pie-chart-inner-radius: " + innerRadiusPercent + ";");
+
         categoryPieChart.getData().forEach(data -> {
             String categoryName = data.getName();
             if (categoryName != null && !categoryName.isEmpty()) {

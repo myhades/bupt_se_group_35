@@ -23,6 +23,21 @@
     -fx-cursor: hand;
     -fx-graphic-text-gap: 14px;
 }
+.toggle-button {
+    -fx-text-fill: white;
+    -fx-padding: 6px 16px;
+    -fx-font-size: 16px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 8px;
+    -fx-background-color: #7F7F7F;
+}
+.toggle-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-opacity: 0.6;
+}
 .edit-icon {
     -fx-fill: #FFFFFF;
     -fx-scale-x: 1.2;
@@ -56,6 +71,7 @@
 .pie-chart {
     -fx-pref-height: 500px;
     -fx-padding: 0 0 -16px 0;
+    -fx-pie-chart-inner-radius: 0.4;
 }
 
 .small-button {

@@ -22,6 +22,7 @@
     <!-- NavBar -->
     <NavBarController activePage="HOME"/>
 
+
     <!-- Greeting Row + Edit Button -->
     <HBox styleClass="greeting-row" alignment="CENTER_LEFT" spacing="10">
         <VBox spacing="4">
@@ -29,12 +30,12 @@
             <Label text="Not sure what to do? Take a quick tutorial." styleClass="info-label"/>
         </VBox>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Edit Widget" styleClass="edit-button">
-            <graphic>
-                <SVGPath content="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"
-                         styleClass="edit-icon"/>
-            </graphic>
-        </Button>
+<!--        <Button text="Edit Widget" styleClass="edit-button">-->
+<!--            <graphic>-->
+<!--                <SVGPath content="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"-->
+<!--                         styleClass="edit-icon"/>-->
+<!--            </graphic>-->
+<!--        </Button>-->
     </HBox>
 
     <!-- Chart Row -->
@@ -65,9 +66,9 @@
                 <Label text="Category" styleClass="chart-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="toggleIncomeExpenseBtn"
-                        text="Toggle: Income"
+                        text="Income"
                         onAction="#onToggleIncomeExpense"
-                        styleClass="small-button"/>
+                        styleClass="toggle-button"/>
             </HBox>
             <PieChart fx:id="categoryPieChart" styleClass="pie-chart"/>
         </VBox>
