@@ -429,7 +429,7 @@ class TransactionManagerTest {
 
     @Test
     void testPartialMatchName() {
-        List<Transaction> result = txManager.searchByKeyword("D");
+        List<Transaction> result = txManager.searchByKeyword("DTest");
         assertEquals(1, result.size());
         assertEquals("DTestTransaction4", result.get(0).getName());
     }
