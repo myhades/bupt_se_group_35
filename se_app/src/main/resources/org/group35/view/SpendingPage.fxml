@@ -131,18 +131,20 @@
                            text="\$ 0" styleClass="budget-amount"/>
                     <Label text="left to spend" styleClass="budget-left-text"/>
                 </HBox>
-                <ProgressBar fx:id="budgetProgressBar"
-                             styleClass="progress-bar"
-                             maxWidth="Infinity"
-                             progress="0.4"/>
+<!--                <ProgressBar fx:id="budgetProgressBar"-->
+<!--                             styleClass="progress-bar"-->
+<!--                             maxWidth="Infinity"-->
+<!--                             progress="0.4"/>-->
             </VBox>
 
             <!-- AI Container -->
-            <VBox styleClass="content-container">
+            <VBox styleClass="content-container"
+                  VBox.vgrow="ALWAYS"
+                  prefHeight="100">
                 <Label text="AI Summary" styleClass="section-title"/>
                 <Label fx:id="aiSummary"
                        styleClass="ai-summary"
-                       text="No data."/>
+                       text="Click update to continue."/>
             </VBox>
         </VBox>
     </GridPane>
