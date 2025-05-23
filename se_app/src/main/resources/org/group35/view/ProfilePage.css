@@ -1,0 +1,120 @@
+/* MorePage.css */
+
+/* Greeting Bar */
+.greeting-row {
+    -fx-padding: 30 0 20 6;
+    -fx-alignment: center-left;
+}
+.greeting-label {
+    -fx-font-size: 46px;
+    -fx-font-family: 'Articulat CF Bold';
+}
+
+/* Settings Container */
+.settings-container {
+    -fx-padding: 20px 30px 30px 30px;
+    -fx-spacing: 15;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20px;
+}
+.settings-title {
+    -fx-font-size: 22px;
+}
+
+/* Setting Items */
+.item {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 10px;
+    -fx-background-radius: 12px;
+}
+.item:hover {
+    -fx-background-color: rgba(0,0,0,0.05);
+    -fx-background-insets: -6;
+}
+.item:pressed {
+    -fx-background-insets: -6;
+    -fx-background-color: rgba(0,0,0,0.15);
+}
+.item-text {
+    -fx-spacing: -5px;
+}
+.item-title {
+    -fx-font-size: 20px;
+    -fx-font-family: "Articulat CF Demi Bold";
+    -fx-text-fill: #000000;
+}
+
+.item-subtitle {
+    -fx-font-size: 18px;
+    -fx-font-family: "Articulat CF Normal";
+    -fx-text-fill: #7F7F7F;
+}
+.item-icon-bg {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+}
+.item-icon {
+    -fx-fill: #FFFFFF;
+    -fx-scale-x: 1.35;
+    -fx-scale-y: 1.35;
+}
+.profile-icon {
+    -fx-background-color: #275317;
+}
+.theme-icon {
+    -fx-background-color: #D09E00;
+}
+.accessibility-icon {
+    -fx-background-color: #C04F15;
+}
+.about-icon {
+    -fx-background-color: #215F9A;
+}
+
+/* ScrollPane Styling */
+.spending-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-min-width: 450px;
+    -fx-max-width: 600px;
+    -fx-min-height: 200px;
+    -fx-pref-height: -1;
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+    -fx-pannable: true;
+    -fx-hbar-policy: never;
+}
+.spending-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+.spending-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5px;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+.spending-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+    -fx-background-color: #888888;
+}
+.spending-scrollpane > .scroll-bar > .increment-button,
+.spending-scrollpane > .scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.settings-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.settings-content {
+    -fx-padding: 10px;
+}

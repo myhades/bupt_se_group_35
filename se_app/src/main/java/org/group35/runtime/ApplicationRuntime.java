@@ -32,6 +32,7 @@ public final class ApplicationRuntime {
         EDIT_BUDGET("/org/group35/view/EditBudgetDialog.fxml"),
         AI_SUGGESTION("/org/group35/view/AIDialog.fxml"),
         RECOMMENDATION("/org/group35/view/RecommendationDialog.fxml"),
+        PROFILE("/org/group35/view/ProfilePage.fxml"),
         ABOUT("/org/group35/view/AboutPage.fxml"),
         SUBSCRIPTION("/org/group35/view/SubscriptionPage.fxml"),
         FEEDBACK("/org/group35/view/FeedbackPage.fxml");

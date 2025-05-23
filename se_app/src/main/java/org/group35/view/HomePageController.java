@@ -24,7 +24,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class HomePageController implements Initializable {
+public class HomePageController {
 
     @FXML private LineChart<String, Number> spendingChart;
     @FXML private PieChart categoryPieChart;
@@ -53,8 +53,8 @@ public class HomePageController implements Initializable {
             Color.web("#1F2A44")
     };
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         ApplicationRuntime rt = ApplicationRuntime.getInstance();
         txm = rt.getTranscationManager();
         currentUser = rt.getCurrentUser();
