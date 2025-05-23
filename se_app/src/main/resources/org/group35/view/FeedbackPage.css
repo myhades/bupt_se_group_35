@@ -1,0 +1,158 @@
+/* 继承AboutPage的风格，略作调整 */
+
+.root-container {
+    -fx-background-color: #F5F5F5;
+}
+
+.main-container {
+    -fx-background-color: #F5F5F5;
+    -fx-spacing: 5;
+    -fx-padding: 20 0 0 0;
+}
+
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+    -fx-padding: 10 0 20 6;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: #D09E00;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Articulat CF Demi Bold';
+    -fx-padding: 0 0 0 5;
+}
+
+.info-content-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-min-width: 400px;
+    -fx-max-width: 550px;
+}
+
+.info-text-container {
+    -fx-padding: 5px;
+    -fx-spacing: 10px;
+}
+
+.info-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-min-height: 120px;
+    -fx-max-height: 200px;
+    -fx-fit-to-width: true;
+    -fx-pannable: true;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: as-needed;
+}
+.info-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+.info-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5px;
+}
+.info-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+.info-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+    -fx-background-color: #888888;
+}
+
+.rating-row {
+    -fx-padding: 20 0 0 0;
+}
+
+.face-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 5;
+    -fx-border-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-min-width: 48px;
+    -fx-min-height: 48px;
+    -fx-max-width: 48px;
+    -fx-max-height: 48px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 2, 0, 0, 1);
+    -fx-transition: background-color 0.2s;
+}
+.face-button:focused, .face-button:selected {
+    -fx-background-color: #F0F9FF;
+}
+.face-svg {
+    -fx-stroke: #215F9A;
+    -fx-stroke-width: 2;
+    -fx-fill: none;
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+}
+.face-svg.sad { -fx-stroke: #E53935; }
+.face-svg.dissatisfied { -fx-stroke: #FB8C00; }
+.face-svg.neutral { -fx-stroke: #FBC02D; }
+.face-svg.smile { -fx-stroke: #43A047; }
+.face-svg.happy { -fx-stroke: #1E88E5; }
+.face-button:hover .face-svg {
+    -fx-stroke-width: 2.5;
+    -fx-opacity: 0.8;
+}
+
+.face-icon {
+    -fx-fill: black;
+    -fx-scale-x: 1.35;
+    -fx-scale-y: 1.35;
+}
+
+.face-icon-bg {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 8px;
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+}
+
+.face-hbox {
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-padding: 2;
+    -fx-spacing: 0;
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.03), 1, 0, 0, 1);
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-max-width: 44px;
+    -fx-max-height: 44px;
+    -fx-transition: background-color 0.2s;
+}
+.face-hbox:hover {
+    -fx-background-color: #F0F9FF;
+}
+.face-hbox:pressed {
+    -fx-background-color: #E0F2FF;
+}
+
+/* FeedbackPage.css */
+.info-text {
+    -fx-font-size: 18px;         /* 字号 */
+    /*-fx-font-family: "微软雅黑";  !* 字体，可换成你想要的 *!*/
+    -fx-text-fill: black;      /* 颜色 */
+    -fx-font-weight: bold;       /* 加粗，可选 */
+    -fx-wrap-text: true;
+}
