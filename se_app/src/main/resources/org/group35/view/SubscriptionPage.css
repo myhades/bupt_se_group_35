@@ -1,6 +1,5 @@
 /* 主容器样式 */
 .main-container {
-    -fx-background-color: #F5F5F5;
     -fx-spacing: 5;
     -fx-padding: 20 0 0 0;
 }

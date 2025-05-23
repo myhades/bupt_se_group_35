@@ -248,6 +248,12 @@ public class SpendingPageController {
         box.setAlignment(Pos.CENTER_LEFT);
         box.getStyleClass().add("spending-item");
 
+        box.setUserData(tx.getId());
+        box.setOnMouseClicked(evt -> {
+            String uuid = (String) box.getUserData();
+            onSpendingItemClicked(uuid);
+        });
+
         Circle circle = new Circle(20);
         circle.getStyleClass().add("icon-circle");
         char letterChar = tx.getName().toUpperCase().charAt(0);
@@ -271,6 +277,12 @@ public class SpendingPageController {
 
         box.getChildren().addAll(icon, info, amtLbl);
         return box;
+    }
+
+    private void onSpendingItemClicked(String uuid) {
+        Map<String,Object> params = new HashMap<>();
+        params.put("uuid", uuid);
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.CONFIRM_ENTRY, params);
     }
 
     /**
