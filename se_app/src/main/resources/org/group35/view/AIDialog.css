@@ -1,4 +1,27 @@
-/* PlanPage.css */
+/* Vertical ScrollBar Styling */
+.spending-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+
+.spending-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5px;
+}
+
+.spending-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+
+.spending-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+    -fx-background-color: #888888;
+}
+
+.spending-scrollpane > .scroll-bar > .increment-button,
+.spending-scrollpane > .scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
 
 /* Greeting Bar */
 .greeting-row {
@@ -78,6 +101,24 @@
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
 }
+.loading-arc {
+    -fx-stroke: #000000;
+    -fx-stroke-width: 6;
+    -fx-fill: transparent;
+    -fx-stroke-line-cap: round;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+    -fx-translate-x: 105px;
+    -fx-translate-y: 30px;
+}
+.recommendation-text {
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-padding: 5px 10px;
+    -fx-font-size: 16px;
+    -fx-line-spacing: 2px;
+    -fx-text-fill: #0D3512;
+}
+
 
 /* Local Info */
 .info-label-small {
