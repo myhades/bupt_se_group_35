@@ -16,7 +16,8 @@ import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import java.time.format.DateTimeFormatter;
 import javafx.application.Platform;
-import org.group35.service.LocalizationService;
+import org.group35.util.TimezoneUtils;
+import org.group35.util.CurrencyUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -144,7 +145,7 @@ public class EditBudgetDialogController {
      */
     private void loadLocalInfo() {
         // 异步获取本地化信息，避免阻塞UI
-        LocalizationService.getCurrentLocalInfoAsync()
+        TimezoneUtils.getCurrentLocalInfoAsync()
                 .thenAccept(localInfo -> {
                     // 在JavaFX主线程中更新UI
                     Platform.runLater(() -> updateLocalInfoDisplay(localInfo));
@@ -152,7 +153,7 @@ public class EditBudgetDialogController {
                 .exceptionally(throwable -> {
                     System.err.println("Error loading local info: " + throwable.getMessage());
                     // 使用默认信息
-                    Platform.runLater(() -> updateLocalInfoDisplay(LocalizationService.getCurrentLocalInfo()));
+                    Platform.runLater(() -> updateLocalInfoDisplay(TimezoneUtils.getCurrentLocalInfo()));
                     return null;
                 });
     }
@@ -160,14 +161,14 @@ public class EditBudgetDialogController {
     /**
      * 新增方法：更新本地化信息显示
      */
-    private void updateLocalInfoDisplay(LocalizationService.LocalInfo localInfo) {
+    private void updateLocalInfoDisplay(TimezoneUtils.LocalInfo localInfo) {
         try {
             if (timezoneLabel != null) {
                 timezoneLabel.setText(localInfo.getTimezone());
             }
 
             if (currencyLabel != null) {
-                String formattedCurrency = LocalizationService.formatCurrencyName(localInfo.getCurrency());
+                String formattedCurrency = CurrencyUtils.formatCurrencyName(localInfo.getCurrency());
                 currencyLabel.setText(formattedCurrency);
             }
 
@@ -193,9 +194,10 @@ public class EditBudgetDialogController {
      */
     @FXML
     private void refreshLocalInfo() {
-        LocalizationService.refreshCache();
+        TimezoneUtils.refreshCache();
         loadLocalInfo();
     }
+
     private double calculateCurrentUsedBudget() {
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
         User currentUser = runtime.getCurrentUser();
@@ -222,5 +224,4 @@ public class EditBudgetDialogController {
             return 0.0;
         }
     }
-
 }
