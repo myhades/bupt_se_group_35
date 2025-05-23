@@ -68,7 +68,8 @@
                             text="Stop"
                             onAction="#handleStop"
                             styleClass="action-button,stop-button"/>
-                    <Button text="Continue"
+                    <Button fx:id="continueButton"
+                            text="Continue"
                             onAction="#handleContinue"
                             styleClass="action-button,continue-button"/>
                 </HBox>
@@ -89,6 +90,7 @@
             <TextArea fx:id="describeArea"
                       promptText="Start here. Your transcription will be added to the existing content."
                       styleClass="describe-area"
+                      wrapText="true"
                       GridPane.columnIndex="1"
                       GridPane.rowIndex="0">
                 <GridPane.margin>
