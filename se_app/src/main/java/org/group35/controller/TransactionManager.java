@@ -341,10 +341,22 @@ public class TransactionManager {
         LogUtils.debug("Setting category for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
-            tx.setCategory(category);
+            tx.setCategory(category); //TODO: add robust design
             save();
         } else {
             LogUtils.warn("Transaction not found: " + id);
+        }
+    }
+
+    /** Sets the category of the transaction with the given ID. */
+    public String getTxCategory(String id, String category) {
+        LogUtils.debug("Setting category for transaction: " + id);
+        Transaction tx = getById(id);
+        if (tx != null) {
+            return tx.getCategory();
+        } else {
+            LogUtils.warn("Transaction not found: " + id);
+            return "Other";
         }
     }
 

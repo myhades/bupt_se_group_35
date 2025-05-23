@@ -54,7 +54,7 @@ class TransactionManagerTest {
         tx1.setUsername("TestUser");
         tx1.setName("ATestTransaction1");
         tx1.setAmount(new BigDecimal("100.00"));
-        txManager.add(tx1);
+        txManager.add(tx1, "Shopping");
         tx1.setTimestamp(LocalDateTime.of(2025, 5, 20, 10, 0));
 
         Transaction tx2 = new Transaction();
@@ -416,6 +416,14 @@ class TransactionManagerTest {
         Transaction updated = txManager.getById(tx.getId());
         assertEquals(newPattern, updated.getRecurrencePattern());
         assertNotEquals(originalPattern, updated.getRecurrencePattern());
+    }
+
+    @Test
+    void getTxCategory() {
+        List<Transaction> transactions = txManager.getTransactions();
+        assertFalse(transactions.isEmpty());
+        Transaction tx = transactions.get(0);
+        assertEquals("Shopping", tx.getCategory());
     }
 
     @Test
