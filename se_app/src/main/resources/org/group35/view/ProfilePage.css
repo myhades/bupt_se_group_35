@@ -1,13 +1,36 @@
-/* MorePage.css */
+/* ConfirmEntryPage.css */
 
-/* Greeting Bar */
-.greeting-row {
-    -fx-padding: 30 0 20 6;
-    -fx-alignment: center-left;
+/* Main Container */
+.main-container{
+    -fx-padding: 20px 0 0 0;
+    -fx-vgrow: always;
+    -fx-spacing: 20px;
 }
-.greeting-label {
-    -fx-font-size: 46px;
-    -fx-font-family: 'Articulat CF Bold';
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-text-from {
+    -fx-text-fill: gray;
+    -fx-cursor: hand;
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: #3B7D23;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
 }
 
 /* Confirm Entry */
@@ -89,7 +112,7 @@
 /* Input */
 .input-container {
     -fx-spacing: 13px;
-    -fx-background-color: #F2F2F2;
+    -fx-background-color: #FFFFFF;
     -fx-background-radius: 20px;
     -fx-vgrow: always;
     -fx-alignment: center;
@@ -125,7 +148,7 @@
 }
 
 /* ScrollPane Styling */
-.spending-scrollpane {
+.setting-scrollpane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-padding: 0;
@@ -138,57 +161,33 @@
     -fx-pannable: true;
     -fx-hbar-policy: never;
 }
-.spending-scrollpane > .viewport {
+.setting-scrollpane > .viewport {
     -fx-background-color: transparent;
 }
-.spending-scrollpane > .scroll-bar:vertical {
+.setting-scrollpane > .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-padding: 0 0 0 5;
 }
-.spending-scrollpane > .scroll-bar:vertical > .thumb {
+.setting-scrollpane > .scroll-bar:vertical > .thumb {
     -fx-background-color: #cccccc;
     -fx-background-radius: 5px;
 }
-.spending-scrollpane > .scroll-bar:vertical > .thumb:hover {
+.setting-scrollpane > .scroll-bar:vertical > .thumb:hover {
     -fx-background-color: #aaaaaa;
 }
-.spending-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+.setting-scrollpane > .scroll-bar:vertical > .thumb:pressed {
     -fx-background-color: #888888;
 }
-.spending-scrollpane > .scroll-bar > .increment-button,
-.spending-scrollpane > .scroll-bar > .decrement-button {
+.setting-scrollpane > .scroll-bar > .increment-button,
+.setting-scrollpane > .scroll-bar > .decrement-button {
     -fx-padding: 0;
     -fx-background-color: transparent;
 }
 
-.settings-scrollpane {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-}
-
-.settings-content {
-    -fx-padding: 10px;
-}
-
-/* Title Row */
-.title-container{
-    -fx-alignment: center-left;
-    -fx-spacing: 25;
-    -fx-padding: 10 0 20 6;
-}
-.title-back-button {
-    -fx-cursor: hand;
-    -fx-background-color: transparent;
-}
-.title-text {
-    -fx-font-size: 40px;
-    -fx-font-family: "Articulat CF Demi Bold";
-}
-.title-dot {
-    -fx-font-size: 20px;
-    -fx-text-fill: #275317;
-}
-.title-back-icon{
-    -fx-scale-x: 2;
-    -fx-scale-y: 2;
+/* Settings Container */
+.settings-container {
+    -fx-padding: 20px 30px 30px 30px;
+    -fx-spacing: 15;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20px;
 }
