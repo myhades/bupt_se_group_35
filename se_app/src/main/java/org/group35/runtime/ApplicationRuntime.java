@@ -3,10 +3,7 @@ package org.group35.runtime;
 import org.group35.controller.TransactionManager;
 import org.group35.controller.UserManager;
 import org.group35.model.User;
-import org.group35.util.AudioUtils;
-import org.group35.util.CameraUtils;
-import org.group35.util.LogUtils;
-import org.group35.util.SceneManager;
+import org.group35.util.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -59,6 +56,7 @@ public final class ApplicationRuntime {
     // Shared services
     private final CameraUtils cameraService;
     private final AudioUtils  audioService;
+    private final CsvUtils    csvService;
 
     // Runtime state
     private User           loggedInUser;
@@ -74,6 +72,7 @@ public final class ApplicationRuntime {
         transactionManager = new TransactionManager();
         cameraService      = new CameraUtils();
         audioService       = new AudioUtils();
+        csvService         = new CsvUtils();
 
         Runtime.getRuntime().addShutdownHook(new Thread(cameraService::shutdown));
 
@@ -127,6 +126,10 @@ public final class ApplicationRuntime {
     public AudioUtils getAudioService() {
         return audioService;
     }
+
+    /** Returns the CsvService instance.
+     * @return the shared CsvUtils service */
+    public CsvUtils getCsvUtils() {return csvService;}
 
     /**
      * Returns the currently logged-in user.
