@@ -38,6 +38,7 @@
     -fx-spacing: 10px;
     -fx-min-width: 400px;
     -fx-max-width: 550px;
+
 }
 
 /* Info Text Styling */
@@ -75,12 +76,13 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-padding: 0;
-    -fx-min-height: 450px;
-    -fx-max-height: 500px;
+    /*-fx-min-height: 450px;*/
+    /*-fx-max-height: 1000px;*/
     -fx-fit-to-width: true;
     -fx-pannable: true;
     -fx-hbar-policy: never;
     -fx-vbar-policy: as-needed;
+    /*-fx-fit-to-height: true; !* 确保ScrollPane扩展高度 *!*/
 }
 .info-scrollpane > .viewport {
     -fx-background-color: transparent;
