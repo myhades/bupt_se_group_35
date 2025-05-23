@@ -5,48 +5,63 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.concurrent.TimeUnit;
+import java.nio.file.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
+import java.util.Objects;
+import java.util.concurrent.atomic.*;
+
 import org.group35.util.LogUtils;
+import org.slf4j.helpers.SubstituteLogger;
 
 public class AudioRecognition {
 
     private static final String API_URL = "https://api.gptsapi.net/v1/audio/transcriptions";
     private static final String API_TOKEN = "sk-id8a932449e17e32258e1565c2ab579825ad061b479cbtQr";  // model API token
-
+    // 用来在回调到来时通知另一个线程停止
+    private static final AtomicBoolean doneFlag = new AtomicBoolean(false);
     public AudioRecognition (){
     }
     private static String buildAudioPrompt(){
-        String promptText = "";
+        String promptText = "This audio is about transactions";
         return promptText;
     }
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS) // 连接超时
-            .writeTimeout(60, TimeUnit.SECONDS) // 写入超时（对于上传大文件很重要）
-            .readTimeout(60, TimeUnit.SECONDS) // 读取超时（转录可能需要一些时间）
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
             .build();
 
+    /**
+     * 回调接口，用于返回转写结果或错误
+     */
+    public interface TranscriptionCallback {
+        void onSuccess(String transcription);
+        void onFailure(Throwable error);
+    }
 
-    private static String transcribeAudio(File audioFile, String prompt) throws IOException {
-        String mimeType = getMimeType(audioFile);
-        LogUtils.info(mimeType);
+    /**
+     * 异步调用 Whisper 转写接口。
+     *
+     * @param audioBytes  WAV/其他音频的 byte 数组
+     * @param callback    结果回调
+     */
+    private static void transcribeAudio(byte[] audioBytes, TranscriptionCallback callback) throws IOException {
 
-        if (mimeType == null) {
-            LogUtils.error("警告: 无法确定文件 " + audioFile.getName() + " 的 MIME 类型。将尝试使用 'application/octet-stream'。");
-            mimeType = "application/octet-stream"; // OpenAI 应该仍然可以处理它，但最好提供正确的类型
-        }
-
-        RequestBody fileBody = RequestBody.create(audioFile, MediaType.parse(mimeType));
+        RequestBody fileBody = RequestBody.create(audioBytes, MediaType.parse("audio/wav"));
 
         String model = "whisper-1";
 
+        String prompt = buildAudioPrompt();
+
         RequestBody body = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("file", audioFile.getName(), fileBody)
+                .addFormDataPart("file", "audio.wav", fileBody)
                 .addFormDataPart("model", model)
                 .addFormDataPart("language", "en")
                 .addFormDataPart("prompt", prompt)
+                .addFormDataPart("response_format", "json")
                 .build();
 
         Request request = new Request.Builder()
@@ -55,42 +70,69 @@ public class AudioRecognition {
                 .post(body)
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                LogUtils.info("Request successfully, status code: " + response.code());
-                String responseBodyString = response.body() != null ? response.body().string() : null;
-                if (responseBodyString == null || responseBodyString.isEmpty()) {
-                    LogUtils.warn("Return an empty response body");
-                }
-
-                JSONObject jsonResponse = new JSONObject(responseBodyString);
-
-                if (jsonResponse.has("text")) {
-                    return jsonResponse.getString("text");
-                } else {
-                    LogUtils.error("RuntimeException: cannot find \"text\" body");
-                    return null;
-                }
-
-            } else {
-                // 打印失败的响应状态码及响应内容
-                LogUtils.warn("Request failed, status code: " + response.code());
-                LogUtils.debug("Response body: " + response.body().string());
-                return null;
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtils.error("Transcription request failed" + e.getMessage());
+                callback.onFailure(e);
+                doneFlag.set(true);
             }
 
+            @Override
+            public void onResponse(Call call, Response response) {
+                try (ResponseBody respBody = response.body()) {
+                    if (!response.isSuccessful()) {
+                        String msg = respBody != null ? respBody.string() : "empty body";
+                        IOException err = new IOException("HTTP " + response.code() + ": " + msg);
+                        LogUtils.warn("Transcription failed: " + err.getMessage());
+                        callback.onFailure(err);
+                        return;
+                    }
 
-        } catch (Exception e) {
-            LogUtils.error(e.getMessage());
-            return null;
-        }
+                    String jsonString = respBody != null ? respBody.string() : "";
+                    JSONObject json = new JSONObject(jsonString);
+                    if (json.has("text")) {
+                        callback.onSuccess(json.getString("text"));
+                    } else {
+                        String errMsg = "No 'text' in response JSON";
+                        LogUtils.error(errMsg);
+                        callback.onFailure(new IllegalStateException(errMsg));
+                    }
+                } catch (Exception ex) {
+                    LogUtils.error("Error processing transcription response" + ex.getMessage());
+                    callback.onFailure(ex);
+                }finally {
+                    doneFlag.set(true);
+                }
+            }
+        });
     }
 
+
     /**
-     * 根据文件扩展名尝试获取 MIME 类型。
-     * @param file 要检查的文件
-     * @return 文件的 MIME 类型字符串，如果无法确定则返回 null
+     * 从指定路径读取 WAV 文件并返回其 byte 数组。
+     *
+     * @param wavFilePath WAV 文件的绝对或相对路径
+     * @return 文件内容的 byte 数组
+     * @throws IOException           读取文件失败时抛出
+     * @throws InvalidPathException  路径字符串非法时抛出
+     * @throws NullPointerException  wavFilePath 为 null 时抛出
      */
+    public static byte[] loadYourWavBytes(String wavFilePath) throws IOException {
+        Objects.requireNonNull(wavFilePath, "wavFilePath must not be null");
+
+        Path path = Paths.get(wavFilePath);
+        if (!Files.exists(path)) {
+            throw new IOException("WAV file not found: " + path.toAbsolutePath());
+        }
+        if (!Files.isReadable(path)) {
+            throw new IOException("WAV file is not readable: " + path.toAbsolutePath());
+        }
+
+        // 直接读取所有字节到内存
+        return Files.readAllBytes(path);
+    }
+
     private static String getMimeType(File file) {
         try {
             String contentType = Files.probeContentType(file.toPath());
@@ -114,29 +156,61 @@ public class AudioRecognition {
         return null; // 如果无法通过扩展名确定
     }
 
-    //example
     public static void main(String[] args) {
-
-        String filePath = "F:\\BUPT lessons\\JavaProject\\read.wav"; // 支持的格式: mp3, mp4, mpeg, mpga, m4a, wav, webm
-
-        File audioFile = new File(filePath);
-        if (!audioFile.exists()) {
-            LogUtils.error("错误：在 '" + filePath + "' 未找到音频文件。");
-            return;
-        }
-
-        // OpenAI API 对音频文件大小限制为 25MB
-        if (audioFile.length() > 25 * 1024 * 1024) {
-            LogUtils.error("错误：音频文件大小超过 25MB 限制。");
-            return;
-        }
-
         try {
-            String transcribedText = transcribeAudio(audioFile, buildAudioPrompt());
-            LogUtils.info("转录文本:");
-            LogUtils.info(transcribedText);
+            // 模拟输入（byte[] 类型）
+            byte[] wavBytes = AudioRecognition.loadYourWavBytes("F:\\BUPT lessons\\JavaProject\\read.wav");
+
+            // 用于存储数据
+            AtomicReference<String> transcriptionResult = new AtomicReference<>();
+            // 用线程池同时运行两个任务：（一个用于调用api，一个显示加载中……）
+            ExecutorService executor = Executors.newFixedThreadPool(2);
+
+            executor.submit(()->{
+                try {
+                    AudioRecognition.transcribeAudio(wavBytes, new TranscriptionCallback() {
+                        @Override
+                        public void onSuccess(String transcription) {
+                            // 转写成功，回调到前端或 UI 线程
+                            //LogUtils.info("success: " + transcription);
+                            transcriptionResult.set(transcription);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable error) {
+                            // 转写失败，回调通知
+                            //LogUtils.error("fail: " + error.getMessage());
+                            transcriptionResult.set(null);
+                        }
+                    });
+                } catch (IOException e) {
+                    LogUtils.error("Error:" + e.getMessage());
+                    doneFlag.set(true);
+                }
+            });
+
+            executor.submit(() -> {
+                while (!doneFlag.get()) {
+                    //
+                    LogUtils.info("加载中...");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ignored) {}
+                }
+                LogUtils.info("gpt生成完成，可以进行渲染");
+//                String result = transcriptionResult.get();
+//                LogUtils.info(result);
+            });
+
+            LogUtils.info("do anything in main thread");
+            // 可选，这将会阻塞主线程，这样可以将上述的渲染在主线程上进行
+            executor.shutdown();// ExecutorService 停止接受新任务
+            executor.awaitTermination(5, TimeUnit.MINUTES);//会等待直到所有任务完成
+            LogUtils.info("main thread continue");
+            String result = transcriptionResult.get();
+            LogUtils.info(result);
+
         } catch (Exception e) {
-            LogUtils.error("转录过程中发生错误: " + e.getMessage());
             e.printStackTrace();
         }
     }
