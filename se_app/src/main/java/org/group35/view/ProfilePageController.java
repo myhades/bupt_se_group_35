@@ -32,6 +32,7 @@ import org.group35.util.ImageUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.PasswordUtils;
 
+import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,6 +44,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,7 +58,7 @@ public class ProfilePageController implements Initializable {
     @FXML private VBox loadContainer;
     @FXML private VBox inputContainer;
     @FXML private VBox emptyInputContainer;
-    @FXML private Arc spinnerArc;
+
     @FXML private ImageView avatarImage;
     @FXML private TextField nameField;
     @FXML private TextField passwordField;
@@ -64,8 +66,9 @@ public class ProfilePageController implements Initializable {
     @FXML private TextField LocationField;
     @FXML private ComboBox<String> categoryBox;
 
-    private ProgramStatus fromStatus;
     private Boolean isWarning;
+
+    private User currentuser;
 
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -73,7 +76,7 @@ public class ProfilePageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-        User currentuser = runtime.getCurrentUser();
+        this.currentuser = runtime.getCurrentUser();
         Object fromPageObj = runtime.getNavParam("fromPage");
         Object fromStatusObj = runtime.getNavParam("fromStatus");
 
@@ -88,6 +91,7 @@ public class ProfilePageController implements Initializable {
             avatarImage.setClip(clip);
         }
         else {
+            resetAvatarToDefault();
             LogUtils.error("No Avatar");
         }
 
@@ -121,8 +125,7 @@ public class ProfilePageController implements Initializable {
     }
 
     private void setCategoryBox() {
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
-        List<String> categories = rt.getCurrentUser().getCategory();
+        List<String> categories = currentuser.getCategory();
         categoryBox.setItems(FXCollections.observableArrayList(categories));
     }
 
@@ -156,13 +159,6 @@ public class ProfilePageController implements Initializable {
             loadContainer.setVisible(true);
             inputContainer.setVisible(false);
             emptyInputContainer.setVisible(true);
-            spinnerArc.setRadiusX(24);
-            spinnerArc.setRadiusY(24);
-            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), spinnerArc);
-            rotateTransition.setByAngle(360);
-            rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
-            rotateTransition.setInterpolator(Interpolator.LINEAR);
-            rotateTransition.play();
         }
         else {
             hintContainer.setVisible(true);
@@ -172,91 +168,6 @@ public class ProfilePageController implements Initializable {
         }
     }
 
-//    @FXML
-//    private void handleSave(ActionEvent event) {
-//
-//        String name = nameField.getText();
-//        if (name == null || name.trim().isEmpty()) {
-//            showError("Name cannot be empty.");
-//            return;
-//        }
-//
-//        // 2) Validate amount
-//        BigDecimal amount;
-//        try {
-//            amount = new BigDecimal(passwordField.getText().trim());
-//            if (amount.compareTo(BigDecimal.ZERO) == 0) {
-//                showError("Amount must be not be zero.");
-//                return;
-//            }
-//        } catch (NumberFormatException e) {
-//            showError("Invalid amount format.");
-//            return;
-//        }
-//
-//        // 3) Validate date/time
-////        String dtInput = TimezoneField.getText() == null
-////                ? ""
-////                : TimezoneField.getText().trim();
-//        LocalDateTime timestamp;
-//        timestamp = LocalDateTime.now();
-////        if (dtInput.isEmpty()) {
-////            timestamp = LocalDateTime.now();
-////        } else {
-////            Pattern pattern = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(?: (\\d{2}:\\d{2}))?$");
-////            Matcher matcher = pattern.matcher(dtInput);
-////            if (!matcher.matches()) {
-////                showError("Invalid date/time. Use yyyy-MM-dd (HH:mm).");
-////                return;
-////            }
-////            LocalDate date;
-////            LocalTime time = LocalTime.MIDNIGHT;
-////            try {
-////                date = LocalDate.parse(matcher.group(1), DateTimeFormatter.ISO_LOCAL_DATE);
-////                String timePart = matcher.group(2);
-////                if (timePart != null) {
-////                    time = LocalTime.parse(timePart, DateTimeFormatter.ofPattern("HH:mm"));
-////                }
-////            } catch (DateTimeParseException e) {
-////                showError("Could not parse date or time.");
-////                return;
-////            }
-////            timestamp = LocalDateTime.of(date, time);
-////            if (timestamp.isAfter(LocalDateTime.now())) {
-////                showError("Date and time cannot be in the future.");
-////                return;
-////            }
-////        }
-//
-//        // 4) Get location
-//        String location = LocationField.getText().trim();
-//
-//        // 5) Validate category
-//        String category = categoryBox.getValue();
-//        if (category == null || category.trim().isEmpty()) {
-//            showError("Please select a category.");
-//            return;
-//        }
-//
-//        // 6) Construct transaction model
-//        Transaction tx = new Transaction();
-//        ApplicationRuntime rt = ApplicationRuntime.getInstance();
-//        TransactionManager txm = rt.getTranscationManager();
-//
-//        String username = rt.getCurrentUser().getUsername();
-//        tx.setUsername(username);
-//        tx.setName(name);
-//        tx.setAmount(amount);
-//        tx.setTimestamp(timestamp);
-//        tx.setCategory(category);
-//        if (!location.isEmpty()) {
-//            tx.setLocation(location);
-//        }
-//
-//        // 7) Saving and going back
-//        txm.add(tx);
-//        goBack(event);
-//    }
 
     private void showError(String message) {
         warningLabel.setText(message);
@@ -264,29 +175,37 @@ public class ProfilePageController implements Initializable {
     }
 
     @FXML
-    private void handleSelectAvatar(ActionEvent event) {
-        Window win = passwordField.getScene().getWindow();
-        File file = FileUtils.chooseFile(
-                win,
-                "Select CSV File",
-                null,
-                List.of(
-                        new FileChooser.ExtensionFilter("CSV", "*.csv"),
-                        new FileChooser.ExtensionFilter("All files", "*.*")
-                )
-        );
-        if (file == null) {
-//            showStatus("Selection cancelled.", true);
-            return;
+    private void handleSelectAvatar(MouseEvent event) {
+        Window win = categoryBox.getScene().getWindow();
+        try{
+            String selectedBase64 = ImageUtils.chooseAndProcessImage(win, 256);
+            Image selectedImage = ImageUtils.fromBase64(selectedBase64);
+            if (selectedImage != null) {  // only update when a pic actually selected
+                avatarImage.setImage(selectedImage);
+                double radius = avatarImage.getFitWidth() / 2.0;
+                Circle clip = new Circle(radius, radius, radius);
+                avatarImage.setClip(clip);
+                currentuser.setAvatar(selectedBase64);
+            }
         }
+        catch (IOException e) {
+            e.printStackTrace();
+            LogUtils.error("Invalid File");
+            resetAvatarToDefault();
+        }
+    }
+
+    private void resetAvatarToDefault() {
+        avatarImage.setImage(defaultAvatar);
+        double radius = avatarImage.getFitWidth() / 2.0;
+        Circle clip = new Circle(radius, radius, radius);
+        avatarImage.setClip(clip);
     }
 
     @FXML
     private void handleSave(ActionEvent event) {
         hideWarning();
 //        toggleProcessing(false);
-        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-        User currentuser = runtime.getCurrentUser();
 
 //        String username = nameField.getText().trim();
 //
@@ -348,10 +267,10 @@ public class ProfilePageController implements Initializable {
         //TODO: clear all textfiled
     }
 
-    @FXML
-    public void goBack(Event e) {
-        ApplicationRuntime.getInstance().navigateTo(fromStatus);
-    }
+//    @FXML
+//    public void goBack(Event e) {
+//        ApplicationRuntime.getInstance().navigateTo(fromStatus);
+//    }
 
     @FXML
     public void gotoMore(Event e) {

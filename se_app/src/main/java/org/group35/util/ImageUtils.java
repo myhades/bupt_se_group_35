@@ -32,9 +32,13 @@ public class ImageUtils {
     public static String chooseAndProcessImage(Window owner, int dimension) throws IOException {
         File file = FileUtils.chooseFile(
                 owner,
-                "Select PNG Image",
+                "Select Image",
                 null,
-                List.of(new FileChooser.ExtensionFilter("PNG Images", "*.png"))
+                List.of(
+                        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"),
+                        new FileChooser.ExtensionFilter("PNG Images", "*.png"),
+                        new FileChooser.ExtensionFilter("JPEG Images", "*.jpg", "*.jpeg")
+                )
         );
         if (file == null) {
             return null;
