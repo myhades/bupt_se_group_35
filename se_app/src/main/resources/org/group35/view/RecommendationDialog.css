@@ -1,82 +1,97 @@
-/* RecommendationDialog.css */
+/* PlanPage.css */
 
-/* 背景面板 */
-.recommendation-overlay-panel {
-    -fx-background-color: white;
-    -fx-background-radius: 20px;
+/* Greeting Bar */
+.greeting-row {
+    -fx-padding: 20 0 0 6;
+}
+.greeting-label {
+    -fx-font-size: 30px;
+    -fx-font-family: 'Articulat CF Bold';
 }
 
-/* 返回按钮样式 - 蓝色底 */
-.title-back-button {
-    -fx-background-color: #4A90E2; /* 蓝色背景 */
-    -fx-background-radius: 8px;
-    -fx-cursor: hand;
-    -fx-padding: 8 10;
-    -fx-pref-width: 40;
-    -fx-pref-height: 40;
+/* Chart Row */
+.chart-row {
+    -fx-padding: 30 0 0 0;
 }
-
-.title-back-button:hover {
-    -fx-background-color: #357ABD; /* 深蓝色悬停效果 */
-}
-
-/* 返回箭头图标样式 */
-.title-back-icon {
-    -fx-fill: #FFFFFF; /* 白色箭头 */
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-}
-
-/* 标题区域容器样式 - 白色背景 */
-.header-container {
-    -fx-background-color: white;
-    -fx-background-radius: 15px;
-    -fx-padding: 15 20;
-}
-
-/* 标题样式 - 字号减小 */
-.title-label {
+.chart-title {
     -fx-font-size: 20px;
     -fx-font-family: 'Articulat CF Demi Bold';
 }
-
-/* 卡片容器样式 */
-.card {
+.chart-container {
     -fx-background-color: white;
     -fx-background-radius: 20px;
     -fx-padding: 20px;
 }
-
-/* 滚动面板样式 */
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+.pie-chart {
+    -fx-pref-height: 350px;
+    -fx-padding: 0 0 0 0;
 }
 
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
+/* Budget Info */
+.budget-amount {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
 }
 
-.scroll-pane .scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-pref-width: 8px;
+/* Percentage Gray Style */
+.percentage-gray {
+    -fx-text-fill: #808080;
 }
 
-.scroll-pane .scroll-bar:vertical .track {
-    -fx-background-color: #E0E0E0;
-    -fx-background-radius: 4px;
-}
-
-.scroll-pane .scroll-bar:vertical .thumb {
-    -fx-background-color: #BDBDBD;
-    -fx-background-radius: 4px;
-}
-
-/* 推荐文本样式 - 统一字号为16px并加粗 */
-.recommendation-text {
-    -fx-font-size: 16px; /* 与PlanPage保持一致 */
-    -fx-fill: #D76A03;
-    -fx-font-family: 'Articulat CF';
+/* Buttons */
+.edit-button{
+    -fx-padding: 7 22;
+    -fx-font-size: 18px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #585858;
+    -fx-background-radius: 30px;
     -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+.ai-suggestion-button {
+    -fx-padding: 7 22;
+    -fx-font-size: 18px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #275317;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+/*.edit-button:hover, .ai-suggestion-button:hover {*/
+/*    -fx-background-color: derive(#595959, 50%);*/
+/*}*/
+.edit-icon {
+    -fx-fill: #fdfdfd;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
 
+.Here-icon {
+    -fx-fill: #D76A03;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+/* Recommendation Button */
+.recommendation-button {
+    -fx-font-size: 16px;
+    -fx-text-fill: #D76A03;
+    -fx-padding: 6 0 0 0;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+/* Local Info */
+.info-label-small {
+    -fx-font-size: 16px;
+    -fx-text-fill: #7F7F7F;
+}
+.info-label-big {
+    -fx-font-size: 16px;
+    -fx-text-fill: #323232;
+}
+.update-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2E7D32; /* green */
+    -fx-padding: 10 0 0 0;
 }

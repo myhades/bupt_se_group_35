@@ -1,43 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Pos?>
+
+<?import org.group35.view.components.NavBarController?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.shape.SVGPath?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.group35.view.EditBudgetDialogController"
-            stylesheets="@EditBudgetDialog.css"
-            styleClass="dialog-container"
-            prefWidth="550" prefHeight="300">
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.EditBudgetDialogController"
+      stylesheets="@EditBudgetDialog.css"
+      styleClass="root-container">
 
-    <!-- Title moved to top center position -->
-    <Label text="New Budget Setting" styleClass="title-label"
-           AnchorPane.topAnchor="30" AnchorPane.leftAnchor="300"/>
-    <SVGPath content="M21,10.12H14.22L16.96,7.3C14.23,4.6 9.81,4.5 7.08,7.2C4.35,9.91 4.35,14.28 7.08,17C9.81,19.7 14.23,19.7 16.96,17C18.32,15.65 19,14.08 19,12.1H21C21,14.08 20.12,16.65 18.36,18.39C14.85,21.87 9.15,21.87 5.64,18.39C2.14,14.92 2.11,9.28 5.62,5.81C9.13,2.34 14.76,2.34 18.27,5.81L21,3V10.12M12.5,8V12.25L16,14.33L15.28,15.54L11,13V8H12.5Z"
-             styleClass="update-icon" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="280">
-    </SVGPath>
-    <Label text="●" styleClass="Dot" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="265"/>
+    <!-- NavBar -->
+    <NavBarController activePage="PLAN"/>
 
-    <!-- Background - enlarged and repositioned -->
-    <VBox alignment="CENTER_LEFT" spacing="15" styleClass="card"
-          AnchorPane.topAnchor="70" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.bottomAnchor="40">
-
-        <HBox spacing="10">
-            <padding>
-                <Insets left="50"/>
-            </padding>
-            <Label text="New Budget：" styleClass="dialog-label"/>
-            <TextField fx:id="budgetInputField" promptText="Unit: $"
-                       styleClass="input-field"/>
-        </HBox>
-        <!-- Error&Correct hinting -->
-        <Label fx:id="errorLabel" text="" styleClass="error-label" visible="false"/>
-
-        <HBox spacing="30" alignment="CENTER">
-            <Button text="Confirm" onAction="#handleSave" styleClass="dialog-button"/>
-            <Button text="Cancel" onAction="#handleCancel" styleClass="dialog-button"/>
-        </HBox>
+    <!-- Title Section -->
+    <VBox styleClass="greeting-row" spacing="10">
+        <Label text="You're currently on a budget." styleClass="greeting-label"/>
     </VBox>
-</AnchorPane>
+
+    <!-- Main Content -->
+    <GridPane styleClass="chart-row" hgap="20" vgap="20">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="40"/>
+        </columnConstraints>
+
+        <!-- Left: Budget Info -->
+        <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="0" alignment="TOP_LEFT" >
+            <Label text="Edit Budget" styleClass="chart-title"/>
+
+            <VBox spacing="80" alignment="CENTER" style="-fx-padding: 40 0 0 0;">
+                <VBox spacing="20">
+                    <HBox spacing="50" alignment="CENTER">
+                        <Label text="Total Budget:" styleClass="info-label-big"/>
+                        <TextField fx:id="budgetInputField" promptText="e.g., 2000" prefWidth="150"/>
+                    </HBox>
+                    <HBox style="-fx-padding: 0 0 0 80;">
+                        <Label fx:id="errorLabel" text="" styleClass="error-label" visible="false"/>
+                    </HBox>
+                </VBox>
+                <HBox spacing="30" alignment="CENTER">
+                    <Button fx:id="saveBudgetButton" text="Save" onAction="#handleSave" styleClass="confirm-button">
+                        <graphic>
+                            <SVGPath content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" styleClass="edit-icon"/>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" styleClass="cancel-button"/>
+                </HBox>
+            </VBox>
+        </VBox>
+
+
+        <!-- Right: Recommendation and Local Info -->
+        <VBox styleClass="chart-container" spacing="10" GridPane.columnIndex="1">
+            <Label text="Recommendation" styleClass="chart-title" graphicTextGap="10"/>
+            <!-- Button with adjusted text wrapping and position -->
+            <Button fx:id="recommendationButton"
+                    wrapText="true"
+                    prefWidth="-1"
+                    maxWidth="Infinity"
+                    prefHeight="-1"
+                    minHeight="60"
+                    text="Tap to get recommendations on restaurants, coupon sites and more."
+                    styleClass="recommendation-button"
+                    onAction="#gotoRecommendation"
+                    graphicTextGap="20">
+                <graphic>
+                    <HBox alignment="CENTER">
+                        <SVGPath content="M12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5M12,2A7,7 0 0,1 19,9C19,14.25 12,22 12,22C12,22 5,14.25 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9C7,10 7,12 12,18.71C17,12 17,10 17,9A5,5 0 0,0 12,4Z"
+                                 styleClass="Here-icon"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Label text="Local" styleClass="chart-title" style="-fx-padding: 15 0 0 0;"/>
+
+            <GridPane hgap="25" vgap="8">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="95"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Time Zone" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label text="Asia/Shanghai" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+
+                <Label text="Currency" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label text="RMB/Yuan" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+
+                <Label text="Ratio" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label text="7.29 per USD" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+            </GridPane>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Label text="Last updated: 2025/3/18 21:14" styleClass="update-label" style="-fx-padding: 10 0 0 0;"/>
+            </HBox>
+        </VBox>
+
+    </GridPane>
+
+</VBox>

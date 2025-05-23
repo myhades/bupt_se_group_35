@@ -1,210 +1,97 @@
-.ai-overlay-panel {
-    -fx-background-color: rgba(255, 255, 255, 0.98);
-    -fx-background-radius: 15;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 2;
-    -fx-border-radius: 15;
+/* PlanPage.css */
+
+/* Greeting Bar */
+.greeting-row {
+    -fx-padding: 20 0 0 6;
+}
+.greeting-label {
+    -fx-font-size: 30px;
+    -fx-font-family: 'Articulat CF Bold';
 }
 
-.ai-suggestion-content {
-    -fx-background-color: transparent;
+/* Chart Row */
+.chart-row {
+    -fx-padding: 30 0 0 0;
 }
-
-.title-label-overlay {
-    -fx-font-size: 18px;
-    -fx-text-fill: #2c3e50;
-    -fx-font-weight: bold;
+.chart-title {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Articulat CF Demi Bold';
 }
-
-.back-button-overlay {
-    -fx-background-color: #6c757d;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-padding: 8 16;
-    -fx-cursor: hand;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-}
-
-.back-button-overlay:hover {
-    -fx-background-color: #5a6268;
-}
-
-.back-button-overlay:pressed {
-    -fx-background-color: #545b62;
-}
-
-/* 返回箭头图标样式 */
-.back-arrow-icon {
-    -fx-fill: white;
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-}
-
-.content-label-overlay {
-    -fx-font-size: 14px;
-    -fx-text-fill: #6c757d;
-    -fx-text-alignment: center;
-}
-
-/* 滚动面板样式 */
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
-
-.scroll-pane .scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-pref-width: 8px;
-}
-
-.scroll-pane .scroll-bar:vertical .track {
-    -fx-background-color: #E0E0E0;
-    -fx-background-radius: 4px;
-}
-
-.scroll-pane .scroll-bar:vertical .thumb {
-    -fx-background-color: #BDBDBD;
-    -fx-background-radius: 4px;
-}
-
-/* 保留原有样式用于兼容 */
-.ai-suggestion-panel {
+.chart-container {
     -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-border-color: #e9ecef;
-    -fx-border-width: 1;
-    -fx-border-radius: 12;
+    -fx-background-radius: 20px;
+    -fx-padding: 20px;
+}
+.pie-chart {
+    -fx-pref-height: 350px;
+    -fx-padding: 0 0 0 0;
 }
 
-.title-label-small {
-    -fx-font-size: 16px;
-    -fx-text-fill: #2c3e50;
-    -fx-font-weight: bold;
-}
-
-.back-button-small {
-    -fx-background-color: #6c757d;
-    -fx-text-fill: white;
-    -fx-background-radius: 6;
-    -fx-padding: 6 12;
-    -fx-cursor: hand;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-}
-
-.back-button-small:hover {
-    -fx-background-color: #5a6268;
-}
-
-.back-button-small:pressed {
-    -fx-background-color: #545b62;
-}
-
-.content-label {
-    -fx-font-size: 16px;
-    -fx-text-fill: #6c757d;
-    -fx-text-alignment: center;
-}
-
-.dialog-container {
-    -fx-background-color: #f8f9fa;
-}
-
-.card {
-    -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-padding: 25;
-}
-
-.title-label {
+/* Budget Info */
+.budget-amount {
     -fx-font-size: 22px;
-    -fx-text-fill: #2c3e50;
     -fx-font-weight: bold;
 }
 
-.local-icon {
-    -fx-fill: #3498db;
+/* Percentage Gray Style */
+.percentage-gray {
+    -fx-text-fill: #808080;
 }
 
-.back-button {
-    -fx-background-color: #6c757d;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-padding: 8 16;
+/* Buttons */
+.edit-button{
+    -fx-padding: 7 22;
+    -fx-font-size: 18px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #585858;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+.ai-suggestion-button {
+    -fx-padding: 7 22;
+    -fx-font-size: 18px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #275317;
+    -fx-background-radius: 30px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 14px;
+}
+/*.edit-button:hover, .ai-suggestion-button:hover {*/
+/*    -fx-background-color: derive(#595959, 50%);*/
+/*}*/
+.edit-icon {
+    -fx-fill: #fdfdfd;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+.Here-icon {
+    -fx-fill: #D76A03;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+/* Recommendation Button */
+.recommendation-button {
+    -fx-font-size: 16px;
+    -fx-text-fill: #D76A03;
+    -fx-padding: 6 0 0 0;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+/* Local Info */
+.info-label-small {
+    -fx-font-size: 16px;
+    -fx-text-fill: #7F7F7F;
+}
+.info-label-big {
+    -fx-font-size: 16px;
+    -fx-text-fill: #323232;
+}
+.update-label {
     -fx-font-size: 14px;
-    -fx-cursor: hand;
-    -fx-font-weight: bold;
-}
-
-.back-button:hover {
-    -fx-background-color: #5a6268;
-}
-
-.back-button:pressed {
-    -fx-background-color: #545b62;
-}
-
-.close-button {
-    -fx-background-color: #6c757d;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-padding: 10 20;
-    -fx-cursor: hand;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-.close-button:hover {
-    -fx-background-color: #5a6268;
-}
-
-.close-button:pressed {
-    -fx-background-color: #545b62;
-}
-
-.dialog-button {
-    -fx-background-color: #28a745;
-    -fx-text-fill: white;
-    -fx-padding: 10 20;
-    -fx-background-radius: 8;
-    -fx-cursor: hand;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-.dialog-button:hover {
-    -fx-background-color: #218838;
-}
-
-.dialog-button:pressed {
-    -fx-background-color: #1e7e34;
-}
-
-/* Recommendation样式的箭头按钮 */
-.title-back-button {
-    -fx-background-color: #4A90E2; /* 蓝色背景 */
-    -fx-background-radius: 8px;
-    -fx-cursor: hand;
-    -fx-padding: 8 10;
-    -fx-pref-width: 45;
-    -fx-pref-height: 35;
-}
-
-.title-back-button:hover {
-    -fx-background-color: #357ABD; /* 深蓝色悬停效果 */
-}
-
-.title-back-button:pressed {
-    -fx-background-color: #2E6BA8;
-}
-
-.title-back-icon {
-    -fx-fill: white; /* 白色箭头 */
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
+    -fx-text-fill: #2E7D32; /* green */
+    -fx-padding: 10 0 0 0;
 }
