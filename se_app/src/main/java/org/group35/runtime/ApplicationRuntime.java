@@ -32,7 +32,8 @@ public final class ApplicationRuntime {
         EDIT_BUDGET("/org/group35/view/EditBudgetDialog.fxml"),
         AI_SUGGESTION("/org/group35/view/AIDialog.fxml"),
         RECOMMENDATION("/org/group35/view/RecommendationDialog.fxml"),
-        ABOUT("/org/group35/view/AboutPage.fxml");
+        ABOUT("/org/group35/view/AboutPage.fxml"),
+        SUBSCRIPTION("/org/group35/view/SubscriptionPage.fxml");
 
         private final String fxmlPath;
 

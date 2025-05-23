@@ -54,15 +54,29 @@
             </VBox>
         </HBox>
 
-        <!-- Accessibility -->
-        <HBox styleClass="item" spacing="10" alignment="CENTER_LEFT" fillHeight="false">
+<!--        &lt;!&ndash; Accessibility &ndash;&gt;-->
+<!--        <HBox styleClass="item" spacing="10" alignment="CENTER_LEFT" fillHeight="false">-->
+<!--            <StackPane styleClass="item-icon-bg,accessibility-icon" alignment="CENTER">-->
+<!--                <SVGPath content="M21,9H15V22H13V16H11V22H9V9H3V7H21M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6C10.89,6 10,5.1 10,4C10,2.89 10.89,2 12,2Z"-->
+<!--                         styleClass="item-icon"/>-->
+<!--            </StackPane>-->
+<!--            <VBox styleClass="item-text" spacing="2">-->
+<!--                <Label text="Accessibility" styleClass="item-title"/>-->
+<!--                <Label text="Change accessibility settings such as font size, contrast and more." styleClass="item-subtitle"/>-->
+<!--            </VBox>-->
+<!--        </HBox>-->
+
+        <!-- Subscription -->
+        <HBox styleClass="item" spacing="10" alignment="CENTER_LEFT" fillHeight="false" onMouseClicked="#gotoSubscription">
             <StackPane styleClass="item-icon-bg,accessibility-icon" alignment="CENTER">
-                <SVGPath content="M21,9H15V22H13V16H11V22H9V9H3V7H21M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6C10.89,6 10,5.1 10,4C10,2.89 10.89,2 12,2Z"
+                <SVGPath content="M14 10H3V12H14V10M14 6H3V8H14V6M3 16H10V14H3V16M21.5 11.5L23 13L16 20L11.5 15.5L13 14L16 17L21.5 11.5Z"
                          styleClass="item-icon"/>
+
+
             </StackPane>
             <VBox styleClass="item-text" spacing="2">
-                <Label text="Accessibility" styleClass="item-title"/>
-                <Label text="Change accessibility settings such as font size, contrast and more." styleClass="item-subtitle"/>
+                <Label text="Subscription" styleClass="item-title"/>
+                <Label text="Try our premium subscription and compare features." styleClass="item-subtitle"/>
             </VBox>
         </HBox>
 

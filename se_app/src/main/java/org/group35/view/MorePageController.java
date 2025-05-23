@@ -29,4 +29,9 @@ public class MorePageController implements Initializable {
     private void gotoAbout(MouseEvent event) {
         ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.ABOUT);
     }
+
+    @FXML
+    private void gotoSubscription(MouseEvent event) {
+        ApplicationRuntime.getInstance().navigateTo(ApplicationRuntime.ProgramStatus.SUBSCRIPTION);
+    }
 }
