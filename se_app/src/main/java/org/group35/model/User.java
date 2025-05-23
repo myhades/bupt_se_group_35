@@ -2,8 +2,14 @@ package org.group35.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+
+import org.group35.util.TimezoneUtils;
+
+import static org.group35.util.TimezoneUtils.getCoordinates;
+import static org.group35.util.TimezoneUtils.getTimeZoneId;
 
 /**
  * User data model, including username and encrypted password etc.
@@ -68,9 +74,13 @@ public class User {
         this.hashedPassword = hashedPassword;
         this.avatar = null;
         this.monthlyBudget = BigDecimal.ZERO;
-        this.location = "China, Shanghai";
-//        this.timezone = TimezoneUtil.getTimeZoneId();
-        //TODO: add default location and timezone
+        this.location = "China, Shanghai"; //TODO: add default location and timezone
+        try {
+            this.timezone = TimezoneUtils.getTimeZoneId(getCoordinates(this.location)[0], getCoordinates(this.location)[1]);
+        }
+       catch (IOException e) {
+                this.timezone = "Asia/Shanghai";
+       }
 
         // Initialize default categories
         addCategory("Entertainment");
