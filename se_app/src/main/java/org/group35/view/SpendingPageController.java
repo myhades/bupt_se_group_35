@@ -2,6 +2,7 @@ package org.group35.view;
 
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -13,6 +14,7 @@ import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
+import org.group35.service.AIAssistant;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +23,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import org.group35.util.LogUtils;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -28,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class SpendingPageController {
 
@@ -192,6 +197,15 @@ public class SpendingPageController {
 
     @FXML void updateSummary(ActionEvent event){
         setProcessing("processing");
+        CompletableFuture<String> future = AIAssistant.AISummaryAsync();
+        future.whenComplete((text, err) -> Platform.runLater(() -> {
+            if (err != null) {
+                LogUtils.error("AI summary generation failed: " + err.getMessage());
+                setProcessing("initial");
+            } else {
+                setAISummary(text);
+            }
+        }));
     }
 
     @FXML
