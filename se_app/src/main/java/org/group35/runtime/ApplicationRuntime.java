@@ -3,12 +3,15 @@ package org.group35.runtime;
 import org.group35.controller.TransactionManager;
 import org.group35.controller.UserManager;
 import org.group35.model.User;
+import org.group35.util.AudioUtils;
 import org.group35.util.CameraUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.SceneManager;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * ApplicationRuntime is a singleton class that encapsulates all model manager instances.
@@ -25,7 +28,7 @@ public final class ApplicationRuntime {
         SPENDING("/org/group35/view/SpendingPage.fxml"),
         PLAN("/org/group35/view/PlanPage.fxml"),
         MORE("/org/group35/view/MorePage.fxml"),
-        MANUAL_ENTRY("/org/group35/view/ManualEntryPage.fxml"),
+        DESCRIBE("/org/group35/view/DescribePage.fxml"),
         RECOGNIZE_BILL("/org/group35/view/RecognizeBillPage.fxml"),
         IMPORT_CSV("/org/group35/view/ImportCSVPage.fxml"),
         CONFIRM_ENTRY("/org/group35/view/ConfirmEntryPage.fxml"),
@@ -49,11 +52,12 @@ public final class ApplicationRuntime {
     private static ApplicationRuntime instance;
 
     // Model managers
-    private final UserManager         userManager;
-    private final TransactionManager  transactionManager;
+    private final UserManager        userManager;
+    private final TransactionManager transactionManager;
 
     // Shared services
-    private final CameraUtils         cameraService;
+    private final CameraUtils cameraService;
+    private final AudioUtils  audioService;
 
     // Runtime state
     private User           loggedInUser;
@@ -68,6 +72,7 @@ public final class ApplicationRuntime {
         userManager        = new UserManager();
         transactionManager = new TransactionManager();
         cameraService      = new CameraUtils();
+        audioService       = new AudioUtils();
 
         Runtime.getRuntime().addShutdownHook(new Thread(cameraService::shutdown));
 
@@ -116,6 +121,12 @@ public final class ApplicationRuntime {
         return cameraService;
     }
 
+    /** Returns the AudioService instance.
+     * @return the shared AudioUtils service */
+    public AudioUtils getAudioService() {
+        return audioService;
+    }
+
     /**
      * Returns the currently logged-in user.
      * @return the current User, or null if no user is logged in.
@@ -160,19 +171,48 @@ public final class ApplicationRuntime {
     }
 
     /**
-     * Scene navigation method
+     * Basic navigation: always populate fromPage/fromStatus.
      */
     public void navigateTo(ProgramStatus target) {
+        navigateTo(target, null, true);
+    }
+
+    /**
+     * Navigation with parameter transfer (clears existing params by default).
+     */
+    public void navigateTo(ProgramStatus target, Map<String,Object> params) {
+        navigateTo(target, params, true);
+    }
+
+    /**
+     * Navigation with parameter transfer and control over clearing old params.
+     * @param target      page to navigate to
+     * @param params      extra key/value pairs to merge
+     * @param clearParams if true, clears existing navParams first; otherwise merges
+     */
+    public void navigateTo(ProgramStatus target, Map<String,Object> params, boolean clearParams) {
+        if (clearParams) {
+            navParams.clear();
+        }
+        navParams.put("fromStatus", this.programStatus);
+        navParams.put("fromPage",   formatPageName(this.programStatus));
+        if (params != null) {
+            navParams.putAll(params);
+        }
         setProgramStatus(target);
     }
 
     /**
-     * Overloaded scene navigation method with parameter transfer
+     * Formats an enum name into Title Case sentence: ENUM_NAME -> "Enum Name"
      */
-    public void navigateTo(ProgramStatus target, Map<String,Object> params) {
-        this.navParams.clear();
-        if (params != null) navParams.putAll(params);
-        setProgramStatus(target);
+    private String formatPageName(ProgramStatus status) {
+        if (status == null) return "";
+        return Arrays.stream(status.name().split("_"))
+                .map(s -> {
+                    String lower = s.toLowerCase();
+                    return Character.toUpperCase(lower.charAt(0)) + lower.substring(1);
+                })
+                .collect(Collectors.joining(" "));
     }
 
     /**
@@ -194,6 +234,10 @@ public final class ApplicationRuntime {
             LogUtils.debug("Leaving bill recognition page, shutting down camera...");
             cameraService.shutdown();
         }
+        if (this.programStatus == ProgramStatus.DESCRIBE) {
+            LogUtils.debug("Leaving describe page, shutting down audio...");
+            audioService.shutdown();
+        }
 
         this.programStatus = status;
         LogUtils.debug("ProgramStatus changed to: " + status);
@@ -206,5 +250,6 @@ public final class ApplicationRuntime {
     public void shutdown() {
         LogUtils.debug("ApplicationRuntime is being shut down, doing some clean up...");
         cameraService.shutdown();
+        audioService.shutdown();
     }
 }
