@@ -2,7 +2,6 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.controller.TransactionManager;
-import org.group35.model.Transaction;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -10,7 +9,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -190,39 +188,79 @@ public class AIAssistant {
 
     }
     //api
-//    public static CompletableFuture<String> AISuggestion(BigDecimal userSavingGoal, String stringContent) {
-//        CompletableFuture<String> reponse = new CompletableFuture<>();
-//        try{
-//            String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);
-//            response = DeepSeekCalling();
-//            // LogUtils.debug(response);
-//            return response;
-//        } catch (IOException e) {
-//            LogUtils.error(e.getMessage());
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    public static CompletableFuture<String> AISummary(String stringContent) {
-//        try{
-//            CompletableFuture<String> response = DeepSeekCalling(buildAISummaryPrompt(stringContent));
-//            // LogUtils.debug(response);
-//            return response;
-//        } catch (IOException e) {
-//            LogUtils.error(e.getMessage());
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    public static CompletableFuture<String> AIRecommendation(String location, String stringContent) throws IOException {
-//        String localTime = TimezoneUtils.getLocalTime(location);
-//        try{
-//            CompletableFuture<String> response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
-//            // LogUtils.debug(response);
-//            return response;
-//        } catch (IOException e) {
-//            LogUtils.error(e.getMessage());
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public static CompletableFuture<String> AISuggestionAsync(BigDecimal userSavingGoal, String stringContent) {
+        CompletableFuture<String> response = new CompletableFuture<>();
+        try{
+            String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);
+            DeepSeekCalling(prompt, new RecognitionCallback() {
+                @Override
+                public void onSuccess(String content) {
+                    response.complete(content);
+                }
+
+                @Override
+                public void onFailure(Throwable e) {
+                    response.completeExceptionally(e);
+                }
+            });
+            // LogUtils.debug(response);
+            return response;
+        } catch (IOException e) {
+            LogUtils.error(e.getMessage());
+            response.completeExceptionally(e);
+        }
+        return response;
+    }
+    public static CompletableFuture<String> AISummaryAsync() {
+        CompletableFuture<String> response = new CompletableFuture<>();
+        try{
+            String stringContent = TransactionManager.transferTransaction();
+            String prompt = buildAISummaryPrompt(stringContent);
+            LogUtils.info("debug:" + stringContent);
+            DeepSeekCalling(prompt, new RecognitionCallback() {
+                @Override
+                public void onSuccess(String content) {
+                    response.complete(content);
+                }
+
+                @Override
+                public void onFailure(Throwable e) {
+                    response.completeExceptionally(e);
+                }
+            });
+            // LogUtils.debug(response);
+            return response;
+        } catch (IOException e) {
+            LogUtils.error(e.getMessage());
+            response.completeExceptionally(e);
+        }
+        return response;
+    }
+    public static CompletableFuture<String> AIRecommendationAsync(String location, String stringContent) throws IOException {
+        CompletableFuture<String> response = new CompletableFuture<>();
+        try{
+            String localTime = TimezoneUtils.getLocalTime(location);
+            String prompt = buildAIRecommendationPrompt(location, localTime, stringContent);
+            DeepSeekCalling(prompt, new RecognitionCallback() {
+                @Override
+                public void onSuccess(String content) {
+                    response.complete(content);
+                }
+
+                @Override
+                public void onFailure(Throwable e) {
+                    response.completeExceptionally(e);
+                }
+            });
+            // LogUtils.debug(response);
+            return response;
+        } catch (IOException e) {
+            LogUtils.error(e.getMessage());
+            response.completeExceptionally(e);
+        }
+        return response;
+
+    }
 
 
     public static void main(String[] args) throws IOException {
@@ -230,9 +268,7 @@ public class AIAssistant {
 //        User usr = UserManager.getCurrentUser();
 //        BigDecimal budget = usr.getMonthlyBudget();
 
-
-
-
+//
 //        BigDecimal budget = BigDecimal.valueOf(5000);
 //        String location = "Tokyo, Japan";
 //        //String stringContent = TransactionUtils.transferTransaction();
@@ -240,9 +276,9 @@ public class AIAssistant {
 //                "2025-04-03,expense,1000,food\\n" +
 //                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
 //
-//        CompletableFuture<String> suggFuture = AISuggestion(budget, stringContent);
-//        CompletableFuture<String> summFuture = AISummary(stringContent);
-//        CompletableFuture<String> recFuture = AIRecommendation(location, stringContent);
+//        CompletableFuture<String> suggFuture = AISuggestionAsyn(budget, stringContent);
+//        CompletableFuture<String> summFuture = AISummaryAsyn();
+//        CompletableFuture<String> recFuture = AIRecommendationAsyn(location, stringContent);
 //
 //        // Wait for all futures to complete (for demonstration)
 //        CompletableFuture.allOf(suggFuture, summFuture, recFuture).join();

@@ -115,7 +115,7 @@ public class ConfirmEntryPageController implements Initializable {
 
         toggleProcessing(true);
 
-        BillsRecognition.imageRecognitionAsyn(base64)
+        BillsRecognition.imageRecognitionAsync(base64)
                 .whenComplete((tx, err) -> {
                     Platform.runLater(() -> {
                         toggleProcessing(false);

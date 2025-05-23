@@ -5,7 +5,6 @@ import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
-import org.group35.util.ImageUtils;
 import org.group35.util.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,7 +12,6 @@ import org.json.JSONTokener;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -63,7 +61,7 @@ public class BillsRecognition {
     }
 
 
-    public static String buildRequestBody(String base64Image, String prompt) {
+    public static String buildImageRequestBody(String base64Image, String prompt) {
         JSONObject payload = new JSONObject();
         payload.put("model", "gpt-4o");
 //        payload.put("temperature", 1);
@@ -103,6 +101,38 @@ public class BillsRecognition {
         return payload.toString();
     }
 
+    public static String buildTextRequestBody(String content, String prompt) {
+        JSONObject payload = new JSONObject();
+        payload.put("model", "gpt-4o");
+//        payload.put("temperature", 1);
+//        payload.put("max_tokens", 2048);
+//        payload.put("top_p", 1);
+
+        // 构建消息数组
+        JSONArray messages = new JSONArray();
+
+        // 用户消息
+        JSONObject userMessage = new JSONObject();
+        userMessage.put("role", "user");
+
+        JSONArray contentArray = new JSONArray();
+
+        // 文本部分 (安全转义)
+        JSONObject textContent = new JSONObject();
+        textContent.put("type", "text");
+        textContent.put("text", prompt.replace("\"", "\\\"")); // 转义双引号
+        contentArray.put(textContent);
+
+
+        userMessage.put("content", contentArray);
+        //userMessage.put("content", "Hello!");
+        messages.put(userMessage);
+
+        payload.put("messages", messages);
+
+        LogUtils.debug("request body: " + payload.toString());
+        return payload.toString();
+    }
     private static void multimodelAPICalling(String requestBody, RecognitionCallback callback) throws IOException {
 
         RequestBody body = RequestBody.create(
@@ -201,21 +231,48 @@ public class BillsRecognition {
         }
     }
 
-    public static CompletableFuture<Transaction> imageRecognitionAsyn(String base64Image){
+    public static CompletableFuture<Transaction> imageRecognitionAsync(String base64Image){
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-//            List<String> categoryList = currentUser.getCategory();
-//            String categories = String.join("",categoryList);
+            List<String> categoryList = currentUser.getCategory();
+            String categories = String.join("",categoryList);
+            categories = categories.replaceAll("\\\\(.)", "$1");
+
+//            List<String> categoryLists = Arrays.asList("Electronics", "Home Appliances", "Books");
+            // Combine categories into one string
+//            String categories = String.join("\\n", categoryLists);
 //            categories = categories.replaceAll("\\\\(.)", "$1");
 
-            List<String> categoryLists = Arrays.asList("Electronics", "Home Appliances", "Books");
-
-            // Combine categories into one string
-            String categories = String.join("\\n", categoryLists);
-            categories = categories.replaceAll("\\\\(.)", "$1");
             String prompt = buildCapturePrompt(categories);
-            String body   = buildRequestBody(base64Image, prompt);
+            String body   = buildImageRequestBody(base64Image, prompt);
+
+            multimodelAPICalling(body, new RecognitionCallback() {
+                @Override
+                public void onSuccess(Transaction transactions) {
+                    cf.complete(transactions);
+                }
+                @Override
+                public void onFailure(Throwable e) {
+                    cf.completeExceptionally(e);
+                }
+            });
+        } catch (Exception e) {
+            LogUtils.error("image recognition error:" + e.getMessage());
+            cf.completeExceptionally(e);
+        }
+        return cf;
+    }
+    public static CompletableFuture<Transaction> textRecognitionAsync(String text){
+        CompletableFuture<Transaction> cf = new CompletableFuture<>();
+        try {
+            User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+            List<String> categoryList = currentUser.getCategory();
+            String categories = String.join("",categoryList);
+            categories = categories.replaceAll("\\\\(.)", "$1");
+
+            String prompt = buildCapturePrompt(categories);
+            String body   = buildImageRequestBody(text, prompt);
 
             multimodelAPICalling(body, new RecognitionCallback() {
                 @Override
