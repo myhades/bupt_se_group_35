@@ -81,6 +81,27 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Fuzzy search transaction records and perform partial matching based on the name or category fields.
+     *
+     * @param keyword keyword to search
+     * @return matched transactions
+     */
+    public List<Transaction> searchByNameOrCategory(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            LogUtils.warn("Search keyword is empty or null");
+            return new ArrayList<>();
+        }
+
+        LogUtils.trace("Fuzzy searching transactions by name or category with keyword: " + keyword);
+        String lowerKeyword = keyword.trim().toLowerCase();
+
+        return transactions.stream()
+                .filter(tx -> tx.getName() != null && tx.getName().toLowerCase().contains(lowerKeyword)
+                        || tx.getCategory() != null && tx.getCategory().toLowerCase().contains(lowerKeyword))
+                .collect(Collectors.toList());
+    }
+
     /** Returns transactions within the given amount range. bigger or equal, smaller or equal */
     public List<Transaction> getByAmountRange(BigDecimal minAmount, BigDecimal maxAmount) {
         LogUtils.trace("Filtering transactions by amount range: " + minAmount + " - " + maxAmount);
@@ -170,12 +191,13 @@ public class TransactionManager {
 
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
-        // 求求你们不要覆盖传进来的已经构造好了的tx，要自动填充自己加个overload方法吧
 //        tx.setTimestamp(LocalDateTime.now());
 //        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
 //        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
 //        Instant instant = Instant.now();
 //        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
+//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
+//        tx.setCategory(tx.getCategory()==null ? currentUser.getCategory().get(0) : tx.getCategory()); //FIXME: fuzzy match
 //        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone()));
 //        tx.setCategory(currentUser.getCategory().get(0));
         transactions.add(tx);
