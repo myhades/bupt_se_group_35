@@ -1,6 +1,7 @@
 package org.group35.view;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,12 +17,15 @@ import org.group35.util.LogUtils;
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class DescribePageController implements Initializable {
 
     @FXML private Button recordButton;
     @FXML private Button stopButton;
+    @FXML private Button continueButton;
     @FXML private Label hintProcessLabel;
     @FXML private TextArea describeArea;
 
@@ -34,6 +38,18 @@ public class DescribePageController implements Initializable {
         recordButton.managedProperty().bind(recordButton.visibleProperty());
         stopButton.managedProperty().bind(stopButton.visibleProperty());
         hintProcessLabel.managedProperty().bind(hintProcessLabel.visibleProperty());
+        continueButton.managedProperty().bind(continueButton.visibleProperty());
+
+        continueButton.visibleProperty().bind(
+                Bindings.createBooleanBinding(
+                        () -> {
+                            String txt = describeArea.getText();
+                            return txt != null && !txt.trim().isEmpty();
+                        },
+                        describeArea.textProperty()
+                )
+        );
+
         toggleRecording(false);
         toggleProcessing(false);
     }
@@ -91,8 +107,15 @@ public class DescribePageController implements Initializable {
 
     @FXML
     private void handleContinue(ActionEvent event) {
-        if (isRecording || isProcessing) return;
-        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.CONFIRM_ENTRY);
+        String description = describeArea.getText() != null
+                ? describeArea.getText()
+                : "";
+        if (isRecording || isProcessing || description.isEmpty()) return;
+        Map<String,Object> params = new HashMap<>();
+        params.put("description",  description);
+        params.put("needsProcess", Boolean.TRUE);
+        params.put("processType",  "text");
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.CONFIRM_ENTRY, params);
     }
 
     @FXML
