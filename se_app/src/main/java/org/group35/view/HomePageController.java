@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
@@ -19,6 +20,7 @@ import javafx.event.ActionEvent;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -28,11 +30,11 @@ public class HomePageController implements Initializable {
     @FXML private PieChart categoryPieChart;
     @FXML private Button toggleIncomeExpenseBtn;
     @FXML private NumberAxis yAxis;
+    @FXML private Label greetingLabel;
 
-    private boolean showIncome = true; // default show income
+    private boolean showIncome = true;
 
-    // txManager instance
-    private TransactionManager txManager;
+    private TransactionManager txm;
     private User currentUser;
 
     // Add this near the top of the class
@@ -53,17 +55,26 @@ public class HomePageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize txManager
-        txManager = ApplicationRuntime.getInstance().getTranscationManager();
+        ApplicationRuntime rt = ApplicationRuntime.getInstance();
+        txm = rt.getTranscationManager();
+        currentUser = rt.getCurrentUser();
+        List<Transaction> txs = txm.getByUser(currentUser.getUsername());
+        updateCharts(txs);
+        greetingLabel.setText(makeGreeting());
+    }
 
-        // Get current user's username
-        currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-
-        // Fetch all transactions for the current user
-        List<Transaction> transactions = txManager.getByUser(currentUser.getUsername());
-
-        // Update charts with real data
-        updateCharts(transactions);
+    private String makeGreeting() {
+        LocalTime now = LocalTime.now();
+        int hour = now.getHour();
+        if (hour < 6) {
+            return "Good night";
+        } else if (hour < 12) {
+            return "Good morning";
+        } else if (hour < 18) {
+            return "Good afternoon";
+        } else {
+            return "Good evening";
+        }
     }
 
     @FXML
@@ -72,7 +83,7 @@ public class HomePageController implements Initializable {
         toggleIncomeExpenseBtn.setText((showIncome ? "Income " : "Expense"));
 
 //        String currentUser = ApplicationRuntime.getInstance().getCurrentUser().getUsername();
-        List<Transaction> transactions = txManager.getByUser(currentUser.getUsername());
+        List<Transaction> transactions = txm.getByUser(currentUser.getUsername());
 
         // 可选：根据收支状态过滤交易
         List<Transaction> filtered = transactions.stream()
