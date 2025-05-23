@@ -24,6 +24,7 @@ import org.group35.service.AIAssistant;
 import org.group35.util.LogUtils;
 
 public class RecommendationDialogController {
+    public Label aiRecommendationLabel;
     @FXML
     private Button recommendationButton;
     @FXML
@@ -42,14 +43,12 @@ public class RecommendationDialogController {
     private Label usedAmountLabel;
     @FXML
     private Label usedPercentLabel;
-    @FXML
-    private Label aiRecommendationTextArea;
 
     @FXML private Arc loadingArc;
 
     @FXML
     public void initialize() throws IOException {
-        aiRecommendationTextArea.managedProperty().bind(aiRecommendationTextArea.visibleProperty());
+        aiRecommendationLabel.managedProperty().bind(aiRecommendationLabel.visibleProperty());
         loadingArc.managedProperty().bind(loadingArc.visibleProperty());
         loadingArc.setRadiusX(24);
         loadingArc.setRadiusY(24);
@@ -59,19 +58,15 @@ public class RecommendationDialogController {
         rotateTransition.setInterpolator(Interpolator.LINEAR);
         rotateTransition.play();
         setProcessing("processing");
-
         CompletableFuture<String> future = AIAssistant.AIRecommendationAsync();
         future.whenComplete((text, err) -> Platform.runLater(() -> {
             if (err != null) {
                 LogUtils.error("AI summary generation failed: " + err.getMessage());
-                setProcessing("done");
             } else {
                 LogUtils.info("-----------------------------------------");
                 setAIRecommendation(text);
             }
         }));
-        aiRecommendationTextArea.setMouseTransparent(true);
-        aiRecommendationTextArea.setFocusTraversable(false);
         try {
             if (recommendationButton != null) {
                 recommendationButton.setWrapText(true);
@@ -87,15 +82,15 @@ public class RecommendationDialogController {
             e.printStackTrace();
         }
     }
-    public void setAIRecommendation(String recommendation) {
-        aiRecommendationTextArea.setText(recommendation);
+    public void setAIRecommendation(String text) {
+        aiRecommendationLabel.setText(text);
         setProcessing("done");
     }
 
 
     private void setProcessing(String status) {
         loadingArc.setVisible(status.equals("processing"));
-        aiRecommendationTextArea.setVisible(status.equals("done"));
+        aiRecommendationLabel.setVisible(status.equals("done"));
     }
     private void loadBudgetData() {
         try {
