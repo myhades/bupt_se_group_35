@@ -124,9 +124,7 @@ public class SpendingPageController {
         String user = rt.getCurrentUser().getUsername();
         List<Transaction> txs = txm.getByUser(user);
 
-        // TODO: Remove sample data and interface search and filtering with TransactionManager
-        txs = getSampleTransactions();
-
+        // TODO: Interface search and filtering with TransactionManager
 //        String kw = searchField.getText().trim().toLowerCase();
 //        if (!kw.isEmpty()) {
 //            txs = txs.stream()
@@ -257,37 +255,5 @@ public class SpendingPageController {
             return COLOR_PALETTE[idx];
         }
         return Color.web("#555555");
-    }
-
-    /**
-     * Provide sample transactions (Netflix and McDonald) for initial load.
-     */
-    private List<Transaction> getSampleTransactions() {
-        Transaction netflix = new Transaction();
-        netflix.setName("Netflix Family");
-        netflix.setTimestamp(LocalDateTime.of(2025, 12, 11, 0, 0));
-        netflix.setAmount(new BigDecimal("-29.9"));
-
-        Transaction mcDonald = new Transaction();
-        mcDonald.setName("McDonald");
-        mcDonald.setTimestamp(LocalDateTime.of(2025, 12, 25, 0, 0));
-        mcDonald.setAmount(new BigDecimal("-15.9"));
-
-        Transaction hulu = new Transaction();
-        hulu.setName("Hulu");
-        hulu.setTimestamp(LocalDateTime.of(2025, 12, 24, 0, 0));
-        hulu.setAmount(new BigDecimal("-19.9"));
-
-        Transaction dinner = new Transaction();
-        dinner.setName("Sichuan Palace");
-        dinner.setTimestamp(LocalDateTime.of(2025, 12, 27, 0, 0));
-        dinner.setAmount(new BigDecimal("-120.7"));
-
-        Transaction utility = new Transaction();
-        utility.setName("Utility Bill");
-        utility.setTimestamp(LocalDateTime.of(2025, 12, 27, 0, 0));
-        utility.setAmount(new BigDecimal("-120.7"));
-
-        return List.of(netflix, mcDonald, hulu, dinner, utility);
     }
 }
