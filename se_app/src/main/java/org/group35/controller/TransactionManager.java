@@ -455,11 +455,10 @@ public class TransactionManager {
         return txManager.getByUser(runtime.getCurrentUser().getUsername());
     }
 
-    public static Transaction getByJSON(JSONObject content){
+    public static Transaction getByJSON(JSONArray content){
         try {
-            // 1. 解析成 JSONArray
-            JSONArray arr = new JSONArray(content);
-            JSONObject bill = arr.getJSONObject(0);
+
+            JSONObject bill = content.getJSONObject(0);
 
             // 3. 提取各个字段
             String name     = bill.optString("name","");      // 商家/供应商名称

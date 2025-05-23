@@ -138,12 +138,14 @@ public class BillsRecognition {
                     String text = respBody.string();
                     JSONObject json = new JSONObject(text);
                     JSONArray choices = json.getJSONArray("choices");
-                    JSONObject content = choices
+                    String content = choices
                             .getJSONObject(0)
                             .getJSONObject("message")
-                            .getJSONObject("content");
-
-                    Transaction transaction = TransactionManager.getByJSON(content);
+                            .getString("content");
+                    content = removeFirstAndLastLine(content);
+                    LogUtils.info(content);
+                    JSONArray contents = new JSONArray(content);
+                    Transaction transaction = TransactionManager.getByJSON(contents);
 
                     callback.onSuccess(transaction);
                 } catch (Exception ex) {
@@ -156,6 +158,22 @@ public class BillsRecognition {
         });
 
 
+    }
+    public static String removeFirstAndLastLine(String inputString) {
+
+        String[] lines = inputString.split("\n");
+
+        if (lines.length <= 2) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 1; i < lines.length - 1; i++) {
+            result.append(lines[i]).append("\n");
+        }
+
+        return result.toString().trim();
     }
     public static void writeDataToJson(String path, String data){
         try {
@@ -187,10 +205,15 @@ public class BillsRecognition {
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-            List<String> categoryList = currentUser.getCategory();
-            String categories = String.join("",categoryList);
-            categories = categories.replaceAll("\\\\(.)", "$1");
+//            List<String> categoryList = currentUser.getCategory();
+//            String categories = String.join("",categoryList);
+//            categories = categories.replaceAll("\\\\(.)", "$1");
 
+            List<String> categoryLists = Arrays.asList("Electronics", "Home Appliances", "Books");
+
+            // Combine categories into one string
+            String categories = String.join("\\n", categoryLists);
+            categories = categories.replaceAll("\\\\(.)", "$1");
             String prompt = buildCapturePrompt(categories);
             String body   = buildRequestBody(base64Image, prompt);
 
