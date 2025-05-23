@@ -149,11 +149,11 @@ public class User {
     /**
      * Get all defined categories.
      *
-     * @return an unmodifiable collection of all categories
+     * @return an unmodifiable List of all categories
      */
-    public Collection<String> getCategory() {
+    public List<String> getCategory() {
 
-        return Collections.unmodifiableCollection(categoryMap.keySet());
+        return Collections.unmodifiableList(new ArrayList<>(categoryMap.keySet()));
     }
 
     /**
@@ -167,9 +167,9 @@ public class User {
             return false;
 //            throw new IllegalArgumentException("Category name cannot be null or empty");
         }
-        if (categoryMap.containsKey(name)) {
+        if (! categoryMap.containsKey(name)) {
             return false;
-//            throw new IllegalArgumentException("Category with name '" + name + "' already exists.");
+//            throw new IllegalArgumentException("Category with name '" + name + "' doesnt exist.");
         }
         categoryMap.remove(name);
         return true;

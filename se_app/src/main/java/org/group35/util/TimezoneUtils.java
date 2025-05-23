@@ -91,7 +91,7 @@ public class TimezoneUtils {
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         return zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
-    private static LocalDateTime getFormattedCurrentTimeByZone(String timeZoneId) {
+    public static LocalDateTime getFormattedCurrentTimeByZone(String timeZoneId) {
         ZoneId zoneId = ZoneId.of(timeZoneId);
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         return zonedDateTime.toLocalDateTime();
