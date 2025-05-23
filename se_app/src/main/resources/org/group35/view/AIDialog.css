@@ -39,6 +39,13 @@
 }
 
 /* Buttons */
+.recommendation-button {
+    -fx-font-size: 16px;
+    -fx-text-fill: #D76A03;
+    -fx-padding: 6 0 0 0;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
 .edit-button{
     -fx-padding: 7 22;
     -fx-font-size: 18px;
@@ -70,15 +77,6 @@
     -fx-fill: #D76A03;
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
-}
-
-/* Recommendation Button */
-.recommendation-button {
-    -fx-font-size: 16px;
-    -fx-text-fill: #D76A03;
-    -fx-padding: 6 0 0 0;
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
 }
 
 /* Local Info */

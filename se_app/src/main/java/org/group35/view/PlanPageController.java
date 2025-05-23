@@ -23,6 +23,8 @@ public class PlanPageController {
     @FXML
     private Button AIButton;
     @FXML
+    private Label budgetStatusLabel;
+    @FXML
     private Label availableAmountLabel;
     @FXML
     private Label availablePercentLabel;
@@ -90,6 +92,16 @@ public class PlanPageController {
             }
 
             updateBudgetLabels(totalBudget, usedBudget, availableBudget, usedPercentage, availablePercentage);
+            if (budgetStatusLabel != null) {
+
+                if (totalBudgetBD == null || totalBudget <= 0.0) {
+                    budgetStatusLabel.setText("Welcome to set your budget here.");
+                } else if (usedBudget > totalBudget) {
+                    budgetStatusLabel.setText("Oops! It seems that you are over budget!");
+                } else {
+                    budgetStatusLabel.setText("You're currently on a budget.");
+                }
+            }
 
             System.out.println("Budget display updated - Total: $" + totalBudget + ", Used: $" + usedBudget);
         } catch (Exception e) {
@@ -175,8 +187,8 @@ public class PlanPageController {
                         transactionTime.getYear() == currentYear) {
 
                     BigDecimal amount = transaction.getAmount();
-                    if (amount != null) {
-                        totalExpenses += Math.abs(amount.doubleValue());
+                    if (amount != null && amount.compareTo(BigDecimal.ZERO) < 0) {
+                        totalExpenses += amount.abs().doubleValue(); // less than 0
                     }
                 }
             }
