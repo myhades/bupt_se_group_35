@@ -23,6 +23,7 @@
 .title-text-from {
     -fx-text-fill: gray;
     -fx-cursor: hand;
+    -fx-max-width: 400px;
 }
 .title-dot {
     -fx-font-size: 20px;
@@ -93,10 +94,10 @@
 .save-button:hover {
     -fx-background-color: derive(#000000, 50%);
 }
-.cancel-button {
+.cancel-button, .delete-button {
     -fx-background-color: #7e0000;
 }
-.cancel-button:hover {
+.cancel-button:hover, delete-button:hover {
     -fx-background-color: derive(#7e0000, 50%);
 }
 .loading-arc {

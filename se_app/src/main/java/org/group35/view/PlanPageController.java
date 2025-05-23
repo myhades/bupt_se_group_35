@@ -14,7 +14,8 @@ import javafx.scene.control.*;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
-import org.group35.service.LocalizationService;
+import org.group35.util.TimezoneUtils;
+import org.group35.util.CurrencyUtils;
 
 public class PlanPageController {
     @FXML
@@ -75,7 +76,7 @@ public class PlanPageController {
      */
     private void loadLocalInfo() {
         // 异步获取本地化信息，避免阻塞UI
-        LocalizationService.getCurrentLocalInfoAsync()
+        TimezoneUtils.getCurrentLocalInfoAsync()
                 .thenAccept(localInfo -> {
                     // 在JavaFX主线程中更新UI
                     Platform.runLater(() -> updateLocalInfoDisplay(localInfo));
@@ -83,7 +84,7 @@ public class PlanPageController {
                 .exceptionally(throwable -> {
                     System.err.println("Error loading local info: " + throwable.getMessage());
                     // 使用默认信息
-                    Platform.runLater(() -> updateLocalInfoDisplay(LocalizationService.getCurrentLocalInfo()));
+                    Platform.runLater(() -> updateLocalInfoDisplay(TimezoneUtils.getCurrentLocalInfo()));
                     return null;
                 });
     }
@@ -91,14 +92,14 @@ public class PlanPageController {
     /**
      * 新增方法：更新本地化信息显示
      */
-    private void updateLocalInfoDisplay(LocalizationService.LocalInfo localInfo) {
+    private void updateLocalInfoDisplay(TimezoneUtils.LocalInfo localInfo) {
         try {
             if (timezoneLabel != null) {
                 timezoneLabel.setText(localInfo.getTimezone());
             }
 
             if (currencyLabel != null) {
-                String formattedCurrency = LocalizationService.formatCurrencyName(localInfo.getCurrency());
+                String formattedCurrency = CurrencyUtils.formatCurrencyName(localInfo.getCurrency());
                 currencyLabel.setText(formattedCurrency);
             }
 
@@ -124,7 +125,7 @@ public class PlanPageController {
      */
     @FXML
     private void refreshLocalInfo() {
-        LocalizationService.refreshCache();
+        TimezoneUtils.refreshCache();
         loadLocalInfo();
     }
 
