@@ -11,10 +11,12 @@ import org.group35.util.TimezoneUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Comparator;
 
@@ -481,6 +483,29 @@ public class TransactionManager {
                 .replace("\n", "\\n")    // Escape newline
                 .replace("\r", "\\r")    // Escape carriage return
                 .replace("\t", "\\t");   // Escape tab
+    }
+
+    public static Transaction fromMap(Map<String,Object> row, String username) {
+        Transaction tx = new Transaction();
+        tx.setUsername(username);
+
+        Object payee = row.get("payee");
+        tx.setName(payee != null ? payee.toString() : "Unknown");
+
+        Object dateObj = row.get("date");
+        if (dateObj instanceof LocalDate ld) {
+            tx.setTimestamp(ld.atStartOfDay());
+        } else {
+            tx.setTimestamp(LocalDateTime.now());
+        }
+
+        Object amt = row.get("amount");
+        if (amt instanceof BigDecimal bd) {
+            tx.setAmount(bd);
+        } else {
+            tx.setAmount(BigDecimal.ZERO);
+        }
+        return tx;
     }
 
 }
