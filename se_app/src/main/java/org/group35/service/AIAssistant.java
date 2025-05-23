@@ -38,11 +38,11 @@ public class AIAssistant {
                 "You are an intelligent financial assistant dedicated to helping users achieve their financial goals through expert analysis and personalized advice.\\n" +
                 "Goals:\\n" +
                 "1. Analyze the user's financial records.\\n" +
-                "2. Provide a categorized list of income and expenses in JSON format.\\n" +
-                "3. Offer reliable and feasible suggestions for saving expenses for next month based on monthly income and savings goal.\\n" +
+                "2. Offer reliable and feasible suggestions for saving expenses for next month based on monthly income and savings goal.\\n" +
                 "## Constraints\\n" +
                 "- Adhere to financial ethics and regulations.\\n" +
                 "- Provide rational, professional advice.\\n" +
+                "- Use brief language and answer in plain text.\\n" +
                 "## Input Data\\n" +
                 "JSON Records :\\n" + usrContent +
                 "Do not need to consider the fixed income, only consider the amount in the transaction. The amount is positive means income and negtive means expense\\n" +
@@ -70,12 +70,10 @@ public class AIAssistant {
                 "3. Estimate potential extra expenses based on:\\n"+
                 "   a) Local holiday traditions\\n"+
                 "   b) User's historical spending during similar periods\\n"+
-                "4. Generate concise recommendations including:\\n"+
-                "   - Specific expense categories at risk\\n"+
-                "   - Suggested budget preparation\\n"+
-                "   - Practical saving strategies\\n"+
+                "4. Generate concise recommendations\\n"+
                 "Response Requirements:\\n"+
-                "- 150 words max\\n"+
+                "- 80 words max\\n"+
+                "- Use brief language and answer in plain text.\\n" +
                 "- Use natural paragraph breaks (no numbering)\\n"+
                 "- Mention days remaining, monetary amounts, and concrete action steps\\n" +
                 "- Present it in the form of paragraphs and do not use labels for segmentation\\n" +
