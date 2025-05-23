@@ -194,7 +194,7 @@ public class AIAssistant {
 
     }
     //api
-    public static CompletableFuture<String> AISuggestionAsyn(BigDecimal userSavingGoal, String stringContent) {
+    public static CompletableFuture<String> AISuggestionAsync(BigDecimal userSavingGoal, String stringContent) {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
             String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);
@@ -217,10 +217,10 @@ public class AIAssistant {
         }
         return response;
     }
-    public static CompletableFuture<String> AISummaryAsyn() {
+    public static CompletableFuture<String> AISummaryAsync() {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
-            String stringContent = null;//TransactionManager.transferTransaction();
+            String stringContent = TransactionManager.transferTransaction();
             String prompt = buildAISummaryPrompt(stringContent);
             LogUtils.info("debug:" + stringContent);
             DeepSeekCalling(prompt, new RecognitionCallback() {
@@ -242,7 +242,7 @@ public class AIAssistant {
         }
         return response;
     }
-    public static CompletableFuture<String> AIRecommendationAsyn(String location, String stringContent) throws IOException {
+    public static CompletableFuture<String> AIRecommendationAsync(String location, String stringContent) throws IOException {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
             String localTime = TimezoneUtils.getLocalTime(location);
