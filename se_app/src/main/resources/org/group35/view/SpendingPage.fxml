@@ -14,10 +14,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.ColumnConstraints?>
 
+<?import javafx.scene.shape.Arc?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.group35.view.SpendingPageController"
-            stylesheets="@SpendingPage.css"
-            styleClass="root-container">
+      fx:controller="org.group35.view.SpendingPageController"
+      stylesheets="@SpendingPage.css"
+      styleClass="root-container">
 
     <!-- NavBar -->
     <NavBarController activePage="SPENDING"/>
@@ -91,20 +92,17 @@
                 </StackPane>
                 <Button fx:id="sortNameButton" styleClass="sort-button">
                     <graphic>
-                        <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                                 styleClass="sort-icon"/>
+                        <SVGPath styleClass="sort-icon"/>
                     </graphic>
                 </Button>
                 <Button fx:id="sortAmountButton" styleClass="sort-button">
                     <graphic>
-                        <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                                 styleClass="sort-icon"/>
+                        <SVGPath styleClass="sort-icon"/>
                     </graphic>
                 </Button>
                 <Button fx:id="sortDateButton" styleClass="sort-button">
                     <graphic>
-                        <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                                 styleClass="sort-icon"/>
+                        <SVGPath styleClass="sort-icon"/>
                     </graphic>
                 </Button>
             </HBox>
@@ -131,20 +129,41 @@
                            text="\$ 0" styleClass="budget-amount"/>
                     <Label text="left to spend" styleClass="budget-left-text"/>
                 </HBox>
-<!--                <ProgressBar fx:id="budgetProgressBar"-->
-<!--                             styleClass="progress-bar"-->
-<!--                             maxWidth="Infinity"-->
-<!--                             progress="0.4"/>-->
             </VBox>
 
             <!-- AI Container -->
             <VBox styleClass="content-container"
                   VBox.vgrow="ALWAYS"
                   prefHeight="100">
-                <Label text="AI Summary" styleClass="section-title"/>
-                <Label fx:id="aiSummary"
-                       styleClass="ai-summary"
-                       text="Click update to continue."/>
+                <Label text="Summary" styleClass="section-title"/>
+
+                <!-- Update Button -->
+                <Button fx:id="updateSummaryButton"
+                        wrapText="true"
+                        maxWidth="Infinity"
+                        minHeight="60"
+                        text="Tap to get AI summary about your recent spending"
+                        styleClass="update-summary-button"
+                        onAction="#updateSummary"
+                        graphicTextGap="20"
+                        contentDisplay="TOP">
+                    <graphic>
+                        <HBox alignment="CENTER">
+                            <SVGPath content="M17,14H19V17H22V19H19V22H17V19H14V17H17V14M5,3H19C20.11,3 21,3.89 21,5V12.8C20.39,12.45 19.72,12.2 19,12.08V5H5V19H12.08C12.2,19.72 12.45,20.39 12.8,21H5C3.89,21 3,20.11 3,19V5C3,3.89 3.89,3 5,3M7,7H17V9H7V7M7,11H17V12.08C16.15,12.22 15.37,12.54 14.68,13H7V11M7,15H12V17H7V15Z"
+                                     styleClass="update-summary-icon"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <!-- Loading Icon -->
+                <Arc fx:id="loadingArc"
+                     length="270"
+                     styleClass="loading-arc"/>
+
+                <!-- Summary Text -->
+                <Label fx:id="summaryText"
+                       styleClass="summary-text"/>
+
             </VBox>
         </VBox>
     </GridPane>

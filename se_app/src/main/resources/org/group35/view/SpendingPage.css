@@ -212,6 +212,28 @@
     -fx-control-inner-background: #CCCCCC;
     -fx-background-insets: 0;
 }
+.update-summary-button {
+    -fx-padding: 20px;
+    -fx-font-size: 16px;
+    -fx-text-fill: gray;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+.update-summary-icon {
+    -fx-fill: gray;
+    -fx-scale-x: 1.4;
+    -fx-scale-y: 1.4;
+}
+.loading-arc {
+    -fx-stroke: #000000;
+    -fx-stroke-width: 6;
+    -fx-fill: transparent;
+    -fx-stroke-line-cap: round;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+    -fx-translate-x: 105px;
+    -fx-translate-y: 30px;
+}
 .ai-summary {
     -fx-font-family: 'Articulat CF Normal';
     -fx-padding: 0 5px;
