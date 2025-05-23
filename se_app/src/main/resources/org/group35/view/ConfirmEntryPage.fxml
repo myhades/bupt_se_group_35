@@ -16,6 +16,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.shape.Arc?>
+<?import javafx.scene.control.ComboBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.ConfirmEntryPageController"
       stylesheets="@ConfirmEntryPage.css"
@@ -66,6 +67,11 @@
                 <!-- Hint Text -->
                 <Text text="Double check&#10;all the information"
                       styleClass="hint-text" />
+
+                <!-- Warning Message -->
+                <Label fx:id="warningLabel"
+                       text=""
+                       styleClass="warning-label"/>
 
                 <!-- Button Panel -->
                 <HBox styleClass="button-panel">
@@ -126,8 +132,46 @@
                              StackPane.alignment="CENTER_RIGHT">
                     </SVGPath>
                 </StackPane>
+                <StackPane styleClass="icon-field">
+                    <TextField fx:id="datetimeField"
+                               promptText="Date and Time"
+                               styleClass="input-field"/>
+                    <SVGPath content="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V9H19V19M19 7H5V5H19V7Z"
+                             styleClass="input-icon"
+                             StackPane.alignment="CENTER_RIGHT">
+                    </SVGPath>
+                </StackPane>
+                <StackPane styleClass="icon-field">
+                    <TextField fx:id="locationField"
+                               promptText="Location (optional)"
+                               styleClass="input-field"/>
+                    <SVGPath content="M11.5 9C11.5 7.62 12.62 6.5 14 6.5C15.1 6.5 16.03 7.21 16.37 8.19C16.45 8.45 16.5 8.72 16.5 9C16.5 10.38 15.38 11.5 14 11.5C12.91 11.5 12 10.81 11.64 9.84C11.55 9.58 11.5 9.29 11.5 9M5 9C5 13.5 10.08 19.66 11 20.81L10 22C10 22 3 14.25 3 9C3 5.83 5.11 3.15 8 2.29C6.16 3.94 5 6.33 5 9M14 2C17.86 2 21 5.13 21 9C21 14.25 14 22 14 22C14 22 7 14.25 7 9C7 5.13 10.14 2 14 2M14 4C11.24 4 9 6.24 9 9C9 10 9 12 14 18.71C19 12 19 10 19 9C19 6.24 16.76 4 14 4Z"
+                             styleClass="input-icon"
+                             StackPane.alignment="CENTER_RIGHT">
+                    </SVGPath>
+                </StackPane>
+                <StackPane styleClass="icon-field">
+                    <ComboBox fx:id="categoryBox"
+                              promptText="Category"
+                              styleClass="input-field, input-select"
+                              GridPane.hgrow="ALWAYS"
+                              maxWidth="Infinity"/>
+                    <SVGPath content="M11,13.5V21.5H3V13.5H11M9,15.5H5V19.5H9V15.5M12,2L17.5,11H6.5L12,2M12,5.86L10.08,9H13.92L12,5.86M17.5,13C20,13 22,15 22,17.5C22,20 20,22 17.5,22C15,22 13,20 13,17.5C13,15 15,13 17.5,13M17.5,15A2.5,2.5 0 0,0 15,17.5A2.5,2.5 0 0,0 17.5,20A2.5,2.5 0 0,0 20,17.5A2.5,2.5 0 0,0 17.5,15Z"
+                             styleClass="input-icon"
+                             StackPane.alignment="CENTER_RIGHT"/>
+                </StackPane>
+
             </VBox>
 
+            <!-- Empty Input Area -->
+            <VBox fx:id="emptyInputContainer"
+                  styleClass="input-container"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="0">
+                <GridPane.margin>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </GridPane.margin>
+            </VBox>
         </GridPane>
     </VBox>
 </VBox>

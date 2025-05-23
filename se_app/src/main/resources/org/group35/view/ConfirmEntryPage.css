@@ -62,6 +62,13 @@
     -fx-spacing: 15px;
     -fx-alignment: CENTER-LEFT;
 }
+.warning-label {
+    -fx-text-fill: #bf1c1c;
+    -fx-font-size: 16px;
+    -fx-translate-x: 32px;
+    -fx-wrap-text: true;
+    -fx-max-width: 300px;
+}
 .action-button {
     -fx-font-family: 'Articulat CF Normal';
     -fx-font-size: 16px;
@@ -106,6 +113,11 @@
 /* Input */
 .input-container {
     -fx-spacing: 20px;
+    -fx-background-color: #F2F2F2;
+    -fx-background-radius: 20px;
+    -fx-vgrow: always;
+    -fx-alignment: center;
+    -fx-padding: 20px;
 }
 .input-field {
     -fx-background-color: #CCCCCC;
@@ -113,6 +125,16 @@
     -fx-text-fill: #000000;
     -fx-prompt-text-fill: #635f5f;
     -fx-font-size: 16px;
+}
+.input-select {
+}
+.input-select .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.input-select .arrow {
+    -fx-shape: "";
+    -fx-background-color: transparent;
 }
 .icon-field {
     -fx-pref-width: 290px;

@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.SVGPath?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
+
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.RecognizeBillPageController"
       stylesheets="@RecognizeBillPage.css"
