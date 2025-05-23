@@ -19,6 +19,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.shape.Circle?>
+
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.ProfilePageController"
       stylesheets="@ProfilePage.css"
@@ -38,11 +41,6 @@
                              styleClass="title-back-icon"/>
                 </graphic>
             </Button>
-            <Label fx:id="previousPageLabel"
-                   text="Previous"
-                   styleClass="title-text, title-text-from"
-                   onMouseClicked="#goBack"/>
-            <Label text=">" styleClass="title-text, title-text-from"/>
             <Label text="Profile" styleClass="title-text"/>
             <Label text="●" styleClass="title-dot"/>
         </HBox>
@@ -66,6 +64,16 @@
                 <SVGPath content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
                          styleClass="hint-icon"/>
 
+                <StackPane styleClass="avatar-container">
+                    <ImageView fx:id="avatarImage"
+                               fitWidth="48" fitHeight="48"
+                               styleClass="avatar-image">
+                        <clip>
+                            <Circle centerX="24" centerY="24" radius="24"/>
+                        </clip>
+                    </ImageView>
+                </StackPane>
+
                 <!-- Hint Text -->
                 <Text text="Double check&#10;all the information"
                       styleClass="hint-text" />
@@ -80,30 +88,6 @@
                     <Button text="Save"
                             onAction="#handleSave"
                             styleClass="action-button,save-button"/>
-                </HBox>
-
-            </VBox>
-
-            <!-- Load Container -->
-            <VBox fx:id="loadContainer"
-                  styleClass="hint-container"
-                  GridPane.columnIndex="0"
-                  GridPane.rowIndex="0">
-
-                <!-- Loading Icon -->
-                <Arc fx:id="spinnerArc"
-                     length="270"
-                     styleClass="loading-arc"/>
-
-                <!-- Hint Text -->
-                <Text text="Please wait..."
-                      styleClass="hint-text" />
-
-                <!-- Button Panel -->
-                <HBox styleClass="button-panel">
-                    <Button text="Cancel"
-                            onAction="#handleCancel"
-                            styleClass="action-button,cancel-button"/>
                 </HBox>
 
             </VBox>
@@ -170,15 +154,6 @@
                 </ScrollPane>
             </VBox>
 
-            <!-- Empty Input Area -->
-            <VBox fx:id="emptyInputContainer"
-                  styleClass="input-container"
-                  GridPane.columnIndex="1"
-                  GridPane.rowIndex="0">
-                <GridPane.margin>
-                    <Insets top="30" right="30" bottom="30" left="30"/>
-                </GridPane.margin>
-            </VBox>
         </GridPane>
     </VBox>
 </VBox>

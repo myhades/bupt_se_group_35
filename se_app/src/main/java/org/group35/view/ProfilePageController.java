@@ -13,8 +13,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Arc;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -55,6 +57,7 @@ public class ProfilePageController implements Initializable {
     @FXML private VBox inputContainer;
     @FXML private VBox emptyInputContainer;
     @FXML private Arc spinnerArc;
+    @FXML private ImageView avatarImage;
     @FXML private TextField nameField;
     @FXML private TextField passwordField;
     @FXML private ComboBox<String> TimezoneField;
@@ -69,35 +72,24 @@ public class ProfilePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
-        Object fromPageObj = rt.getNavParam("fromPage");
-        Object fromStatusObj = rt.getNavParam("fromStatus");
-        Object needsProcessObj = rt.getNavParam("needsProcess");
-        Object processTypeObj = rt.getNavParam("processType");
-        String prevPage = (fromPageObj instanceof String)
-                ? ((String) fromPageObj) : "UNKNOWN";
-        fromStatus = (fromStatusObj instanceof ProgramStatus)
-                ? ((ProgramStatus) fromStatusObj) : ProgramStatus.HOME;
-        Boolean needsProcess = (needsProcessObj instanceof Boolean)
-                ? ((Boolean) needsProcessObj) : Boolean.FALSE;
-        String processType = (processTypeObj instanceof String)
-                ? ((String) processTypeObj) : "none";
-        previousPageLabel.setText(prevPage);
-
-        warningLabel.managedProperty().bind(warningLabel.visibleProperty());
-        hintContainer.managedProperty().bind(hintContainer.visibleProperty());
-        loadContainer.managedProperty().bind(loadContainer.visibleProperty());
-        inputContainer.managedProperty().bind(inputContainer.visibleProperty());
-        emptyInputContainer.managedProperty().bind(emptyInputContainer.visibleProperty());
-        warningLabel.setVisible(false);
-        hintContainer.setVisible(false);
-        loadContainer.setVisible(true);
-        inputContainer.setVisible(false);
-        emptyInputContainer.setVisible(true);
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        User currentuser = runtime.getCurrentUser();
+        Object fromPageObj = runtime.getNavParam("fromPage");
+        Object fromStatusObj = runtime.getNavParam("fromStatus");
 
         setTimezones();
         setCategoryBox();
 
+        Image avatar = ImageUtils.fromBase64(currentuser.getAvatar());
+        if (avatar != null) {
+            avatarImage.setImage(avatar);
+            double radius = avatarImage.getFitWidth() / 2.0;
+            Circle clip = new Circle(radius, radius, radius);
+            avatarImage.setClip(clip);
+        }
+        else {
+            LogUtils.error("No Avatar");
+        }
 
     }
 
