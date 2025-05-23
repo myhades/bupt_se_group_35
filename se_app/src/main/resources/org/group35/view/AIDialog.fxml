@@ -23,7 +23,7 @@
 
     <!-- Title Section -->
     <VBox styleClass="greeting-row" spacing="10">
-        <Label text="You're currently on a budget." styleClass="greeting-label"/>
+        <Label text="No budgeting? Let AI do the suffering." styleClass="greeting-label"/>
     </VBox>
 
     <!-- Main Content -->
