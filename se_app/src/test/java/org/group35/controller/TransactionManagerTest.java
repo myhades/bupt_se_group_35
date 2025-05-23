@@ -50,28 +50,28 @@ class TransactionManagerTest {
         // Add some transactions to the store for testing
         Transaction tx1 = new Transaction();
         tx1.setUsername("TestUser");
-        tx1.setName("TestTransaction1");
+        tx1.setName("ATestTransaction1");
         tx1.setAmount(new BigDecimal("100.00"));
         txManager.add(tx1);
         tx1.setTimestamp(LocalDateTime.of(2025, 5, 20, 10, 0));
 
         Transaction tx2 = new Transaction();
         tx2.setUsername("TestUser");
-        tx2.setName("TestTransaction2");
+        tx2.setName("BTestTransaction2");
         tx2.setAmount(new BigDecimal("200.00"));
         txManager.add(tx2);
         tx2.setTimestamp(LocalDateTime.of(2025, 5, 21, 9, 0));
 
         Transaction tx3 = new Transaction();
         tx3.setUsername("TestUser");
-        tx3.setName("TestTransaction3");
+        tx3.setName("CTestTransaction3");
         tx3.setAmount(new BigDecimal("-50.00"));
         txManager.add(tx3);
         tx3.setTimestamp(LocalDateTime.of(2025, 5, 22, 8, 0));
 
         Transaction tx4 = new Transaction();
         tx4.setUsername("TestUser");
-        tx4.setName("TestTransaction4");
+        tx4.setName("DTestTransaction4");
         tx4.setAmount(new BigDecimal("-150.00"));
         txManager.add(tx4);
         tx4.setTimestamp(LocalDateTime.of(2025, 5, 22, 14, 0));
@@ -204,6 +204,20 @@ class TransactionManagerTest {
         List<Transaction> sorted = txManager.sortByTimestamp(false);
         assertEquals(LocalDateTime.of(2025, 5, 22, 14, 0), sorted.get(0).getTimestamp()); // lastest
         assertEquals(LocalDateTime.of(2025, 5, 20, 10, 0), sorted.get(3).getTimestamp()); // earliest
+    }
+
+    @Test
+    void sortByName_Ascending() {
+        List<Transaction> sorted = txManager.sortByName(true);
+        assertEquals("ATestTransaction1", sorted.get(0).getName()); // smallest
+        assertEquals("DTestTransaction4", sorted.get(3).getName()); // biggest
+    }
+
+    @Test
+    void sortByName_Descending() {
+        List<Transaction> sorted = txManager.sortByName(false);
+        assertEquals("DTestTransaction4", sorted.get(0).getName()); // biggest
+        assertEquals("ATestTransaction1", sorted.get(3).getName()); // smallest
     }
 
     @Test
