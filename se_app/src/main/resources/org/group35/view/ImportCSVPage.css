@@ -68,7 +68,7 @@
     -fx-wrap-text: true;
     -fx-max-width: 300px;
 }
-.status-label .warning {
+.status-label.warning {
     -fx-text-fill: #bf1c1c;
 }
 .button-panel {
