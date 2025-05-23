@@ -2,6 +2,7 @@ package org.group35.view;
 
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -10,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Arc;
 import javafx.util.Duration;
@@ -17,7 +19,11 @@ import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
+import org.group35.service.BillsRecognition;
+import org.group35.util.ImageUtils;
+import org.group35.util.LogUtils;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
@@ -48,6 +54,8 @@ public class ConfirmEntryPageController implements Initializable {
     private ProgramStatus fromStatus;
     private Boolean isProcessing;
 
+    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -55,12 +63,15 @@ public class ConfirmEntryPageController implements Initializable {
         Object fromPageObj = rt.getNavParam("fromPage");
         Object fromStatusObj = rt.getNavParam("fromStatus");
         Object needsProcessObj = rt.getNavParam("needsProcess");
+        Object processTypeObj = rt.getNavParam("processType");
         String prevPage = (fromPageObj instanceof String)
                 ? ((String) fromPageObj) : "UNKNOWN";
         fromStatus = (fromStatusObj instanceof ProgramStatus)
                 ? ((ProgramStatus) fromStatusObj) : ProgramStatus.HOME;
         Boolean needsProcess = (needsProcessObj instanceof Boolean)
                 ? ((Boolean) needsProcessObj) : Boolean.FALSE;
+        String processType = (processTypeObj instanceof String)
+                ? ((String) processTypeObj) : "none";
         previousPageLabel.setText(prevPage);
 
         warningLabel.managedProperty().bind(warningLabel.visibleProperty());
@@ -76,7 +87,61 @@ public class ConfirmEntryPageController implements Initializable {
 
         setCategoryBox();
         toggleProcessing(needsProcess);
+        switch (processType) {
+            case "image":   doImageProcess(); break;
+            case "text":    doTextProcess(); break;
+            default:        break;
+        }
 
+    }
+
+    private void doImageProcess() {
+        ApplicationRuntime rt = ApplicationRuntime.getInstance();
+        Object snapshotObj = rt.getNavParam("snapshot");
+        Image snapshot = (snapshotObj instanceof Image)
+                ? ((Image) snapshotObj) : null;
+        if (snapshot == null) {
+            LogUtils.error("Image processing requested but got null for snapshot");
+            return;
+        }
+        String base64;
+        try {
+            base64 = ImageUtils.toBase64(snapshot, "PNG");
+        }
+        catch (IOException e) {
+            LogUtils.error("IOException occurred when converting snapshot to base64");
+            return;
+        }
+
+        toggleProcessing(true);
+
+        BillsRecognition.imageRecognitionAsyn(base64)
+                .whenComplete((tx, err) -> {
+                    Platform.runLater(() -> {
+                        toggleProcessing(false);
+                        if (err != null) {
+                            LogUtils.error("Recognition failed: " + err.getMessage());
+                        } else {
+                            populateFields(tx);
+                        }
+                    });
+                });
+    }
+
+    private void doTextProcess() {
+    }
+
+    private void populateFields(Transaction tx) {
+        nameField.setText(tx.getName());
+        amountField.setText(tx.getAmount().toPlainString());
+        LocalDateTime ts = tx.getTimestamp();
+        datetimeField.setText(ts != null ? ts.format(DATE_FMT) : "");
+        String loc = tx.getLocation();
+        locationField.setText(loc != null ? loc : "");
+        String cat = tx.getCategory();
+        if (cat != null && !cat.isEmpty()) {
+            categoryBox.setValue(cat);
+        }
     }
 
     private void setCategoryBox() {
