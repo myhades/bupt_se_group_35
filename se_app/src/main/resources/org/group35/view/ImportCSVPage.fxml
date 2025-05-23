@@ -1,81 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import org.group35.view.components.NavBarController?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.SVGPath?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.layout.BorderPane?>
+
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.group35.view.ImportCSVPageController"
+      stylesheets="@ImportCSVPage.css"
+      styleClass="root-container">
 
-<?import org.group35.view.components.NavBarController?>
+    <!-- Nav Bar -->
+    <NavBarController activePage="SPENDING" />
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.group35.view.ImportCSVPageController"
-            stylesheets="@ImportCSVPage.css"
-            styleClass="root-container">
+    <!-- Main Container -->
+    <VBox styleClass="main-container">
 
-    <top>
-        <VBox>
-            <!-- NavBar -->
-            <NavBarController activePage="SPENDING"/>
-        </VBox>
-    </top>
+        <!-- Title Row -->
+        <HBox styleClass="title-container">
+            <Button styleClass="title-back-button" onAction="#gotoSpending">
+                <graphic>
+                    <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+                             styleClass="title-back-icon"/>
+                </graphic>
+            </Button>
+            <Label text="Import CSV" styleClass="title-text"/>
+            <Label text="●" styleClass="title-dot"/>
+        </HBox>
 
-    <!-- Main Content Area -->
-    <center>
-        <VBox styleClass="main-container" VBox.vgrow="ALWAYS">
+        <!-- Main Container -->
+        <GridPane styleClass="import-container">
 
-            <!-- Title Row -->
-            <HBox styleClass="title-container">
-                <Button styleClass="title-back-button" onAction="#gotoSpending">
-                    <graphic>
-                        <SVGPath content="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                                 styleClass="title-back-icon"/>
-                    </graphic>
-                </Button>
-                <Label text="Import CSV" styleClass="title-text"/>
-                <Label text="●" styleClass="title-dot"/>
-            </HBox>
+            <columnConstraints>
+                <ColumnConstraints percentWidth="40" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="60" hgrow="ALWAYS"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="100" vgrow="ALWAYS"/>
+            </rowConstraints>
 
-            <!-- Input Area Container -->
-            <HBox spacing="50" alignment="CENTER" VBox.vgrow="ALWAYS">
-                <!-- Left Side: Spending List -->
-                <VBox styleClass="spending-list-container" HBox.hgrow="ALWAYS">
-                    <Label text="Spendings" styleClass="section-title"/>
-                    <ScrollPane styleClass="spending-scrollpane">
-                        <VBox fx:id="spendingListVBox"
-                              styleClass="spending-list"/>
-                    </ScrollPane>
-                </VBox>
+            <!-- Hint Container -->
+            <VBox styleClass="hint-container"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="0">
+                <SVGPath content="M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z"
+                         styleClass="hint-icon"/>
 
-                <!-- Right Side: Info Container -->
-                <VBox styleClass="info-container">
+                <!-- Hint Text -->
+                <Text fx:id="hintText"
+                      text="Select the file"
+                      styleClass="hint-text" />
 
-                    <!-- Budget Section -->
-                    <VBox styleClass="budget-section">
-                        <Label text="Budget" styleClass="section-title"/>
-                        <HBox styleClass="budget-info">
-                            <Label text="\$ 200" styleClass="budget-amount"/>
-                            <Label text="left to spend" styleClass="budget-left-text"/>
-                        </HBox>
-                        <ProgressBar styleClass="budget-progress"/>
-                    </VBox>
+                <!-- Warning Message -->
+                <Label fx:id="statusLabel"
+                       text=""
+                       styleClass="status-label"/>
 
-                    <!-- Separator -->
-                    <Separator styleClass="divider"/>
+                <!-- Button Panel -->
+                <HBox fx:id="buttonPanel" styleClass="button-panel">
+                    <Button fx:id="selectButton"
+                            text="Select"
+                            onAction="#handleSelect"
+                            styleClass="action-button,select-button"/>
+                    <Button fx:id="importButton"
+                            text="Import"
+                            onAction="#handleImport"
+                            styleClass="action-button,import-button"/>
+                </HBox>
 
-                    <!-- AI Section -->
-                    <VBox styleClass="ai-section">
-                        <Label text="AI Summary" styleClass="section-title"/>
-                        <Label styleClass="ai-summary"
-                               text="Most of your recent spending went to essential expenses like rent and utilities, with discretionary spending such as dining out and entertainment..."/>
-                    </VBox>
-                </VBox>
-            </HBox>
-        </VBox>
-    </center>
-</BorderPane>
+            </VBox>
+
+            <!-- Preview Container -->
+            <VBox styleClass="preview-container"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="0">
+                <GridPane.margin>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </GridPane.margin>
+                <ScrollPane styleClass="spending-scrollpane">
+                    <VBox fx:id="spendingListVBox"
+                          styleClass="spending-list"/>
+                </ScrollPane>
+            </VBox>
+
+        </GridPane>
+
+    </VBox>
+</VBox>

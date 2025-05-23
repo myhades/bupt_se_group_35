@@ -54,7 +54,7 @@ class TransactionManagerTest {
         tx1.setUsername("TestUser");
         tx1.setName("ATestTransaction1");
         tx1.setAmount(new BigDecimal("100.00"));
-        txManager.add(tx1);
+        txManager.add(tx1, "Shopping");
         tx1.setTimestamp(LocalDateTime.of(2025, 5, 20, 10, 0));
 
         Transaction tx2 = new Transaction();
@@ -419,8 +419,17 @@ class TransactionManagerTest {
     }
 
     @Test
+    void getTxCategory() {
+        List<Transaction> transactions = txManager.getTransactions();
+        assertFalse(transactions.isEmpty());
+        Transaction tx = transactions.get(0);
+        assertEquals("Shopping", tx.getCategory());
+        assertEquals("Shopping", txManager.getTxCategory(tx.getId()));
+    }
+
+    @Test
     void testPartialMatchName() {
-        List<Transaction> result = txManager.searchByNameOrCategory("D");
+        List<Transaction> result = txManager.searchByKeyword("D");
         assertEquals(1, result.size());
         assertEquals("DTestTransaction4", result.get(0).getName());
     }
@@ -506,5 +515,85 @@ class TransactionManagerTest {
         tx10.setCurrency(Transaction.Currency.CNY);
         tx10.setTimestamp(LocalDateTime.of(2025, 5, 25, 9, 30));
         txManager.add(tx10, "Investment");
+
+        Transaction tx11 = new Transaction();
+        tx11.setUsername("TestUser");
+        tx11.setName("Amazon Bookstore");
+        tx11.setAmount(new BigDecimal("-150.00"));
+        tx11.setCurrency(Transaction.Currency.CNY);
+        tx11.setTimestamp(LocalDateTime.of(2025, 4, 5, 18, 20));
+        txManager.add(tx11, "Shopping");
+
+        Transaction tx12 = new Transaction();
+        tx12.setUsername("TestUser");
+        tx12.setName("Tutoring Center");
+        tx12.setAmount(new BigDecimal("-400.00"));
+        tx12.setCurrency(Transaction.Currency.CNY);
+        tx12.setTimestamp(LocalDateTime.of(2025, 4, 6, 14, 0));
+        txManager.add(tx12, "Education");
+
+        Transaction tx13 = new Transaction();
+        tx13.setUsername("TestUser");
+        tx13.setName("KFC Lunch");
+        tx13.setAmount(new BigDecimal("-60.00"));
+        tx13.setCurrency(Transaction.Currency.CNY);
+        tx13.setTimestamp(LocalDateTime.of(2025, 4, 8, 12, 30));
+        txManager.add(tx13, "Cater");
+
+        Transaction tx14 = new Transaction();
+        tx14.setUsername("TestUser");
+        tx14.setName("TikTok Transfer");
+        tx14.setAmount(new BigDecimal("300.00"));
+        tx14.setCurrency(Transaction.Currency.CNY);
+        tx14.setTimestamp(LocalDateTime.of(2025, 4, 10, 20, 15));
+        txManager.add(tx14, "Transfer");
+
+        Transaction tx15 = new Transaction();
+        tx15.setUsername("TestUser");
+        tx15.setName("Shanghai Metro");
+        tx15.setAmount(new BigDecimal("-8.00"));
+        tx15.setCurrency(Transaction.Currency.CNY);
+        tx15.setTimestamp(LocalDateTime.of(2025, 4, 12, 8, 45));
+        txManager.add(tx15, "Transportation");
+
+        Transaction tx16 = new Transaction();
+        tx16.setUsername("TestUser");
+        tx16.setName("Netflix Subscription");
+        tx16.setAmount(new BigDecimal("-45.00"));
+        tx16.setCurrency(Transaction.Currency.CNY);
+        tx16.setTimestamp(LocalDateTime.of(2025, 4, 15, 22, 0));
+        txManager.add(tx16, "Entertainment");
+
+        Transaction tx17 = new Transaction();
+        tx17.setUsername("TestUser");
+        tx17.setName("Baidu Salary");
+        tx17.setAmount(new BigDecimal("18000.00"));
+        tx17.setCurrency(Transaction.Currency.CNY);
+        tx17.setTimestamp(LocalDateTime.of(2025, 4, 18, 9, 30));
+        txManager.add(tx17, "Salary");
+
+        Transaction tx18 = new Transaction();
+        tx18.setUsername("TestUser");
+        tx18.setName("Monthly Rent");
+        tx18.setAmount(new BigDecimal("-4000.00"));
+        tx18.setCurrency(Transaction.Currency.CNY);
+        tx18.setTimestamp(LocalDateTime.of(2025, 4, 20, 10, 0));
+        txManager.add(tx18, "Rent");
+
+        Transaction tx19 = new Transaction();
+        tx19.setUsername("TestUser");
+        tx19.setName("Stocks Investment");
+        tx19.setAmount(new BigDecimal("-5000.00"));
+        tx19.setCurrency(Transaction.Currency.CNY);
+        tx19.setTimestamp(LocalDateTime.of(2025, 4, 25, 15, 45));
+        txManager.add(tx19, "Investment");
+
+        Transaction tx20 = new Transaction();
+        tx20.setUsername("TestUser");
+        tx20.setName("Disney Plus");
+        tx20.setAmount(new BigDecimal("-35.00"));
+        tx20.setCurrency(Transaction.Currency.CNY);
+        tx20.setTimestamp(LocalDateTime.of(2025, 5, 1, 20, 0));
+        txManager.add(tx20, "Entertainment");
     }
 }

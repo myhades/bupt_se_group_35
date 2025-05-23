@@ -17,13 +17,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SpendingPageController {
 
@@ -109,7 +106,7 @@ public class SpendingPageController {
     private void onSortPressed(SortType type) {
         if (type != currentSortType) {
             currentSortType  = type;
-            currentSortOrder = SortOrder.DESC;
+            currentSortOrder = SortOrder.ASC;
         } else {
             currentSortOrder = (currentSortOrder == SortOrder.DESC
                     ? SortOrder.ASC
@@ -124,39 +121,21 @@ public class SpendingPageController {
         String user = rt.getCurrentUser().getUsername();
         List<Transaction> txs = txm.getByUser(user);
 
-        // TODO: Interface search and filtering with TransactionManager
-//        String kw = searchField.getText().trim().toLowerCase();
-//        if (!kw.isEmpty()) {
-//            txs = txs.stream()
-//                    .filter(tx -> tx.getName()
-//                            .toLowerCase()
-//                            .contains(kw))
-//                    .collect(Collectors.toList());
-//        }
-//
-//        if (currentSortType != null) {
-//            Comparator<Transaction> cmp;
-//            switch (currentSortType) {
-//                case DATE:
-//                    cmp = Comparator.comparing(Transaction::getTimestamp);
-//                    break;
-//                case NAME:
-//                    cmp = Comparator.comparing(
-//                            Transaction::getName,
-//                            String.CASE_INSENSITIVE_ORDER
-//                    );
-//                    break;
-//                case AMOUNT:
-//                    cmp = Comparator.comparing(Transaction::getAmount);
-//                    break;
-//                default:
-//                    throw new IllegalStateException();
-//            }
-//            if (currentSortOrder == SortOrder.DESC) {
-//                cmp = cmp.reversed();
-//            }
-//            txs.sort(cmp);
-//        }
+        // Apply keyword filtering if any
+        String kw = searchField.getText().trim().toLowerCase();
+        if (!kw.isEmpty()) {
+            txs = txm.searchByKeyword(txs, kw);
+        }
+
+        // Apply sorting
+        if (currentSortType != null) {
+            txs = switch (currentSortType) {
+                case DATE -> txm.sortByTimestamp(txs, currentSortOrder == SortOrder.ASC);
+                case NAME -> txm.sortByName(txs, currentSortOrder == SortOrder.ASC);
+                case AMOUNT -> txm.sortByAmount(txs, currentSortOrder == SortOrder.ASC);
+                default -> throw new IllegalStateException();
+            };
+        }
 
         setTransactionList(txs);
         updateSortIcons();
