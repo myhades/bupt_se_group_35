@@ -14,8 +14,8 @@
 
 <?import javafx.scene.control.TextArea?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.group35.view.PlanPageController"
-      stylesheets="@PlanPage.css"
+      fx:controller="org.group35.view.AIDialogController"
+      stylesheets="@AIDialog.css"
       styleClass="root-container">
 
     <!-- NavBar -->
