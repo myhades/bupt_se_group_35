@@ -42,12 +42,12 @@
             <!-- Info Area Container -->
             <HBox spacing="50" alignment="CENTER" VBox.vgrow="ALWAYS">
                 <!-- Left Side: Software Info -->
-                <VBox styleClass="info-content-container" HBox.hgrow="ALWAYS">
+                <VBox styleClass="info-content-container" VBox.vgrow="ALWAYS">
                     <Label text="Software Information" styleClass="section-title"/>
-                    <ScrollPane styleClass="info-scrollpane" fitToWidth="true">
+                    <ScrollPane styleClass="info-scrollpane" fitToWidth="true" VBox.vgrow="ALWAYS">
                         <VBox fx:id="softwareInfoVBox" styleClass="info-text-container" spacing="15">
                             <Label text="Application Version" styleClass="info-subtitle"/>
-                            <Label text="Financial Planner v1.0.0" styleClass="info-text"/>
+                            <Label text="Monora v1.0.0" styleClass="info-text"/>
 
                             <Label text="Development Team" styleClass="info-subtitle"/>
                             <Label text="Group 35 - Software Engineering Practice" styleClass="info-text"/>
@@ -68,11 +68,11 @@
                             </VBox>
 
                             <Label text="Contact Us" styleClass="info-subtitle"/>
-                            <Label text="If you have any questions or suggestions, please contact us at: Email: support@group35.org Project Home: github.com/group35/financial-planner" styleClass="info-text" wrapText="true"/>
+                            <Label text="If you have any questions or suggestions, please contact us at: Email: support@group35.org Project Home: github.com/myhades/bupt_se_group_35" styleClass="info-text" wrapText="true"/>
 
                             <Label text="System Requirements" styleClass="info-subtitle"/>
                             <VBox spacing="5" styleClass="feature-list">
-                                <Label text="• Java 17 or higher" styleClass="info-text"/>
+                                <Label text="• Java Development Kit 21 or higher" styleClass="info-text"/>
                                 <Label text="• Windows/macOS/Linux" styleClass="info-text"/>
                                 <Label text="• Minimum screen resolution: 1280x720" styleClass="info-text"/>
                                 <Label text="• Memory: 512MB RAM" styleClass="info-text"/>
@@ -86,12 +86,12 @@
                 </VBox>
 
                 <!-- Right Side: Privacy Policy -->
-                <VBox styleClass="info-content-container">
+                <VBox styleClass="info-content-container" VBox.vgrow="ALWAYS">
                     <Label text="Privacy Policy" styleClass="section-title"/>
-                    <ScrollPane styleClass="info-scrollpane" fitToWidth="true">
+                    <ScrollPane styleClass="info-scrollpane" fitToWidth="true" VBox.vgrow="ALWAYS">
                         <VBox fx:id="privacyPolicyVBox" styleClass="info-text-container" spacing="15">
                             <Label text="Introduction" styleClass="info-subtitle"/>
-                            <Label text="Financial Planner application values your privacy. This Privacy Policy explains how we collect, use, and protect your personal information. By using this application, you agree to the terms of this Privacy Policy." styleClass="info-text" wrapText="true"/>
+                            <Label text="Monora values your privacy. This Privacy Policy explains how we collect, use, and protect your personal information. By using this application, you agree to the terms of this Privacy Policy." styleClass="info-text" wrapText="true"/>
 
                             <Label text="Data Collection" styleClass="info-subtitle"/>
                             <Label text="This application only collects and stores the following information on your local device:" styleClass="info-text" wrapText="true"/>
@@ -125,7 +125,7 @@
                                 <Label text="• Decline the use of personalized features" styleClass="info-text"/>
                             </VBox>
 
-                            <Label text="Last Updated: March 18, 2025" styleClass="update-date"/>
+                            <Label text="Last Updated: May 20, 2025" styleClass="update-date"/>
                         </VBox>
                     </ScrollPane>
                 </VBox>
