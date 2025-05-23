@@ -609,7 +609,7 @@ public class TransactionManager {
      * @param input The input string to escape.
      * @return A string with escaped special characters.
      */
-    private static String escapeString(String input) {
+    public static String escapeString(String input) {
         if (input == null) return "";
         return input
                 .replace("\\", "\\\\")   // Escape backslash
