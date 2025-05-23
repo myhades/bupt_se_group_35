@@ -29,16 +29,22 @@ public class BillsRecognition {
                 "Output the result as a JSON structure that can be directly saved to a file. Ensure the output strictly follows this JSON format:\n" +
                 "[\n" +
                 "{\n" +
-                "\"Description\": \"...\",\n" +
-                "\"Amount\": \"...\",\n" +
-                "\"Merchant\": \"...\",\n" +
-                "\"Date\": \"...\"\n" +
+                "\"id\": \"...\",\n" +
+                "\"username\": \"...\",\n" +
+                "\"name\": \"...\",\n" +
+                "\"timestamp\": \"...\",\n" +
+                "\"amount\": \"...\",\n" +
+                "\"category\": \"...\",\n" +
+                "\"currency\": \"...\"\n" +
                 "},\n" +
                 "{\n" +
-                "\"Description\": \"...\",\n" +
-                "\"Amount\": \"...\",\n" +
-                "\"Merchant\": \"...\",\n" +
-                "\"Date\": \"...\"\n" +
+                "\"id\": \"...\",\n" +
+                "\"username\": \"...\",\n" +
+                "\"name\": \"...\",\n" +
+                "\"timestamp\": \"...\",\n" +
+                "\"amount\": \"...\",\n" +
+                "\"category\": \"...\",\n" +
+                "\"currency\": \"...\"\n" +
                 "}\n" +
                 "]\n" +
                 "Please ensure the output is in a valid JSON file format and exclude any additional information or explanations. Return only the JSON data structured as specified.";

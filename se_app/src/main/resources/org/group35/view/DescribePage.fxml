@@ -89,6 +89,7 @@
             <TextArea fx:id="describeArea"
                       promptText="Start here. Your transcription will be added to the existing content."
                       styleClass="describe-area"
+                      wrapText="true"
                       GridPane.columnIndex="1"
                       GridPane.rowIndex="0">
                 <GridPane.margin>

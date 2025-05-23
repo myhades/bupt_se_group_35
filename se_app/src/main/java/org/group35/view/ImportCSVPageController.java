@@ -8,8 +8,14 @@ import org.group35.runtime.ApplicationRuntime;
 public class ImportCSVPageController {
 
     @FXML
-    public void initialize() {
+    public void initialize() {}
 
+    @FXML
+    public void handleSelect(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void handleSave(ActionEvent actionEvent) {
     }
 
     @FXML

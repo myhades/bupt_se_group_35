@@ -1,19 +1,21 @@
 package org.group35.view;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
+import org.group35.service.AudioRecognition;
 import org.group35.util.AudioUtils;
 import org.group35.util.LogUtils;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Base64;
 import java.util.ResourceBundle;
 
 public class DescribePageController implements Initializable {
@@ -21,31 +23,27 @@ public class DescribePageController implements Initializable {
     @FXML private Button recordButton;
     @FXML private Button stopButton;
     @FXML private Label hintProcessLabel;
+    @FXML private TextArea describeArea;
 
     private final AudioUtils audioUtils = ApplicationRuntime.getInstance().getAudioService();
     private boolean isRecording = false;
     private boolean isProcessing = false;
-    private String base64Audio;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         recordButton.managedProperty().bind(recordButton.visibleProperty());
         stopButton.managedProperty().bind(stopButton.visibleProperty());
         hintProcessLabel.managedProperty().bind(hintProcessLabel.visibleProperty());
-        recordButton.setVisible(true);
-        stopButton.setVisible(false);
-        hintProcessLabel.setVisible(false);
+        toggleRecording(false);
+        toggleProcessing(false);
     }
 
     @FXML
     private void handleRecord(ActionEvent event) {
         if (isProcessing) return;
-
         try {
             audioUtils.startRecording();
-            isRecording = true;
-            recordButton.setVisible(false);
-            stopButton.setVisible(true);
+            toggleRecording(true);
         } catch (LineUnavailableException e) {
             LogUtils.error("Unable to start audio recording: " + e.getMessage());
         }
@@ -53,20 +51,42 @@ public class DescribePageController implements Initializable {
 
     @FXML
     private void handleStop(ActionEvent event) {
-        isRecording = false;
         try {
             byte[] wavData = audioUtils.stopRecording();
-            base64Audio = Base64.getEncoder().encodeToString(wavData);
+            toggleRecording(false);
+            toggleProcessing(true);
+            AudioRecognition
+                .transcribeAsync(wavData)
+                .whenComplete((text, err) -> {
+                    Platform.runLater(() -> {
+                        toggleProcessing(false);
+                        if (err != null) {
+                            LogUtils.error("Transcription failed: " + err.getMessage());
+                        } else {
+                            String currentText = describeArea.getText() != null
+                                    ? describeArea.getText()
+                                    : "";
+                            describeArea.setText(currentText + " " + text);
+                        }
+                    });
+                });
         } catch (IOException e) {
             LogUtils.error("Error stopping audio recording: " + e.getMessage());
         } finally {
             audioUtils.shutdown();
         }
-        isRecording = false;
-        isProcessing = true;
-        stopButton.setVisible(false);
-        recordButton.setVisible(true);
-        hintProcessLabel.setVisible(true);
+    }
+
+    private void toggleRecording(boolean isRecording) {
+        this.isRecording = isRecording;
+        stopButton.setVisible(isRecording);
+        recordButton.setVisible(!isRecording);
+    }
+
+    private void toggleProcessing(boolean isProcessing) {
+        this.isProcessing = isProcessing;
+        hintProcessLabel.setVisible(isProcessing);
+
     }
 
     @FXML
