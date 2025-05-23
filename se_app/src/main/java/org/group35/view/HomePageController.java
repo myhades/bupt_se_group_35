@@ -80,14 +80,19 @@ package org.group35.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
+import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
+import org.group35.util.LogUtils;
 
+//import java.awt.event.ActionEvent;
+import javafx.event.ActionEvent;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
@@ -98,9 +103,13 @@ public class HomePageController implements Initializable {
 
     @FXML private LineChart<String, Number> spendingChart;
     @FXML private PieChart categoryPieChart;
+    @FXML private Button toggleIncomeExpenseBtn;
+
+    private boolean showIncome = true; // 默认显示收入
 
     // txManager instance
     private TransactionManager txManager;
+    private User currentUser;
 
     // Add this near the top of the class
     private static final Color[] COLOR_PALETTE = {
@@ -124,16 +133,31 @@ public class HomePageController implements Initializable {
         txManager = ApplicationRuntime.getInstance().getTranscationManager();
 
         // Get current user's username
-        String currentUser = ApplicationRuntime.getInstance().getCurrentUser().getUsername();
+        currentUser = ApplicationRuntime.getInstance().getCurrentUser();
 
         // Fetch all transactions for the current user
-        List<Transaction> transactions = txManager.getByUser(currentUser);
+        List<Transaction> transactions = txManager.getByUser(currentUser.getUsername());
 
         // Update charts with real data
         updateCharts(transactions);
     }
 
+    @FXML
+    private void onToggleIncomeExpense(ActionEvent event) {
+        showIncome = !showIncome;
+        toggleIncomeExpenseBtn.setText("Toggle: " + (showIncome ? "Income" : "Expense"));
 
+//        String currentUser = ApplicationRuntime.getInstance().getCurrentUser().getUsername();
+        List<Transaction> transactions = txManager.getByUser(currentUser.getUsername());
+
+        // 可选：根据收支状态过滤交易
+        List<Transaction> filtered = transactions.stream()
+                .filter(tx -> showIncome ? tx.getAmount().compareTo(BigDecimal.ZERO) > 0
+                        : tx.getAmount().compareTo(BigDecimal.ZERO) < 0)
+                .toList();
+
+        updateCharts(filtered);
+    }
 
     /**
      * Updates both the line chart and pie chart with the given transaction data.
@@ -146,8 +170,6 @@ public class HomePageController implements Initializable {
 
         List<PieChart.Data> categoryData = generateCategoryPieData(transactions);
         setCategoryPieData(categoryData);
-
-        // Apply coloring after setting data
         applyCategoryBasedColoring();
     }
 
@@ -186,17 +208,47 @@ public class HomePageController implements Initializable {
     private List<PieChart.Data> generateCategoryPieData(List<Transaction> transactions) {
         Map<String, BigDecimal> categoryTotals = new HashMap<>();
 
-        // Group by category and sum amount
+        List<String> validCategories = currentUser.getCategory();
+
+//        for (String category : validCategories) {
+//            /// Group by category and sum amount
+//            List<Transaction> txsInCategory = txManager.getByCategory(category);
+//            BigDecimal totalAmount = txsInCategory.stream()
+//                    .map(Transaction::getAmount)
+//                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+//
+//            if (totalAmount.compareTo(BigDecimal.ZERO) > 0) {
+//                categoryTotals.put(category, totalAmount);
+//            }
+//        }
+//
+//        List<PieChart.Data> pieData = new ArrayList<>();
+//        for (Map.Entry<String, BigDecimal> entry : categoryTotals.entrySet()) {
+//            pieData.add(new PieChart.Data(entry.getKey(), entry.getValue().doubleValue()));
+//        }
         for (Transaction tx : transactions) {
             String category = tx.getCategory();
-            if (category != null && !category.trim().isEmpty()) {
-                categoryTotals.put(category, categoryTotals.getOrDefault(category, BigDecimal.ZERO).add(tx.getAmount()));
+            if (category == null || category.trim().isEmpty()) {
+                continue; // 跳过无类别的交易
             }
+
+            BigDecimal amount = tx.getAmount();
+
+            // 根据 showIncome 决定是否保留该交易
+            if ((showIncome && amount.compareTo(BigDecimal.ZERO) <= 0) ||
+                    (!showIncome && amount.compareTo(BigDecimal.ZERO) >= 0)) {
+                continue; // 跳过不符合条件的交易
+            }
+
+            categoryTotals.put(category, categoryTotals.getOrDefault(category, BigDecimal.ZERO).add(amount.abs())); // 统计绝对值用于饼图展示
         }
 
+        // 转换为 PieChart.Data 列表
         List<PieChart.Data> pieData = new ArrayList<>();
         for (Map.Entry<String, BigDecimal> entry : categoryTotals.entrySet()) {
-            pieData.add(new PieChart.Data(entry.getKey(), entry.getValue().doubleValue()));
+            String categoryName = entry.getKey();
+            double total = entry.getValue().doubleValue();
+            pieData.add(new PieChart.Data(categoryName, total));
         }
 
         return pieData;
@@ -212,6 +264,7 @@ public class HomePageController implements Initializable {
                 char letterChar = categoryName.toUpperCase().charAt(0);
                 data.getNode().setStyle("-fx-pie-color: " + toRGBCode(getColorForLetter(letterChar)) + ";");
             } else {
+                LogUtils.warn("Invalid category found for categoryName: " + categoryName);
                 data.getNode().setStyle("-fx-pie-color: #555555;");
             }
         });

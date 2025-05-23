@@ -424,11 +424,12 @@ class TransactionManagerTest {
         assertFalse(transactions.isEmpty());
         Transaction tx = transactions.get(0);
         assertEquals("Shopping", tx.getCategory());
+        assertEquals("Shopping", txManager.getTxCategory(tx.getId()));
     }
 
     @Test
     void testPartialMatchName() {
-        List<Transaction> result = txManager.searchByNameOrCategory("D");
+        List<Transaction> result = txManager.searchByKeyword("D");
         assertEquals(1, result.size());
         assertEquals("DTestTransaction4", result.get(0).getName());
     }

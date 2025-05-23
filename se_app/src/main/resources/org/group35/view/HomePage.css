@@ -51,10 +51,18 @@
     -fx-background-radius: 20px;
     -fx-padding: 16px;
 }
+
+/* pie chart */
 .pie-chart {
     -fx-pref-height: 500px;
     -fx-padding: 0 0 -16px 0;
 }
+
+.small-button {
+    -fx-padding: 4px 8px;
+    -fx-font-size: 12px;
+}
+
 #spendingChart .chart-plot-background {
     -fx-background-color: transparent;
 }

@@ -59,7 +59,16 @@
         <VBox styleClass="chart-container"
               spacing="10"
               GridPane.columnIndex="1">
-            <Label text="Category" styleClass="chart-title"/>
+<!--            <Label text="Category" styleClass="chart-title"/>-->
+<!--            <PieChart fx:id="categoryPieChart" styleClass="pie-chart"/>-->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Category" styleClass="chart-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="toggleIncomeExpenseBtn"
+                        text="Toggle: Income"
+                        onAction="#onToggleIncomeExpense"
+                        styleClass="small-button"/>
+            </HBox>
             <PieChart fx:id="categoryPieChart" styleClass="pie-chart"/>
         </VBox>
     </GridPane>

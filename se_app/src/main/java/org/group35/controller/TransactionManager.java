@@ -157,6 +157,21 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /** Returns transactions for a given category. */
+    public List<Transaction> getByCategory(String category) {
+        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+        if (currentUser.getCategory().contains(category)) {
+            LogUtils.trace("Filtering transactions for category: " + category);
+            return transactions.stream()
+                    .filter(tx -> category.equals(tx.getCategory()))
+                    .collect(Collectors.toList());
+        }
+        else {
+            LogUtils.error("Category not valid: " + category);
+            return new ArrayList<>();
+        }
+    }
+
     /**
      * sort by amount
      * @param ascending = true sort by ascending，= false sort by descending
@@ -236,7 +251,7 @@ public class TransactionManager {
     public void add(Transaction tx, String category) {
         User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
         tx.setCategory(currentUser.getCategory().contains(category) ? category : null);
-        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
+//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
         transactions.add(tx);
         save();
         LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
@@ -377,7 +392,7 @@ public class TransactionManager {
     }
 
     /** Sets the category of the transaction with the given ID. */
-    public String getTxCategory(String id, String category) {
+    public String getTxCategory(String id) {
         LogUtils.debug("Setting category for transaction: " + id);
         Transaction tx = getById(id);
         if (tx != null) {
