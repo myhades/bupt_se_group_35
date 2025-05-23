@@ -93,3 +93,37 @@
     -fx-text-fill: #2E7D32; /* green */
     -fx-padding: 10 0 0 0;
 }
+.loading-arc {
+    -fx-stroke: #000000;
+    -fx-stroke-width: 6;
+    -fx-fill: transparent;
+    -fx-stroke-line-cap: round;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+    -fx-translate-x: 105px;
+    -fx-translate-y: 30px;
+}
+.recommendation-text {
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-padding: -10px 5px;
+    -fx-font-size: 16px;
+    -fx-line-spacing: -2px;
+    -fx-text-fill: #0D3512;
+    -fx-wrap-text: true;
+}
+
+.update-recommendation-icon {
+    -fx-fill: gray;
+    -fx-scale-x: 1.4;
+    -fx-scale-y: 1.4;
+}
+.loading-arc {
+    -fx-stroke: #000000;
+    -fx-stroke-width: 6;
+    -fx-fill: transparent;
+    -fx-stroke-line-cap: round;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+    -fx-translate-x: 105px;
+    -fx-translate-y: 30px;
+}
