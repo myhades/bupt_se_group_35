@@ -7,12 +7,15 @@ import org.group35.runtime.ApplicationRuntime;
 import org.group35.service.CsvImport;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -393,6 +396,49 @@ public class TransactionManager {
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
         TransactionManager txManager = runtime.getTranscationManager();
         return txManager.getByUser(runtime.getCurrentUser().getUsername());
+    }
+
+    public static Transaction getByJSON(JSONObject content){
+        try {
+            // 1. 解析成 JSONArray
+            JSONArray arr = new JSONArray(content);
+            JSONObject bill = arr.getJSONObject(0);
+
+            // 3. 提取各个字段
+            String name     = bill.optString("name","");      // 商家/供应商名称
+            String amount   = bill.optString("amount","");    // 金额（正为收入，负为支出）
+            BigDecimal amounts = new BigDecimal(amount);
+
+            String timeStr     = bill.optString("time","");      // 时间
+            LocalDateTime time = null;
+            DateTimeFormatter DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd['T'HH:mm[:ss]]");
+            if (timeStr != null && !timeStr.isEmpty()) {
+
+                if (timeStr.length() == 10) {
+                    time = LocalDateTime.parse(timeStr + "T00:00", DATE_TIME_FMT);
+                } else {
+                    // 支持带 T 或空格分隔
+                    timeStr = timeStr.contains("T") ? timeStr : timeStr.replace(" ", "T");
+                    time = LocalDateTime.parse(timeStr, DATE_TIME_FMT);
+                }
+            }
+
+            String location = bill.optString("location","");  // 地点
+            String category = bill.optString("category","Other");  // 分类
+
+
+            Transaction tx = new Transaction();
+            tx.setName(name);
+            tx.setAmount(amounts);
+            tx.setTimestamp(time);
+            tx.setLocation(location);
+            tx.setCategory(category);
+            return tx;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
