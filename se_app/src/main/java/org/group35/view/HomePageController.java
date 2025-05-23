@@ -197,22 +197,6 @@ public class HomePageController implements Initializable {
 
         List<String> validCategories = currentUser.getCategory();
 
-//        for (String category : validCategories) {
-//            /// Group by category and sum amount
-//            List<Transaction> txsInCategory = txManager.getByCategory(category);
-//            BigDecimal totalAmount = txsInCategory.stream()
-//                    .map(Transaction::getAmount)
-//                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-//
-//            if (totalAmount.compareTo(BigDecimal.ZERO) > 0) {
-//                categoryTotals.put(category, totalAmount);
-//            }
-//        }
-//
-//        List<PieChart.Data> pieData = new ArrayList<>();
-//        for (Map.Entry<String, BigDecimal> entry : categoryTotals.entrySet()) {
-//            pieData.add(new PieChart.Data(entry.getKey(), entry.getValue().doubleValue()));
-//        }
         for (Transaction tx : transactions) {
             String category = tx.getCategory();
             if (category == null || category.trim().isEmpty()) {
@@ -245,9 +229,6 @@ public class HomePageController implements Initializable {
      * Applies dynamic coloring to the pie chart based on category's first letter.
      */
     public void applyCategoryBasedColoring() {
-        double innerRadiusPercent = 0.4;
-        categoryPieChart.setLegendVisible(false);
-        categoryPieChart.setStyle("-fx-pie-chart-inner-radius: " + innerRadiusPercent + ";");
 
         categoryPieChart.getData().forEach(data -> {
             String categoryName = data.getName();
@@ -293,6 +274,8 @@ public class HomePageController implements Initializable {
         categoryPieChart.getData().clear();
         categoryPieChart.getData().addAll(data);
         categoryPieChart.setLegendVisible(false);
+        categoryPieChart.setLabelLineLength(4);
+        categoryPieChart.setLabelsVisible(true);
     }
 
     /**
