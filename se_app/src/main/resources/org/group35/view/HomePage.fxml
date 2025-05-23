@@ -41,8 +41,8 @@
     <!-- Chart Row -->
     <GridPane styleClass="chart-row" hgap="20">
         <columnConstraints>
-            <ColumnConstraints percentWidth="65"/>
-            <ColumnConstraints percentWidth="35"/>
+            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="40"/>
         </columnConstraints>
 
         <!-- Left: Line chart -->
