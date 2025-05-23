@@ -2,8 +2,6 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.controller.TransactionManager;
-import org.group35.model.Transaction;
-import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -11,10 +9,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -194,7 +188,7 @@ public class AIAssistant {
 
     }
     //api
-    public static CompletableFuture<String> AISuggestionAsyn(BigDecimal userSavingGoal, String stringContent) {
+    public static CompletableFuture<String> AISuggestionAsync(BigDecimal userSavingGoal, String stringContent) {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
             String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);
@@ -217,10 +211,10 @@ public class AIAssistant {
         }
         return response;
     }
-    public static CompletableFuture<String> AISummaryAsyn() {
+    public static CompletableFuture<String> AISummaryAsync() {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
-            String stringContent = null;//TransactionManager.transferTransaction();
+            String stringContent = TransactionManager.transferTransaction();
             String prompt = buildAISummaryPrompt(stringContent);
             LogUtils.info("debug:" + stringContent);
             DeepSeekCalling(prompt, new RecognitionCallback() {
@@ -242,7 +236,7 @@ public class AIAssistant {
         }
         return response;
     }
-    public static CompletableFuture<String> AIRecommendationAsyn(String location, String stringContent) throws IOException {
+    public static CompletableFuture<String> AIRecommendationAsync(String location, String stringContent) throws IOException {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
             String localTime = TimezoneUtils.getLocalTime(location);

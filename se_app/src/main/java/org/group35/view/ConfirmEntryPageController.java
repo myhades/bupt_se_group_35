@@ -115,12 +115,13 @@ public class ConfirmEntryPageController implements Initializable {
 
         toggleProcessing(true);
 
-        BillsRecognition.imageRecognitionAsyn(base64)
+        BillsRecognition.imageRecognitionAsync(base64)
                 .whenComplete((tx, err) -> {
                     Platform.runLater(() -> {
                         toggleProcessing(false);
                         if (err != null) {
                             LogUtils.error("Recognition failed: " + err.getMessage());
+                            showError("Recognition failed: " + err.getMessage());
                         } else {
                             populateFields(tx);
                         }
@@ -129,6 +130,27 @@ public class ConfirmEntryPageController implements Initializable {
     }
 
     private void doTextProcess() {
+        ApplicationRuntime rt = ApplicationRuntime.getInstance();
+        Object descriptionObj = rt.getNavParam("description");
+        String rawText = (descriptionObj instanceof String) ? (String) descriptionObj : "";
+        if (rawText.isEmpty()) {
+            LogUtils.error("Text processing requested but no text provided");
+            toggleProcessing(false);
+            return;
+        }
+
+        toggleProcessing(true);
+
+        BillsRecognition.textRecognitionAsync(rawText)
+                .whenComplete((tx, err) -> Platform.runLater(() -> {
+                    toggleProcessing(false);
+                    if (err != null) {
+                        LogUtils.error("Text recognition failed: " + err.getMessage());
+                        showError("Text recognition failed: " + err.getMessage());
+                    } else {
+                        populateFields(tx);
+                    }
+                }));
     }
 
     private void populateFields(Transaction tx) {

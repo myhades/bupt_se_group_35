@@ -5,6 +5,7 @@ import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
+import org.group35.util.ImageUtils;
 import org.group35.util.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import org.json.JSONTokener;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -59,7 +61,31 @@ public class BillsRecognition {
                 "Please ensure the output is in a valid JSON file format and exclude any additional information or explanations. Return only the JSON data structured as specified.";
         return promptText;
     }
+    private static String buildTextPrompt(String content, String categories){
 
+        //TODO: Customized user input
+        // 文本参数
+        String promptText = "Please analyze the text containing bill details and generate a JSON-formatted output. Each entry in the JSON should include the following fields: name, amount, date, location, category\n" +
+                "\n" +
+                "The bill content is:" + content + "\n" +
+                "If the bill does not contain information, this field can be left empty. But category cannot be empty\n" +
+                "Name is merchant(supplier) name\nAmount is the amount of income or expenditure. The amount is positive means income and negtive means expense\n" +
+                "Time indicate the time described by the user. Time must conform the LocalDateTime format \nlocation indicate the location described by the user\n" +
+                "The category must be one of the following categories. Please select the most suitable category (if it does not match any of these declared categories, set it as the \"other\" category).The categories are"+ categories +"\n" +
+                "Output the result as a JSON structure that can be directly saved to a file. Ensure the output strictly follows this JSON format:\n" +
+                "[\n" +
+                "{\n" +
+                "\"name\": \"...\",\n" +
+                "\"amount\": \"...\",\n" +
+                "\"time\": \"...\",\n" +
+                "\"location\": \"...\"\n" +
+                "\"category\": \"...\",\n" +
+                "}" +
+                "]\n" +
+                "There is only one bill, so you must generate only one json body\n" +
+                "Please ensure the output is in a valid JSON file format and exclude any additional information or explanations. Return only the JSON data structured as specified.";
+        return promptText;
+    }
 
     public static String buildImageRequestBody(String base64Image, String prompt) {
         JSONObject payload = new JSONObject();
@@ -101,7 +127,7 @@ public class BillsRecognition {
         return payload.toString();
     }
 
-    public static String buildTextRequestBody(String content, String prompt) {
+    public static String buildTextRequestBody(String prompt) {
         JSONObject payload = new JSONObject();
         payload.put("model", "gpt-4o");
 //        payload.put("temperature", 1);
@@ -231,7 +257,7 @@ public class BillsRecognition {
         }
     }
 
-    public static CompletableFuture<Transaction> imageRecognitionAsyn(String base64Image){
+    public static CompletableFuture<Transaction> imageRecognitionAsync(String base64Image){
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
@@ -263,7 +289,7 @@ public class BillsRecognition {
         }
         return cf;
     }
-    public static CompletableFuture<Transaction> textRecognitionAsyn(String text){
+    public static CompletableFuture<Transaction> textRecognitionAsync(String text){
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
@@ -271,8 +297,9 @@ public class BillsRecognition {
             String categories = String.join("",categoryList);
             categories = categories.replaceAll("\\\\(.)", "$1");
 
-            String prompt = buildCapturePrompt(categories);
-            String body   = buildImageRequestBody(text, prompt);
+            text = TransactionManager.escapeString(text);
+            String prompt = buildTextPrompt(text, categories);
+            String body   = buildTextRequestBody(prompt);
 
             multimodelAPICalling(body, new RecognitionCallback() {
                 @Override
@@ -303,7 +330,7 @@ public class BillsRecognition {
 //            String category = String.join("",categoryList);
 //            category = category.replaceAll("\\\\(.)", "$1");
 //
-//            String requestBody = buildRequestBody(base64Image, buildCapturePrompt(category));
+//            String requestBody = buildTextRequestBody(buildTextPrompt(category));
 //            String response = multimodelAPICalling(requestBody);
 //            LogUtils.debug(response);
 //            writeDataToJson(jsonDataPath, response);
@@ -311,6 +338,6 @@ public class BillsRecognition {
 //            LogUtils.error(e.getMessage());
 //            throw new RuntimeException(e);
 //        }
-//
+
     }
 }
