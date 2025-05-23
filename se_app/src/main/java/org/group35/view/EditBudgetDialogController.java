@@ -14,6 +14,9 @@ import javafx.scene.paint.Color;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
+import java.time.format.DateTimeFormatter;
+import javafx.application.Platform;
+import org.group35.service.LocalizationService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,7 +31,19 @@ public class EditBudgetDialogController {
     private String newBudget;
     private boolean confirmed = false;
 
+    // 新增：本地化信息的UI元素（需要在FXML中添加fx:id）
+    @FXML
+    private Label timezoneLabel;
+    @FXML
+    private Label currencyLabel;
+    @FXML
+    private Label exchangeRateLabel;
+    @FXML
+    private Label lastUpdatedLabel;
+
     public void initialize() {
+        // 新增：加载本地化信息
+        loadLocalInfo();
     }
 
     public void setNewBudget(String newBudget) {
@@ -124,7 +139,63 @@ public class EditBudgetDialogController {
             return false;
         }
     }
+    /**
+     * 新增方法：加载本地化信息
+     */
+    private void loadLocalInfo() {
+        // 异步获取本地化信息，避免阻塞UI
+        LocalizationService.getCurrentLocalInfoAsync()
+                .thenAccept(localInfo -> {
+                    // 在JavaFX主线程中更新UI
+                    Platform.runLater(() -> updateLocalInfoDisplay(localInfo));
+                })
+                .exceptionally(throwable -> {
+                    System.err.println("Error loading local info: " + throwable.getMessage());
+                    // 使用默认信息
+                    Platform.runLater(() -> updateLocalInfoDisplay(LocalizationService.getCurrentLocalInfo()));
+                    return null;
+                });
+    }
 
+    /**
+     * 新增方法：更新本地化信息显示
+     */
+    private void updateLocalInfoDisplay(LocalizationService.LocalInfo localInfo) {
+        try {
+            if (timezoneLabel != null) {
+                timezoneLabel.setText(localInfo.getTimezone());
+            }
+
+            if (currencyLabel != null) {
+                String formattedCurrency = LocalizationService.formatCurrencyName(localInfo.getCurrency());
+                currencyLabel.setText(formattedCurrency);
+            }
+
+            if (exchangeRateLabel != null) {
+                exchangeRateLabel.setText(localInfo.getExchangeRate());
+            }
+
+            if (lastUpdatedLabel != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d HH:mm");
+                String updateTime = localInfo.getUpdateTime().format(formatter);
+                lastUpdatedLabel.setText("Last updated: " + updateTime);
+            }
+
+            System.out.println("Local info updated - Timezone: " + localInfo.getTimezone() +
+                    ", Currency: " + localInfo.getCurrency());
+        } catch (Exception e) {
+            System.err.println("Error updating local info display: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 新增方法：手动刷新本地化信息
+     */
+    @FXML
+    private void refreshLocalInfo() {
+        LocalizationService.refreshCache();
+        loadLocalInfo();
+    }
     private double calculateCurrentUsedBudget() {
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
         User currentUser = runtime.getCurrentUser();

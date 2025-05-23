@@ -1,9 +1,13 @@
 package org.group35.view;
 
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Arc;
 import javafx.scene.shape.SVGPath;
+import javafx.util.Duration;
 import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
 import org.group35.model.User;
@@ -18,6 +22,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -31,14 +36,16 @@ public class SpendingPageController {
     @FXML private Button sortNameButton;
     @FXML private Button sortAmountButton;
     @FXML private Button sortDateButton;
+    @FXML private Button updateSummaryButton;
     @FXML private Label budgetLeftAmount;
-    @FXML private Label aiSummary;
+    @FXML private Label summaryText;
+    @FXML private Arc loadingArc;
 
     private enum SortType  { DATE, NAME, AMOUNT }
     private enum SortOrder { ASC, DESC }
     private SortType  currentSortType  = null;
     private SortOrder currentSortOrder = null;
-    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("MMMM d");
+    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("MMMM d, yyyy");
     private static final Color[] COLOR_PALETTE = {
             Color.web("#2E86AB"),
             Color.web("#1B4F72"),
@@ -92,7 +99,24 @@ public class SpendingPageController {
         refreshList();
 
         this.setBudgetLeftAmount();
-        this.setAISummary();
+
+        updateSummaryButton.managedProperty().bind(updateSummaryButton.visibleProperty());
+        summaryText.managedProperty().bind(summaryText.visibleProperty());
+        loadingArc.managedProperty().bind(loadingArc.visibleProperty());
+        loadingArc.setRadiusX(24);
+        loadingArc.setRadiusY(24);
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), loadingArc);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+        rotateTransition.setInterpolator(Interpolator.LINEAR);
+        rotateTransition.play();
+        setProcessing("initial");
+    }
+
+    private void setProcessing(String status) {
+        updateSummaryButton.setVisible(status.equals("initial"));
+        loadingArc.setVisible(status.equals("processing"));
+        summaryText.setVisible(status.equals("done"));
     }
 
     private void setBudgetLeftAmount(){
@@ -105,8 +129,9 @@ public class SpendingPageController {
         budgetLeftAmount.setText("$"+String.format("%.0f", availableBudget));
     }
 
-    private void setAISummary(){
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
+    private void setAISummary(String summary){
+        summaryText.setText(summary);
+        setProcessing("done");
     }
 
     private void onSortPressed(SortType type) {
@@ -163,6 +188,10 @@ public class SpendingPageController {
                 icon.setContent(ctrl.descSvgPath);
             }
         }
+    }
+
+    @FXML void updateSummary(ActionEvent event){
+        setProcessing("processing");
     }
 
     @FXML
@@ -222,7 +251,7 @@ public class SpendingPageController {
         VBox info = new VBox(0, nameLbl, dateLbl);
         HBox.setHgrow(info, Priority.ALWAYS);
 
-        BigDecimal amt = tx.getAmount();
+        BigDecimal amt = tx.getAmount().setScale(2, RoundingMode.HALF_UP);
         Label amtLbl = new Label("$ " + amt.toPlainString());
         amtLbl.getStyleClass().add("spending-amount");
 
