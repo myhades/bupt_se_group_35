@@ -1,11 +1,9 @@
 /* 继承AboutPage的风格，略作调整 */
 
 .root-container {
-    -fx-background-color: #F5F5F5;
 }
 
 .main-container {
-    -fx-background-color: #F5F5F5;
     -fx-spacing: 5;
     -fx-padding: 20 0 0 0;
 }

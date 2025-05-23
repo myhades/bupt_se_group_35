@@ -142,7 +142,7 @@
                         wrapText="true"
                         maxWidth="Infinity"
                         minHeight="60"
-                        text="Tap to get AI summary about your recent spending"
+                        text="Tap to get your spending summary"
                         styleClass="update-summary-button"
                         onAction="#updateSummary"
                         graphicTextGap="25">
