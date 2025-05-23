@@ -128,6 +128,15 @@
     -fx-background-color: transparent;
     -fx-min-height: 50px;
     -fx-max-height: 70px;
+    -fx-background-radius: 20px;
+}
+.spending-item:hover {
+    -fx-background-insets: -4;
+    -fx-background-color: rgba(0,0,0,0.05);
+}
+.spending-item:pressed {
+    -fx-background-insets: -4;
+    -fx-background-color: rgba(0,0,0,0.15);
 }
 
 /* Spending Text and Icon */
@@ -140,6 +149,7 @@
 }
 .spending-name {
     -fx-font-size: 18px;
+    -fx-max-width: 200px;
     -fx-font-family: 'Articulat CF Demi Bold';
 }
 .spending-date {
