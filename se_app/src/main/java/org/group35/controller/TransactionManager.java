@@ -170,13 +170,14 @@ public class TransactionManager {
 
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
+        // 求求你们不要覆盖传进来的已经构造好了的tx，要自动填充自己加个overload方法吧
 //        tx.setTimestamp(LocalDateTime.now());
-        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+//        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
 //        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
 //        Instant instant = Instant.now();
 //        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
-        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
-        tx.setCategory(currentUser.getCategory().get(0)); //FIXME: fuzzy match
+//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone()));
+//        tx.setCategory(currentUser.getCategory().get(0));
         transactions.add(tx);
         save();
         LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");

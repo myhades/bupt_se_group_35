@@ -2,6 +2,7 @@ package org.group35.view;
 
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,8 +72,15 @@ public class ConfirmEntryPageController implements Initializable {
         inputContainer.setVisible(false);
         emptyInputContainer.setVisible(true);
 
+        setCategoryBox();
         toggleProcessing(true);
 
+    }
+
+    private void setCategoryBox() {
+        ApplicationRuntime rt = ApplicationRuntime.getInstance();
+        List<String> categories = rt.getCurrentUser().getCategory();
+        categoryBox.setItems(FXCollections.observableArrayList(categories));
     }
 
     private void toggleProcessing(boolean isProcessing) {
@@ -116,41 +125,48 @@ public class ConfirmEntryPageController implements Initializable {
         }
 
         // 3) Validate date/time
-        String dtInput = datetimeField.getText().trim();
-        Pattern pattern = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(?: (\\d{2}:\\d{2}))?$");
-        Matcher matcher = pattern.matcher(dtInput);
-        if (!matcher.matches()) {
-            showError("Invalid date/time. Use yyyy-MM-dd (HH:mm).");
-            return;
-        }
-        LocalDate date;
-        LocalTime time = LocalTime.MIDNIGHT;
-        try {
-            date = LocalDate.parse(matcher.group(1), DateTimeFormatter.ISO_LOCAL_DATE);
-            String timePart = matcher.group(2);
-            if (timePart != null) {
-                time = LocalTime.parse(timePart, DateTimeFormatter.ofPattern("HH:mm"));
+        String dtInput = datetimeField.getText() == null
+                ? ""
+                : datetimeField.getText().trim();
+        LocalDateTime timestamp;
+
+        if (dtInput.isEmpty()) {
+            timestamp = LocalDateTime.now();
+        } else {
+            Pattern pattern = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(?: (\\d{2}:\\d{2}))?$");
+            Matcher matcher = pattern.matcher(dtInput);
+            if (!matcher.matches()) {
+                showError("Invalid date/time. Use yyyy-MM-dd (HH:mm).");
+                return;
             }
-        } catch (DateTimeParseException e) {
-            showError("Could not parse date or time.");
-            return;
-        }
-        LocalDateTime timestamp = LocalDateTime.of(date, time);
-        if (timestamp.isAfter(LocalDateTime.now())) {
-            showError("Date and time cannot be in the future.");
-            return;
+            LocalDate date;
+            LocalTime time = LocalTime.MIDNIGHT;
+            try {
+                date = LocalDate.parse(matcher.group(1), DateTimeFormatter.ISO_LOCAL_DATE);
+                String timePart = matcher.group(2);
+                if (timePart != null) {
+                    time = LocalTime.parse(timePart, DateTimeFormatter.ofPattern("HH:mm"));
+                }
+            } catch (DateTimeParseException e) {
+                showError("Could not parse date or time.");
+                return;
+            }
+            timestamp = LocalDateTime.of(date, time);
+            if (timestamp.isAfter(LocalDateTime.now())) {
+                showError("Date and time cannot be in the future.");
+                return;
+            }
         }
 
         // 4) Get location
-        String location = locationField.getText();
+        String location = locationField.getText().trim();
 
         // 5) Validate category
-        // TODO: Not implemented just yet
-//        String category = categoryBox.getValue();
-//        if (category == null || category.trim().isEmpty()) {
-//            showError("Please select a category.");
-//            return;
-//        }
+        String category = categoryBox.getValue();
+        if (category == null || category.trim().isEmpty()) {
+            showError("Please select a category.");
+            return;
+        }
 
         // 6) Construct transaction model
         Transaction tx = new Transaction();
@@ -162,10 +178,9 @@ public class ConfirmEntryPageController implements Initializable {
         tx.setName(name);
         tx.setAmount(amount);
         tx.setTimestamp(timestamp);
-//        tx.setCategory(category);
-        String loc = locationField.getText().trim();
-        if (!loc.isEmpty()) {
-            tx.setLocation(loc);
+        tx.setCategory(category);
+        if (!location.isEmpty()) {
+            tx.setLocation(location);
         }
 
         // 7) Saving and going back
