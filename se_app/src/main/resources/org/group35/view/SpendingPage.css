@@ -234,9 +234,11 @@
     -fx-translate-x: 105px;
     -fx-translate-y: 30px;
 }
-.ai-summary {
+.summary-text {
     -fx-font-family: 'Articulat CF Normal';
-    -fx-padding: 0 5px;
+    -fx-padding: -10px 5px;
+    -fx-font-size: 16px;
+    -fx-line-spacing: -2px;
     -fx-text-fill: #0D3512;
     -fx-wrap-text: true;
 }
