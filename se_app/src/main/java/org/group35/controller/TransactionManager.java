@@ -342,4 +342,75 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Retrieves the list of transactions for the current user.
+     *
+     * @return List of Transaction objects associated with the current user.
+     */
+    public static List<Transaction> getTransaction() {
+        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+        TransactionManager txManager = runtime.getTranscationManager();
+        return txManager.getByUser(runtime.getCurrentUser().getUsername());
+    }
+
+    /**
+     * Converts the list of transactions to a JSON-like string representation.
+     * Each transaction is converted to a string with special characters escaped.
+     *
+     * @return A JSON-like string representing all transactions.
+     */
+    public static String transferTransaction() {
+        List<Transaction> transactions = getTransaction();
+        StringBuilder result = new StringBuilder();
+        result.append("["); // Start of JSON array
+
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction t = transactions.get(i);
+            if (i > 0) result.append(", ");
+            result.append(convertTransactionToEscapedString(t)); // Convert each transaction to string
+        }
+
+        result.append("]"); // End of JSON array
+        return result.toString();
+    }
+
+    /**
+     * Converts a single Transaction object into a string, escaping special characters
+     * to ensure valid JSON formatting.
+     *
+     * @param t The Transaction object to convert.
+     * @return A string representation of the transaction in JSON-like format with escaped characters.
+     */
+    private static String convertTransactionToEscapedString(Transaction t) {
+        return String.format(
+                "{\"id\":\"%s\",\"username\":\"%s\",\"name\":\"%s\",\"timestamp\":\"%s\"," +
+                        "\"amount\":%.2f,\"category\":\"%s\",\"currency\":\"%s\"}",
+                escapeString(t.getId()),
+                escapeString(t.getUsername()),
+                escapeString(t.getName()),
+                escapeString(t.getTimestamp().toString()),
+                t.getAmount(),
+                escapeString(t.getCategory()),
+                escapeString(t.getCurrency().name())
+        );
+    }
+
+    /**
+     * Escapes special characters in a string to ensure proper formatting for JSON output.
+     * The following characters are escaped: backslash, double quotes, newlines, carriage
+     * returns, and tabs.
+     *
+     * @param input The input string to escape.
+     * @return A string with escaped special characters.
+     */
+    private static String escapeString(String input) {
+        if (input == null) return "";
+        return input
+                .replace("\\", "\\\\")   // Escape backslash
+                .replace("\"", "\\\"")   // Escape double quotes
+                .replace("\n", "\\n")    // Escape newline
+                .replace("\r", "\\r")    // Escape carriage return
+                .replace("\t", "\\t");   // Escape tab
+    }
+
 }
