@@ -13,6 +13,8 @@
 <?import javafx.geometry.Insets?>
 
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.control.ScrollPane?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.RecommendationDialogController"
       stylesheets="@RecommendationDialog.css"
@@ -90,14 +92,13 @@
         <!-- Right: Recommendation and Local Info -->
         <VBox styleClass="chart-container" spacing="10" GridPane.columnIndex="1">
             <Label text="AI Recommendation" styleClass="chart-title"/>
-            <TextArea fx:id="aiRecommendationTextArea"
-                      prefWidth="100"
-                      prefHeight="300"
-                      wrapText="true"
-                      editable="false"
-                      styleClass="recommendation-textarea"
-                      promptText="AI-generated recommendations will appear here..."/>
+            <!-- Loading Icon -->
+            <Arc fx:id="loadingArc"
+                 length="270"
+                 styleClass="loading-arc"/>
+            <Label fx:id="aiRecommendationTextArea" styleClass="recommendation-text"/>
         </VBox>
+
 
     </GridPane>
 

@@ -1,17 +1,27 @@
 package org.group35.view;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import javafx.util.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
+import javafx.util.Duration;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.shape.Arc;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
+import org.group35.service.AIAssistant;
+import org.group35.util.LogUtils;
 
 public class RecommendationDialogController {
     @FXML
@@ -33,12 +43,33 @@ public class RecommendationDialogController {
     @FXML
     private Label usedPercentLabel;
     @FXML
-    private TextArea aiSuggestionTextArea;
-    @FXML
-    private TextArea aiRecommendationTextArea;
+    private Label aiRecommendationTextArea;
+
+    @FXML private Arc loadingArc;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
+        aiRecommendationTextArea.managedProperty().bind(aiRecommendationTextArea.visibleProperty());
+        loadingArc.managedProperty().bind(loadingArc.visibleProperty());
+        loadingArc.setRadiusX(24);
+        loadingArc.setRadiusY(24);
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), loadingArc);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+        rotateTransition.setInterpolator(Interpolator.LINEAR);
+        rotateTransition.play();
+        setProcessing("processing");
+
+        CompletableFuture<String> future = AIAssistant.AIRecommendationAsync();
+        future.whenComplete((text, err) -> Platform.runLater(() -> {
+            if (err != null) {
+                LogUtils.error("AI summary generation failed: " + err.getMessage());
+                setProcessing("done");
+            } else {
+                LogUtils.info("-----------------------------------------");
+                setAIRecommendation(text);
+            }
+        }));
         aiRecommendationTextArea.setMouseTransparent(true);
         aiRecommendationTextArea.setFocusTraversable(false);
         try {
@@ -50,16 +81,22 @@ public class RecommendationDialogController {
             }
             loadBudgetData();
             updateBudgetDisplay();
-            System.out.println("PlanPageController initialized successfully");
+            LogUtils.info("PlanPageController initialized successfully");
         } catch (Exception e) {
-            System.err.println("Error in PlanPageController.initialize(): " + e.getMessage());
+            LogUtils.error("Error in PlanPageController.initialize(): " + e.getMessage());
             e.printStackTrace();
         }
     }
-    public void setAISuggestion(String suggestion) {
-        aiSuggestionTextArea.setText(suggestion);
+    public void setAIRecommendation(String recommendation) {
+        aiRecommendationTextArea.setText(recommendation);
+        setProcessing("done");
     }
 
+
+    private void setProcessing(String status) {
+        loadingArc.setVisible(status.equals("processing"));
+        aiRecommendationTextArea.setVisible(status.equals("done"));
+    }
     private void loadBudgetData() {
         try {
             System.out.println("Loading budget data...");

@@ -5,19 +5,28 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.shape.Arc;
+import javafx.util.Duration;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.CompletableFuture;
+
 import javafx.application.Platform;
+import org.group35.service.AIAssistant;
+import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.group35.util.CurrencyUtils;
 
 public class AIDialogController {
+    public Arc loadingArc;
     @FXML
     private Button recommendationButton;
     @FXML
@@ -37,9 +46,6 @@ public class AIDialogController {
     @FXML
     private Label usedPercentLabel;
     @FXML
-    private TextArea aiSuggestionTextArea;
-    // 新增：本地化信息的UI元素（需要在FXML中添加fx:id）
-    @FXML
     private Label timezoneLabel;
     @FXML
     private Label currencyLabel;
@@ -47,13 +53,30 @@ public class AIDialogController {
     private Label exchangeRateLabel;
     @FXML
     private Label lastUpdatedLabel;
+    @FXML
+    private Label aiSuggestionLabel;
 
 
     public void initialize() {
-        // 新增：加载本地化信息
+        aiSuggestionLabel.managedProperty().bind(aiSuggestionLabel.visibleProperty());
+        loadingArc.managedProperty().bind(loadingArc.visibleProperty());
+        loadingArc.setRadiusX(24);
+        loadingArc.setRadiusY(24);
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), loadingArc);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+        rotateTransition.setInterpolator(Interpolator.LINEAR);
+        rotateTransition.play();
+        setProcessing("processing");
+        CompletableFuture<String> future = AIAssistant.AISuggestionAsync();
+        future.whenComplete((text, err) -> Platform.runLater(() -> {
+            if (err != null) {
+                LogUtils.error("AI suggestion generation failed: " + err.getMessage());
+            } else {
+                setAISuggestion(text);
+            }
+        }));
         loadLocalInfo();
-        aiSuggestionTextArea.setMouseTransparent(true);
-        aiSuggestionTextArea.setFocusTraversable(false);
         try {
             if (recommendationButton != null) {
                 recommendationButton.setWrapText(true);
@@ -69,8 +92,9 @@ public class AIDialogController {
             e.printStackTrace();
         }
     }
-    public void setAISuggestion(String suggestion) {
-        aiSuggestionTextArea.setText(suggestion);
+    public void setAISuggestion(String text) {
+        aiSuggestionLabel.setText(text);
+        setProcessing("done");
     }
 
     private void loadBudgetData() {
@@ -79,6 +103,11 @@ public class AIDialogController {
         } catch (Exception e) {
             System.err.println("Error loading budget data: " + e.getMessage());
         }
+    }
+    private void setProcessing(String status) {
+//        updateSummaryButton.setVisible(status.equals("initial"));
+        loadingArc.setVisible(status.equals("processing"));
+        aiSuggestionLabel.setVisible(status.equals("done"));
     }
 
     private void updateBudgetDisplay() {
