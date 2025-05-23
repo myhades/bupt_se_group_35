@@ -62,24 +62,22 @@
                   styleClass="hint-container"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="0">
-                <SVGPath content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
-                         styleClass="hint-icon"/>
 
                 <StackPane styleClass="avatar-container" onMouseClicked="#handleSelectAvatar">
                     <ImageView fx:id="avatarImage"
                                fitWidth="96" fitHeight="96"
                                styleClass="avatar-image">
-<!--                        <image>-->
-<!--                            <Image url="@/org/group35/view/assets/images/default_avatar.png" />-->
-<!--                        </image>-->
                         <clip>
                             <Circle centerX="48" centerY="48" radius="48"/>
                         </clip>
                     </ImageView>
                 </StackPane>
 
+<!--                <SVGPath content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"-->
+<!--                         styleClass="hint-icon"/>-->
+
                 <!-- Hint Text -->
-                <Text text="Double check&#10;all the information"
+                <Text text="Click to Edit&#10;Change your information"
                       styleClass="hint-text" />
 
                 <!-- Warning Message -->
@@ -92,6 +90,9 @@
                     <Button text="Save"
                             onAction="#handleSave"
                             styleClass="action-button,save-button"/>
+                    <Button text="Cancle"
+                            onAction="#handleCancel"
+                            styleClass="action-button,cancel-button"/>
                 </HBox>
 
             </VBox>

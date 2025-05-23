@@ -71,14 +71,16 @@ public class ProfilePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+//        hideWarning();
+
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
         this.uManager = runtime.getUserManager();
         currentname = runtime.getCurrentUser().getUsername();
-        Object fromPageObj = runtime.getNavParam("fromPage");
-        Object fromStatusObj = runtime.getNavParam("fromStatus");
 
         setTimezones();
         setCategoryBox();
+
+        LocationField.setPromptText(uManager.getLocation(currentname));
 
         Image avatar = ImageUtils.fromBase64(uManager.getUserAvatar(currentname));
         if (avatar != null) {
@@ -94,17 +96,6 @@ public class ProfilePageController implements Initializable {
 
     }
 
-
-    private void populateFields(Transaction tx) {
-        passwordField.setText(tx.getName());
-        LocalDateTime ts = tx.getTimestamp();
-        String loc = tx.getLocation();
-        LocationField.setText(loc != null ? loc : "");
-        String cat = tx.getCategory();
-        if (cat != null && !cat.isEmpty()) {
-            categoryBox.setValue(cat);
-        }
-    }
 
     private void setTimezones() {
         ObservableList<String> timezones = FXCollections.observableArrayList(
@@ -125,13 +116,6 @@ public class ProfilePageController implements Initializable {
         categoryBox.setItems(FXCollections.observableArrayList(categories));
     }
 
-    /**
-     * Show an inline warning message above the input field.
-     */
-    private void showWarning(String msg, boolean isWarning) {
-        //TODO
-
-    }
 
     /**
      * Hide the inline warning label.
@@ -142,7 +126,9 @@ public class ProfilePageController implements Initializable {
         warningLabel.setManaged(false);
     }
 
-
+    /**
+     * Show an inline warning message above the input field.
+     */
     private void showError(String message) {
         warningLabel.setText(message);
         warningLabel.setVisible(true);
@@ -182,7 +168,6 @@ public class ProfilePageController implements Initializable {
 
         String initialPwd = passwordField.getText().trim();
         if (initialPwd.isEmpty()) {
-            showError("Please enter a password.");
             return;
         }
         if (initialPwd.length() < 8 || !initialPwd.matches(".*[A-Za-z].*")
@@ -200,7 +185,7 @@ public class ProfilePageController implements Initializable {
         String timezone = TimezoneField.getValue();
         uManager.setTimezone(timezone);
 
-        String location = LocationField.getText().trim();
+        String location = LocationField.getText();
         uManager.setLocation(location);
 
         //TODO: add more validation
