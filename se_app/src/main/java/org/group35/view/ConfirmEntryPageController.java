@@ -8,12 +8,15 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Arc;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.group35.controller.TransactionManager;
 import org.group35.model.Transaction;
@@ -39,6 +42,7 @@ import java.util.regex.Pattern;
 public class ConfirmEntryPageController implements Initializable {
 
     @FXML private Label previousPageLabel;
+    @FXML private Label currentPageLabel;
     @FXML private Label warningLabel;
     @FXML private VBox hintContainer;
     @FXML private VBox loadContainer;
@@ -50,16 +54,21 @@ public class ConfirmEntryPageController implements Initializable {
     @FXML private TextField datetimeField;
     @FXML private TextField locationField;
     @FXML private ComboBox<String> categoryBox;
+    @FXML private Text hintText;
+    @FXML private SVGPath hintIcon;
+    @FXML private Button deleteButton;
+    @FXML private Button saveButton;
 
     private ProgramStatus fromStatus;
-    private Boolean isProcessing;
+    private Transaction currentTx;
 
+    private static final ApplicationRuntime rt = ApplicationRuntime.getInstance();
+    private static final TransactionManager txm = rt.getTranscationManager();
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
         Object fromPageObj = rt.getNavParam("fromPage");
         Object fromStatusObj = rt.getNavParam("fromStatus");
         Object needsProcessObj = rt.getNavParam("needsProcess");
@@ -72,27 +81,50 @@ public class ConfirmEntryPageController implements Initializable {
                 ? ((Boolean) needsProcessObj) : Boolean.FALSE;
         String processType = (processTypeObj instanceof String)
                 ? ((String) processTypeObj) : "none";
-        previousPageLabel.setText(prevPage);
 
         warningLabel.managedProperty().bind(warningLabel.visibleProperty());
         hintContainer.managedProperty().bind(hintContainer.visibleProperty());
         loadContainer.managedProperty().bind(loadContainer.visibleProperty());
         inputContainer.managedProperty().bind(inputContainer.visibleProperty());
         emptyInputContainer.managedProperty().bind(emptyInputContainer.visibleProperty());
+        deleteButton.managedProperty().bind(deleteButton.visibleProperty());
         warningLabel.setVisible(false);
         hintContainer.setVisible(false);
         loadContainer.setVisible(true);
         inputContainer.setVisible(false);
         emptyInputContainer.setVisible(true);
+        deleteButton.setVisible(false);
 
+        previousPageLabel.setText(prevPage);
         setCategoryBox();
+        modifyingEntryCheck();
         toggleProcessing(needsProcess);
-        switch (processType) {
-            case "image":   doImageProcess(); break;
-            case "text":    doTextProcess(); break;
-            default:        break;
-        }
+        doProcessCheck(processType);
 
+    }
+
+    private void doProcessCheck(String processType){
+        switch (processType) {
+            case "image": doImageProcess(); break;
+            case "text":  doTextProcess(); break;
+            default:      break;
+        }
+    }
+
+    private void modifyingEntryCheck(){
+        Object uuidObj = rt.getNavParam("uuid");
+        String uuid = (uuidObj instanceof String)
+                ? ((String) uuidObj) : "none";
+        currentTx = txm.getById(uuid);
+        if (currentTx!=null){
+            previousPageLabel.setText("\""+currentTx.getName()+"\"");
+            currentPageLabel.setText("Manage Entry");
+            hintText.setText("Modify or\ndelete this entry");
+            hintIcon.setContent("M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z");
+            deleteButton.setVisible(true);
+            saveButton.setText("Modify");
+            populateFields(currentTx);
+        }
     }
 
     private void doImageProcess() {
@@ -121,6 +153,7 @@ public class ConfirmEntryPageController implements Initializable {
                         toggleProcessing(false);
                         if (err != null) {
                             LogUtils.error("Recognition failed: " + err.getMessage());
+                            showError("Recognition failed: " + err.getMessage());
                         } else {
                             populateFields(tx);
                         }
@@ -129,6 +162,27 @@ public class ConfirmEntryPageController implements Initializable {
     }
 
     private void doTextProcess() {
+        ApplicationRuntime rt = ApplicationRuntime.getInstance();
+        Object descriptionObj = rt.getNavParam("description");
+        String rawText = (descriptionObj instanceof String) ? (String) descriptionObj : "";
+        if (rawText.isEmpty()) {
+            LogUtils.error("Text processing requested but no text provided");
+            toggleProcessing(false);
+            return;
+        }
+
+        toggleProcessing(true);
+
+        BillsRecognition.textRecognitionAsync(rawText)
+                .whenComplete((tx, err) -> Platform.runLater(() -> {
+                    toggleProcessing(false);
+                    if (err != null) {
+                        LogUtils.error("Text recognition failed: " + err.getMessage());
+                        showError("Text recognition failed: " + err.getMessage());
+                    } else {
+                        populateFields(tx);
+                    }
+                }));
     }
 
     private void populateFields(Transaction tx) {
@@ -151,7 +205,6 @@ public class ConfirmEntryPageController implements Initializable {
     }
 
     private void toggleProcessing(boolean isProcessing) {
-        this.isProcessing = isProcessing;
         if (isProcessing){
             hintContainer.setVisible(false);
             loadContainer.setVisible(true);
@@ -170,6 +223,14 @@ public class ConfirmEntryPageController implements Initializable {
             loadContainer.setVisible(false);
             inputContainer.setVisible(true);
             emptyInputContainer.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void handleDelete(ActionEvent event) {
+        if (currentTx != null) {
+            txm.delete(currentTx.getId());
+            goBack(event);
         }
     }
 
@@ -240,9 +301,7 @@ public class ConfirmEntryPageController implements Initializable {
         }
 
         // 6) Construct transaction model
-        Transaction tx = new Transaction();
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
-        TransactionManager txm = rt.getTranscationManager();
+        Transaction tx = (currentTx==null)?(new Transaction()):(currentTx);
 
         String username = rt.getCurrentUser().getUsername();
         tx.setUsername(username);
@@ -255,8 +314,9 @@ public class ConfirmEntryPageController implements Initializable {
         }
 
         // 7) Saving and going back
-        txm.add(tx);
-        goBack(event);
+        if (currentTx!=null) txm.update(currentTx);
+        else txm.add(tx);
+        goToSpending(event);
     }
 
     private void showError(String message) {
@@ -272,5 +332,10 @@ public class ConfirmEntryPageController implements Initializable {
     @FXML
     public void goBack(Event e) {
         ApplicationRuntime.getInstance().navigateTo(fromStatus);
+    }
+
+    @FXML
+    public void goToSpending(Event e) {
+        ApplicationRuntime.getInstance().navigateTo(ProgramStatus.SPENDING);
     }
 }

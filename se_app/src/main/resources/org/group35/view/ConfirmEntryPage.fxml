@@ -41,7 +41,9 @@
                    styleClass="title-text, title-text-from"
                    onMouseClicked="#goBack"/>
             <Label text=">" styleClass="title-text, title-text-from"/>
-            <Label text="Confirm Entry" styleClass="title-text"/>
+            <Label fx:id="currentPageLabel"
+                   text="Confirm Entry"
+                   styleClass="title-text"/>
             <Label text="●" styleClass="title-dot"/>
         </HBox>
 
@@ -61,11 +63,15 @@
                   styleClass="hint-container"
                   GridPane.columnIndex="0"
                   GridPane.rowIndex="0">
-                <SVGPath content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+
+                <!-- Hint Icon -->
+                <SVGPath fx:id="hintIcon"
+                         content="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
                          styleClass="hint-icon"/>
 
                 <!-- Hint Text -->
-                <Text text="Double check&#10;all the information"
+                <Text fx:id="hintText"
+                      text="Double check&#10;all the information"
                       styleClass="hint-text" />
 
                 <!-- Warning Message -->
@@ -75,7 +81,12 @@
 
                 <!-- Button Panel -->
                 <HBox styleClass="button-panel">
-                    <Button text="Save"
+                    <Button fx:id="deleteButton"
+                            text="Delete"
+                            onAction="#handleDelete"
+                            styleClass="action-button,delete-button"/>
+                    <Button fx:id="saveButton"
+                            text="Save"
                             onAction="#handleSave"
                             styleClass="action-button,save-button"/>
                 </HBox>
