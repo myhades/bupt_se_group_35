@@ -1,0 +1,210 @@
+/* ConfirmEntryPage.css */
+
+/* Main Container */
+.main-container{
+    -fx-padding: 20px 0 0 0;
+    -fx-vgrow: always;
+    -fx-spacing: 20px;
+}
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-text-from {
+    -fx-text-fill: gray;
+    -fx-cursor: hand;
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: #3B7D23;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
+/* Confirm Entry */
+.confirm-container {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-pref-height: 320px;
+    -fx-vgrow: always;
+    -fx-alignment: center;
+}
+
+/* Hint */
+.hint-container{
+    -fx-spacing: 25px;
+    -fx-padding: 20px;
+    -fx-alignment: center-left;
+}
+.hint-icon{
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-translate-x: 40px
+}
+.hint-text {
+    -fx-font-size: 20px;
+    -fx-line-spacing: -3px;
+    -fx-translate-x: 32px
+}
+.button-panel {
+    -fx-spacing: 15px;
+    -fx-alignment: CENTER-LEFT;
+}
+.warning-label {
+    -fx-text-fill: #bf1c1c;
+    -fx-font-size: 16px;
+    -fx-translate-x: 32px;
+    -fx-wrap-text: true;
+    -fx-max-width: 300px;
+}
+.action-button {
+    -fx-font-family: 'Articulat CF Normal';
+    -fx-font-size: 16px;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 120px;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-translate-x: 32px
+}
+.action-button:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+    -fx-opacity: 0.6;
+}
+.save-button {
+    -fx-background-color: #000000;
+}
+.save-button:hover {
+    -fx-background-color: derive(#000000, 50%);
+}
+.cancel-button {
+    -fx-background-color: #7e0000;
+}
+.cancel-button:hover {
+    -fx-background-color: derive(#7e0000, 50%);
+}
+.loading-arc {
+    -fx-stroke: #000000;
+    -fx-stroke-width: 6;
+    -fx-fill: transparent;
+    -fx-stroke-line-cap: round;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+    -fx-translate-x: 24px;
+}
+
+/* Input */
+.input-container {
+    -fx-spacing: 13px;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20px;
+    -fx-vgrow: always;
+    -fx-alignment: center;
+    -fx-padding: 10px 25px;
+}
+.input-field {
+    -fx-background-color: #CCCCCC;
+    -fx-control-inner-background: #CCCCCC;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #635f5f;
+    -fx-font-size: 14px;
+}
+.input-select {
+}
+.input-select .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.input-select .arrow {
+    -fx-shape: "";
+    -fx-background-color: transparent;
+}
+.icon-field {
+    -fx-pref-width: 290px;
+}
+.input-icon {
+    -fx-fill: #635f5f;
+    -fx-cursor: text;
+    -fx-translate-x: -14px;
+    -fx-scale-x: 0.9;
+    -fx-scale-y: 0.9;
+
+}
+
+/* ScrollPane Styling */
+.setting-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-min-width: 450px;
+    -fx-max-width: 600px;
+    -fx-min-height: 200px;
+    -fx-pref-height: -1;
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+    -fx-pannable: true;
+    -fx-hbar-policy: never;
+}
+.setting-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+.setting-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+.setting-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5px;
+}
+.setting-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+.setting-scrollpane > .scroll-bar:vertical > .thumb:pressed {
+    -fx-background-color: #888888;
+}
+.setting-scrollpane > .scroll-bar > .increment-button,
+.setting-scrollpane > .scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+/* Settings Container */
+.settings-container {
+    -fx-padding: 20px 30px 30px 30px;
+    -fx-spacing: 15;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20px;
+}
+
+/* 分类控制容器 */
+.category-control-box {
+    -fx-alignment: CENTER_LEFT;
+}
+
+
+/* 分类按钮 */
+.category-button {
+    -fx-background-color: transparent;
+    -fx-padding: 3;
+    -fx-cursor: hand;
+}
+
+.category-button-icon {
+    -fx-fill: #666666;
+}

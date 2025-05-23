@@ -154,26 +154,52 @@ public class UserManager {
         LogUtils.warn("Transaction not found: " + updated.getUsername());
     }
 
+    public void setHashedPassword(String hashedPassword){
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        user.setHashedPassword(hashedPassword);
+        save();
+        LogUtils.info("Password updated for user: " + user.getUsername());
+    }
+
+    public void setHashedPassword(String username, String hashedPassword){
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                user.setHashedPassword(hashedPassword);
+                save();
+                LogUtils.info("Password updated for user: " + username);
+            }
+        }
+        LogUtils.info("Failed to set hashedpassword. User not found: " + username);
+    }
+
+    public String getHashedPassword(){
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        return user.getHashedPassword();
+    }
+
+    public String getHashedPassword(String username){
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return user.getHashedPassword();
+            }
+        }
+        LogUtils.info("Failed to get hashedpassword. User not found: " + username);
+        return "";
+    }
+
     /**
      * Compresses, crops to square, encodes to Base64 and stores as the user's avatar.
      * @param username  the user to update
-     * @param imagePath path to the source image file
+     * @param base64  source image file in base64 string
      */
-    public static void setUserAvatar(String username, String imagePath) {
+    public void setUserAvatar(String username, String base64) {
         LogUtils.debug("Attempting to set avatar for user: " + username);
         List<User> users = getPersistentUsers();
         for (User u : users) {
             if (u.getUsername().equals(username)) {
-                try {
-                    byte[] compressed = ImageUtils.loadCompressImage(imagePath);
-                    String base64 = ImageUtils.toBase64(compressed);
-                    u.setAvatar(base64);
-                    PersistentDataManager.getStore().setUsers(users);
-                    PersistentDataManager.saveStore();
-                    LogUtils.info("Avatar updated for user: " + username);
-                } catch (IOException e) {
-                    LogUtils.error("Failed to process avatar image for user: " + username);
-                }
+                u.setAvatar(base64);
+                save();
+                LogUtils.info("Avatar updated for user: " + username);
                 return;
             }
         }
@@ -182,21 +208,14 @@ public class UserManager {
 
     /**
      * Set current user's avatar.
-     * @param imagePath path to the source image file
+     * @param base64  source image file in base64 string
      */
-    public void setAvatar(String imagePath) {
+    public void setAvatar(String base64) {
         User user = ApplicationRuntime.getInstance().getCurrentUser();
         LogUtils.debug("Attempting to set avatar for current user: " + user.getUsername());
-        try {
-            byte[] compressed = ImageUtils.loadCompressImage(imagePath);
-            String base64 = ImageUtils.toBase64(compressed);
-            user.setAvatar(base64);
-            save();
-            LogUtils.info("Avatar updated for user: " + user.getUsername());
-        } catch (IOException e) {
-            LogUtils.error("Failed to process avatar image for user: " + user.getUsername());
-        }
-        LogUtils.warn("Failed to set avatar. User not found: " + user.getUsername());
+        user.setAvatar(base64);
+        save();
+        LogUtils.info("Avatar updated for user: " + user.getUsername());
     }
 
 
@@ -340,7 +359,7 @@ public class UserManager {
     /**
      * Get the categories for current user.
      */
-    public Collection<String> getCategory() {
+    public List<String> getCategory() {
         User user = ApplicationRuntime.getInstance().getCurrentUser();
         return user.getCategory();
     }
@@ -348,7 +367,7 @@ public class UserManager {
     /**
      * Get the categories for a specific user.
      */
-    public Collection<String> getCategory(String username) {
+    public List<String> getCategory(String username) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 LogUtils.info("Categories for user: " + username + " are " + u.getCategory());

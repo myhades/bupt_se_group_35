@@ -443,6 +443,7 @@ class TransactionManagerTest {
         tx1.setCurrency(Transaction.Currency.CNY);
         txManager.add(tx1, "Cater");
         tx1.setTimestamp(LocalDateTime.of(2025, 5, 20, 10, 0));
+        tx1.setLocation("China, Beijing");
 
         Transaction tx2 = new Transaction();
         tx2.setUsername("TestUser");
@@ -451,6 +452,7 @@ class TransactionManagerTest {
         tx2.setCurrency(Transaction.Currency.CNY);
         txManager.add(tx2, "Shopping");
         tx2.setTimestamp(LocalDateTime.of(2025, 5, 21, 9, 0));
+        tx2.setLocation("Japan, Tokyo");
 
         Transaction tx3 = new Transaction();
         tx3.setUsername("TestUser");
@@ -459,6 +461,7 @@ class TransactionManagerTest {
         tx3.setCurrency(Transaction.Currency.CNY);
         txManager.add(tx3, "Transportation");
         tx3.setTimestamp(LocalDateTime.of(2025, 5, 21, 12, 0));
+        tx3.setLocation("China, Beijing");
 
         Transaction tx4 = new Transaction();
         tx4.setUsername("TestUser");
@@ -467,6 +470,7 @@ class TransactionManagerTest {
         tx4.setCurrency(Transaction.Currency.CNY);
         txManager.add(tx4, "Salary");
         tx4.setTimestamp(LocalDateTime.of(2025, 5, 22, 11, 12));
+        tx4.setLocation("China, Beijing");
 
         Transaction tx5 = new Transaction();
         tx5.setUsername("TestUser");
@@ -475,6 +479,7 @@ class TransactionManagerTest {
         tx5.setCurrency(Transaction.Currency.CNY);
         txManager.add(tx5, "Transfer");
         tx5.setTimestamp(LocalDateTime.of(2025, 5, 22, 21, 05));
+        tx5.setLocation("China, Beijing");
 
         Transaction tx6 = new Transaction();
         tx6.setUsername("TestUser");
@@ -483,6 +488,7 @@ class TransactionManagerTest {
         tx6.setCurrency(Transaction.Currency.CNY);
         tx6.setTimestamp(LocalDateTime.of(2025, 5, 23, 14, 30));
         txManager.add(tx6, "Education");
+        tx6.setLocation("United States, New York");
 
         Transaction tx7 = new Transaction();
         tx7.setUsername("TestUser");
@@ -491,6 +497,7 @@ class TransactionManagerTest {
         tx7.setCurrency(Transaction.Currency.CNY);
         tx7.setTimestamp(LocalDateTime.of(2025, 5, 23, 16, 45));
         txManager.add(tx7, "Shopping");
+        tx7.setLocation("United States, New York");
 
         Transaction tx8 = new Transaction();
         tx8.setUsername("TestUser");
@@ -499,6 +506,7 @@ class TransactionManagerTest {
         tx8.setCurrency(Transaction.Currency.CNY);
         tx8.setTimestamp(LocalDateTime.of(2025, 5, 24, 10, 15));
         txManager.add(tx8, "Entertainment");
+        tx8.setLocation("China, Shanghai");
 
         Transaction tx9 = new Transaction();
         tx9.setUsername("TestUser");
@@ -507,6 +515,7 @@ class TransactionManagerTest {
         tx9.setCurrency(Transaction.Currency.CNY);
         tx9.setTimestamp(LocalDateTime.of(2025, 5, 24, 11, 0));
         txManager.add(tx9, "Rent");
+        tx9.setLocation("China, Hangzhou");
 
         Transaction tx10 = new Transaction();
         tx10.setUsername("TestUser");
@@ -515,6 +524,7 @@ class TransactionManagerTest {
         tx10.setCurrency(Transaction.Currency.CNY);
         tx10.setTimestamp(LocalDateTime.of(2025, 5, 25, 9, 30));
         txManager.add(tx10, "Investment");
+        tx10.setLocation("China, Beijing");
 
         Transaction tx11 = new Transaction();
         tx11.setUsername("TestUser");
@@ -523,6 +533,7 @@ class TransactionManagerTest {
         tx11.setCurrency(Transaction.Currency.CNY);
         tx11.setTimestamp(LocalDateTime.of(2025, 4, 5, 18, 20));
         txManager.add(tx11, "Shopping");
+        tx11.setLocation("United States, Seattle");
 
         Transaction tx12 = new Transaction();
         tx12.setUsername("TestUser");
@@ -531,6 +542,7 @@ class TransactionManagerTest {
         tx12.setCurrency(Transaction.Currency.CNY);
         tx12.setTimestamp(LocalDateTime.of(2025, 4, 6, 14, 0));
         txManager.add(tx12, "Education");
+        tx12.setLocation("China, Shanghai");
 
         Transaction tx13 = new Transaction();
         tx13.setUsername("TestUser");
@@ -539,6 +551,7 @@ class TransactionManagerTest {
         tx13.setCurrency(Transaction.Currency.CNY);
         tx13.setTimestamp(LocalDateTime.of(2025, 4, 8, 12, 30));
         txManager.add(tx13, "Cater");
+        tx13.setLocation("China, Beijing");
 
         Transaction tx14 = new Transaction();
         tx14.setUsername("TestUser");
@@ -547,6 +560,7 @@ class TransactionManagerTest {
         tx14.setCurrency(Transaction.Currency.CNY);
         tx14.setTimestamp(LocalDateTime.of(2025, 4, 10, 20, 15));
         txManager.add(tx14, "Transfer");
+        tx14.setLocation("China, Shanghai");
 
         Transaction tx15 = new Transaction();
         tx15.setUsername("TestUser");
@@ -555,6 +569,7 @@ class TransactionManagerTest {
         tx15.setCurrency(Transaction.Currency.CNY);
         tx15.setTimestamp(LocalDateTime.of(2025, 4, 12, 8, 45));
         txManager.add(tx15, "Transportation");
+        tx15.setLocation("China, Shanghai");
 
         Transaction tx16 = new Transaction();
         tx16.setUsername("TestUser");
@@ -563,6 +578,7 @@ class TransactionManagerTest {
         tx16.setCurrency(Transaction.Currency.CNY);
         tx16.setTimestamp(LocalDateTime.of(2025, 4, 15, 22, 0));
         txManager.add(tx16, "Entertainment");
+        tx16.setLocation("United States, New York");
 
         Transaction tx17 = new Transaction();
         tx17.setUsername("TestUser");
@@ -571,6 +587,7 @@ class TransactionManagerTest {
         tx17.setCurrency(Transaction.Currency.CNY);
         tx17.setTimestamp(LocalDateTime.of(2025, 4, 18, 9, 30));
         txManager.add(tx17, "Other");
+        tx17.setLocation("China, Beijing");
 
         Transaction tx18 = new Transaction();
         tx18.setUsername("TestUser");
@@ -579,6 +596,8 @@ class TransactionManagerTest {
         tx18.setCurrency(Transaction.Currency.CNY);
         tx18.setTimestamp(LocalDateTime.of(2025, 4, 20, 10, 0));
         txManager.add(tx18, "Rent");
+        tx18.setLocation("China, Beijing");
+
 
         Transaction tx19 = new Transaction();
         tx19.setUsername("TestUser");
@@ -587,6 +606,7 @@ class TransactionManagerTest {
         tx19.setCurrency(Transaction.Currency.CNY);
         tx19.setTimestamp(LocalDateTime.of(2025, 4, 25, 15, 45));
         txManager.add(tx19, "Investment");
+        tx19.setLocation("China, Beijing");
 
         Transaction tx20 = new Transaction();
         tx20.setUsername("TestUser");
@@ -595,6 +615,7 @@ class TransactionManagerTest {
         tx20.setCurrency(Transaction.Currency.CNY);
         tx20.setTimestamp(LocalDateTime.of(2025, 5, 1, 20, 0));
         txManager.add(tx20, "Entertainment");
+        tx20.setLocation("United States, Los Angeles");
 
         Transaction tx21 = new Transaction();
         tx21.setUsername("TestUser");
@@ -603,6 +624,7 @@ class TransactionManagerTest {
         tx21.setCurrency(Transaction.Currency.CNY);
         tx21.setTimestamp(LocalDateTime.of(2025, 2, 3, 21, 45));
         txManager.add(tx21, "Entertainment");
+        tx21.setLocation("United States, New York");
 
         Transaction tx22 = new Transaction();
         tx22.setUsername("TestUser");
@@ -611,6 +633,7 @@ class TransactionManagerTest {
         tx22.setCurrency(Transaction.Currency.CNY);
         tx22.setTimestamp(LocalDateTime.of(2025, 2, 6, 10, 30));
         txManager.add(tx22, "Education");
+        tx22.setLocation("China, Beijing");
 
         Transaction tx23 = new Transaction();
         tx23.setUsername("TestUser");
@@ -619,6 +642,7 @@ class TransactionManagerTest {
         tx23.setCurrency(Transaction.Currency.CNY);
         tx23.setTimestamp(LocalDateTime.of(2025, 2, 8, 8, 45));
         txManager.add(tx23, "Cater");
+        tx23.setLocation("China, Beijing");
 
         Transaction tx24 = new Transaction();
         tx24.setUsername("TestUser");
@@ -627,6 +651,7 @@ class TransactionManagerTest {
         tx24.setCurrency(Transaction.Currency.CNY);
         tx24.setTimestamp(LocalDateTime.of(2025, 2, 10, 15, 20));
         txManager.add(tx24, "Transfer");
+        tx24.setLocation("China, Beijing");
 
         Transaction tx25 = new Transaction();
         tx25.setUsername("TestUser");
@@ -635,6 +660,7 @@ class TransactionManagerTest {
         tx25.setCurrency(Transaction.Currency.CNY);
         tx25.setTimestamp(LocalDateTime.of(2025, 2, 12, 7, 55));
         txManager.add(tx25, "Transportation");
+        tx25.setLocation("China, Beijing");
 
         Transaction tx26 = new Transaction();
         tx26.setUsername("TestUser");
@@ -643,6 +669,7 @@ class TransactionManagerTest {
         tx26.setCurrency(Transaction.Currency.CNY);
         tx26.setTimestamp(LocalDateTime.of(2025, 2, 15, 9, 0));
         txManager.add(tx26, "Salary");
+        tx26.setLocation("China, Beijing");
 
         Transaction tx27 = new Transaction();
         tx27.setUsername("TestUser");
@@ -651,6 +678,7 @@ class TransactionManagerTest {
         tx27.setCurrency(Transaction.Currency.CNY);
         tx27.setTimestamp(LocalDateTime.of(2025, 2, 18, 14, 0));
         txManager.add(tx27, "Shopping");
+        tx27.setLocation("China, Beijing");
 
         Transaction tx28 = new Transaction();
         tx28.setUsername("TestUser");
@@ -659,6 +687,7 @@ class TransactionManagerTest {
         tx28.setCurrency(Transaction.Currency.CNY);
         tx28.setTimestamp(LocalDateTime.of(2025, 2, 20, 10, 0));
         txManager.add(tx28, "Rent");
+        tx28.setLocation("China, Beijing");
 
         Transaction tx29 = new Transaction();
         tx29.setUsername("TestUser");
@@ -667,6 +696,7 @@ class TransactionManagerTest {
         tx29.setCurrency(Transaction.Currency.CNY);
         tx29.setTimestamp(LocalDateTime.of(2025, 2, 25, 16, 30));
         txManager.add(tx29, "Investment");
+        tx29.setLocation("Hong Kong, Hong Kong");
 
         Transaction tx30 = new Transaction();
         tx30.setUsername("TestUser");
@@ -674,6 +704,7 @@ class TransactionManagerTest {
         tx30.setAmount(new BigDecimal("-80.00"));
         tx30.setCurrency(Transaction.Currency.CNY);
         tx30.setTimestamp(LocalDateTime.of(2025, 3, 2, 12, 15));
+        tx30.setLocation("China, Beijing");
         txManager.add(tx30, "Other");
     }
 }
