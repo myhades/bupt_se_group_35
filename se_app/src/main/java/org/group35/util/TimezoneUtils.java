@@ -30,7 +30,7 @@ public class TimezoneUtils {
         return getCurrentTimeByZone(timeZoneId);
     }
 
-    private static double[] getCoordinates(String location) throws IOException {
+    public static double[] getCoordinates(String location) throws IOException {
         HttpUrl url = HttpUrl.parse(GEONAMES_SEARCH_URL).newBuilder()
                 .addQueryParameter("q", location)
                 .addQueryParameter("maxRows", "1")    // 限制返回1条结果
@@ -61,7 +61,7 @@ public class TimezoneUtils {
         }
     }
 
-    private static String getTimeZoneId(double lat, double lng) throws IOException {
+    public static String getTimeZoneId(double lat, double lng) throws IOException {
         HttpUrl url = HttpUrl.parse(GEONAMES_TIMEZONE_URL).newBuilder()
                 .addQueryParameter("lat", String.valueOf(lat))
                 .addQueryParameter("lng", String.valueOf(lng))
@@ -86,12 +86,12 @@ public class TimezoneUtils {
         }
     }
 
-    private static String getCurrentTimeByZone(String timeZoneId) {
+    public static String getCurrentTimeByZone(String timeZoneId) {
         ZoneId zoneId = ZoneId.of(timeZoneId);
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         return zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
-    private static LocalDateTime getFormattedCurrentTimeByZone(String timeZoneId) {
+    public static LocalDateTime getFormattedCurrentTimeByZone(String timeZoneId) {
         ZoneId zoneId = ZoneId.of(timeZoneId);
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         return zonedDateTime.toLocalDateTime();

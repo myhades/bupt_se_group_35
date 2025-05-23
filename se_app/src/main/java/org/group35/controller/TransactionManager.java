@@ -154,22 +154,42 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * sort by name
+     * @param ascending = true sort by ascending，= false sort by descending
+     */
+    public List<Transaction> sortByName(boolean ascending) {
+        Comparator<Transaction> comparator = Comparator.comparing(Transaction::getName);
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+        return transactions.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {
+        // 求求你们不要覆盖传进来的已经构造好了的tx，要自动填充自己加个overload方法吧
 //        tx.setTimestamp(LocalDateTime.now());
-        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
-        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
-        Instant instant = Instant.now();
-        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
-//        try{
-//            tx.setTimestamp(TimezoneUtils.getLocalTime(currentUser.getTimezone()); //TODO
-//        }
-//        catch (IOException e){
-//            LogUtils.error("Failed to set timestamp for transaction: " + tx.getId());
-//        }
+//        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+//        ZoneId zoneId = ZoneId.of(currentUser.getTimezone());
+//        Instant instant = Instant.now();
+//        tx.setTimestamp(LocalDateTime.ofInstant(instant, zoneId));
+//        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone()));
+//        tx.setCategory(currentUser.getCategory().get(0));
         transactions.add(tx);
-        LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
         save();
+        LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
+    }
+
+    public void add(Transaction tx, String category) {
+        User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
+        tx.setCategory(currentUser.getCategory().contains(category) ? category : null);
+        tx.setTimestamp(TimezoneUtils.getFormattedCurrentTimeByZone(currentUser.getTimezone())); //TODO
+        transactions.add(tx);
+        save();
+        LogUtils.info("Adding new transaction for user " + tx.getUsername() + ": " + tx.getName() + " (" + tx.getAmount() + ")");
     }
 
     /** Updates an existing transaction by ID. */
