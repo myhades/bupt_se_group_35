@@ -1,6 +1,8 @@
 package org.group35.service;
 
 import okhttp3.*;
+import org.group35.controller.TransactionManager;
+import org.group35.model.Transaction;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -8,14 +10,17 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class AIAssistant {
     private static final String API_URL = "https://api.deepseek.com/chat/completions";  // DeepSeek API URL
     private static final String API_TOKEN = "sk-8c5a64ad52574f3e93a27b2d97055aab";  // DeepSeek API token
 
+    private static final AtomicBoolean doneFlag = new AtomicBoolean(false);
     private static OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -24,7 +29,10 @@ public class AIAssistant {
     public AIAssistant(){
 
     }
-
+    public interface RecognitionCallback {
+        void onSuccess(String content);
+        void onFailure(Throwable e);
+    }
     private static String buildSavingExpensesSuggestionPrompt( BigDecimal goal, String usrContent){
         //TODO: Customized user input
         String prompt = "Smart Financial Assistant for customizing users' suggestions.\\n" +
@@ -100,8 +108,7 @@ public class AIAssistant {
         return prompt;
     }
 
-    private static CompletableFuture<String> DeepSeekCalling(String prompts) throws IOException {
-        CompletableFuture<String> future = new CompletableFuture<>();
+    private static void DeepSeekCalling(String prompts, RecognitionCallback callback) throws IOException {
         // 修正JSON格式，特别是转义字符
         String requestBodyString = "{\n" +
                 "  \"messages\": [\n" +
@@ -148,123 +155,101 @@ public class AIAssistant {
         // new
         client.newCall(request).enqueue(new Callback() {
             @Override public void onFailure(Call call, IOException e) {
-                LogUtils.error("DeepSeek API call failed: " + e.getMessage());
-                future.completeExceptionally(e);
+                LogUtils.error("API calling error:" + e.getMessage());
+                callback.onFailure(e);
+                doneFlag.set(true);
             }
 
-            @Override public void onResponse(Call call, Response response) throws IOException {
-                try (ResponseBody rb = response.body()) {
-                    if (!response.isSuccessful() || rb == null) {
-                        String msg = "DeepSeek API returned " + response.code();
-                        LogUtils.warn(msg);
-                        future.completeExceptionally(new IOException(msg));
+            @Override
+            public void onResponse(Call call, Response response) {
+                try (ResponseBody respBody = response.body()) {
+                    if (!response.isSuccessful()) {
+                        String msg = respBody != null ? respBody.string() : "empty body";
+                        IOException err = new IOException("HTTP " + response.code() + ": " + msg);
+                        LogUtils.warn("Transcription failed: " + err.getMessage());
+                        callback.onFailure(err);
                         return;
                     }
-                    String resp = rb.string();
-                    JSONObject json = new JSONObject(resp);
+                    String text = respBody.string();
+                    JSONObject json = new JSONObject(text);
                     JSONArray choices = json.getJSONArray("choices");
                     String content = choices
                             .getJSONObject(0)
                             .getJSONObject("message")
                             .getString("content");
-                    future.complete(content);
+
+                    callback.onSuccess(content);
+                } catch (Exception ex) {
+                    LogUtils.error("处理响应时出错" + ex.getMessage());
+                    callback.onFailure(ex);
+                }finally {
+                    doneFlag.set(true);
                 }
             }
         });
 
-        return future;
-//        // 发送请求并获取响应
-//        ResponseBody responseBody = null;
-//        try {
-//            Response response = client.newCall(request).execute();
-//            responseBody = response.body();
-//
-//            if (response.isSuccessful()) {
-//                LogUtils.info("Request successfully, status code: " + response.code());
-//                // 打印成功响应内容
-//                String responses = responseBody.string();
-//                LogUtils.debug(responses);
-//                JSONObject responseJson = new JSONObject(responses);
-//                JSONArray choices = responseJson.getJSONArray("choices");
-//                JSONObject message = choices.getJSONObject(0).getJSONObject("message");
-//                String content = message.getString("content");
-//                LogUtils.debug("Response: " + content);
-//                return content;
-//            } else {
-//                // 打印失败的响应状态码及响应内容
-//                LogUtils.warn("Request failed, status code: " + response.code());
-//                if (responseBody != null) {
-//                    LogUtils.debug("Response body: " + responseBody.string());
-//                }
-//
-//                return "";
-//            }
-//        } catch (IOException e) {
-//            LogUtils.error(e.getMessage());
-//            //e.printStackTrace();
-//
-//            return "";
-//        } finally {
-//            if (responseBody != null) {
-//                responseBody.close();
-//            }
-//        }
     }
     //api
-    public static CompletableFuture<String> AISuggestion(BigDecimal userSavingGoal, String stringContent) {
-        try{
-            CompletableFuture<String> response = DeepSeekCalling(buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent));
-            // LogUtils.debug(response);
-            return response;
-        } catch (IOException e) {
-            LogUtils.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-    public static CompletableFuture<String> AISummary(String stringContent) {
-        try{
-            CompletableFuture<String> response = DeepSeekCalling(buildAISummaryPrompt(stringContent));
-            // LogUtils.debug(response);
-            return response;
-        } catch (IOException e) {
-            LogUtils.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-    public static CompletableFuture<String> AIRecommendation(String location, String stringContent) throws IOException {
-        String localTime = TimezoneUtils.getLocalTime(location);
-        try{
-            CompletableFuture<String> response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
-            // LogUtils.debug(response);
-            return response;
-        } catch (IOException e) {
-            LogUtils.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
+//    public static CompletableFuture<String> AISuggestion(BigDecimal userSavingGoal, String stringContent) {
+//        CompletableFuture<String> reponse = new CompletableFuture<>();
+//        try{
+//            String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);
+//            response = DeepSeekCalling();
+//            // LogUtils.debug(response);
+//            return response;
+//        } catch (IOException e) {
+//            LogUtils.error(e.getMessage());
+//            throw new RuntimeException(e);
+//        }
+//    }
+//    public static CompletableFuture<String> AISummary(String stringContent) {
+//        try{
+//            CompletableFuture<String> response = DeepSeekCalling(buildAISummaryPrompt(stringContent));
+//            // LogUtils.debug(response);
+//            return response;
+//        } catch (IOException e) {
+//            LogUtils.error(e.getMessage());
+//            throw new RuntimeException(e);
+//        }
+//    }
+//    public static CompletableFuture<String> AIRecommendation(String location, String stringContent) throws IOException {
+//        String localTime = TimezoneUtils.getLocalTime(location);
+//        try{
+//            CompletableFuture<String> response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
+//            // LogUtils.debug(response);
+//            return response;
+//        } catch (IOException e) {
+//            LogUtils.error(e.getMessage());
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 
     public static void main(String[] args) throws IOException {
         //api using example
 //        User usr = UserManager.getCurrentUser();
 //        BigDecimal budget = usr.getMonthlyBudget();
-        BigDecimal budget = BigDecimal.valueOf(5000);
-        String location = "Tokyo, Japan";
-        //String stringContent = TransactionUtils.transferTransaction();
-        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
-                "2025-04-03,expense,1000,food\\n" +
-                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
 
-        CompletableFuture<String> suggFuture = AISuggestion(budget, stringContent);
-        CompletableFuture<String> summFuture = AISummary(stringContent);
-        CompletableFuture<String> recFuture = AIRecommendation(location, stringContent);
 
-        // Wait for all futures to complete (for demonstration)
-        CompletableFuture.allOf(suggFuture, summFuture, recFuture).join();
 
-        LogUtils.info(suggFuture.join());
-        LogUtils.info(summFuture.join());
-        LogUtils.info(recFuture.join());
+
+//        BigDecimal budget = BigDecimal.valueOf(5000);
+//        String location = "Tokyo, Japan";
+//        //String stringContent = TransactionUtils.transferTransaction();
+//        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
+//                "2025-04-03,expense,1000,food\\n" +
+//                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
+//
+//        CompletableFuture<String> suggFuture = AISuggestion(budget, stringContent);
+//        CompletableFuture<String> summFuture = AISummary(stringContent);
+//        CompletableFuture<String> recFuture = AIRecommendation(location, stringContent);
+//
+//        // Wait for all futures to complete (for demonstration)
+//        CompletableFuture.allOf(suggFuture, summFuture, recFuture).join();
+//
+//        LogUtils.info(suggFuture.join());
+//        LogUtils.info(summFuture.join());
+//        LogUtils.info(recFuture.join());
 
     }
 }
