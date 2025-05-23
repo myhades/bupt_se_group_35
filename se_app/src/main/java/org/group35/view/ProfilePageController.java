@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
@@ -59,13 +60,13 @@ public class ProfilePageController implements Initializable {
 
     @FXML private ImageView avatarImage;
     @FXML final Image defaultAvatar = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/group35/view/assets/images/default_avatar.png")));
-    @FXML private TextField nameField;
     @FXML private TextField passwordField;
     @FXML private ComboBox<String> TimezoneField;
     @FXML private TextField LocationField;
     @FXML private ComboBox<String> categoryBox;
+    private TextField categoryInputField;
 
-    private Boolean isWarning;
+    private boolean isAddingCategory = false;
 
     private UserManager uManager;
     private String currentname;
@@ -117,6 +118,22 @@ public class ProfilePageController implements Initializable {
     private void setCategoryBox() {
         List<String> categories = uManager.getCategory();
         categoryBox.setItems(FXCollections.observableArrayList(categories));
+
+        // 初始化输入框但不显示
+        categoryInputField = new TextField();
+        categoryInputField.setPromptText("Enter new category");
+        categoryInputField.getStyleClass().add("input-field"); // 保持样式一致
+        categoryInputField.setVisible(false);
+
+        // 监听回车确认
+        categoryInputField.setOnAction(this::confirmAddCategory);
+
+        // 监听失去焦点事件，自动恢复 categoryBox
+        categoryInputField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal && isAddingCategory) { // 失去焦点且处于添加模式
+                revertToCategoryBox();
+            }
+        });
     }
 
 
@@ -141,7 +158,7 @@ public class ProfilePageController implements Initializable {
     private void handleSelectAvatar(MouseEvent event) {
         Window win = categoryBox.getScene().getWindow();
         try{
-            String selectedBase64 = ImageUtils.chooseAndProcessImage(win, 256);
+            String selectedBase64 = ImageUtils.chooseAndProcessImage(win, 128);
             Image selectedImage = ImageUtils.fromBase64(selectedBase64);
             if (selectedImage != null) {  // only update when a pic actually selected
                 avatarImage.setImage(selectedImage);
@@ -199,6 +216,11 @@ public class ProfilePageController implements Initializable {
     @FXML
     private void handleCancel(ActionEvent event) {
         //TODO: clear all textfiled
+        revertToCategoryBox();
+        categoryBox.setValue(categoryBox.getItems().get(0));
+        TimezoneField.setValue(uManager.getTimezone());
+        LocationField.setPromptText(uManager.getLocation(currentname));
+
     }
 
 
@@ -209,30 +231,62 @@ public class ProfilePageController implements Initializable {
 
     @FXML
     private void addCategory(ActionEvent event) {
-        // 实现添加分类的逻辑
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Add Category");
-        dialog.setHeaderText("Enter new category name");
-        dialog.setContentText("Category:");
+        if (!isAddingCategory) {
+            // 切换到输入模式
+            isAddingCategory = true;
+            categoryBox.setVisible(false);
+            categoryInputField.setVisible(true);
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(category -> {
-            if (!category.isEmpty()) {
-                categoryBox.getItems().add(category);
-                categoryBox.getSelectionModel().select(category);
-            }
-        });
+            // 将输入框添加到原categoryBox的位置
+            StackPane parent = (StackPane) categoryBox.getParent().getParent();
+            parent.getChildren().add(categoryInputField);
+            // 自动获取焦点
+            Platform.runLater(() -> categoryInputField.requestFocus());
+
+        }
+    }
+
+    private void confirmAddCategory(ActionEvent event) {
+        String newCategory = categoryInputField.getText().trim();
+        if (uManager.addCategory(newCategory)){
+            categoryBox.getItems().add(newCategory);
+            categoryBox.getSelectionModel().select(newCategory);
+            LogUtils.info("Add newCategory: " + newCategory);
+        }
+        else {
+            showError("Existing Category or Empty");
+            LogUtils.error("Add newCategory failed: " + newCategory);
+        }
+
+        // 恢复原状
+        revertToCategoryBox();
     }
 
     @FXML
     private void removeCategory(ActionEvent event) {
-        // 实现删除分类的逻辑
+        if (isAddingCategory) {
+            // 如果在添加模式下点击删除按钮，则取消添加
+            revertToCategoryBox();
+            return;
+        }
+
         String selected = categoryBox.getSelectionModel().getSelectedItem();
         if (selected != null) {
             categoryBox.getItems().remove(selected);
+            uManager.removeCategory(selected);
         } else {
-            // 可以显示警告信息
-            showError("Please select a category to remove");
+            warningLabel.setText("Please select a category to remove");
+            warningLabel.setVisible(true);
         }
+    }
+
+    private void revertToCategoryBox() {
+        isAddingCategory = false;
+        categoryInputField.setVisible(false);
+        categoryBox.setVisible(true);
+
+        // 移除输入框
+        StackPane parent = (StackPane) categoryBox.getParent().getParent();
+        parent.getChildren().remove(categoryInputField);
     }
 }
