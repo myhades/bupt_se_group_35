@@ -2,8 +2,6 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.controller.TransactionManager;
-import org.group35.model.Transaction;
-import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -11,10 +9,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;

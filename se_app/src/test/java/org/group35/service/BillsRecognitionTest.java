@@ -9,14 +9,8 @@ import org.group35.util.LogUtils;
 import org.group35.model.Transaction;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BillsRecognitionTest {
 
@@ -50,7 +44,7 @@ class BillsRecognitionTest {
 
 
             // Call image recognition asynchronously
-            CompletableFuture<Transaction> futureTransaction = BillsRecognition.imageRecognitionAsyn(base64Image);
+            CompletableFuture<Transaction> futureTransaction = BillsRecognition.imageRecognitionAsync(base64Image);
 
             // Wait for result
             futureTransaction.thenAccept(transaction -> {
