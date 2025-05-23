@@ -7,6 +7,7 @@ import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.ImageUtils;
 import org.group35.util.LogUtils;
+import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -44,7 +45,8 @@ public class BillsRecognition {
         String promptText = "Please analyze the image containing bill details and generate a JSON-formatted output. Each entry in the JSON should include the following fields: name, amount, date, location, category\n" +
                 "\n" +
                 "If the bill does not contain information, this field can be left empty. But category cannot be empty\n" +
-                "Name is merchant(supplier) name\nAmount is the amount of income or expenditure. The amount is positive means income and negtive means expense\n" +
+                "Name is merchant(supplier) name\n" +
+                "Amount is the amount of income or expenditure. The amount is positive means income and negtive means expense\n" +
                 "Time indicate the time described by the user. Time must conform the LocalDateTime format \nlocation indicate the location described by the user\n" +
                 "The category must be one of the following categories. Please select the most suitable category (if it does not match any of these declared categories, set it as the \"other\" category).The categories are"+ categories +"\n" +
                 "Output the result as a JSON structure that can be directly saved to a file. Ensure the output strictly follows this JSON format:\n" +
@@ -65,12 +67,16 @@ public class BillsRecognition {
 
         //TODO: Customized user input
         // 文本参数
+        User user = ApplicationRuntime.getInstance().getCurrentUser();
+        String time = TimezoneUtils.getCurrentTimeByZone(user.getTimezone());
         String promptText = "Please analyze the text containing bill details and generate a JSON-formatted output. Each entry in the JSON should include the following fields: name, amount, date, location, category\n" +
                 "\n" +
                 "The bill content is:" + content + "\n" +
                 "If the bill does not contain information, this field can be left empty. But category cannot be empty\n" +
-                "Name is merchant(supplier) name\nAmount is the amount of income or expenditure. The amount is positive means income and negtive means expense\n" +
-                "Time indicate the time described by the user. Time must conform the LocalDateTime format \nlocation indicate the location described by the user\n" +
+                "name is merchant(supplier) name\n" +
+                "amount is the amount of income or expenditure. The amount is positive means income and negtive means expense. Please convert the currency amount to the default US dollar unit according to the text description\n" +
+                "time indicate the time described by the user. time must conform the LocalDateTime format. If the time provided by the user is not a specific time but an adverb of time, then infer based on the current time("+ time +") to obtain the most accurate time possible. The number of time digits that cannot be inferred is replaced by 0.\n" +
+                "location indicate the location described by the user\n" +
                 "The category must be one of the following categories. Please select the most suitable category (if it does not match any of these declared categories, set it as the \"other\" category).The categories are"+ categories +"\n" +
                 "Output the result as a JSON structure that can be directly saved to a file. Ensure the output strictly follows this JSON format:\n" +
                 "[\n" +

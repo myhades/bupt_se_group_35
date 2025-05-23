@@ -12,10 +12,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -510,7 +508,7 @@ public class TransactionManager {
      *
      * @return List of Transaction objects associated with the current user.
      */
-    public static List<Transaction> getTransaction() {
+    public static List<Transaction> getByCurrentUser() {
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
         TransactionManager txManager = runtime.getTranscationManager();
         return txManager.getByUser(runtime.getCurrentUser().getUsername());
@@ -566,7 +564,7 @@ public class TransactionManager {
      * @return A JSON-like string representing all transactions.
      */
     public static String transferTransaction() {
-        List<Transaction> transactions = getTransaction();
+        List<Transaction> transactions = getByCurrentUser();
         StringBuilder result = new StringBuilder();
         result.append("["); // Start of JSON array
 
