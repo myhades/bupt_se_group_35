@@ -2,6 +2,7 @@ package org.group35.service;
 
 import okhttp3.*;
 import org.group35.controller.TransactionManager;
+import org.group35.controller.UserManager;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -188,9 +189,11 @@ public class AIAssistant {
 
     }
     //api
-    public static CompletableFuture<String> AISuggestionAsync(BigDecimal userSavingGoal, String stringContent) {
+    public static CompletableFuture<String> AISuggestionAsync() {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
+            BigDecimal userSavingGoal = UserManager.getMonthlyBudget();
+            String stringContent = TransactionManager.transferTransaction();
             String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);
             DeepSeekCalling(prompt, new RecognitionCallback() {
                 @Override
@@ -236,10 +239,12 @@ public class AIAssistant {
         }
         return response;
     }
-    public static CompletableFuture<String> AIRecommendationAsync(String location, String stringContent) throws IOException {
+    public static CompletableFuture<String> AIRecommendationAsync() throws IOException {
         CompletableFuture<String> response = new CompletableFuture<>();
         try{
+            String location = UserManager.getLocation();
             String localTime = TimezoneUtils.getLocalTime(location);
+            String stringContent = TransactionManager.transferTransaction();
             String prompt = buildAIRecommendationPrompt(location, localTime, stringContent);
             DeepSeekCalling(prompt, new RecognitionCallback() {
                 @Override

@@ -1,14 +1,17 @@
 package org.group35.util;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import javax.imageio.ImageIO;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -16,6 +19,51 @@ import net.coobird.thumbnailator.Thumbnails;
  * Utility methods for loading, compressing, and converting images.
  */
 public class ImageUtils {
+
+    /**
+     * Opens a PNG file picker, crops to center square, resizes to the given dimension,
+     * and returns the Base64-encoded string of the processed image.
+     *
+     * @param owner     the JavaFX Window owning the file dialog
+     * @param dimension the target width and height in pixels (e.g. 256)
+     * @return a Base64 string of the processed PNG image, or null if cancelled
+     * @throws IOException if reading or processing fails
+     */
+    public static String chooseAndProcessImage(Window owner, int dimension) throws IOException {
+        File file = FileUtils.chooseFile(
+                owner,
+                "Select PNG Image",
+                null,
+                List.of(new FileChooser.ExtensionFilter("PNG Images", "*.png"))
+        );
+        if (file == null) {
+            return null;
+        }
+        // Crop, resize, and get raw bytes
+        byte[] processed = ImageUtils.loadAndResizeImage(file.getAbsolutePath(), dimension);
+        // Encode to Base64
+        return ImageUtils.toBase64(processed);
+    }
+
+    /**
+     * Loads an image from disk, center-crops it to a square, resizes to [dimension]×[dimension],
+     * outputs as PNG, and returns the raw bytes.
+     */
+    public static byte[] loadAndResizeImage(String path, int dimension) throws IOException {
+        BufferedImage img = ImageIO.read(new File(path));
+        int w = img.getWidth(), h = img.getHeight();
+        int side = Math.min(w, h);
+        int x = (w - side) / 2, y = (h - side) / 2;
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Thumbnails.of(img)
+                .sourceRegion(x, y, side, side)
+                .size(dimension, dimension)
+                .outputFormat("png")
+                .toOutputStream(out);
+
+        return out.toByteArray();
+    }
 
     /**
      * Loads an image from disk, center‑crops it to a square, resizes to 1024×1024,
