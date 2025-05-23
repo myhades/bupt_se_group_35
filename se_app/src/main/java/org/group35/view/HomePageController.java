@@ -234,9 +234,7 @@ public class HomePageController implements Initializable {
      * Applies dynamic coloring to the pie chart based on category's first letter.
      */
     public void applyCategoryBasedColoring() {
-        double innerRadiusPercent = 0.4;
-        categoryPieChart.setLegendVisible(false);
-        categoryPieChart.setStyle("-fx-pie-chart-inner-radius: " + innerRadiusPercent + ";");
+
 
         categoryPieChart.getData().forEach(data -> {
             String categoryName = data.getName();

@@ -317,6 +317,34 @@ public class TransactionManager {
                 .orElse(null);
     }
 
+    public List<Transaction> getIncome() {
+        LogUtils.trace("Filtering transactions for income");
+        return transactions.stream()
+                .filter(tx -> tx.getAmount().compareTo(BigDecimal.ZERO) > 0)
+                .collect(Collectors.toList());
+    }
+
+    public List<Transaction> getExpense() {
+        LogUtils.trace("Filtering transactions for expense");
+        return transactions.stream()
+                .filter(tx -> tx.getAmount().compareTo(BigDecimal.ZERO) < 0)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Transaction> getIncome(List<Transaction> transactions) {
+        LogUtils.trace("Filtering transactions for income");
+        return transactions.stream()
+                .filter(tx -> tx.getAmount().compareTo(BigDecimal.ZERO) > 0)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Transaction> getExpense(List<Transaction> transactions) {
+        LogUtils.trace("Filtering transactions for expense");
+        return transactions.stream()
+                .filter(tx -> tx.getAmount().compareTo(BigDecimal.ZERO) < 0)
+                .collect(Collectors.toList());
+    }
+
     /** Sets the username of the transaction with the given ID. */
     public void setTxUsername(String id, String username) {
         LogUtils.debug("Setting username for transaction: " + id);

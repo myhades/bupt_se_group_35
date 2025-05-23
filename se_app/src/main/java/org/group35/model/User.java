@@ -93,6 +93,7 @@ public class User {
         addCategory("Transfer");
         addCategory("Investment");
         addCategory("Other");
+        addCategory("Unclassified");
     }
 
     public String getUsername() {
