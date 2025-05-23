@@ -156,6 +156,26 @@ public class AudioRecognition {
         return null; // 如果无法通过扩展名确定
     }
 
+    public static CompletableFuture<String> transcribeAsync(byte[] audioBytes) {
+        CompletableFuture<String> cf = new CompletableFuture<>();
+        try {
+            transcribeAudio(audioBytes, new TranscriptionCallback() {
+                @Override
+                public void onSuccess(String transcription) {
+                    cf.complete(transcription);
+                }
+                @Override
+                public void onFailure(Throwable error) {
+                    cf.completeExceptionally(error);
+                }
+            });
+        } catch (IOException e) {
+            cf.completeExceptionally(e);
+        }
+        return cf;
+    }
+
+
     public static void main(String[] args) {
         try {
             // 模拟输入（byte[] 类型）
