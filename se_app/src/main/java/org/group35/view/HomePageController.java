@@ -69,7 +69,7 @@ public class HomePageController implements Initializable {
     @FXML
     private void onToggleIncomeExpense(ActionEvent event) {
         showIncome = !showIncome;
-        toggleIncomeExpenseBtn.setText((showIncome ? " Income" : "Expense"));
+        toggleIncomeExpenseBtn.setText((showIncome ? "Income " : "Expense"));
 
 //        String currentUser = ApplicationRuntime.getInstance().getCurrentUser().getUsername();
         List<Transaction> transactions = txManager.getByUser(currentUser.getUsername());
