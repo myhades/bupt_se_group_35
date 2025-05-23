@@ -12,12 +12,18 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CompletableFuture;
 
 
 public class AIAssistant {
     private static final String API_URL = "https://api.deepseek.com/chat/completions";  // DeepSeek API URL
     private static final String API_TOKEN = "sk-8c5a64ad52574f3e93a27b2d97055aab";  // DeepSeek API token
 
+    private static OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build();
     public AIAssistant(){
 
     }
@@ -97,7 +103,8 @@ public class AIAssistant {
         return prompt;
     }
 
-    private static String DeepSeekCalling(String prompts) throws IOException {
+    private static CompletableFuture<String> DeepSeekCalling(String prompts) throws IOException {
+        CompletableFuture<String> future = new CompletableFuture<>();
         // 修正JSON格式，特别是转义字符
         String requestBodyString = "{\n" +
                 "  \"messages\": [\n" +
@@ -131,12 +138,6 @@ public class AIAssistant {
         // 打印请求体以调试
         LogUtils.debug("Request Body: \n" + requestBodyString);
 
-        // 创建 OkHttpClient
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)  // 设置连接超时为30秒
-                .readTimeout(60, TimeUnit.SECONDS)     // 设置读取超时为30秒
-                .writeTimeout(60, TimeUnit.SECONDS)    // 设置写入超时为30秒
-                .build();
         MediaType mediaType = MediaType.get("application/json");
         RequestBody body = RequestBody.create(mediaType, requestBodyString);
 
@@ -147,70 +148,97 @@ public class AIAssistant {
                 .addHeader("Authorization", "Bearer " + API_TOKEN)
                 .post(body)
                 .build();
+        // new
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                LogUtils.error("DeepSeek API call failed: " + e.getMessage());
+                future.completeExceptionally(e);
+            }
 
-        // 发送请求并获取响应
-        ResponseBody responseBody = null;
-        try {
-            Response response = client.newCall(request).execute();
-            responseBody = response.body();
-
-            if (response.isSuccessful()) {
-                LogUtils.info("Request successfully, status code: " + response.code());
-                // 打印成功响应内容
-                String responses = responseBody.string();
-                LogUtils.debug(responses);
-                JSONObject responseJson = new JSONObject(responses);
-                JSONArray choices = responseJson.getJSONArray("choices");
-                JSONObject message = choices.getJSONObject(0).getJSONObject("message");
-                String content = message.getString("content");
-                LogUtils.debug("Response: " + content);
-                return content;
-            } else {
-                // 打印失败的响应状态码及响应内容
-                LogUtils.warn("Request failed, status code: " + response.code());
-                if (responseBody != null) {
-                    LogUtils.debug("Response body: " + responseBody.string());
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody rb = response.body()) {
+                    if (!response.isSuccessful() || rb == null) {
+                        String msg = "DeepSeek API returned " + response.code();
+                        LogUtils.warn(msg);
+                        future.completeExceptionally(new IOException(msg));
+                        return;
+                    }
+                    String resp = rb.string();
+                    JSONObject json = new JSONObject(resp);
+                    JSONArray choices = json.getJSONArray("choices");
+                    String content = choices
+                            .getJSONObject(0)
+                            .getJSONObject("message")
+                            .getString("content");
+                    future.complete(content);
                 }
-
-                return "";
             }
-        } catch (IOException e) {
-            LogUtils.error(e.getMessage());
-            //e.printStackTrace();
+        });
 
-            return "";
-        } finally {
-            if (responseBody != null) {
-                responseBody.close();
-            }
-        }
+        return future;
+//        // 发送请求并获取响应
+//        ResponseBody responseBody = null;
+//        try {
+//            Response response = client.newCall(request).execute();
+//            responseBody = response.body();
+//
+//            if (response.isSuccessful()) {
+//                LogUtils.info("Request successfully, status code: " + response.code());
+//                // 打印成功响应内容
+//                String responses = responseBody.string();
+//                LogUtils.debug(responses);
+//                JSONObject responseJson = new JSONObject(responses);
+//                JSONArray choices = responseJson.getJSONArray("choices");
+//                JSONObject message = choices.getJSONObject(0).getJSONObject("message");
+//                String content = message.getString("content");
+//                LogUtils.debug("Response: " + content);
+//                return content;
+//            } else {
+//                // 打印失败的响应状态码及响应内容
+//                LogUtils.warn("Request failed, status code: " + response.code());
+//                if (responseBody != null) {
+//                    LogUtils.debug("Response body: " + responseBody.string());
+//                }
+//
+//                return "";
+//            }
+//        } catch (IOException e) {
+//            LogUtils.error(e.getMessage());
+//            //e.printStackTrace();
+//
+//            return "";
+//        } finally {
+//            if (responseBody != null) {
+//                responseBody.close();
+//            }
+//        }
     }
     //api
-    public static String AISuggestion(BigDecimal userSavingGoal, String stringContent) {
+    public static CompletableFuture<String> AISuggestion(BigDecimal userSavingGoal, String stringContent) {
         try{
-            String response = DeepSeekCalling(buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent));
-            LogUtils.debug(response);
+            CompletableFuture<String> response = DeepSeekCalling(buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent));
+            // LogUtils.debug(response);
             return response;
         } catch (IOException e) {
             LogUtils.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
-    public static String AISummary(String stringContent) {
+    public static CompletableFuture<String> AISummary(String stringContent) {
         try{
-            String response = DeepSeekCalling(buildAISummaryPrompt(stringContent));
-            LogUtils.debug(response);
+            CompletableFuture<String> response = DeepSeekCalling(buildAISummaryPrompt(stringContent));
+            // LogUtils.debug(response);
             return response;
         } catch (IOException e) {
             LogUtils.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
-    public static String AIRecommendation(String location, String stringContent) throws IOException {
+    public static CompletableFuture<String> AIRecommendation(String location, String stringContent) throws IOException {
         String localTime = TimezoneUtils.getLocalTime(location);
         try{
-            String response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
-            LogUtils.debug(response);
+            CompletableFuture<String> response = DeepSeekCalling(buildAIRecommendationPrompt(location, localTime, stringContent));
+            // LogUtils.debug(response);
             return response;
         } catch (IOException e) {
             LogUtils.error(e.getMessage());
@@ -221,22 +249,25 @@ public class AIAssistant {
 
     public static void main(String[] args) throws IOException {
         //api using example
-        User usr = UserManager.getCurrentUser();
-        BigDecimal budget = usr.getMonthlyBudget();
+//        User usr = UserManager.getCurrentUser();
+//        BigDecimal budget = usr.getMonthlyBudget();
+        BigDecimal budget = BigDecimal.valueOf(5000);
         String location = "Tokyo, Japan";
-        String stringContent = TransactionUtils.transferTransaction();
-//        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
-//                "2025-04-03,expense,1000,food\\n" +
-//                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
+        //String stringContent = TransactionUtils.transferTransaction();
+        String stringContent = "2025-04-01,expense,10000,Supermarket\\n" +
+                "2025-04-03,expense,1000,food\\n" +
+                "2025-04-05,expense,3000,Utilities\\n"; // data in any format
 
-        String sugg = AISuggestion(budget, stringContent);
-        LogUtils.info(sugg);
+        CompletableFuture<String> suggFuture = AISuggestion(budget, stringContent);
+        CompletableFuture<String> summFuture = AISummary(stringContent);
+        CompletableFuture<String> recFuture = AIRecommendation(location, stringContent);
 
-        String summ = AISummary(stringContent);
-        LogUtils.info(summ);
+        // Wait for all futures to complete (for demonstration)
+        CompletableFuture.allOf(suggFuture, summFuture, recFuture).join();
 
-        String response = AIRecommendation(location, stringContent);
-        LogUtils.info(response);
+        LogUtils.info(suggFuture.join());
+        LogUtils.info(summFuture.join());
+        LogUtils.info(recFuture.join());
 
     }
 }
