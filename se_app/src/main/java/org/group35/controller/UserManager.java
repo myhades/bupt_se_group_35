@@ -268,9 +268,9 @@ public class UserManager {
     /**
      * Get the budget for a specific user.
      */
-    public BigDecimal getMonthlyBudget() {
+    public static BigDecimal getMonthlyBudget() {
         User user = ApplicationRuntime.getInstance().getCurrentUser();
-        return getMonthlyBudget(user.getUsername());
+        return user.getMonthlyBudget();
     }
 
     public void setLocation(String username, String location) {
@@ -300,7 +300,7 @@ public class UserManager {
         return "noplace"; //FIXME
     }
 
-    public String getLocation() {
+    public static String getLocation() {
         User user = ApplicationRuntime.getInstance().getCurrentUser();
         return user.getLocation();
     }
