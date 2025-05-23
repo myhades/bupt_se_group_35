@@ -118,3 +118,26 @@
 .settings-content {
     -fx-padding: 10px;
 }
+
+/* Title Row */
+.title-container{
+    -fx-alignment: center-left;
+    -fx-spacing: 25;
+    -fx-padding: 10 0 20 6;
+}
+.title-back-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+.title-text {
+    -fx-font-size: 40px;
+    -fx-font-family: "Articulat CF Demi Bold";
+}
+.title-dot {
+    -fx-font-size: 20px;
+    -fx-text-fill: #215F9A;
+}
+.title-back-icon{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
