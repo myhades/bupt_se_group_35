@@ -105,9 +105,9 @@
     -fx-stroke-width: 6;
     -fx-fill: transparent;
     -fx-stroke-line-cap: round;
-    -fx-scale-x: 0.8;
-    -fx-scale-y: 0.8;
-    -fx-translate-x: 28px;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+    -fx-translate-x: 24px;
 }
 
 /* Input */

@@ -28,7 +28,6 @@ public final class ApplicationRuntime {
         SPENDING("/org/group35/view/SpendingPage.fxml"),
         PLAN("/org/group35/view/PlanPage.fxml"),
         MORE("/org/group35/view/MorePage.fxml"),
-        MANUAL_ENTRY("/org/group35/view/ManualEntryPage.fxml"),
         DESCRIBE("/org/group35/view/DescribePage.fxml"),
         RECOGNIZE_BILL("/org/group35/view/RecognizeBillPage.fxml"),
         IMPORT_CSV("/org/group35/view/ImportCSVPage.fxml"),
