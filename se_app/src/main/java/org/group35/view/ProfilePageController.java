@@ -65,20 +65,22 @@ public class ProfilePageController implements Initializable {
 
     private Boolean isWarning;
 
-    private User currentuser;
+    private UserManager uManager;
+    private String currentname;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-        this.currentuser = runtime.getCurrentUser();
+        this.uManager = runtime.getUserManager();
+        currentname = runtime.getCurrentUser().getUsername();
         Object fromPageObj = runtime.getNavParam("fromPage");
         Object fromStatusObj = runtime.getNavParam("fromStatus");
 
         setTimezones();
         setCategoryBox();
 
-        Image avatar = ImageUtils.fromBase64(currentuser.getAvatar());
+        Image avatar = ImageUtils.fromBase64(uManager.getUserAvatar(currentname));
         if (avatar != null) {
             avatarImage.setImage(avatar);
             double radius = avatarImage.getFitWidth() / 2.0;
@@ -119,7 +121,7 @@ public class ProfilePageController implements Initializable {
     }
 
     private void setCategoryBox() {
-        List<String> categories = currentuser.getCategory();
+        List<String> categories = uManager.getCategory();
         categoryBox.setItems(FXCollections.observableArrayList(categories));
     }
 
@@ -157,11 +159,11 @@ public class ProfilePageController implements Initializable {
                 double radius = avatarImage.getFitWidth() / 2.0;
                 Circle clip = new Circle(radius, radius, radius);
                 avatarImage.setClip(clip);
-                currentuser.setAvatar(selectedBase64);
+                uManager.setAvatar(selectedBase64);
+
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
             LogUtils.error("Invalid File");
             resetAvatarToDefault();
         }
@@ -188,7 +190,7 @@ public class ProfilePageController implements Initializable {
             showError("Password must be at least 8 characters and include letters and digit.");
             return;
         }
-        currentuser.setHashedPassword(PasswordUtils.hashPassword(initialPwd));
+        uManager.setHashedPassword(PasswordUtils.hashPassword(initialPwd));
 
 
         String category = categoryBox.getValue();
@@ -196,10 +198,10 @@ public class ProfilePageController implements Initializable {
         //TODO: store to User
 
         String timezone = TimezoneField.getValue();
-        currentuser.setTimezone(timezone);
+        uManager.setTimezone(timezone);
 
         String location = LocationField.getText().trim();
-        currentuser.setLocation(location);
+        uManager.setLocation(location);
 
         //TODO: add more validation
 
