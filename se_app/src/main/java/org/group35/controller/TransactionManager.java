@@ -491,9 +491,10 @@ public class TransactionManager {
             // 3. 提取各个字段
             String name     = bill.optString("name","");      // 商家/供应商名称
             String amount   = bill.optString("amount","");    // 金额（正为收入，负为支出）
+            if(amount == "") amount = "0";
             BigDecimal amounts = new BigDecimal(amount);
 
-            String timeStr     = bill.optString("time","");      // 时间
+            String timeStr     = bill.optString("time",null);      // 时间
             LocalDateTime time = null;
             DateTimeFormatter DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd['T'HH:mm[:ss]]");
             if (timeStr != null && !timeStr.isEmpty()) {
