@@ -13,6 +13,11 @@
 <?import javafx.geometry.Insets?>
 
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.Pane?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.group35.view.AIDialogController"
       stylesheets="@AIDialog.css"
@@ -36,12 +41,31 @@
         <!-- Left: Budget Info -->
         <VBox styleClass="chart-container" spacing="20" GridPane.columnIndex="0">
             <Label text="AI Suggestion" styleClass="chart-title"/>
-            <TextArea fx:id="aiSuggestionTextArea"
-                      prefRowCount="12"
-                      wrapText="true"
-                      editable="false"
-                      styleClass="ai-suggestion-area"
-                      promptText="Your personalized AI budget suggestions will appear here."/>
+            <StackPane alignment="CENTER">
+                <ScrollPane fx:id="aiSuggestionScrollPane"
+                            prefHeight="200"
+                            prefWidth="400"
+                            fitToWidth="true"
+                            styleClass="spending-scrollpane"
+                            style="-fx-background-color:transparent;">
+                    <content>
+                        <Label fx:id="aiSuggestionLabel"
+                               wrapText="true"
+                               styleClass="recommendation-text" />
+                    </content>
+                </ScrollPane>
+
+                <Pane mouseTransparent="true">
+                    <Arc fx:id="loadingArc"
+                         layoutX="140" layoutY="70"
+                    radiusX="20" radiusY="20"
+                    startAngle="0" length="270" type="OPEN"
+                    styleClass="loading-arc"/>
+                </Pane>
+
+            </StackPane>
+
+
         </VBox>
 
         <!-- Right: Recommendation and Local Info -->
