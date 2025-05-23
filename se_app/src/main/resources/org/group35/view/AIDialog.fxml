@@ -89,7 +89,7 @@
                 </columnConstraints>
 
                 <Label text="Time Zone" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label text="Asia/Shanghai" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+                <Label fx:id="timezoneLabel" text="Your Timezone" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
 
                 <Label text="Currency" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                 <Label fx:id="currencyLabel" text="RMB/Yuan" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
