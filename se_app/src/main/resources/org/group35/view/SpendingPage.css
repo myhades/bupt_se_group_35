@@ -161,12 +161,10 @@
     -fx-max-width: 600px;
     -fx-min-height: 200px;
     -fx-pref-height: -1;
-    -fx-max-height: infinity;
     -fx-fit-to-width: true;
     -fx-fit-to-height: true;
     -fx-pannable: true;
     -fx-hbar-policy: never;
-    -fx-vbar-policy: as-needed;
 }
 .spending-scrollpane > .viewport {
     -fx-background-color: transparent;
