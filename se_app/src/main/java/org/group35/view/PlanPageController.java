@@ -2,9 +2,11 @@ package org.group35.view;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -12,6 +14,7 @@ import javafx.scene.control.*;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
+import org.group35.service.LocalizationService;
 
 public class PlanPageController {
     @FXML
@@ -35,6 +38,16 @@ public class PlanPageController {
     @FXML
     private TextArea aiSuggestionTextArea;
 
+    // 新增：本地化信息的UI元素（需要在FXML中添加fx:id）
+    @FXML
+    private Label timezoneLabel;
+    @FXML
+    private Label currencyLabel;
+    @FXML
+    private Label exchangeRateLabel;
+    @FXML
+    private Label lastUpdatedLabel;
+
     public void initialize() {
         try {
             if (recommendationButton != null) {
@@ -43,14 +56,78 @@ public class PlanPageController {
             if (budgetPieChart != null) {
                 budgetPieChart.getStyleClass().add("pie-chart");
             }
+
             loadBudgetData();
             updateBudgetDisplay();
+
+            // 新增：加载本地化信息
+            loadLocalInfo();
+
             System.out.println("PlanPageController initialized successfully");
         } catch (Exception e) {
             System.err.println("Error in PlanPageController.initialize(): " + e.getMessage());
             e.printStackTrace();
         }
     }
+
+    /**
+     * 新增方法：加载本地化信息
+     */
+    private void loadLocalInfo() {
+        // 异步获取本地化信息，避免阻塞UI
+        LocalizationService.getCurrentLocalInfoAsync()
+                .thenAccept(localInfo -> {
+                    // 在JavaFX主线程中更新UI
+                    Platform.runLater(() -> updateLocalInfoDisplay(localInfo));
+                })
+                .exceptionally(throwable -> {
+                    System.err.println("Error loading local info: " + throwable.getMessage());
+                    // 使用默认信息
+                    Platform.runLater(() -> updateLocalInfoDisplay(LocalizationService.getCurrentLocalInfo()));
+                    return null;
+                });
+    }
+
+    /**
+     * 新增方法：更新本地化信息显示
+     */
+    private void updateLocalInfoDisplay(LocalizationService.LocalInfo localInfo) {
+        try {
+            if (timezoneLabel != null) {
+                timezoneLabel.setText(localInfo.getTimezone());
+            }
+
+            if (currencyLabel != null) {
+                String formattedCurrency = LocalizationService.formatCurrencyName(localInfo.getCurrency());
+                currencyLabel.setText(formattedCurrency);
+            }
+
+            if (exchangeRateLabel != null) {
+                exchangeRateLabel.setText(localInfo.getExchangeRate());
+            }
+
+            if (lastUpdatedLabel != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d HH:mm");
+                String updateTime = localInfo.getUpdateTime().format(formatter);
+                lastUpdatedLabel.setText("Last updated: " + updateTime);
+            }
+
+            System.out.println("Local info updated - Timezone: " + localInfo.getTimezone() +
+                    ", Currency: " + localInfo.getCurrency());
+        } catch (Exception e) {
+            System.err.println("Error updating local info display: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 新增方法：手动刷新本地化信息
+     */
+    @FXML
+    private void refreshLocalInfo() {
+        LocalizationService.refreshCache();
+        loadLocalInfo();
+    }
+
     public void setAISuggestion(String suggestion) {
         aiSuggestionTextArea.setText(suggestion);
     }
@@ -201,7 +278,7 @@ public class PlanPageController {
     }
 
     public double getUsedBudget() {
-      return calculateUsedBudget();
+        return calculateUsedBudget();
     }
 
     public double getTotalBudget() {

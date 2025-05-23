@@ -81,8 +81,21 @@
                 </graphic>
             </Button>
 
-            <Label text="Local" styleClass="chart-title" style="-fx-padding: 15 0 0 0;"/>
+            <!-- Local Info Section with Title and Refresh Button -->
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 15 0 0 0;">
+                <Label text="Local" styleClass="chart-title"/>
+                <Button fx:id="refreshLocalButton" onAction="#refreshLocalInfo"
+                        styleClass="refresh-button"
+                        style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-cursor: hand;">
+                    <graphic>
+                        <SVGPath content="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"
+                                 style="-fx-fill: #808080;"
+                                 scaleX="0.8" scaleY="0.8"/>
+                    </graphic>
+                </Button>
+            </HBox>
 
+            <!-- Local Info GridPane with Dynamic Labels -->
             <GridPane hgap="25" vgap="8">
                 <columnConstraints>
                     <ColumnConstraints prefWidth="95"/>
@@ -90,17 +103,15 @@
                 </columnConstraints>
 
                 <Label text="Time Zone" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label text="Asia/Shanghai" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
-
+                <Label fx:id="timezoneLabel" text="Your Timezone" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
                 <Label text="Currency" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <Label text="RMB/Yuan" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
-
+                <Label fx:id="currencyLabel" text="RMB/Yuan" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
                 <Label text="Ratio" styleClass="info-label-small" style="-fx-text-fill: #323232;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <Label text="7.29 per USD" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+                <Label fx:id="exchangeRateLabel" text="7.29 per USD" styleClass="info-label-small" alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
             </GridPane>
 
             <HBox alignment="CENTER_RIGHT">
-                <Label text="Last updated: 2025/3/18 21:14" styleClass="update-label" style="-fx-padding: 10 0 0 0;"/>
+                <Label fx:id="lastUpdatedLabel" text="Last updated: 2025/3/18 21:14" styleClass="update-label" style="-fx-padding: 10 0 0 0;"/>
             </HBox>
         </VBox>
 
