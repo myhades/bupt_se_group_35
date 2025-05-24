@@ -112,7 +112,7 @@
     -fx-background-radius: 20px;
     -fx-vgrow: always;
     -fx-alignment: center;
-    -fx-padding: 10px 25px;
+    -fx-padding: 20px 25px;
 }
 .input-field {
     -fx-background-color: #CCCCCC;
@@ -181,6 +181,9 @@
 /* Settings Container */
 .settings-container {
     -fx-spacing: 15;
+}
+.setting-section-title {
+    -fx-font-size: 14px;
 }
 
 /* 分类控制容器 */

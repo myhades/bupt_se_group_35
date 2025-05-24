@@ -44,6 +44,7 @@ public class SpendingPageController {
     @FXML private Button updateSummaryButton;
     @FXML private Label budgetLeftAmount;
     @FXML private Label summaryText;
+    @FXML private Label noEntryText;
     @FXML private Arc loadingArc;
 
     private enum SortType  { DATE, NAME, AMOUNT }
@@ -84,6 +85,20 @@ public class SpendingPageController {
     @FXML
     public void initialize() {
 
+        updateSummaryButton.managedProperty().bind(updateSummaryButton.visibleProperty());
+        summaryText.managedProperty().bind(summaryText.visibleProperty());
+        noEntryText.managedProperty().bind(noEntryText.visibleProperty());
+        loadingArc.managedProperty().bind(loadingArc.visibleProperty());
+
+        loadingArc.setRadiusX(24);
+        loadingArc.setRadiusY(24);
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), loadingArc);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+        rotateTransition.setInterpolator(Interpolator.LINEAR);
+        rotateTransition.play();
+        setProcessing("initial");
+
         sortControls = List.of(
                 new SortControl(SortType.DATE, sortDateButton,
                         "M20 17H23L19 21L15 17H18V3H20V17M8 5C4.14 5 1 8.13 1 12C1 15.87 4.13 19 8 19C11.86 19 15 15.87 15 12C15 8.13 11.87 5 8 5M8 7.15C10.67 7.15 12.85 9.32 12.85 12C12.85 14.68 10.68 16.85 8 16.85C5.32 16.85 3.15 14.68 3.15 12C3.15 9.32 5.32 7.15 8 7.15M7 9V12.69L10.19 14.53L10.94 13.23L8.5 11.82V9",
@@ -104,18 +119,6 @@ public class SpendingPageController {
         refreshList();
 
         this.setBudgetLeftAmount();
-
-        updateSummaryButton.managedProperty().bind(updateSummaryButton.visibleProperty());
-        summaryText.managedProperty().bind(summaryText.visibleProperty());
-        loadingArc.managedProperty().bind(loadingArc.visibleProperty());
-        loadingArc.setRadiusX(24);
-        loadingArc.setRadiusY(24);
-        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), loadingArc);
-        rotateTransition.setByAngle(360);
-        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
-        rotateTransition.setInterpolator(Interpolator.LINEAR);
-        rotateTransition.play();
-        setProcessing("initial");
     }
 
     private void setProcessing(String status) {
@@ -169,10 +172,10 @@ public class SpendingPageController {
                 case DATE -> txm.sortByTimestamp(txs, currentSortOrder == SortOrder.ASC);
                 case NAME -> txm.sortByName(txs, currentSortOrder == SortOrder.ASC);
                 case AMOUNT -> txm.sortByAmount(txs, currentSortOrder == SortOrder.ASC);
-                default -> throw new IllegalStateException();
             };
         }
 
+        noEntryText.setVisible(txs.isEmpty());
         setTransactionList(txs);
         updateSortIcons();
     }

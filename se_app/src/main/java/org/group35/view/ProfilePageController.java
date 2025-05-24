@@ -53,7 +53,7 @@ public class ProfilePageController implements Initializable {
         statusLabel.managedProperty().bind(statusLabel.visibleProperty());
         showStatus("");
 
-        setTimezones();
+        setTimezoneField();
         setCategoryBox();
         loadAvatar();
         locationField.setText(um.getLocation(currentUsername));
@@ -73,7 +73,7 @@ public class ProfilePageController implements Initializable {
         }
     }
 
-    private void setTimezones() {
+    private void setTimezoneField() {
         ObservableList<String> timezones = FXCollections.observableArrayList(
                 ZoneId.getAvailableZoneIds()
                         .stream()
@@ -82,9 +82,7 @@ public class ProfilePageController implements Initializable {
         );
 
         timezoneField.setItems(timezones);
-
-        // Set default to system timezone
-        timezoneField.setValue(ZoneId.systemDefault().toString());
+        timezoneField.setValue(um.getUser(currentUsername).getTimezone());
     }
 
     private void setCategoryBox() {
@@ -153,31 +151,27 @@ public class ProfilePageController implements Initializable {
     @FXML
     private void handleSave(ActionEvent event) {
 
-        String initialPwd = passwordField.getText().trim();
-        if (initialPwd.isEmpty()) {
-            return;
+        String updatedPassword = passwordField.getText().trim();
+        if (!updatedPassword.isEmpty()) {
+            if (updatedPassword.length() < 8 || !updatedPassword.matches(".*[A-Za-z].*")
+                    || !updatedPassword.matches(".*\\d.*")) {
+                showStatus("Password must be at least 8 characters and include letters and digit.", true);
+                return;
+            }
+            um.setHashedPassword(PasswordUtils.hashPassword(updatedPassword));
         }
-        if (initialPwd.length() < 8 || !initialPwd.matches(".*[A-Za-z].*")
-                || !initialPwd.matches(".*\\d.*")) {
-            showStatus("Password must be at least 8 characters and include letters and digit.", true);
-            return;
-        }
-        um.setHashedPassword(PasswordUtils.hashPassword(initialPwd));
-
-
-        String category = categoryBox.getValue();
-
-        //TODO: store to User
 
         String timezone = timezoneField.getValue();
-        um.setTimezone(timezone);
+        um.setTimezone(currentUsername, timezone);
 
-        String location = locationField.getText();
-        um.setLocation(currentUsername, location);
+        String loc = locationField.getText().trim();
+        if (loc.isEmpty()) {
+            showStatus("Location cannot be empty.", true);
+            return;
+        }
+        um.setLocation(currentUsername, loc);
 
-        //TODO: add more validation
-
-
+        showStatus("Details updated successfully.");
     }
 
     @FXML

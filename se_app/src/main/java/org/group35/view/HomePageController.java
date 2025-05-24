@@ -31,11 +31,14 @@ public class HomePageController {
     @FXML private Button toggleIncomeExpenseBtn;
     @FXML private NumberAxis yAxis;
     @FXML private Label greetingLabel;
+    @FXML private Label noEntryText1;
+    @FXML private Label noEntryText2;
 
     private boolean showIncome = true;
 
-    private TransactionManager txm;
-    private User currentUser;
+    private final ApplicationRuntime rt = ApplicationRuntime.getInstance();
+    private final TransactionManager txm = rt.getTranscationManager();
+    private final User currentUser = rt.getCurrentUser();
 
     // Add this near the top of the class
     private static final Color[] COLOR_PALETTE = {
@@ -55,12 +58,16 @@ public class HomePageController {
 
     @FXML
     public void initialize() {
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
-        txm = rt.getTranscationManager();
-        currentUser = rt.getCurrentUser();
+
+        noEntryText1.managedProperty().bind(noEntryText1.visibleProperty());
+        noEntryText2.managedProperty().bind(noEntryText2.visibleProperty());
+
         List<Transaction> txs = txm.getByUser(currentUser.getUsername());
         updateCharts(txs);
+        noEntryText1.setVisible(txs.isEmpty());
+        noEntryText2.setVisible(txs.isEmpty());
         greetingLabel.setText(makeGreeting());
+
     }
 
     private String makeGreeting() {

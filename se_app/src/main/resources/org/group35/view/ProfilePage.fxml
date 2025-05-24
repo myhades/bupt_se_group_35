@@ -99,82 +99,66 @@
                 </GridPane.margin>
                 <ScrollPane styleClass="setting-scrollpane">
                     <VBox styleClass="settings-container">
-                    <StackPane styleClass="icon-field">
-                        <PasswordField fx:id="passwordField"
-                                       promptText="Update Password"
+
+                        <Label styleClass="setting-section-title"
+                               text="Personal Details"/>
+                        <StackPane styleClass="icon-field">
+                            <PasswordField fx:id="passwordField"
+                                           promptText="Update Password"
+                                           styleClass="input-field"/>
+                            <SVGPath content="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                                     styleClass="input-icon"
+                                     StackPane.alignment="CENTER_RIGHT">
+                            </SVGPath>
+                        </StackPane>
+                        <StackPane styleClass="icon-field">
+                            <ComboBox fx:id="timezoneField"
+                                        promptText="Timezone"
+                                        styleClass="input-field, input-select"
+                                        GridPane.hgrow="ALWAYS"
+                                        maxWidth="Infinity"/>
+                            <SVGPath content="M15,12H16.5V16.25L19.36,17.94L18.61,19.16L15,17V12M16,9C16.69,9 17.37,9.1 18,9.29V4.7L15,5.86V9.07C15.33,9 15.66,9 16,9M23,16A7,7 0 0,1 16,23C13,23 10.4,21.08 9.42,18.4L8,17.9L2.66,19.97L2.5,20A0.5,0.5 0 0,1 2,19.5V4.38C2,4.15 2.15,3.97 2.36,3.9L8,2L14,4.1L19.34,2.03L19.5,2A0.5,0.5 0 0,1 20,2.5V10.25C21.81,11.5 23,13.62 23,16M9,16C9,13.21 10.63,10.8 13,9.67V5.87L9,4.47V16.13H9C9,16.09 9,16.04 9,16M16,11A5,5 0 0,0 11,16A5,5 0 0,0 16,21A5,5 0 0,0 21,16A5,5 0 0,0 16,11M4,5.46V17.31L7,16.15V4.45L4,5.46Z"
+                                     styleClass="input-icon"
+                                     StackPane.alignment="CENTER_RIGHT">
+                            </SVGPath>
+                        </StackPane>
+                        <StackPane styleClass="icon-field">
+                            <TextField fx:id="locationField"
+                                       promptText="Location"
                                        styleClass="input-field"/>
-                        <SVGPath content="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
-                                 styleClass="input-icon"
-                                 StackPane.alignment="CENTER_RIGHT">
-                        </SVGPath>
-                    </StackPane>
-                    <StackPane styleClass="icon-field">
-                        <ComboBox fx:id="timezoneField"
-                                    promptText="Timezone"
-                                    styleClass="input-field, input-select"
-                                    GridPane.hgrow="ALWAYS"
-                                    maxWidth="Infinity"/>
-                        <SVGPath content="M15,12H16.5V16.25L19.36,17.94L18.61,19.16L15,17V12M16,9C16.69,9 17.37,9.1 18,9.29V4.7L15,5.86V9.07C15.33,9 15.66,9 16,9M23,16A7,7 0 0,1 16,23C13,23 10.4,21.08 9.42,18.4L8,17.9L2.66,19.97L2.5,20A0.5,0.5 0 0,1 2,19.5V4.38C2,4.15 2.15,3.97 2.36,3.9L8,2L14,4.1L19.34,2.03L19.5,2A0.5,0.5 0 0,1 20,2.5V10.25C21.81,11.5 23,13.62 23,16M9,16C9,13.21 10.63,10.8 13,9.67V5.87L9,4.47V16.13H9C9,16.09 9,16.04 9,16M16,11A5,5 0 0,0 11,16A5,5 0 0,0 16,21A5,5 0 0,0 21,16A5,5 0 0,0 16,11M4,5.46V17.31L7,16.15V4.45L4,5.46Z"
-                                 styleClass="input-icon"
-                                 StackPane.alignment="CENTER_RIGHT">
-                        </SVGPath>
-                    </StackPane>
-                    <StackPane styleClass="icon-field">
-                        <TextField fx:id="locationField"
-                                   promptText="Location"
-                                   styleClass="input-field"/>
-                        <SVGPath content="M11.5 9C11.5 7.62 12.62 6.5 14 6.5C15.1 6.5 16.03 7.21 16.37 8.19C16.45 8.45 16.5 8.72 16.5 9C16.5 10.38 15.38 11.5 14 11.5C12.91 11.5 12 10.81 11.64 9.84C11.55 9.58 11.5 9.29 11.5 9M5 9C5 13.5 10.08 19.66 11 20.81L10 22C10 22 3 14.25 3 9C3 5.83 5.11 3.15 8 2.29C6.16 3.94 5 6.33 5 9M14 2C17.86 2 21 5.13 21 9C21 14.25 14 22 14 22C14 22 7 14.25 7 9C7 5.13 10.14 2 14 2M14 4C11.24 4 9 6.24 9 9C9 10 9 12 14 18.71C19 12 19 10 19 9C19 6.24 16.76 4 14 4Z"
-                                 styleClass="input-icon"
-                                 StackPane.alignment="CENTER_RIGHT">
-                        </SVGPath>
-                    </StackPane>
-<!--                    <StackPane styleClass="icon-field">-->
-<!--                        <ComboBox fx:id="categoryBox"-->
-<!--                                  promptText="Category"-->
-<!--                                  styleClass="input-field, input-select"-->
-<!--                                  GridPane.hgrow="ALWAYS"-->
-<!--                                  maxWidth="Infinity"/>-->
-<!--                        <SVGPath content="M11,13.5V21.5H3V13.5H11M9,15.5H5V19.5H9V15.5M12,2L17.5,11H6.5L12,2M12,5.86L10.08,9H13.92L12,5.86M17.5,13C20,13 22,15 22,17.5C22,20 20,22 17.5,22C15,22 13,20 13,17.5C13,15 15,13 17.5,13M17.5,15A2.5,2.5 0 0,0 15,17.5A2.5,2.5 0 0,0 17.5,20A2.5,2.5 0 0,0 20,17.5A2.5,2.5 0 0,0 17.5,15Z"-->
-<!--                                 styleClass="input-icon"-->
-<!--                                 StackPane.alignment="CENTER_RIGHT"/>-->
-<!--                    </StackPane>-->
-                    <StackPane styleClass="icon-field">
-                        <TextField fx:id="nameField"
-                                   promptText="TODO"
-                                   styleClass="input-field"/>
-                        <SVGPath content="M21.41 11.58L12.41 2.58A2 2 0 0 0 11 2H4A2 2 0 0 0 2 4V11A2 2 0 0 0 2.59 12.42L11.59 21.42A2 2 0 0 0 13 22A2 2 0 0 0 14.41 21.41L21.41 14.41A2 2 0 0 0 22 13A2 2 0 0 0 21.41 11.58M13 20L4 11V4H11L20 13M6.5 5A1.5 1.5 0 1 1 5 6.5A1.5 1.5 0 0 1 6.5 5Z"
-                                 styleClass="input-icon"
-                                 StackPane.alignment="CENTER_RIGHT">
-                        </SVGPath>
-                    </StackPane>
-                    <StackPane styleClass="icon-field">
-                        <HBox spacing="5" styleClass="input-field, input-select" alignment="CENTER_RIGHT">
-                            <ComboBox fx:id="categoryBox"
-                                      promptText="Category"
-                                      styleClass="input-field, input-select"
-                                      HBox.hgrow="ALWAYS"
-                                      maxWidth="Infinity"/>
-                            <Button onAction="#addCategory" styleClass="category-button">
-                                <graphic>
-                                    <SVGPath content="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                                             styleClass="input-icon"/>
-                                </graphic>
-                            </Button>
-                            <Button onAction="#removeCategory" styleClass="category-button">
-                                <graphic>
-                                    <SVGPath content="M19,13H5V11H19V13Z"
-                                             styleClass="input-icon"/>
-                                </graphic>
-                            </Button>
-                        </HBox>
-<!--                        <SVGPath content="M11,13.5V21.5H3V13.5H11M9,15.5H5V19.5H9V15.5M12,2L17.5,11H6.5L12,2M12,5.86L10.08,9H13.92L12,5.86M17.5,13C20,13 22,15 22,17.5C22,20 20,22 17.5,22C15,22 13,20 13,17.5C13,15 15,13 17.5,13M17.5,15A2.5,2.5 0 0,0 15,17.5A2.5,2.5 0 0,0 17.5,20A2.5,2.5 0 0,0 20,17.5A2.5,2.5 0 0,0 17.5,15Z"-->
-<!--                                 styleClass="input-icon"-->
-<!--                                 StackPane.alignment="CENTER_RIGHT"/>-->
-                    </StackPane>
-                </VBox>
+                            <SVGPath content="M11.5 9C11.5 7.62 12.62 6.5 14 6.5C15.1 6.5 16.03 7.21 16.37 8.19C16.45 8.45 16.5 8.72 16.5 9C16.5 10.38 15.38 11.5 14 11.5C12.91 11.5 12 10.81 11.64 9.84C11.55 9.58 11.5 9.29 11.5 9M5 9C5 13.5 10.08 19.66 11 20.81L10 22C10 22 3 14.25 3 9C3 5.83 5.11 3.15 8 2.29C6.16 3.94 5 6.33 5 9M14 2C17.86 2 21 5.13 21 9C21 14.25 14 22 14 22C14 22 7 14.25 7 9C7 5.13 10.14 2 14 2M14 4C11.24 4 9 6.24 9 9C9 10 9 12 14 18.71C19 12 19 10 19 9C19 6.24 16.76 4 14 4Z"
+                                     styleClass="input-icon"
+                                     StackPane.alignment="CENTER_RIGHT">
+                            </SVGPath>
+                        </StackPane>
+
+                        <Label styleClass="setting-section-title"
+                               text="Manage Categories"/>
+
+                        <StackPane styleClass="icon-field">
+                            <HBox spacing="5" styleClass="input-field, input-select" alignment="CENTER_RIGHT">
+                                <ComboBox fx:id="categoryBox"
+                                          promptText="Category"
+                                          styleClass="input-field, input-select"
+                                          HBox.hgrow="ALWAYS"
+                                          maxWidth="Infinity"/>
+                                <Button onAction="#addCategory" styleClass="category-button">
+                                    <graphic>
+                                        <SVGPath content="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                                                 styleClass="input-icon"/>
+                                    </graphic>
+                                </Button>
+                                <Button onAction="#removeCategory" styleClass="category-button">
+                                    <graphic>
+                                        <SVGPath content="M19,13H5V11H19V13Z"
+                                                 styleClass="input-icon"/>
+                                    </graphic>
+                                </Button>
+                            </HBox>
+                        </StackPane>
+                    </VBox>
                 </ScrollPane>
             </VBox>
-
         </GridPane>
     </VBox>
 </VBox>
