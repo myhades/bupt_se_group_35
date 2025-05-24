@@ -1,7 +1,6 @@
 package org.group35.view;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.chart.LineChart;
@@ -15,10 +14,8 @@ import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LogUtils;
 
-//import java.awt.event.ActionEvent;
 import javafx.event.ActionEvent;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -64,8 +61,6 @@ public class HomePageController {
 
         List<Transaction> txs = txm.getByUser(currentUser.getUsername());
         updateCharts(txs);
-        noEntryText1.setVisible(txs.isEmpty());
-        noEntryText2.setVisible(txs.isEmpty());
         greetingLabel.setText(makeGreeting());
 
     }
@@ -98,8 +93,6 @@ public class HomePageController {
                         : tx.getAmount().compareTo(BigDecimal.ZERO) < 0)
                 .toList();
 
-        noEntryText1.setVisible(filtered.isEmpty());
-        noEntryText2.setVisible(filtered.isEmpty());
         updateCharts(filtered);
     }
 
@@ -109,6 +102,9 @@ public class HomePageController {
      * @param transactions The list of transactions to visualize
      */
     private void updateCharts(List<Transaction> transactions) {
+        noEntryText1.setVisible(transactions.isEmpty());
+        noEntryText2.setVisible(transactions.isEmpty());
+
         XYChart.Series<String, Number> spendingSeries = generateSpendingChartData(transactions);
         setSpendingChartData(spendingSeries);
 
