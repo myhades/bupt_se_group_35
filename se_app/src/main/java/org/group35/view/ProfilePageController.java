@@ -1,7 +1,5 @@
 package org.group35.view;
 
-import javafx.animation.Interpolator;
-import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,81 +10,58 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import javafx.util.Duration;
-import org.group35.controller.TransactionManager;
 import org.group35.controller.UserManager;
-import org.group35.model.Transaction;
-import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.runtime.ApplicationRuntime.ProgramStatus;
-import org.group35.service.BillsRecognition;
-import org.group35.util.FileUtils;
 import org.group35.util.ImageUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.PasswordUtils;
 
 import javafx.scene.input.MouseEvent;
-import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ProfilePageController implements Initializable {
 
-    @FXML private Label warningLabel;
-    @FXML private VBox hintContainer;
-
+    @FXML private Label statusLabel;
     @FXML private ImageView avatarImage;
     @FXML final Image defaultAvatar = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/group35/view/assets/images/default_avatar.png")));
     @FXML private TextField passwordField;
-    @FXML private ComboBox<String> TimezoneField;
-    @FXML private TextField LocationField;
+    @FXML private ComboBox<String> timezoneField;
+    @FXML private TextField locationField;
     @FXML private ComboBox<String> categoryBox;
     private TextField categoryInputField;
 
     private boolean isAddingCategory = false;
-
-    private UserManager uManager;
-    private String currentname;
+    private final ApplicationRuntime rt = ApplicationRuntime.getInstance();
+    private final UserManager um = rt.getUserManager();
+    private final String currentUsername = rt.getCurrentUser().getUsername();;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-//        hideWarning();
-
-        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-        this.uManager = runtime.getUserManager();
-        currentname = runtime.getCurrentUser().getUsername();
+        statusLabel.managedProperty().bind(statusLabel.visibleProperty());
+        showStatus("");
 
         setTimezones();
         setCategoryBox();
+        loadAvatar();
+        locationField.setText(um.getLocation(currentUsername));
 
-        categoryBox.setValue(categoryBox.getItems().get(0));
-        LocationField.setPromptText(uManager.getLocation(currentname));
+    }
 
-        Image avatar = ImageUtils.fromBase64(uManager.getUserAvatar(currentname));
+    private void loadAvatar() {
+        Image avatar = ImageUtils.fromBase64(um.getUserAvatar(currentUsername));
         if (avatar != null) {
             avatarImage.setImage(avatar);
             double radius = avatarImage.getFitWidth() / 2.0;
@@ -95,11 +70,8 @@ public class ProfilePageController implements Initializable {
         }
         else {
             resetAvatarToDefault();
-            LogUtils.error("No Avatar");
         }
-
     }
-
 
     private void setTimezones() {
         ObservableList<String> timezones = FXCollections.observableArrayList(
@@ -109,14 +81,15 @@ public class ProfilePageController implements Initializable {
                         .collect(Collectors.toList())
         );
 
-        TimezoneField.setItems(timezones);
+        timezoneField.setItems(timezones);
 
         // Set default to system timezone
-        TimezoneField.setValue(ZoneId.systemDefault().toString());
+        timezoneField.setValue(ZoneId.systemDefault().toString());
     }
 
     private void setCategoryBox() {
-        List<String> categories = uManager.getCategory();
+
+        List<String> categories = um.getCategory();
         categoryBox.setItems(FXCollections.observableArrayList(categories));
 
         // 初始化输入框但不显示
@@ -134,43 +107,38 @@ public class ProfilePageController implements Initializable {
                 revertToCategoryBox();
             }
         });
+
+        categoryBox.setValue(categoryBox.getItems().getFirst());
     }
 
-
-    /**
-     * Hide the inline warning label.
-     */
-    private void hideWarning() {
-        //TODO
-        warningLabel.setVisible(false);
-        warningLabel.setManaged(false);
+    private void showStatus(String message) {
+        showStatus(message, false);
     }
 
-    /**
-     * Show an inline warning message above the input field.
-     */
-    private void showError(String message) {
-        warningLabel.setText(message);
-        warningLabel.setVisible(true);
+    private void showStatus(String message, boolean isWarning) {
+        statusLabel.setVisible(!message.isEmpty());
+        statusLabel.setText(message);
+        if (isWarning) statusLabel.getStyleClass().add("warning");
+        else statusLabel.getStyleClass().removeAll("warning");
     }
 
     @FXML
     private void handleSelectAvatar(MouseEvent event) {
-        Window win = categoryBox.getScene().getWindow();
+        Window win = avatarImage.getScene().getWindow();
         try{
             String selectedBase64 = ImageUtils.chooseAndProcessImage(win, 128);
             Image selectedImage = ImageUtils.fromBase64(selectedBase64);
-            if (selectedImage != null) {  // only update when a pic actually selected
+            if (selectedImage != null) {
                 avatarImage.setImage(selectedImage);
                 double radius = avatarImage.getFitWidth() / 2.0;
                 Circle clip = new Circle(radius, radius, radius);
                 avatarImage.setClip(clip);
-                uManager.setAvatar(selectedBase64);
-
+                um.setAvatar(currentUsername, selectedBase64);
+                showStatus("Profile picture updated.");
             }
         }
         catch (IOException e) {
-            LogUtils.error("Invalid File");
+            LogUtils.error("Exception occurred when updating profile picture");
             resetAvatarToDefault();
         }
     }
@@ -184,7 +152,6 @@ public class ProfilePageController implements Initializable {
 
     @FXML
     private void handleSave(ActionEvent event) {
-        hideWarning();
 
         String initialPwd = passwordField.getText().trim();
         if (initialPwd.isEmpty()) {
@@ -192,21 +159,21 @@ public class ProfilePageController implements Initializable {
         }
         if (initialPwd.length() < 8 || !initialPwd.matches(".*[A-Za-z].*")
                 || !initialPwd.matches(".*\\d.*")) {
-            showError("Password must be at least 8 characters and include letters and digit.");
+            showStatus("Password must be at least 8 characters and include letters and digit.", true);
             return;
         }
-        uManager.setHashedPassword(PasswordUtils.hashPassword(initialPwd));
+        um.setHashedPassword(PasswordUtils.hashPassword(initialPwd));
 
 
         String category = categoryBox.getValue();
 
         //TODO: store to User
 
-        String timezone = TimezoneField.getValue();
-        uManager.setTimezone(timezone);
+        String timezone = timezoneField.getValue();
+        um.setTimezone(timezone);
 
-        String location = LocationField.getText();
-        uManager.setLocation(location);
+        String location = locationField.getText();
+        um.setLocation(currentUsername, location);
 
         //TODO: add more validation
 
@@ -214,13 +181,8 @@ public class ProfilePageController implements Initializable {
     }
 
     @FXML
-    private void handleCancel(ActionEvent event) {
-        //TODO: clear all textfiled
-        revertToCategoryBox();
-        categoryBox.setValue(categoryBox.getItems().get(0));
-        TimezoneField.setValue(uManager.getTimezone());
-        LocationField.setPromptText(uManager.getLocation(currentname));
-
+    private void handleDiscard(ActionEvent event) {
+        gotoMore(event);
     }
 
 
@@ -248,13 +210,13 @@ public class ProfilePageController implements Initializable {
 
     private void confirmAddCategory(ActionEvent event) {
         String newCategory = categoryInputField.getText().trim();
-        if (uManager.addCategory(newCategory)){
+        if (um.addCategory(newCategory)){
             categoryBox.getItems().add(newCategory);
             categoryBox.getSelectionModel().select(newCategory);
             LogUtils.info("Add newCategory: " + newCategory);
         }
         else {
-            showError("Existing Category or Empty");
+            showStatus("Category already exists or empty input.", true);
             LogUtils.error("Add newCategory failed: " + newCategory);
         }
 
@@ -265,7 +227,6 @@ public class ProfilePageController implements Initializable {
     @FXML
     private void removeCategory(ActionEvent event) {
         if (isAddingCategory) {
-            // 如果在添加模式下点击删除按钮，则取消添加
             revertToCategoryBox();
             return;
         }
@@ -273,10 +234,9 @@ public class ProfilePageController implements Initializable {
         String selected = categoryBox.getSelectionModel().getSelectedItem();
         if (selected != null) {
             categoryBox.getItems().remove(selected);
-            uManager.removeCategory(selected);
+            um.removeCategory(selected);
         } else {
-            warningLabel.setText("Please select a category to remove");
-            warningLabel.setVisible(true);
+            showStatus("Please select a category to remove.", true);
         }
     }
 
@@ -284,8 +244,6 @@ public class ProfilePageController implements Initializable {
         isAddingCategory = false;
         categoryInputField.setVisible(false);
         categoryBox.setVisible(true);
-
-        // 移除输入框
         StackPane parent = (StackPane) categoryBox.getParent().getParent();
         parent.getChildren().remove(categoryInputField);
     }
