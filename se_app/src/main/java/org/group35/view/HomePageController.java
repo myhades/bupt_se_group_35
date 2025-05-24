@@ -98,6 +98,8 @@ public class HomePageController {
                         : tx.getAmount().compareTo(BigDecimal.ZERO) < 0)
                 .toList();
 
+        noEntryText1.setVisible(filtered.isEmpty());
+        noEntryText2.setVisible(filtered.isEmpty());
         updateCharts(filtered);
     }
 
