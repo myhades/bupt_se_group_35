@@ -207,12 +207,12 @@ public class UserManager {
     }
 
     /**
-     * Set current user's avatar.
+     * Set user's avatar.
      * @param base64  source image file in base64 string
      */
-    public void setAvatar(String base64) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        LogUtils.debug("Attempting to set avatar for current user: " + user.getUsername());
+    public void setAvatar(String username, String base64) {
+        User user = getUser(username);
+        LogUtils.debug("Attempting to set avatar for user: " + user.getUsername());
         user.setAvatar(base64);
         save();
         LogUtils.info("Avatar updated for user: " + user.getUsername());
@@ -302,13 +302,6 @@ public class UserManager {
         }
     }
 
-    public void setLocation(String location) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        user.setLocation(location);
-        save();
-        LogUtils.info("Location updated for user: " + user.getUsername());
-    }
-
     public String getLocation(String username) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
@@ -316,7 +309,7 @@ public class UserManager {
                 return u.getLocation();
             }
         }
-        return "noplace"; //FIXME
+        return ""; //FIXME
     }
 
     public static String getLocation() {

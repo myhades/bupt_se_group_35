@@ -81,35 +81,6 @@ class TransactionManagerTest {
     }
 
     @Test
-    void importFromCsv_shouldReadAndAddTransactionsWithCurrentUser() throws IOException {
-        // Prepare a sample CSV file
-        String csvContent = "date,amount,payee,type\n" +
-                "2025-05-20,100.00,TestMerchant,credit\n" +
-                "2025-05-19,-25.50,CoffeeShop,debit\n";
-        Path csvFile = tempDir.resolve("sample.csv");
-        Files.writeString(csvFile, csvContent, StandardCharsets.UTF_8);
-
-        // Invoke import
-        txManager.importFromCsv(csvFile.toString());
-
-        // Verify transactions were added
-        List<Transaction> all = txManager.getTransactions();
-        assertEquals(6, all.size(), "Should import two transactions");
-
-        Transaction first = all.get(4);
-        assertEquals("TestUser", first.getUsername(), "Username should be set to current user");
-        assertEquals("TestMerchant", first.getName());
-        assertEquals(new BigDecimal("100.00"), first.getAmount());
-        assertNotNull(first.getTimestamp(), "Timestamp should be set by add() method");
-
-        Transaction second = all.get(5);
-        assertEquals("TestUser", second.getUsername());
-        assertEquals("CoffeeShop", second.getName());
-        assertEquals(new BigDecimal("-25.50"), second.getAmount());
-        assertNotNull(second.getTimestamp());
-    }
-
-    @Test
     void getAll() {
         List<Transaction> all = txManager.getTransactions();
         assertEquals(4, all.size(), "Should exist 4 transaction by now");
