@@ -317,24 +317,6 @@ public class TransactionManager {
         save();
     }
 
-    /**
-     * Import a CSV, tag each Transaction with the current user,
-     * and add them to the store.
-     */
-    public void importFromCsv(String filePath) throws IOException {
-        String currentUser = ApplicationRuntime
-                .getInstance()
-                .getCurrentUser()
-                .getUsername();
-
-        List<Transaction> txs = csvImportService.parseTransactions(filePath);
-        for (Transaction tx : txs) {
-            tx.setUsername(currentUser);
-            add(tx);
-        }
-        save();
-    }
-
     /** Save the current transaction list back to the persistent store. */
     private void save() {
         LogUtils.debug("Persisting " + transactions.size() + " transactions to store");

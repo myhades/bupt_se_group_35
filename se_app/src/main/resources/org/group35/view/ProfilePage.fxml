@@ -71,7 +71,7 @@
                 </StackPane>
 
                 <!-- Hint Text -->
-                <Text text="Update your&#10;profile picture and details"
+                <Text text="Update your details"
                       styleClass="hint-text" />
 
                 <!-- Warning Message -->
