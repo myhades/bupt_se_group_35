@@ -514,22 +514,43 @@ public class TransactionManager {
         return txManager.getByUser(runtime.getCurrentUser().getUsername());
     }
 
-    public static Transaction getByJSON(JSONArray content){
+    public static Transaction getByJSON(Object obj){
+        JSONObject bill = null;
         try {
+            if (obj instanceof JSONObject) {
+                bill = (JSONObject) obj;
+            }
+            else if (obj instanceof JSONArray) {
+                JSONArray jsonArray = (JSONArray) obj;
 
-            JSONObject bill = content.getJSONObject(0);
+                bill = jsonArray.getJSONObject(0);
+            }
+            else {
+                bill = null;
+                LogUtils.debug("Not a JSON format");
+            }
 
-            // 3. 提取各个字段
-            String name     = bill.optString("name","");      // 商家/供应商名称
-            String amount   = bill.optString("amount","");    // 金额（正为收入，负为支出）
-            if(amount == "") amount = "0";
+            String name = "";
+            if (bill.has("name")) {
+                name = bill.optString("name", "");  // 商家/供应商名称
+            }
+
+            String amount = "";
+            if (bill.has("amount")) {
+                amount = bill.optString("amount", ""); // 金额（正为收入，负为支出）
+            }
+            if (amount.isEmpty()) {
+                amount = "0";
+            }
             BigDecimal amounts = new BigDecimal(amount);
 
-            String timeStr     = bill.optString("time",null);      // 时间
+            String timeStr = null;
+            if (bill.has("time")) {
+                timeStr = bill.optString("time", null); // 时间
+            }
             LocalDateTime time = null;
             DateTimeFormatter DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd['T'HH:mm[:ss]]");
             if (timeStr != null && !timeStr.isEmpty()) {
-
                 if (timeStr.length() == 10) {
                     time = LocalDateTime.parse(timeStr + "T00:00", DATE_TIME_FMT);
                 } else {
@@ -539,8 +560,15 @@ public class TransactionManager {
                 }
             }
 
-            String location = bill.optString("location","");  // 地点
-            String category = bill.optString("category","Other");  // 分类
+            String location = "";
+            if (bill.has("location")) {
+                location = bill.optString("location", ""); // 地点
+            }
+
+            String category = "Other";
+            if(bill.has("category")){
+                category = bill.optString("category", "Other");
+            }
 
 
             Transaction tx = new Transaction();

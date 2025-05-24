@@ -2,6 +2,9 @@ package org.group35.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.*;
 import java.time.LocalDateTime;
 
@@ -24,6 +27,19 @@ public class JsonUtils {
         LogUtils.trace("Conversion completed. Result length: " +
                 (json != null ? json.length() : 0));
         return json;
+    }
+    public static Object parseJsonValidation(String str) {
+
+        try {
+            return new JSONObject(str);
+        } catch (Exception e) {
+            try {
+                return new JSONArray(str);
+            } catch (Exception ex) {
+                LogUtils.trace("Not a JSON format");
+                return null;
+            }
+        }
     }
 
     /**
