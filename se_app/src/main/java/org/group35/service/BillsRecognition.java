@@ -6,6 +6,7 @@ import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.ImageUtils;
+import org.group35.util.JsonUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -59,6 +60,7 @@ public class BillsRecognition {
                 "\"category\": \"...\",\n" +
                 "}" +
                 "]\n" +
+                "The category must be in [" + categories + "]" +
                 "There is only one bill, so you must generate only one json body\n" +
                 "Please ensure the output is in a valid JSON file format and exclude any additional information or explanations. Return only the JSON data structured as specified.";
         return promptText;
@@ -77,7 +79,7 @@ public class BillsRecognition {
                 "amount is the amount of income or expenditure. The amount is positive means income and negtive means expense. Please convert the currency amount to the default US dollar unit according to the text description\n" +
                 "time indicate the time described by the user. time must conform the LocalDateTime format. If the time provided by the user is not a specific time but an adverb of time, then infer based on the current time("+ time +") to obtain the most accurate time possible. The number of time digits that cannot be inferred is replaced by 0.\n" +
                 "location indicate the location described by the user\n" +
-                "The category must be one of the following categories. Please select the most suitable category (if it does not match any of these declared categories, set it as the \"other\" category).The categories are"+ categories +"\n" +
+                "The category must be one of the following categories. Please select the most suitable category (if it does not match any of these declared categories, set it as the \"other\" category).The categories you can select are:"+ categories +"\n" +
                 "Output the result as a JSON structure that can be directly saved to a file. Ensure the output strictly follows this JSON format:\n" +
                 "[\n" +
                 "{\n" +
@@ -88,6 +90,7 @@ public class BillsRecognition {
                 "\"category\": \"...\",\n" +
                 "}" +
                 "]\n" +
+                "The category must be in [" + categories + "]" +
                 "There is only one bill, so you must generate only one json body\n" +
                 "Please ensure the output is in a valid JSON file format and exclude any additional information or explanations. Return only the JSON data structured as specified.";
         return promptText;
@@ -206,7 +209,7 @@ public class BillsRecognition {
                             .getString("content");
                     content = removeFirstAndLastLine(content);
                     LogUtils.info(content);
-                    JSONArray contents = new JSONArray(content);
+                    Object contents = JsonUtils.parseJsonValidation(content);
                     Transaction transaction = TransactionManager.getByJSON(contents);
 
                     callback.onSuccess(transaction);
@@ -323,6 +326,7 @@ public class BillsRecognition {
         }
         return cf;
     }
+
 
     public static void main(String[] args) {
 
