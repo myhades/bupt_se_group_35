@@ -1,7 +1,6 @@
 package org.group35.view;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.chart.LineChart;
@@ -15,10 +14,8 @@ import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LogUtils;
 
-//import java.awt.event.ActionEvent;
 import javafx.event.ActionEvent;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -31,11 +28,14 @@ public class HomePageController {
     @FXML private Button toggleIncomeExpenseBtn;
     @FXML private NumberAxis yAxis;
     @FXML private Label greetingLabel;
+    @FXML private Label noEntryText1;
+    @FXML private Label noEntryText2;
 
     private boolean showIncome = true;
 
-    private TransactionManager txm;
-    private User currentUser;
+    private final ApplicationRuntime rt = ApplicationRuntime.getInstance();
+    private final TransactionManager txm = rt.getTranscationManager();
+    private final User currentUser = rt.getCurrentUser();
 
     // Add this near the top of the class
     private static final Color[] COLOR_PALETTE = {
@@ -55,12 +55,14 @@ public class HomePageController {
 
     @FXML
     public void initialize() {
-        ApplicationRuntime rt = ApplicationRuntime.getInstance();
-        txm = rt.getTranscationManager();
-        currentUser = rt.getCurrentUser();
+
+        noEntryText1.managedProperty().bind(noEntryText1.visibleProperty());
+        noEntryText2.managedProperty().bind(noEntryText2.visibleProperty());
+
         List<Transaction> txs = txm.getByUser(currentUser.getUsername());
         updateCharts(txs);
         greetingLabel.setText(makeGreeting());
+
     }
 
     private String makeGreeting() {
@@ -100,6 +102,9 @@ public class HomePageController {
      * @param transactions The list of transactions to visualize
      */
     private void updateCharts(List<Transaction> transactions) {
+        noEntryText1.setVisible(transactions.isEmpty());
+        noEntryText2.setVisible(transactions.isEmpty());
+
         XYChart.Series<String, Number> spendingSeries = generateSpendingChartData(transactions);
         setSpendingChartData(spendingSeries);
 

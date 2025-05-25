@@ -69,12 +69,6 @@ public class ImportCSVPageController {
         statusLabel.setText(message);
         if (isWarning) statusLabel.getStyleClass().add("warning");
         else statusLabel.getStyleClass().removeAll("warning");
-        if (isWarning) {
-            statusLabel.getStyleClass().add("warning");
-        }
-        else {
-            statusLabel.getStyleClass().remove("warning");
-        }
     }
 
     @FXML

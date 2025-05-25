@@ -107,6 +107,13 @@
                 </Button>
             </HBox>
 
+            <!-- No Entry Text -->
+            <HBox alignment="CENTER">
+                <Label fx:id="noEntryText"
+                       text="No Entry"
+                       styleClass="no-entry-text"/>
+            </HBox>
+
             <!-- Spending List Scroll Panel -->
             <ScrollPane styleClass="spending-scrollpane">
                 <VBox fx:id="spendingListVBox"

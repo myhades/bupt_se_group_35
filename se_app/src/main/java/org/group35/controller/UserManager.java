@@ -1,33 +1,18 @@
 package org.group35.controller;
 
-import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.persistence.PersistentDataManager;
 import org.group35.runtime.ApplicationRuntime;
-import org.group35.util.ImageUtils;
 import org.group35.util.LogUtils;
 import org.group35.util.PasswordUtils;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
  * Manages user registration and login operations.
  * Data persistence is handled by PersistentDataManager.
- * Logging is added via LogUtils.
- * <br><br>
- * Usage Example:
- * <br>
- * {@code ApplicationRuntime runtime = ApplicationRuntime.getInstance();}
- * <br>
- * {@code UserManager uManager = runtime.getUserManager();}
- * <br>
- * {@code List<User> tx = uManager.getUser("username");}
- * <br> or <br>
- * {@code User user = UserManager.getCurrentUser();}
  */
 public class UserManager {
 
@@ -111,15 +96,14 @@ public class UserManager {
     /**
      * Get the user by name from the runtime store.
      */
-    public User getUser(String username) throws NoSuchElementException{
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUsername().equals(username)) {
-                LogUtils.debug("Get user: " + username);
-                return users.get(i);
+    public User getUser(String username) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return user;
             }
         }
         LogUtils.warn("User not found: " + username);
-        throw new NoSuchElementException("User not found: " + username);
+        return null;
     }
 
     /**
@@ -207,12 +191,12 @@ public class UserManager {
     }
 
     /**
-     * Set current user's avatar.
+     * Set user's avatar.
      * @param base64  source image file in base64 string
      */
-    public void setAvatar(String base64) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        LogUtils.debug("Attempting to set avatar for current user: " + user.getUsername());
+    public void setAvatar(String username, String base64) {
+        User user = getUser(username);
+        LogUtils.debug("Attempting to set avatar for user: " + user.getUsername());
         user.setAvatar(base64);
         save();
         LogUtils.info("Avatar updated for user: " + user.getUsername());
@@ -302,13 +286,6 @@ public class UserManager {
         }
     }
 
-    public void setLocation(String location) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        user.setLocation(location);
-        save();
-        LogUtils.info("Location updated for user: " + user.getUsername());
-    }
-
     public String getLocation(String username) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
@@ -316,7 +293,7 @@ public class UserManager {
                 return u.getLocation();
             }
         }
-        return "noplace"; //FIXME
+        return ""; //FIXME
     }
 
     public static String getLocation() {
@@ -325,20 +302,14 @@ public class UserManager {
     }
 
     public void setTimezone(String username, String timezone) {
-        for (User u : users) {
-            if (u.getUsername().equals(username)) {
-                u.setTimezone(timezone);
-                save();
-                LogUtils.info("Timezone updated for user: " + username);
-            }
+        User user = getUser(username);
+        if (user != null) {
+            user.setTimezone(timezone);
+            LogUtils.info("Timezone updated for user: " + user.getUsername());
         }
-    }
-
-    public void setTimezone(String timezone) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        user.setTimezone(timezone);
-        save();
-        LogUtils.info("Timezone updated for user: " + user.getUsername());
+        else{
+            LogUtils.warn("Timezone update failed. User not found: " + username);
+        }
     }
 
     public String getTimezone(String username) {
