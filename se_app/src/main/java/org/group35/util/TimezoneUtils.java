@@ -12,34 +12,34 @@ import java.util.concurrent.CompletableFuture;
 
 public class TimezoneUtils {
 
-    // GeoNames API配置
+    // GeoNames API Configuration
     private static final String GEONAMES_SEARCH_URL = "http://api.geonames.org/searchJSON";
     private static final String GEONAMES_TIMEZONE_URL = "http://api.geonames.org/timezoneJSON";
-    private static final String GEONAMES_USERNAME = "Dusk_0027"; // GeoNames 免费账户用户名
+    private static final String GEONAMES_USERNAME = "Dusk_0027"; // GeoNames Free Account Username
 
-    // IP定位API
+    // IP Location API
     private static final String IP_LOCATION_API = "https://ipapi.co/json/";
     private static final String IP_LOCATION_API_BACKUP = "http://ip-api.com/json/";
 
-    // 默认设置
+    // Default Settings
     private static final String DEFAULT_LOCATION = "Unknown";
     private static final String DEFAULT_TIMEZONE = "UTC";
 
     private static final OkHttpClient httpClient = new OkHttpClient();
 
-    // 缓存当前本地化信息
+    // Cached local information
     private static LocalInfo cachedLocalInfo;
     private static LocalDateTime lastUpdateTime;
 
     /**
-     * 本地化信息类
+     * Local information class
      */
     public static class LocalInfo {
-        private String timezone;
-        private String currency;
-        private String exchangeRate;
-        private String location;
-        private LocalDateTime updateTime;
+        private final String timezone;
+        private final String currency;
+        private final String exchangeRate;
+        private final String location;
+        private final LocalDateTime updateTime;
 
         public LocalInfo(String timezone, String currency, String exchangeRate, String location) {
             this.timezone = timezone;
@@ -57,25 +57,39 @@ public class TimezoneUtils {
         public LocalDateTime getUpdateTime() { return updateTime; }
     }
 
-    // ========== 时区相关方法 ==========
+    // ========== Timezone-related methods ==========
 
+    /**
+     * Get the local time of the specified location.
+     *
+     * @param location the location to get the time for
+     * @return the local time in the given location
+     * @throws IOException if there is an issue with the network request
+     */
     public static String getLocalTime(String location) throws IOException {
-        // 1. 获取地理坐标
+        // 1. Get geographical coordinates
         double[] coordinates = getCoordinates(location);
         double lat = coordinates[0];
         double lng = coordinates[1];
 
-        // 2. 获取时区信息
+        // 2. Get timezone information
         String timeZoneId = getTimeZoneId(lat, lng);
 
-        // 3. 获取并格式化当地时间
+        // 3. Get and format local time
         return getCurrentTimeByZone(timeZoneId);
     }
 
+    /**
+     * Get the geographical coordinates (latitude and longitude) of a location.
+     *
+     * @param location the location to search for
+     * @return an array with the latitude and longitude of the location
+     * @throws IOException if there is an issue with the network request
+     */
     public static double[] getCoordinates(String location) throws IOException {
         HttpUrl url = HttpUrl.parse(GEONAMES_SEARCH_URL).newBuilder()
                 .addQueryParameter("q", location)
-                .addQueryParameter("maxRows", "1")    // 限制返回1条结果
+                .addQueryParameter("maxRows", "1")    // Limit to 1 result
                 .addQueryParameter("username", GEONAMES_USERNAME)
                 .build();
 
@@ -103,6 +117,14 @@ public class TimezoneUtils {
         }
     }
 
+    /**
+     * Get the timezone ID of a specific location using its latitude and longitude.
+     *
+     * @param lat the latitude of the location
+     * @param lng the longitude of the location
+     * @return the timezone ID of the location
+     * @throws IOException if there is an issue with the network request
+     */
     public static String getTimeZoneId(double lat, double lng) throws IOException {
         HttpUrl url = HttpUrl.parse(GEONAMES_TIMEZONE_URL).newBuilder()
                 .addQueryParameter("lat", String.valueOf(lat))
@@ -116,7 +138,7 @@ public class TimezoneUtils {
         try (Response response = httpClient.newCall(request).execute()) {
             JsonObject jsonResponse = JsonParser.parseString(response.body().string()).getAsJsonObject();
 
-            // 错误处理（如南极坐标返回无数据）
+            // Error handling (e.g., Antarctica coordinates return no data)
             if (jsonResponse.has("status")) {
                 String errorMsg = jsonResponse.getAsJsonObject("status").get("message").getAsString();
                 LogUtils.warn("finding error:" + errorMsg);
@@ -128,22 +150,37 @@ public class TimezoneUtils {
         }
     }
 
+    /**
+     * Get the current time in a specific timezone.
+     *
+     * @param timeZoneId the ID of the timezone
+     * @return the current time in the specified timezone formatted as a string
+     */
     public static String getCurrentTimeByZone(String timeZoneId) {
         ZoneId zoneId = ZoneId.of(timeZoneId);
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         return zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
+    /**
+     * Get the current time in a specific timezone as a LocalDateTime object.
+     *
+     * @param timeZoneId the ID of the timezone
+     * @return the current time in the specified timezone as LocalDateTime
+     */
     public static LocalDateTime getFormattedCurrentTimeByZone(String timeZoneId) {
         ZoneId zoneId = ZoneId.of(timeZoneId);
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         return zonedDateTime.toLocalDateTime();
     }
 
-    // ========== 位置检测相关方法 ==========
+    // ========== Location detection-related methods ==========
 
     /**
-     * 通过IP地址自动检测用户位置
+     * Automatically detect the user's location based on their IP address.
+     *
+     * @return LocalInfo object containing detected location data
+     * @throws IOException if both primary and backup APIs fail
      */
     public static LocalInfo detectUserLocation() throws IOException {
         try {
@@ -160,7 +197,12 @@ public class TimezoneUtils {
     }
 
     /**
-     * 通用位置检测方法
+     * General location detection method.
+     *
+     * @param apiUrl the URL of the location API
+     * @param isPrimary boolean indicating whether the API is primary or backup
+     * @return LocalInfo object containing detected location data
+     * @throws IOException if there is an issue with the network request
      */
     private static LocalInfo detectLocationFromAPI(String apiUrl, boolean isPrimary) throws IOException {
         Request request = new Request.Builder()
@@ -175,7 +217,7 @@ public class TimezoneUtils {
 
             JsonObject json = JsonParser.parseString(response.body().string()).getAsJsonObject();
 
-            // 检查API错误
+            // Check for API errors
             if (isPrimary && json.has("error") && json.get("error").getAsBoolean()) {
                 String reason = json.has("reason") ? json.get("reason").getAsString() : "Unknown error";
                 throw new IOException("API Error: " + reason);
@@ -185,7 +227,7 @@ public class TimezoneUtils {
                 throw new IOException("API returned failure status: " + message);
             }
 
-            // 解析数据
+            // Parse the data
             String city = json.has("city") ? json.get("city").getAsString() : "Unknown";
             String region = json.has(isPrimary ? "region" : "regionName") ?
                     json.get(isPrimary ? "region" : "regionName").getAsString() : "";
@@ -200,13 +242,13 @@ public class TimezoneUtils {
             double lng = json.has(isPrimary ? "longitude" : "lon") ?
                     json.get(isPrimary ? "longitude" : "lon").getAsDouble() : 0.0;
 
-            // 优化位置显示
+            // Format the location for display
             String displayLocation = !region.isEmpty() && !region.equals(city) ? region : city;
             if (!displayLocation.equals(country)) {
                 displayLocation = displayLocation + ", " + country;
             }
 
-            // 获取精确时区
+            // Get precise timezone
             String displayTimezone = timezone;
             if (!timezone.contains("/") && lat != 0.0 && lng != 0.0) {
                 try {
@@ -215,14 +257,14 @@ public class TimezoneUtils {
                         displayTimezone = preciseTimezone;
                     }
                 } catch (Exception e) {
-                    // 如果获取失败，保持原始时区
+                    // If failed, retain the original timezone
                 }
             }
 
-            // 获取汇率
+            // Get exchange rate
             String exchangeRate = CurrencyUtils.getExchangeRate(currency);
 
-            // 输出调试信息
+            // Log information
             LogUtils.info("Precise timezone: " + displayTimezone);
             LogUtils.info("Final processed data:");
             LogUtils.info("  Location: " + displayLocation);
@@ -235,28 +277,38 @@ public class TimezoneUtils {
     }
 
     /**
-     * 使用主API检测位置
+     * Use the primary API to detect the user's location.
+     *
+     * @return LocalInfo object containing the detected location data
+     * @throws IOException if the API fails
      */
     private static LocalInfo detectLocationFromPrimaryAPI() throws IOException {
         return detectLocationFromAPI(IP_LOCATION_API, true);
     }
 
     /**
-     * 使用备用API检测位置
+     * Use the backup API to detect the user's location.
+     *
+     * @return LocalInfo object containing the detected location data
+     * @throws IOException if the API fails
      */
     private static LocalInfo detectLocationFromBackupAPI() throws IOException {
         return detectLocationFromAPI(IP_LOCATION_API_BACKUP, false);
     }
 
     /**
-     * 获取当前本地化信息
+     * Get the current localized information synchronously.
+     *
+     * @return LocalInfo object containing current localized information
      */
     public static LocalInfo getCurrentLocalInfo() {
         return getLocalInfoSync();
     }
 
     /**
-     * 异步获取本地化信息
+     * Asynchronously get the current localized information.
+     *
+     * @return CompletableFuture containing the localized information
      */
     public static CompletableFuture<LocalInfo> getCurrentLocalInfoAsync() {
         return CompletableFuture.supplyAsync(() -> {
@@ -270,7 +322,9 @@ public class TimezoneUtils {
     }
 
     /**
-     * 同步获取本地化信息
+     * Synchronously get the current localized information.
+     *
+     * @return LocalInfo object containing the localized information
      */
     private static LocalInfo getLocalInfoSync() {
         try {
@@ -286,19 +340,19 @@ public class TimezoneUtils {
     }
 
     /**
-     * 获取默认本地化信息
+     * Get the default localized information.
+     *
+     * @return LocalInfo object with default values
      */
     private static LocalInfo getDefaultLocalInfo() {
-        String timezone = DEFAULT_TIMEZONE;
         String currency = CurrencyUtils.getDefaultCurrency();
-        String location = DEFAULT_LOCATION;
         String exchangeRate = CurrencyUtils.getExchangeRate(currency);
 
-        return new LocalInfo(timezone, currency, exchangeRate, location);
+        return new LocalInfo(DEFAULT_TIMEZONE, currency, exchangeRate, DEFAULT_LOCATION);
     }
 
     /**
-     * 强制刷新缓存
+     * Force refresh the cache of localized information.
      */
     public static void refreshCache() {
         cachedLocalInfo = null;
@@ -306,14 +360,17 @@ public class TimezoneUtils {
     }
 
     /**
-     * 格式化货币显示名称（兼容性方法）
+     * Format currency name for display purposes.
+     *
+     * @param currency the currency code
+     * @return formatted currency name
      */
     public static String formatCurrencyName(String currency) {
         return CurrencyUtils.formatCurrencyName(currency);
     }
 
     /**
-     * 测试位置检测功能
+     * Test the location detection functionality.
      */
     public static void testLocationDetection() {
         try {
@@ -329,29 +386,38 @@ public class TimezoneUtils {
         }
     }
 
-    // ========== 获取默认配置值的方法 ==========
+    // ========== Get default configuration values ==========
 
     /**
-     * 获取默认位置
+     * Get the default location.
+     *
+     * @return default location
      */
     public static String getDefaultLocation() {
         return DEFAULT_LOCATION;
     }
 
     /**
-     * 获取默认时区
+     * Get the default timezone.
+     *
+     * @return default timezone
      */
     public static String getDefaultTimezone() {
         return DEFAULT_TIMEZONE;
     }
 
+    /**
+     * Main method for testing the functionality of getting local time.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         try {
             String location = "Tokyo";
-            String localTime = getLocalTime(location); // example
+            String localTime = getLocalTime(location); // Example usage
             LogUtils.info("input:" + location);
-            LogUtils.info(" 当前时间: " + localTime);
-            
+            LogUtils.info(" Current Time: " + localTime);
+
         } catch (Exception e) {
             LogUtils.error( e.getMessage());
         }
