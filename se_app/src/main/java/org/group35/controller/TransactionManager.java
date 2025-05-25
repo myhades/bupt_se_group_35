@@ -495,7 +495,11 @@ public class TransactionManager {
         TransactionManager txManager = runtime.getTranscationManager();
         return txManager.getByUser(runtime.getCurrentUser().getUsername());
     }
-
+    /**
+     * Retrieves a JSON formatted transactions for the current user.
+     *
+     * @return A Transaction objects associated with the current user.
+     */
     public static Transaction getByJSON(Object obj){
         JSONObject bill = null;
         try {

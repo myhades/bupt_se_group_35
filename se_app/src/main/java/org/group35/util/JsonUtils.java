@@ -28,6 +28,18 @@ public class JsonUtils {
                 (json != null ? json.length() : 0));
         return json;
     }
+    /**
+     * Parses a string and attempts to convert it into a valid JSON object or array.
+     *
+     * <p>This method first tries to parse the string as a {@link JSONObject}. If that fails,
+     * it tries to parse the string as a {@link JSONArray}. If both attempts fail, it logs the
+     * error and returns {@code null}.</p>
+     *
+     * @param str The string to be parsed as JSON. It can represent either a JSON object or an array.
+     * @return An {@link Object} representing the parsed JSON data, which can be either a
+     *         {@link JSONObject} or a {@link JSONArray}. Returns {@code null} if the string
+     *         is not valid JSON.
+     */
     public static Object parseJsonValidation(String str) {
 
         try {
