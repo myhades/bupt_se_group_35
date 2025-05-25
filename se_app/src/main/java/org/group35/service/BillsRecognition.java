@@ -26,7 +26,7 @@ public class BillsRecognition {
     private static final String API_TOKEN = "sk-id8a932449e17e32258e1565c2ab579825ad061b479cbtQr";  // model API token
 
     private static final AtomicBoolean doneFlag = new AtomicBoolean(false);
-    // 创建 OkHttpClient
+    // Create OkHttpClient
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -34,15 +34,23 @@ public class BillsRecognition {
             .build();
     public BillsRecognition(double savingGoal, double monIncome){
     }
+
+    /**
+     * Callback interface for recognition result.
+     */
     public interface RecognitionCallback {
         void onSuccess(Transaction billcontent);
         void onFailure(Throwable e);
     }
 
+    /**
+     * Builds the prompt for capturing the bill details in an image.
+     *
+     * @param categories List of categories that can be selected for the bill.
+     * @return The generated prompt string.
+     */
     private static String buildCapturePrompt(String categories){
 
-        //TODO: Customized user input
-        // 文本参数
         String promptText = "Please analyze the image containing bill details and generate a JSON-formatted output. Each entry in the JSON should include the following fields: name, amount, date, location, category\n" +
                 "\n" +
                 "If the bill does not contain information, this field can be left empty. But category cannot be empty\n" +
@@ -65,10 +73,16 @@ public class BillsRecognition {
                 "Please ensure the output is in a valid JSON file format and exclude any additional information or explanations. Return only the JSON data structured as specified.";
         return promptText;
     }
+
+    /**
+     * Builds the prompt for analyzing bill content from a given text.
+     *
+     * @param content   The bill content text.
+     * @param categories List of available categories for the bill.
+     * @return The generated prompt string.
+     */
     private static String buildTextPrompt(String content, String categories){
 
-        //TODO: Customized user input
-        // 文本参数
         User user = ApplicationRuntime.getInstance().getCurrentUser();
         String time = TimezoneUtils.getCurrentTimeByZone(user.getTimezone());
         String promptText = "Please analyze the text containing bill details and generate a JSON-formatted output. Each entry in the JSON should include the following fields: name, amount, date, location, category\n" +
@@ -96,29 +110,33 @@ public class BillsRecognition {
         return promptText;
     }
 
+    /**
+     * Builds the request body for image-based recognition.
+     *
+     * @param base64Image The base64 encoded image string.
+     * @param prompt The prompt that instructs the model how to interpret the image.
+     * @return The request body string in JSON format.
+     */
     public static String buildImageRequestBody(String base64Image, String prompt) {
         JSONObject payload = new JSONObject();
         payload.put("model", "gpt-4o");
-//        payload.put("temperature", 1);
-//        payload.put("max_tokens", 2048);
-//        payload.put("top_p", 1);
 
-        // 构建消息数组
+        // Build message array
         JSONArray messages = new JSONArray();
 
-        // 用户消息
+        // User message
         JSONObject userMessage = new JSONObject();
         userMessage.put("role", "user");
 
         JSONArray contentArray = new JSONArray();
 
-        // 文本部分 (安全转义)
+        // Text part (safely escape quotes)
         JSONObject textContent = new JSONObject();
         textContent.put("type", "text");
-        textContent.put("text", prompt.replace("\"", "\\\"")); // 转义双引号
+        textContent.put("text", prompt.replace("\"", "\\\"")); // Escape double quotes
         contentArray.put(textContent);
 
-        // 图片部分
+        // Image part
         JSONObject imageContent = new JSONObject();
         imageContent.put("type", "image_url");
         JSONObject imageUrl = new JSONObject();
@@ -136,31 +154,33 @@ public class BillsRecognition {
         return payload.toString();
     }
 
+
+    /**
+     * Builds the request body for text-based recognition.
+     *
+     * @param prompt The prompt to analyze the text and extract bill details.
+     * @return The request body string in JSON format.
+     */
     public static String buildTextRequestBody(String prompt) {
         JSONObject payload = new JSONObject();
         payload.put("model", "gpt-4o");
-//        payload.put("temperature", 1);
-//        payload.put("max_tokens", 2048);
-//        payload.put("top_p", 1);
 
-        // 构建消息数组
+        // Build message array
         JSONArray messages = new JSONArray();
 
-        // 用户消息
+        // User message
         JSONObject userMessage = new JSONObject();
         userMessage.put("role", "user");
 
         JSONArray contentArray = new JSONArray();
 
-        // 文本部分 (安全转义)
+        // Text part (safely escape quotes)
         JSONObject textContent = new JSONObject();
         textContent.put("type", "text");
-        textContent.put("text", prompt.replace("\"", "\\\"")); // 转义双引号
+        textContent.put("text", prompt.replace("\"", "\\\"")); // Escape double quotes
         contentArray.put(textContent);
 
-
         userMessage.put("content", contentArray);
-        //userMessage.put("content", "Hello!");
         messages.put(userMessage);
 
         payload.put("messages", messages);
@@ -168,6 +188,14 @@ public class BillsRecognition {
         LogUtils.debug("request body: " + payload.toString());
         return payload.toString();
     }
+
+    /**
+     * Makes an API call to the multi-model service for bill recognition.
+     *
+     * @param requestBody The request body in JSON format.
+     * @param callback The callback to handle success or failure.
+     * @throws IOException If an I/O error occurs during the API call.
+     */
     private static void multimodelAPICalling(String requestBody, RecognitionCallback callback) throws IOException {
 
         RequestBody body = RequestBody.create(
@@ -175,7 +203,7 @@ public class BillsRecognition {
                 MediaType.get("application/json")
         );
 
-        // 设置请求
+        // Set up the request
         Request request = new Request.Builder()
                 .url(API_URL + "/v1/chat/completions")
                 .addHeader("Content-Type", "application/json")
@@ -185,7 +213,7 @@ public class BillsRecognition {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtils.error("API calling error:" + e.getMessage());
+                LogUtils.error("API calling error: " + e.getMessage());
                 callback.onFailure(e);
                 doneFlag.set(true);
             }
@@ -214,16 +242,21 @@ public class BillsRecognition {
 
                     callback.onSuccess(transaction);
                 } catch (Exception ex) {
-                    LogUtils.error("处理响应时出错" + ex.getMessage());
+                    LogUtils.error("Error processing response: " + ex.getMessage());
                     callback.onFailure(ex);
-                }finally {
+                } finally {
                     doneFlag.set(true);
                 }
             }
         });
-
-
     }
+
+    /**
+     * Removes the first and last line from a given string (usually for cleaning up the response content).
+     *
+     * @param inputString The input string to be processed.
+     * @return The cleaned-up string without the first and last line.
+     */
     public static String removeFirstAndLastLine(String inputString) {
 
         String[] lines = inputString.split("\n");
@@ -240,88 +273,103 @@ public class BillsRecognition {
 
         return result.toString().trim();
     }
-    public static void writeDataToJson(String path, String data){
+
+    /**
+     * Writes the recognized data to a JSON file.
+     *
+     * @param path The file path where the JSON data should be saved.
+     * @param data The JSON data as a string.
+     */
+    public static void writeDataToJson(String path, String data) {
         try {
 
             String[] lines = data.trim().split("\n");
             StringBuilder filteredDataBuilder = new StringBuilder();
-            if(lines[0].trim().equals("[") )filteredDataBuilder.append(lines[0].trim());
+            if (lines[0].trim().equals("[")) filteredDataBuilder.append(lines[0].trim());
             for (int i = 1; i < lines.length - 1; i++) {
                 filteredDataBuilder.append(lines[i].trim());
             }
-            if(lines[lines.length - 1].trim().equals("]")) filteredDataBuilder.append(lines[lines.length - 1].trim());
+            if (lines[lines.length - 1].trim().equals("]")) filteredDataBuilder.append(lines[lines.length - 1].trim());
 
-            // 验证 JSON 格式
+            // Validate the JSON format
             JSONArray jsonArray = new JSONArray(new JSONTokener(filteredDataBuilder.toString()));
 
-            //TODO: 使用JsonUtil
-            try (FileWriter fileWriter = new FileWriter(path)){
+            // Write to file
+            try (FileWriter fileWriter = new FileWriter(path)) {
                 fileWriter.write(jsonArray.toString());
                 LogUtils.debug("Write successfully");
             }
-//            File file = new File(path);
-//            JsonUtils.writeJsonToFile(file, jsonArray);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static CompletableFuture<Transaction> imageRecognitionAsync(String base64Image){
+    /**
+     * Asynchronously recognizes the content of an image and returns a transaction object.
+     *
+     * @param base64Image The base64 encoded image string.
+     * @return A CompletableFuture that will contain the recognized transaction details.
+     */
+    public static CompletableFuture<Transaction> imageRecognitionAsync(String base64Image) {
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
             List<String> categoryList = currentUser.getCategory();
-            String categories = String.join("",categoryList);
+            String categories = String.join("", categoryList);
             categories = categories.replaceAll("\\\\(.)", "$1");
 
-//            List<String> categoryLists = Arrays.asList("Electronics", "Home Appliances", "Books");
-            // Combine categories into one string
-//            String categories = String.join("\\n", categoryLists);
-//            categories = categories.replaceAll("\\\\(.)", "$1");
-
             String prompt = buildCapturePrompt(categories);
-            String body   = buildImageRequestBody(base64Image, prompt);
+            String body = buildImageRequestBody(base64Image, prompt);
 
             multimodelAPICalling(body, new RecognitionCallback() {
                 @Override
                 public void onSuccess(Transaction transactions) {
                     cf.complete(transactions);
                 }
+
                 @Override
                 public void onFailure(Throwable e) {
                     cf.completeExceptionally(e);
                 }
             });
         } catch (Exception e) {
-            LogUtils.error("image recognition error:" + e.getMessage());
+            LogUtils.error("Image recognition error: " + e.getMessage());
             cf.completeExceptionally(e);
         }
         return cf;
     }
-    public static CompletableFuture<Transaction> textRecognitionAsync(String text){
+
+    /**
+     * Asynchronously recognizes the content of a text and returns a transaction object.
+     *
+     * @param text The text to be analyzed.
+     * @return A CompletableFuture that will contain the recognized transaction details.
+     */
+    public static CompletableFuture<Transaction> textRecognitionAsync(String text) {
         CompletableFuture<Transaction> cf = new CompletableFuture<>();
         try {
             User currentUser = ApplicationRuntime.getInstance().getCurrentUser();
             List<String> categoryList = currentUser.getCategory();
-            String categories = String.join("",categoryList);
+            String categories = String.join("", categoryList);
             categories = categories.replaceAll("\\\\(.)", "$1");
 
             text = TransactionManager.escapeString(text);
             String prompt = buildTextPrompt(text, categories);
-            String body   = buildTextRequestBody(prompt);
+            String body = buildTextRequestBody(prompt);
 
             multimodelAPICalling(body, new RecognitionCallback() {
                 @Override
                 public void onSuccess(Transaction transactions) {
                     cf.complete(transactions);
                 }
+
                 @Override
                 public void onFailure(Throwable e) {
                     cf.completeExceptionally(e);
                 }
             });
         } catch (Exception e) {
-            LogUtils.error("image recognition error:" + e.getMessage());
+            LogUtils.error("Text recognition error: " + e.getMessage());
             cf.completeExceptionally(e);
         }
         return cf;

@@ -14,12 +14,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
+/**
+ * The AIAssistant class interacts with the DeepSeek API to provide personalized financial assistance.
+ * It provides functions to help analyze transaction records, suggest saving strategies, generate summaries, and provide financial recommendations.
+ */
 public class AIAssistant {
     private static final String API_URL = "https://api.deepseek.com/chat/completions";  // DeepSeek API URL
     private static final String API_TOKEN = "sk-8c5a64ad52574f3e93a27b2d97055aab";  // DeepSeek API token
 
-    private static final AtomicBoolean doneFlag = new AtomicBoolean(false);
+    private static final AtomicBoolean doneFlag = new AtomicBoolean(false);// Flag to indicate whether the request is done
     private static OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -28,10 +31,23 @@ public class AIAssistant {
     public AIAssistant(){
 
     }
+
+    /**
+     * Callback interface for handling API responses.
+     */
+
     public interface RecognitionCallback {
         void onSuccess(String content);
         void onFailure(Throwable e);
     }
+
+    /**
+     * Builds a prompt to request suggestions for saving expenses based on the user's financial records and savings goals.
+     *
+     * @param goal The user's savings goal.
+     * @param usrContent The user's transaction records in JSON format.
+     * @return A string containing the formatted prompt.
+     */
     private static String buildSavingExpensesSuggestionPrompt( BigDecimal goal, String usrContent){
         //TODO: Customized user input
         String prompt = "Smart Financial Assistant for customizing users' suggestions.\\n" +
@@ -54,9 +70,18 @@ public class AIAssistant {
                 "3. Analyze the data with the fixed income, and timeline to suggest:\\n" +
                 "   - Monthly savings potential.\\n" +
                 "   - Areas to reduce spending.\\n" +
-                "   - Feasible plan of meeting the expected expenses.\\n" ;
+                "   - Feasible plan of meeting the expected expenses.\\n" +
+                "Tips: Use plain text language as the output and present it in paragraph form. Do not answer point by point\\n" ;
         return prompt;
     }
+    /**
+     * Builds a prompt to generate recommendations for the user based on their location, date, and transaction history.
+     *
+     * @param location The user's location.
+     * @param Date The current date.
+     * @param transactionData The user's transaction data in JSON format.
+     * @return A string containing the formatted prompt.
+     */
     private static String buildAIRecommendationPrompt(String location, String Date, String transactionData) {
         return "As a financial advisor specialized in regional expenditure patterns, analyze the user's location and upcoming local holidays.\\n" +
                 "User Context:\\n"+
@@ -77,8 +102,16 @@ public class AIAssistant {
                 "- Use natural paragraph breaks (no numbering)\\n"+
                 "- Mention days remaining, monetary amounts, and concrete action steps\\n" +
                 "- Present it in the form of paragraphs and do not use labels for segmentation\\n" +
-                "- No other answers should appear except for the content required to be answered";
+                "- No other answers should appear except for the content required to be answered"+
+                "Tips: Use plain text language as the output and present it in paragraph form. Do not answer point by point\\n" ;
     }
+
+    /**
+     * Builds a prompt to summarize the user's spending patterns based on their transaction history.
+     *
+     * @param usrContent The user's transaction data in JSON format.
+     * @return A string containing the formatted prompt.
+     */
     private static String buildAISummaryPrompt(String usrContent){
         String prompt = "Smart Financial Assistant for summarizing spending patterns.\\n" +
                 "You are an intelligent financial assistant dedicated to helping users understand their spending patterns through concise and insightful summaries.\\n" +
@@ -101,12 +134,20 @@ public class AIAssistant {
                 "3. Return ONLY a single sentence summary that describes the overall spending pattern.\\n" +
                 "4. Example format: \\\"Your recent spending shows some essential expenses such as rent and utilities, along with significant discretionary spending on dining out and entertainment.\\\"\\n" +
                 "5. Do NOT include any specific monetary values or percentages in your summary.\\n" +
-                "6. Explicitly mention the major categories you identified in a way that gives the user insight about their spending priorities.\\n";
+                "6. Explicitly mention the major categories you identified in a way that gives the user insight about their spending priorities.\\n"+
+                "Tips: Use plain text language as the output and present it in paragraph form. Do not answer point by point\\n" ;
         return prompt;
     }
 
-    private static void DeepSeekCalling(String prompts, RecognitionCallback callback) throws IOException {
-        // 修正JSON格式，特别是转义字符
+    /**
+     * Makes an asynchronous API call to the DeepSeek service using the provided prompt and processes the response.
+     *
+     * @param prompts The prompts to send to the AI.
+     * @param callback The callback for handling the response.
+     * @throws IOException If an error occurs during the API call.
+     */
+    public static void DeepSeekCalling(String prompts, RecognitionCallback callback) throws IOException {
+        // Fix JSON format, especially escape characters
         String requestBodyString = "{\n" +
                 "  \"messages\": [\n" +
                 "    {\n" +
@@ -136,7 +177,7 @@ public class AIAssistant {
                 "  \"top_logprobs\": null\n" +
                 "}";
 
-        // 打印请求体以调试
+        // Print request body for debugging
         LogUtils.debug("Request Body: \n" + requestBodyString);
 
         MediaType mediaType = MediaType.get("application/json");
@@ -186,85 +227,99 @@ public class AIAssistant {
         });
 
     }
-    //api
+
+
+    /**
+     * Calls the DeepSeek API asynchronously to suggest expense-saving strategies based on the user's transaction history.
+     *
+     * @return A CompletableFuture containing the response content.
+     */
     public static CompletableFuture<String> AISuggestionAsync() {
         CompletableFuture<String> response = new CompletableFuture<>();
-        try{
-            BigDecimal userSavingGoal = UserManager.getMonthlyBudget();
-            String stringContent = TransactionManager.transferTransaction();
-            String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);
+        try {
+            BigDecimal userSavingGoal = UserManager.getMonthlyBudget();  // Get the user's savings goal
+            String stringContent = TransactionManager.transferTransaction();  // Get the user's transaction data
+            String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);  // Build the prompt
             DeepSeekCalling(prompt, new RecognitionCallback() {
                 @Override
                 public void onSuccess(String content) {
-                    response.complete(content);
+                    response.complete(content);  // Complete the future with the response
                 }
 
                 @Override
                 public void onFailure(Throwable e) {
-                    response.completeExceptionally(e);
+                    response.completeExceptionally(e);  // Complete the future exceptionally in case of failure
                 }
             });
-            // LogUtils.debug(response);
             return response;
         } catch (IOException e) {
             LogUtils.error(e.getMessage());
-            response.completeExceptionally(e);
+            response.completeExceptionally(e);  // Complete the future exceptionally if there's an error
         }
         return response;
     }
+
+    /**
+     * Calls the DeepSeek API asynchronously to generate a summary of the user's spending habits.
+     *
+     * @return A CompletableFuture containing the response content.
+     */
     public static CompletableFuture<String> AISummaryAsync() {
         CompletableFuture<String> response = new CompletableFuture<>();
-        try{
-            String stringContent = TransactionManager.transferTransaction();
-            String prompt = buildAISummaryPrompt(stringContent);
+        try {
+            String stringContent = TransactionManager.transferTransaction();  // Get the user's transaction data
+            String prompt = buildAISummaryPrompt(stringContent);  // Build the prompt
             LogUtils.info("debug:" + stringContent);
             DeepSeekCalling(prompt, new RecognitionCallback() {
                 @Override
                 public void onSuccess(String content) {
-                    response.complete(content);
+                    response.complete(content);  // Complete the future with the response
                 }
 
                 @Override
                 public void onFailure(Throwable e) {
-                    response.completeExceptionally(e);
+                    response.completeExceptionally(e);  // Complete the future exceptionally in case of failure
                 }
             });
-            // LogUtils.debug(response);
             return response;
         } catch (IOException e) {
             LogUtils.error(e.getMessage());
-            response.completeExceptionally(e);
+            response.completeExceptionally(e);  // Complete the future exceptionally if there's an error
         }
         return response;
     }
+
+    /**
+     * Calls the DeepSeek API asynchronously to generate financial recommendations based on the user's location, date, and transaction history.
+     *
+     * @return A CompletableFuture containing the response content.
+     * @throws IOException If there's an issue with the API request.
+     */
     public static CompletableFuture<String> AIRecommendationAsync() throws IOException {
         CompletableFuture<String> response = new CompletableFuture<>();
-        try{
-            String location = UserManager.getLocation();
-            String localTime = TimezoneUtils.getLocalTime(location);
-            String stringContent = TransactionManager.transferTransaction();
-            String prompt = buildAIRecommendationPrompt(location, localTime, stringContent);
+        try {
+            String location = UserManager.getLocation();  // Get the user's location
+            String localTime = TimezoneUtils.getLocalTime(location);  // Get the local time for the user's location
+            String stringContent = TransactionManager.transferTransaction();  // Get the user's transaction data
+            String prompt = buildAIRecommendationPrompt(location, localTime, stringContent);  // Build the prompt
             DeepSeekCalling(prompt, new RecognitionCallback() {
                 @Override
                 public void onSuccess(String content) {
-                    response.complete(content);
+                    response.complete(content);  // Complete the future with the response
                 }
 
                 @Override
                 public void onFailure(Throwable e) {
-                    response.completeExceptionally(e);
+                    response.completeExceptionally(e);  // Complete the future exceptionally in case of failure
                 }
             });
-            // LogUtils.debug(response);
             return response;
         } catch (IOException e) {
             LogUtils.error(e.getMessage());
-            response.completeExceptionally(e);
+            response.completeExceptionally(e);  // Complete the future exceptionally if there's an error
         }
         return response;
-
     }
-
 
     public static void main(String[] args) throws IOException {
         //api using example

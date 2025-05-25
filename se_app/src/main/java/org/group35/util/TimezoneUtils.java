@@ -149,11 +149,11 @@ public class TimezoneUtils {
         try {
             return detectLocationFromPrimaryAPI();
         } catch (Exception e) {
-            System.err.println("Primary location API failed: " + e.getMessage());
+            LogUtils.error("Primary location API failed: " + e.getMessage());
             try {
                 return detectLocationFromBackupAPI();
             } catch (Exception e2) {
-                System.err.println("Backup location API failed: " + e2.getMessage());
+                LogUtils.error("Backup location API failed: " + e2.getMessage());
                 throw new IOException("All location detection APIs failed");
             }
         }
@@ -223,12 +223,12 @@ public class TimezoneUtils {
             String exchangeRate = CurrencyUtils.getExchangeRate(currency);
 
             // 输出调试信息
-            System.out.println("Precise timezone: " + displayTimezone);
-            System.out.println("Final processed data:");
-            System.out.println("  Location: " + displayLocation);
-            System.out.println("  Currency: " + currency);
-            System.out.println("  Timezone: " + displayTimezone);
-            System.out.println("  Exchange Rate: " + exchangeRate);
+            LogUtils.info("Precise timezone: " + displayTimezone);
+            LogUtils.info("Final processed data:");
+            LogUtils.info("  Location: " + displayLocation);
+            LogUtils.info("  Currency: " + currency);
+            LogUtils.info("  Timezone: " + displayTimezone);
+            LogUtils.info("  Exchange Rate: " + exchangeRate);
 
             return new LocalInfo(displayLocation, currency, exchangeRate, displayLocation);
         }
@@ -263,7 +263,7 @@ public class TimezoneUtils {
             try {
                 return detectUserLocation();
             } catch (Exception e) {
-                System.err.println("Error getting local info: " + e.getMessage());
+                LogUtils.error("Error getting local info: " + e.getMessage());
                 return getDefaultLocalInfo();
             }
         });
@@ -277,10 +277,10 @@ public class TimezoneUtils {
             LocalInfo info = detectUserLocation();
             cachedLocalInfo = info;
             lastUpdateTime = LocalDateTime.now();
-            System.out.println("Local info updated - Timezone: " + info.getTimezone() + ", Currency: " + info.getCurrency());
+            LogUtils.info("Local info updated - Timezone: " + info.getTimezone() + ", Currency: " + info.getCurrency());
             return info;
         } catch (Exception e) {
-            System.err.println("Location detection failed: " + e.getMessage());
+            LogUtils.error("Location detection failed: " + e.getMessage());
             return getDefaultLocalInfo();
         }
     }
@@ -318,14 +318,14 @@ public class TimezoneUtils {
     public static void testLocationDetection() {
         try {
             LocalInfo info = detectUserLocation();
-            System.out.println("=== Location Detection Test ===");
-            System.out.println("Location: " + info.getLocation());
-            System.out.println("Currency: " + info.getCurrency() + " (" + CurrencyUtils.formatCurrencyName(info.getCurrency()) + ")");
-            System.out.println("Timezone: " + info.getTimezone());
-            System.out.println("Exchange Rate: " + info.getExchangeRate());
-            System.out.println("==============================");
+            LogUtils.info("=== Location Detection Test ===");
+            LogUtils.info("Location: " + info.getLocation());
+            LogUtils.info("Currency: " + info.getCurrency() + " (" + CurrencyUtils.formatCurrencyName(info.getCurrency()) + ")");
+            LogUtils.info("Timezone: " + info.getTimezone());
+            LogUtils.info("Exchange Rate: " + info.getExchangeRate());
+            LogUtils.info("==============================");
         } catch (Exception e) {
-            System.err.println("Location detection test failed: " + e.getMessage());
+            LogUtils.error("Location detection test failed: " + e.getMessage());
         }
     }
 
@@ -351,6 +351,7 @@ public class TimezoneUtils {
             String localTime = getLocalTime(location); // example
             LogUtils.info("input:" + location);
             LogUtils.info(" 当前时间: " + localTime);
+            
         } catch (Exception e) {
             LogUtils.error( e.getMessage());
         }
