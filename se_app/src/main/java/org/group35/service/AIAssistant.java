@@ -3,6 +3,7 @@ package org.group35.service;
 import okhttp3.*;
 import org.group35.controller.TransactionManager;
 import org.group35.controller.UserManager;
+import org.group35.runtime.ApplicationRuntime;
 import org.group35.util.LogUtils;
 import org.group35.util.TimezoneUtils;
 import org.json.JSONArray;
@@ -237,7 +238,9 @@ public class AIAssistant {
     public static CompletableFuture<String> AISuggestionAsync() {
         CompletableFuture<String> response = new CompletableFuture<>();
         try {
-            BigDecimal userSavingGoal = UserManager.getMonthlyBudget();  // Get the user's savings goal
+            ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+            UserManager uManager = runtime.getUserManager();
+            BigDecimal userSavingGoal = uManager.getMonthlyBudget(runtime.getCurrentUser().getUsername());  // Get the user's savings goal
             String stringContent = TransactionManager.transferTransaction();  // Get the user's transaction data
             String prompt = buildSavingExpensesSuggestionPrompt(userSavingGoal, stringContent);  // Build the prompt
             DeepSeekCalling(prompt, new RecognitionCallback() {
@@ -298,7 +301,9 @@ public class AIAssistant {
     public static CompletableFuture<String> AIRecommendationAsync() throws IOException {
         CompletableFuture<String> response = new CompletableFuture<>();
         try {
-            String location = UserManager.getLocation();  // Get the user's location
+            ApplicationRuntime runtime = ApplicationRuntime.getInstance();
+            UserManager uManager = runtime.getUserManager();
+            String location = uManager.getLocation(runtime.getCurrentUser().getUsername());  // Get the user's location
             String localTime = TimezoneUtils.getLocalTime(location);  // Get the local time for the user's location
             String stringContent = TransactionManager.transferTransaction();  // Get the user's transaction data
             String prompt = buildAIRecommendationPrompt(location, localTime, stringContent);  // Build the prompt

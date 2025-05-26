@@ -129,7 +129,7 @@ public class SpendingPageController {
 
     private void setBudgetLeftAmount(){
         ApplicationRuntime rt = ApplicationRuntime.getInstance();
-        BigDecimal totalBudgetBD = rt.getUserManager().getMonthlyBudget();
+        BigDecimal totalBudgetBD = rt.getUserManager().getMonthlyBudget(rt.getCurrentUser().getUsername());
         double totalBudget = totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
         double usedBudget = calculateUsedBudget();
         double availableBudget = totalBudget - usedBudget;

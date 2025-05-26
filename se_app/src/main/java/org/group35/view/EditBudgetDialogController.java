@@ -32,7 +32,6 @@ public class EditBudgetDialogController {
     private String newBudget;
     private boolean confirmed = false;
 
-    // 新增：本地化信息的UI元素（需要在FXML中添加fx:id）
     @FXML
     private Label timezoneLabel;
     @FXML
@@ -43,7 +42,6 @@ public class EditBudgetDialogController {
     private Label lastUpdatedLabel;
 
     public void initialize() {
-        // 新增：加载本地化信息
         loadLocalInfo();
     }
 
@@ -113,7 +111,7 @@ public class EditBudgetDialogController {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
             BigDecimal newBudgetBD = BigDecimal.valueOf(budgetValue);
-            runtime.getUserManager().setMonthlyBudget(newBudgetBD);
+            runtime.getUserManager().setMonthlyBudget(runtime.getCurrentUser().getUsername(), newBudgetBD);
             System.out.println("Budget updated via UserManager: $" + budgetValue);
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,9 +138,7 @@ public class EditBudgetDialogController {
             return false;
         }
     }
-    /**
-     * 新增方法：加载本地化信息
-     */
+
     private void loadLocalInfo() {
         // 异步获取本地化信息，避免阻塞UI
         TimezoneUtils.getCurrentLocalInfoAsync()
@@ -158,9 +154,6 @@ public class EditBudgetDialogController {
                 });
     }
 
-    /**
-     * 新增方法：更新本地化信息显示
-     */
     private void updateLocalInfoDisplay(TimezoneUtils.LocalInfo localInfo) {
         try {
             if (timezoneLabel != null) {
@@ -189,9 +182,6 @@ public class EditBudgetDialogController {
         }
     }
 
-    /**
-     * 新增方法：手动刷新本地化信息
-     */
     @FXML
     private void refreshLocalInfo() {
         TimezoneUtils.refreshCache();

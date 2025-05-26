@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import org.group35.controller.UserManager;
 import org.group35.model.Transaction;
 import org.group35.model.User;
 import org.group35.runtime.ApplicationRuntime;
@@ -39,7 +40,6 @@ public class PlanPageController {
     @FXML
     private TextArea aiSuggestionTextArea;
 
-    // 新增：本地化信息的UI元素（需要在FXML中添加fx:id）
     @FXML
     private Label timezoneLabel;
     @FXML
@@ -61,7 +61,6 @@ public class PlanPageController {
             loadBudgetData();
             updateBudgetDisplay();
 
-            // 新增：加载本地化信息
             loadLocalInfo();
 
             System.out.println("PlanPageController initialized successfully");
@@ -75,23 +74,17 @@ public class PlanPageController {
      * 新增方法：加载本地化信息
      */
     private void loadLocalInfo() {
-        // 异步获取本地化信息，避免阻塞UI
         TimezoneUtils.getCurrentLocalInfoAsync()
                 .thenAccept(localInfo -> {
-                    // 在JavaFX主线程中更新UI
                     Platform.runLater(() -> updateLocalInfoDisplay(localInfo));
                 })
                 .exceptionally(throwable -> {
                     System.err.println("Error loading local info: " + throwable.getMessage());
-                    // 使用默认信息
                     Platform.runLater(() -> updateLocalInfoDisplay(TimezoneUtils.getCurrentLocalInfo()));
                     return null;
                 });
     }
 
-    /**
-     * 新增方法：更新本地化信息显示
-     */
     private void updateLocalInfoDisplay(TimezoneUtils.LocalInfo localInfo) {
         try {
             if (timezoneLabel != null) {
@@ -120,9 +113,6 @@ public class PlanPageController {
         }
     }
 
-    /**
-     * 新增方法：手动刷新本地化信息
-     */
     @FXML
     private void refreshLocalInfo() {
         TimezoneUtils.refreshCache();
@@ -144,8 +134,8 @@ public class PlanPageController {
     private void updateBudgetDisplay() {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-
-            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget();
+            UserManager uManager = runtime.getUserManager();
+            BigDecimal totalBudgetBD = uManager.getMonthlyBudget(runtime.getCurrentUser().getUsername());
             double totalBudget = totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
 
             double usedBudget = calculateUsedBudget();
@@ -233,7 +223,7 @@ public class PlanPageController {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
             BigDecimal newBudgetBD = BigDecimal.valueOf(newBudget);
-            runtime.getUserManager().setMonthlyBudget(newBudgetBD);
+            runtime.getUserManager().setMonthlyBudget(runtime.getCurrentUser().getUsername(),newBudgetBD);
             updateBudgetDisplay();
             System.out.println("Total budget updated to: $" + String.format("%.0f", newBudget));
         } catch (Exception e) {
@@ -285,7 +275,8 @@ public class PlanPageController {
     public double getTotalBudget() {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget();
+            UserManager uManager = runtime.getUserManager();
+            BigDecimal totalBudgetBD = uManager.getMonthlyBudget(runtime.getCurrentUser().getUsername());
             return totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
         } catch (Exception e) {
             System.err.println("Error getting total budget: " + e.getMessage());
