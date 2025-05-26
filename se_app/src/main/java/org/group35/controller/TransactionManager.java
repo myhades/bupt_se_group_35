@@ -38,6 +38,7 @@ public class TransactionManager {
     private List<Transaction> transactions;
     private final CsvImport csvImportService = new CsvImport();
 
+
     public TransactionManager() {
         LogUtils.debug("Initializing TransactionManager and loading transactions");
         transactions = PersistentDataManager.getStore().getTransactions();
@@ -76,7 +77,11 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
-    /** Returns transactions for a given name. */
+    /**
+     * Returns transactions for a given name.
+     * @param name name of the transaction
+     * @return list of transactions
+     */
     public List<Transaction> getByName(String name) {
         LogUtils.trace("Filtering transactions for user: " + name);
         return transactions.stream()
@@ -137,7 +142,12 @@ public class TransactionManager {
                 .collect(Collectors.toList());
     }
 
-    /** Returns transactions within the given timestamp range. bigger or equal, smaller or equal */
+    /**
+     * Returns transactions within the given timestamp range.
+     * @param start start timestamp
+     * @param end end timestamp
+     * @return list of transactions
+     */
     public List<Transaction> getByTimestampRange(LocalDateTime start, LocalDateTime end) {
         LogUtils.trace("Filtering transactions by timestamp range: " + start + " - " + end);
         if (start != null && end != null && start.isAfter(end)) {
@@ -243,6 +253,7 @@ public class TransactionManager {
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
+    
 
     /** Adds a new transaction and persists the store. */
     public void add(Transaction tx) {

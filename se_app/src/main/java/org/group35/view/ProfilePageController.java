@@ -87,7 +87,7 @@ public class ProfilePageController implements Initializable {
 
     private void setCategoryBox() {
 
-        List<String> categories = um.getCategory();
+        List<String> categories = um.getCategory(currentUsername);
         categoryBox.setItems(FXCollections.observableArrayList(categories));
 
         // 初始化输入框但不显示
@@ -158,7 +158,7 @@ public class ProfilePageController implements Initializable {
                 showStatus("Password must be at least 8 characters and include letters and digit.", true);
                 return;
             }
-            um.setHashedPassword(PasswordUtils.hashPassword(updatedPassword));
+            um.setHashedPassword(currentUsername,PasswordUtils.hashPassword(updatedPassword));
         }
 
         String timezone = timezoneField.getValue();
@@ -204,7 +204,7 @@ public class ProfilePageController implements Initializable {
 
     private void confirmAddCategory(ActionEvent event) {
         String newCategory = categoryInputField.getText().trim();
-        if (um.addCategory(newCategory)){
+        if (um.addCategory(currentUsername,newCategory)){
             categoryBox.getItems().add(newCategory);
             categoryBox.getSelectionModel().select(newCategory);
             LogUtils.info("Add newCategory: " + newCategory);
@@ -228,7 +228,7 @@ public class ProfilePageController implements Initializable {
         String selected = categoryBox.getSelectionModel().getSelectedItem();
         if (selected != null) {
             categoryBox.getItems().remove(selected);
-            um.removeCategory(selected);
+            um.removeCategory(currentUsername,selected);
         } else {
             showStatus("Please select a category to remove.", true);
         }

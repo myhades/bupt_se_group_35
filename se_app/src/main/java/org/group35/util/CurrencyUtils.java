@@ -12,7 +12,9 @@ public class CurrencyUtils {
     private static final String DEFAULT_CURRENCY = "USD";
 
     /**
-     * 根据国家代码推断货币
+     * get currency symbol by currency code
+     * @param countryCode country code
+     * @return currency symbol
      */
     public static String getCurrencyByCountryCode(String countryCode) {
         switch (countryCode.toUpperCase()) {
@@ -37,7 +39,9 @@ public class CurrencyUtils {
     }
 
     /**
-     * 获取汇率信息
+     * get exchange rate by currency code
+     * @param currency currency code
+     * @return format string of exchange rate
      */
     public static String getExchangeRate(String currency) {
         if ("USD".equals(currency)) {
@@ -71,7 +75,9 @@ public class CurrencyUtils {
     }
 
     /**
-     * 格式化货币显示名称
+     * format currency name
+     * @param currency currency code
+     * @return currency name
      */
     public static String formatCurrencyName(String currency) {
         switch (currency) {
@@ -96,7 +102,8 @@ public class CurrencyUtils {
     }
 
     /**
-     * 获取默认货币
+     * get default currency
+     * @return DEFAULT_CURRENCY
      */
     public static String getDefaultCurrency() {
         return DEFAULT_CURRENCY;

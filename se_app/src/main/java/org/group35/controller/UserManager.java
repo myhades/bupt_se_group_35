@@ -39,17 +39,13 @@ public class UserManager {
 
     /**
      * Register a new user: hash the password, add the user to the store.
+     * @param username the username of the user to register
+     * @param plainPassword the plain text password of the user to register
      */
     public void registerUser(String username, String plainPassword) {
         LogUtils.debug("Attempting to register user: " + username);
         String hashed = PasswordUtils.hashPassword(plainPassword);
         User newUser = new User(username, hashed);
-
-//        List<User> userList = getPersistentUsers();
-//        userList.add(newUser);
-        // Save the updated user list to the persistent store
-//        PersistentDataManager.getStore().setUsers(userList);
-//        PersistentDataManager.saveStore();
         users.add(newUser);
         save();
         LogUtils.info("User registered successfully: " + username);
@@ -106,13 +102,6 @@ public class UserManager {
         return null;
     }
 
-    /**
-     * Get the current logged user.
-     */
-    public static User getCurrentUser(){
-        ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-        return runtime.getCurrentUser();
-    }
 
     /**
      * Set the list of users in the persistent store (used for testing or bulk updates).
@@ -138,12 +127,6 @@ public class UserManager {
         LogUtils.warn("Transaction not found: " + updated.getUsername());
     }
 
-    public void setHashedPassword(String hashedPassword){
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        user.setHashedPassword(hashedPassword);
-        save();
-        LogUtils.info("Password updated for user: " + user.getUsername());
-    }
 
     public void setHashedPassword(String username, String hashedPassword){
         for (User user : users) {
@@ -154,11 +137,6 @@ public class UserManager {
             }
         }
         LogUtils.info("Failed to set hashedpassword. User not found: " + username);
-    }
-
-    public String getHashedPassword(){
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        return user.getHashedPassword();
     }
 
     public String getHashedPassword(String username){
@@ -243,16 +221,6 @@ public class UserManager {
         }
     }
 
-    /**
-     * Sets the budget for current user.
-     * @param budget the new budget amount
-     */
-    public void setMonthlyBudget(BigDecimal budget) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        LogUtils.info("Setting monthly budget for user " + user.getUsername() + " to " + budget);
-        user.setMonthlyBudget(budget);
-        save();
-    }
 
     /**
      * Get the budget for a specific user.
@@ -268,13 +236,6 @@ public class UserManager {
         return BigDecimal.ZERO;
     }
 
-    /**
-     * Get the budget for a specific user.
-     */
-    public static BigDecimal getMonthlyBudget() {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        return user.getMonthlyBudget();
-    }
 
     public void setLocation(String username, String location) {
         for (User u : users) {
@@ -296,10 +257,6 @@ public class UserManager {
         return ""; //FIXME
     }
 
-    public static String getLocation() {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        return user.getLocation();
-    }
 
     public void setTimezone(String username, String timezone) {
         User user = getUser(username);
@@ -320,19 +277,6 @@ public class UserManager {
             }
         }
         return "notimezone"; //FIXME
-    }
-
-    public String getTimezone() {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        return user.getTimezone();
-    }
-
-    /**
-     * Get the categories for current user.
-     */
-    public List<String> getCategory() {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        return user.getCategory();
     }
 
     /**
@@ -370,21 +314,6 @@ public class UserManager {
     }
 
     /**
-     * Add new category for current user.
-     * @param category the category to add
-     */
-    public boolean addCategory(String category) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        if (! user.addCategory(category)){
-            LogUtils.error("Category " + category + " already exists for user: " + user.getUsername());
-            return false;
-        }
-        save();
-        LogUtils.info("Category " + category + " added for current user: " + user.getUsername());
-        return true;
-    }
-
-    /**
      * remove a category for a specific user.
      * @param username the user to update
      * @param category the category to add
@@ -403,21 +332,6 @@ public class UserManager {
         }
         LogUtils.error("User " + username + " does not exist.");
         return false;
-    }
-
-    /**
-     * remove a category for current user.
-     * @param category the category to add
-     */
-    public boolean removeCategory(String category) {
-        User user = ApplicationRuntime.getInstance().getCurrentUser();
-        if (! user.removeCategory(category)) {
-            LogUtils.error("Category " + category + " does not exist for current user: " + user.getUsername());
-            return false;
-        }
-        save();
-        LogUtils.info("Category " + category + " removed for current user: " + user.getUsername());
-        return true;
     }
 
 }

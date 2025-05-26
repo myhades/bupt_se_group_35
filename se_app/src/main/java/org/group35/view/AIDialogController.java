@@ -114,7 +114,7 @@ public class AIDialogController {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
 
-            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget();
+            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget(runtime.getCurrentUser().getUsername());
             double totalBudget = totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
 
             double usedBudget = calculateUsedBudget();
@@ -259,7 +259,7 @@ public class AIDialogController {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
             BigDecimal newBudgetBD = BigDecimal.valueOf(newBudget);
-            runtime.getUserManager().setMonthlyBudget(newBudgetBD);
+            runtime.getUserManager().setMonthlyBudget(runtime.getCurrentUser().getUsername(),newBudgetBD);
             updateBudgetDisplay();
             System.out.println("Total budget updated to: $" + String.format("%.0f", newBudget));
         } catch (Exception e) {
@@ -311,7 +311,7 @@ public class AIDialogController {
     public double getTotalBudget() {
         try {
             ApplicationRuntime runtime = ApplicationRuntime.getInstance();
-            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget();
+            BigDecimal totalBudgetBD = runtime.getUserManager().getMonthlyBudget(runtime.getCurrentUser().getUsername());
             return totalBudgetBD != null ? totalBudgetBD.doubleValue() : 2000.0;
         } catch (Exception e) {
             System.err.println("Error getting total budget: " + e.getMessage());
